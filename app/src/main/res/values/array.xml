@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="adresses" >
+
+        <item>Уллица Авиаторов дом 9 - старое здание</item>
+        <item>Уллица Авиаторов дом 9 - новое здание</item>
+
+    </string-array>
+
+
+    <string-array name="status" >
+
+        <item>Новая заявка</item>
+        <item>В работе</item>
+        <item>Завершено</item>
+
+    </string-array>
+
+    <string-array name="roles" >
+
+        <item>Администратор</item>
+        <item>Пользователь</item>
+        <item>Рабочий</item>
+
+    </string-array>
+
+</resources>

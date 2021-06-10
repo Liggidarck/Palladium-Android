@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "956723783657",
+    "project_id": "school-2122",
+    "storage_bucket": "school-2122.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956723783657:android:2544cfb918e326260d4d78",
+        "android_client_info": {
+          "package_name": "com.george.vector"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "956723783657-tvbf9bdqmd2bspvbbmribc9sk4mvtfvi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAaS5-aMMTMBa6BWNBbM_0FHnlO5Ql328"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "956723783657-tvbf9bdqmd2bspvbbmribc9sk4mvtfvi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
