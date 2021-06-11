@@ -33,12 +33,12 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/topAppBar_new_task">
+        android:layout_below="@+id/topAppBar_new_task" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical" >
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_address"
@@ -189,18 +189,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Статус"
+                app:endIconMode="dropdown_menu"
+                app:errorEnabled="true"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp"
-                app:endIconMode="clear_text"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                app:errorEnabled="true"
-                app:helperTextEnabled="true" >
+                android:layout_marginTop="20dp" >
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/status_autoComplete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapWords" />
+                    android:focusable="false"
+                    android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

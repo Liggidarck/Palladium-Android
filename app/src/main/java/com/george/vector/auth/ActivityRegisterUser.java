@@ -3,12 +3,15 @@ package com.george.vector.auth;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.george.vector.R;
+import com.george.vector.common.ErrorsUtils;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
@@ -74,31 +77,177 @@ public class ActivityRegisterUser extends AppCompatActivity {
             role_user = Objects.requireNonNull(text_input_layout_role_user.getEditText()).getText().toString();
 
 
-            firebaseAuth.createUserWithEmailAndPassword(email_user, password_user).addOnCompleteListener(task -> {
-                if(task.isSuccessful()) {
-                    Toast.makeText(ActivityRegisterUser.this, "User Added", Toast.LENGTH_LONG).show();
+            if(validateFields()) {
+                Toast.makeText(this, "Register", Toast.LENGTH_SHORT).show();
 
-                    userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-                    DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
-                    Map<String,Object> user = new HashMap<>();
-                    user.put("name", name_user);
-                    user.put("last_name", last_name_user);
-                    user.put("patronymic", patronymic_user);
-                    user.put("email", email_user);
-                    user.put("role", role_user);
-                    documentReference.set(user)
-                            .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user - " + userID))
-                            .addOnFailureListener(e -> Log.d("TAG", "Failure - " + e.toString()));
+                firebaseAuth.createUserWithEmailAndPassword(email_user, password_user).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(ActivityRegisterUser.this, "User Added", Toast.LENGTH_LONG).show();
 
-                } else {
-                    Toast.makeText(ActivityRegisterUser.this, "Error" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
+                        userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+                        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+                        Map<String, Object> user = new HashMap<>();
+                        user.put("name", name_user);
+                        user.put("last_name", last_name_user);
+                        user.put("patronymic", patronymic_user);
+                        user.put("email", email_user);
+                        user.put("role", role_user);
+                        documentReference.set(user)
+                                .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user - " + userID))
+                                .addOnFailureListener(e -> Log.d("TAG", "Failure - " + e.toString()));
 
-                }
+                    } else {
+                        Toast.makeText(ActivityRegisterUser.this, "Error" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
+
+                    }
 
 
-            });
+                });
+            }
 
         });
 
+        clearErrors();
     }
+    boolean validateFields() {
+        ErrorsUtils errorsUtils = new ErrorsUtils();
+
+        boolean checkName = errorsUtils.validate_field(name_user);
+        boolean checkLastName = errorsUtils.validate_field(last_name_user);
+        boolean checkPatronymic = errorsUtils.validate_field(patronymic_user);
+        boolean checkEmail = errorsUtils.validate_field(email_user);
+        boolean checkPassword = errorsUtils.validate_field(password_user);
+        boolean checkRole = errorsUtils.validate_field(role_user);
+
+        if(checkName & checkLastName & checkPatronymic & checkEmail & checkPassword & checkRole)
+            return true;
+        else {
+
+            if(!checkName)
+                text_input_layout_name_user.setError("Это поле не может быьт пустым");
+
+            if(!checkLastName)
+                text_input_layout_last_name_user.setError("Это поле не может быть пустым");
+
+            if(!checkPatronymic)
+                text_input_layout_patronymic_user.setError("Это поле не может быть пустым");
+
+            if(!checkEmail)
+                text_input_layout_email_user.setError("Это  поле не может быть пустым");
+
+            if(!checkPassword)
+                text_input_layout_password_user.setError("Это поле не может быть пустым");
+
+            if(!checkRole)
+                text_input_layout_role_user.setError("Это поле не может быть пустым");
+
+            return false;
+        }
+
+    }
+
+    void clearErrors() {
+        Objects.requireNonNull(text_input_layout_name_user.getEditText()).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                text_input_layout_name_user.setError(null);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        Objects.requireNonNull(text_input_layout_last_name_user.getEditText()).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                text_input_layout_last_name_user.setError(null);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        Objects.requireNonNull(text_input_layout_patronymic_user.getEditText()).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                text_input_layout_patronymic_user.setError(null);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        Objects.requireNonNull(text_input_layout_email_user.getEditText()).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                text_input_layout_email_user.setError(null);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        Objects.requireNonNull(text_input_layout_password_user.getEditText()).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                text_input_layout_password_user.setError(null);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        Objects.requireNonNull(text_input_layout_role_user.getEditText()).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                text_input_layout_role_user.setError(null);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
 }

@@ -13,7 +13,7 @@ import android.view.MenuItem;
 
 import com.george.vector.R;
 import com.george.vector.admin.tasks.AddTaskAdminActivity;
-import com.george.vector.admin.tasks.folder.FolderActivity;
+import com.george.vector.admin.tasks.sort_by_category.FolderActivity;
 import com.george.vector.common.ActivityProfile;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

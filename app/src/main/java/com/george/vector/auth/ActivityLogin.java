@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -12,6 +14,8 @@ import android.widget.Toast;
 
 import com.george.vector.admin.MainAdminActivity;
 import com.george.vector.R;
+import com.george.vector.admin.tasks.sort_by_category.FolderActivity;
+import com.george.vector.common.ErrorsUtils;
 import com.george.vector.user.MainUserActivity;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,11 +62,18 @@ public class ActivityLogin extends AppCompatActivity {
                 assert value != null;
 
                 String check_role = value.getString("role");
+                String check_email = value.getString("email");
                 Log.d(TAG, "ROLE - " + check_role);
 
                 assert check_role != null;
                 if(check_role.equals("Администратор"))
                     startActivity(new Intent(this, MainAdminActivity.class));
+
+                if (check_role.equals("Пользователь")) {
+                    Intent intent = new Intent(this, MainUserActivity.class);
+                    intent.putExtra("email", check_email);
+                    startActivity(intent);
+                }
 
             });
 
@@ -72,35 +83,98 @@ public class ActivityLogin extends AppCompatActivity {
             emailED = Objects.requireNonNull(email_login_text_layout.getEditText()).getText().toString();
             passwordED = Objects.requireNonNull(password_login_text_layout.getEditText()).getText().toString();
 
-            firebaseAuth.signInWithEmailAndPassword(emailED, passwordED).addOnCompleteListener(task -> {
+            if(validateFields()) {
 
-                if(task.isSuccessful()) {
-                    Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show();
+                firebaseAuth.signInWithEmailAndPassword(emailED, passwordED).addOnCompleteListener(task -> {
 
-                    userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+                    if (task.isSuccessful()) {
+                        Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show();
 
-                    DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
-                    documentReference.addSnapshotListener(this, (value, error) -> {
-                        assert value != null;
+                        userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
 
-                        String check_role = value.getString("role");
-                        Log.d(TAG, "ROLE - " + check_role);
+                        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+                        documentReference.addSnapshotListener(this, (value, error) -> {
+                            assert value != null;
 
-                        assert check_role != null;
-                        if(check_role.equals("Администратор"))
-                            startActivity(new Intent(this, MainAdminActivity.class));
+                            String check_role = value.getString("role");
+                            Log.d(TAG, "ROLE - " + check_role);
 
-                        if(check_role.equals("Пользователь"))
-                            startActivity(new Intent(this, MainUserActivity.class));
-                    });
+                            assert check_role != null;
+                            if (check_role.equals("Администратор"))
+                                startActivity(new Intent(this, MainAdminActivity.class));
 
-                } else {
-                    Toast.makeText(this, "Error! " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                }
+                            if (check_role.equals("Пользователь"))
+                                startActivity(new Intent(this, MainUserActivity.class));
+                        });
 
-            });
+                    } else {
+                        Toast.makeText(this, "Error! " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                });
+            }
 
         });
 
+        clearErrors();
+
     }
+
+    boolean validateFields() {
+        ErrorsUtils errorsUtils = new ErrorsUtils();
+
+        boolean checkEmail = errorsUtils.validate_field(emailED);
+        boolean checkPassword = errorsUtils.validate_field(passwordED);
+
+        Log.i(TAG, "Email: " + checkEmail + " Password: " + checkPassword);
+
+        if(checkEmail & checkPassword)
+            return true;
+        else {
+            if(!checkEmail)
+                email_login_text_layout.setError("Это поле не может быть пустым!");
+
+            if(!checkPassword)
+                password_login_text_layout.setError("Это поле не может быть пустым!");
+
+            return false;
+        }
+    }
+
+    void clearErrors() {
+        Objects.requireNonNull(email_login_text_layout.getEditText()).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                email_login_text_layout.setError(null);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        Objects.requireNonNull(password_login_text_layout.getEditText()).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                password_login_text_layout.setError(null);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+
 }

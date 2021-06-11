@@ -6,18 +6,18 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import com.george.vector.R;
 import com.george.vector.common.ErrorsUtils;
+import com.george.vector.common.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -25,16 +25,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 
 public class AddTaskAdminActivity extends AppCompatActivity {
 
     MaterialToolbar toolbar;
     ExtendedFloatingActionButton crate_task_fab;
-    MaterialAutoCompleteTextView address_autoComplete;
+    MaterialAutoCompleteTextView address_autoComplete, status_autoComplete;
     TextInputLayout text_input_layout_address, text_input_layout_floor, text_input_layout_cabinet,
             text_input_layout_name_task, text_input_layout_comment, text_input_layout_date_task,
             text_input_layout_executor, text_input_layout_status;
@@ -56,6 +54,7 @@ public class AddTaskAdminActivity extends AppCompatActivity {
 
         crate_task_fab = findViewById(R.id.crate_task);
         address_autoComplete = findViewById(R.id.address_autoComplete);
+        status_autoComplete = findViewById(R.id.status_autoComplete);
         text_input_layout_address = findViewById(R.id.text_input_layout_address);
         text_input_layout_floor = findViewById(R.id.text_input_layout_floor);
         text_input_layout_cabinet = findViewById(R.id.text_input_layout_cabinet);
@@ -79,7 +78,7 @@ public class AddTaskAdminActivity extends AppCompatActivity {
 
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
-        String[] items = getResources().getStringArray(R.array.adresses);
+        String[] items = getResources().getStringArray(R.array.addresses);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 AddTaskAdminActivity.this,
                 R.layout.dropdown_menu_categories,
@@ -87,6 +86,15 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         );
 
         address_autoComplete.setAdapter(adapter);
+
+        String[] items_status = getResources().getStringArray(R.array.status);
+        ArrayAdapter<String> adapter_status = new ArrayAdapter<>(
+                AddTaskAdminActivity.this,
+                R.layout.dropdown_menu_categories,
+                items_status
+        );
+
+        status_autoComplete.setAdapter(adapter_status);
 
         datePickCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
@@ -112,36 +120,38 @@ public class AddTaskAdminActivity extends AppCompatActivity {
 
             if(validateFields()){
                 Date currentDate = new Date();
-                // Форматирование времени как "день.месяц.год"
                 DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
                 String dateText = dateFormat.format(currentDate);
-                // Форматирование времени как "часы:минуты:секунды"
                 DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
                 String timeText = timeFormat.format(currentDate);
 
-                taskID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-                DocumentReference documentReferenceTask = firebaseFirestore.collection("tasks").document(taskID);
+                CollectionReference taskRef = FirebaseFirestore.getInstance().collection("new tasks");
+                taskRef.add(new Task(name_task, address, dateText, floor, cabinet, comment, date_task, executor, status, timeText, email));
+                finish();
 
-                Map<String,Object> task = new HashMap<>();
+//                taskID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+//                DocumentReference documentReferenceTask = firebaseFirestore.collection("new tasks").document(taskID);
+//
+//                Map<String,Object> new_task = new HashMap<>();
+//                //Ручное добавление
+//                new_task.put("description", address);
+//                new_task.put("floor", floor);
+//                new_task.put("cabinet", cabinet);
+//                new_task.put("title", name_task);
+//                new_task.put("comment", comment);
+//                new_task.put("date_task", date_task);
+//                new_task.put("executor", executor);
+//                new_task.put("status", status);
+//
+//                //Автоматическое добавление
+//                new_task.put("priority", dateText);
+//                new_task.put("time_create", timeText);
+//                new_task.put("email_creator", email);
+//
+//                documentReferenceTask.set(new_task)
+//                        .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: task - " + taskID))
+//                        .addOnFailureListener(e -> Log.d("TAG", "Failure - " + e.toString()));
 
-                //Ручное добавление
-                task.put("address", address);
-                task.put("floor", floor);
-                task.put("cabinet", cabinet);
-                task.put("name_task", name_task);
-                task.put("comment", comment);
-                task.put("date_task", date_task);
-                task.put("executor", executor);
-                task.put("status", status);
-
-                //Автоматическое добавление
-                task.put("date_create", dateText);
-                task.put("time_create", timeText);
-                task.put("email_creator", email);
-
-                documentReferenceTask.set(task)
-                        .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: task - " + taskID))
-                        .addOnFailureListener(e -> Log.d("TAG", "Failure - " + e.toString()));
 
             }
 

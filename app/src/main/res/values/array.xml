@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="adresses" >
+    <string-array name="addresses" >
 
         <item>Уллица Авиаторов дом 9 - старое здание</item>
         <item>Уллица Авиаторов дом 9 - новое здание</item>
+        <item>Улица Местечко Барыши дом 25</item>
 
     </string-array>
 
@@ -13,7 +14,7 @@
 
         <item>Новая заявка</item>
         <item>В работе</item>
-        <item>Завершено</item>
+        <item>Архив</item>
 
     </string-array>
 
