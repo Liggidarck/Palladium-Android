@@ -15,6 +15,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class TaskActivity extends AppCompatActivity {
 
     MaterialToolbar topAppBar_tasks_admin;
@@ -22,6 +24,7 @@ public class TaskActivity extends AppCompatActivity {
             text_view_name_task_admin, text_view_comment_task_admin, text_view_status_task_admin,
             text_view_date_create_task_admin;
     Button edit_task_btn;
+    CircleImageView circle_status;
 
     private static final String TAG = "TaskActivity";
 
@@ -44,6 +47,7 @@ public class TaskActivity extends AppCompatActivity {
         text_view_status_task_admin = findViewById(R.id.text_view_status_task_admin);
         text_view_date_create_task_admin = findViewById(R.id.text_view_date_create_task_admin);
         edit_task_btn = findViewById(R.id.edit_task_btn);
+        circle_status = findViewById(R.id.circle_status);
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.get("id_task").toString();
@@ -75,6 +79,16 @@ public class TaskActivity extends AppCompatActivity {
 
             String date_create_text = "Созданно: " + date_create + " " + time_create;
             text_view_date_create_task_admin.setText(date_create_text);
+
+            if(status.equals("Новая заявка"))
+                circle_status.setImageResource(R.color.red);
+
+            if(status.equals("В работе"))
+                circle_status.setImageResource(R.color.orange);
+
+            if(status.equals("Архив"))
+                circle_status.setImageResource(R.color.green);
+
         });
 
         edit_task_btn.setOnClickListener(v -> {

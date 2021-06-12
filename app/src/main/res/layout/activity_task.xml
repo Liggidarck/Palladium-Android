@@ -173,9 +173,9 @@
                         </LinearLayout>
 
                         <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/circle_status"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:src="#FF6B6B"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true" />
 

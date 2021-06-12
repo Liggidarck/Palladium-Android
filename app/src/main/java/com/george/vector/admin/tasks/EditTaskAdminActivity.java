@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
+import com.george.vector.admin.MainAdminActivity;
 import com.george.vector.admin.tasks.sort_by_category.FolderActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -168,8 +169,7 @@ public class EditTaskAdminActivity extends AppCompatActivity {
                     .addOnSuccessListener(unused -> Log.i(TAG, "onSuccess: task - " + id))
                     .addOnFailureListener(e -> Log.i(TAG, "Failure - " + e.toString()));
 
-            Intent intent = new Intent(this, FolderActivity.class);
-            intent.putExtra("section", "new tasks");
+            Intent intent = new Intent(this, MainAdminActivity.class);
             startActivity(intent);
         });
 

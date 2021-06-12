@@ -34,16 +34,10 @@ public class fragmentNewTasks extends Fragment {
 
     private TaskAdapter adapter;
 
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_tasks, container, false);
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
 
         Query query = taskRef.whereEqualTo("status", "Новая заявка");
 

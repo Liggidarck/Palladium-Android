@@ -1,18 +1,22 @@
 package com.george.vector.admin.tasks.sort_by_category.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
+import com.george.vector.admin.TaskActivity;
 import com.george.vector.common.Task;
 import com.george.vector.common.TaskAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,13 +26,10 @@ import com.google.firebase.firestore.Query;
 
 public class fragmentArchiveTasks extends Fragment {
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference taskRef = db.collection("new tasks");
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference taskRef = db.collection("new tasks");
 
     private TaskAdapter adapter;
-
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
 
     @Nullable
     @Override
@@ -47,6 +48,29 @@ public class fragmentArchiveTasks extends Fragment {
         recyclerview_archive_admin.setHasFixedSize(true);
         recyclerview_archive_admin.setLayoutManager(new LinearLayoutManager(fragmentArchiveTasks.this.getContext()));
         recyclerview_archive_admin.setAdapter(adapter);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                adapter.deleteItem(viewHolder.getAdapterPosition());
+            }
+        }).attachToRecyclerView(recyclerview_archive_admin);
+
+        adapter.setOnItemClickListener((documentSnapshot, position) -> {
+            Task task = documentSnapshot.toObject(Task.class);
+            String id = documentSnapshot.getId();
+            String path = documentSnapshot.getReference().getPath();
+            Toast.makeText(fragmentArchiveTasks.this.getContext(), "Position: " + position + " ID: " + id, Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(fragmentArchiveTasks.this.getContext(), TaskActivity.class);
+            intent.putExtra("id_task", id);
+            startActivity(intent);
+        });
 
         return view;
     }

@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.george.vector.R;
@@ -32,13 +33,13 @@ public class AddTaskAdminActivity extends AppCompatActivity {
 
     MaterialToolbar toolbar;
     ExtendedFloatingActionButton crate_task_fab;
-    MaterialAutoCompleteTextView address_autoComplete, status_autoComplete;
+    MaterialAutoCompleteTextView address_autoComplete, status_autoComplete, executor_autoComplete;
     TextInputLayout text_input_layout_address, text_input_layout_floor, text_input_layout_cabinet,
             text_input_layout_name_task, text_input_layout_comment, text_input_layout_date_task,
             text_input_layout_executor, text_input_layout_status;
     TextInputEditText edit_text_date_task;
 
-    String address, floor, cabinet, name_task, comment, date_task, executor, status, taskID, userID, email;
+    String address, floor, cabinet, name_task, comment, date_task, executor, status, userID, email;
 
     Calendar datePickCalendar;
 
@@ -65,6 +66,7 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         text_input_layout_status = findViewById(R.id.text_input_layout_status);
         toolbar = findViewById(R.id.topAppBar_new_task);
         edit_text_date_task = findViewById(R.id.edit_text_date_task);
+        executor_autoComplete = findViewById(R.id.executor_autoComplete);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -96,6 +98,15 @@ public class AddTaskAdminActivity extends AppCompatActivity {
 
         status_autoComplete.setAdapter(adapter_status);
 
+        String[] items_executors = getResources().getStringArray(R.array.executors_ostafyevo);
+        ArrayAdapter<String> adapter_executors = new ArrayAdapter<>(
+                AddTaskAdminActivity.this,
+                R.layout.dropdown_menu_categories,
+                items_executors
+        );
+
+        executor_autoComplete.setAdapter(adapter_executors);
+
         datePickCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
             datePickCalendar.set(Calendar.YEAR, year);
@@ -117,13 +128,23 @@ public class AddTaskAdminActivity extends AppCompatActivity {
             executor = Objects.requireNonNull(text_input_layout_executor.getEditText()).getText().toString();
             status = Objects.requireNonNull(text_input_layout_status.getEditText()).getText().toString();
 
-
             if(validateFields()){
                 Date currentDate = new Date();
                 DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
                 String dateText = dateFormat.format(currentDate);
-                DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+                DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                 String timeText = timeFormat.format(currentDate);
+
+                Log.i(TAG, "address: " + address);
+                Log.i(TAG, "floor: " + floor);
+                Log.i(TAG, "cabinet: " + cabinet);
+                Log.i(TAG, "name_task: " + name_task);
+                Log.i(TAG, "comment: " + comment);
+
+                if(comment.isEmpty())
+                    comment = "Нет коментария к заявке";
+
+                Log.i(TAG, "comment(update): " + comment);
 
                 CollectionReference taskRef = FirebaseFirestore.getInstance().collection("new tasks");
                 taskRef.add(new Task(name_task, address, dateText, floor, cabinet, comment, date_task, executor, status, timeText, email));
@@ -148,12 +169,11 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         boolean check_floor = errorsUtils.validate_field(floor);
         boolean check_cabinet = errorsUtils.validate_field(cabinet);
         boolean check_name_task = errorsUtils.validate_field(name_task);
-        boolean check_comment = errorsUtils.validate_field(comment);
         boolean check_date_task = errorsUtils.validate_field(date_task);
         boolean check_executor = errorsUtils.validate_field(executor);
         boolean check_status = errorsUtils.validate_field(status);
 
-        if(check_address & check_floor & check_cabinet & check_name_task & check_comment & check_date_task & check_executor & check_status) {
+        if(check_address & check_floor & check_cabinet & check_name_task & check_date_task & check_executor & check_status) {
             return true;
         } else {
 
@@ -168,9 +188,6 @@ public class AddTaskAdminActivity extends AppCompatActivity {
 
             if(!check_name_task)
                 text_input_layout_name_task.setError("Это поле не может быть пустым");
-
-            if(!check_comment)
-                text_input_layout_comment.setError("Это поле не может быть пустым");
 
             if(!check_date_task)
                 text_input_layout_date_task.setError("Это поле не может быть пустым");
