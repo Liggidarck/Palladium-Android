@@ -21,10 +21,14 @@ import com.george.vector.common.Task;
 import com.george.vector.common.TaskAdapter;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import java.util.Objects;
 
 public class MainUserActivity extends AppCompatActivity {
 
@@ -32,15 +36,15 @@ public class MainUserActivity extends AppCompatActivity {
     FloatingActionButton fab_add_user;
     BottomAppBar bottomAppBar;
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference taskRef = db.collection("new tasks");
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference taskRef = db.collection("new tasks");
 
     private TaskAdapter adapter;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 
-    static String MAIN_EMAIL;
+    static String MAIN_EMAIL, userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,15 @@ public class MainUserActivity extends AppCompatActivity {
 
         setSupportActionBar(bottomAppBar);
         fab_add_user.setOnClickListener(v -> startActivity(new Intent(this, AddTaskUserActivity.class)));
+
+        userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+        documentReference.addSnapshotListener(this, (value, error) -> {
+            assert value != null;
+            String name = value.getString("name");
+            String role = value.getString("role");
+            Toast.makeText(this, "Name: " + name + " Role: " + role, Toast.LENGTH_SHORT).show();
+        });
 
         setUpRecyclerView();
     }
@@ -78,24 +91,16 @@ public class MainUserActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                adapter.deleteItem(viewHolder.getAdapterPosition());
-            }
-        }).attachToRecyclerView(recyclerView);
-
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             Task task = documentSnapshot.toObject(Task.class);
             String id = documentSnapshot.getId();
             String path = documentSnapshot.getReference().getPath();
-            Toast.makeText(MainUserActivity.this, "Position: " + position + "ID: " + id, Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainUserActivity.this, "Position: " + position + " ID: " + id, Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(this, TaskUserActivity.class);
+            intent.putExtra("id_task", id);
+            startActivity(intent);
+
         });
 
     }

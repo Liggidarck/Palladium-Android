@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.george.vector.R;
@@ -34,13 +35,11 @@ public class AddTaskUserActivity extends AppCompatActivity {
     MaterialAutoCompleteTextView address_autoComplete;
     ExtendedFloatingActionButton crate_task;
 
-    String address, floor, cabinet, name_task, comment, taskID, userID, email;
+    String address, floor, cabinet, name_task, comment, userID, email;
 
     String  date_done = null;
     String  executor = null;
     String  status = "Новая заявка";
-    String  time_priority = null;
-
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -61,6 +60,8 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
+
+        topAppBar_new_task_user.setNavigationOnClickListener(v -> onBackPressed());
 
         String[] items = getResources().getStringArray(R.array.addresses);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -85,42 +86,28 @@ public class AddTaskUserActivity extends AppCompatActivity {
             name_task = Objects.requireNonNull(text_input_layout_name_task.getEditText()).getText().toString();
             comment = Objects.requireNonNull(text_input_layout_comment.getEditText()).getText().toString();
 
+            Log.i(TAG, "address: " + address);
+            Log.i(TAG, "floor: " + floor);
+            Log.i(TAG, "cabinet: " + cabinet);
+            Log.i(TAG, "name_task: " + name_task);
+            Log.i(TAG, "comment: " + comment);
+
+            if(comment.isEmpty())
+                comment = "Нет коментария к заявке";
+
+            Log.i(TAG, "comment(update): " + comment);
+
             if(validateFields()) {
                 Date currentDate = new Date();
                 DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
                 String dateText = dateFormat.format(currentDate);
-                DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+                DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                 String timeText = timeFormat.format(currentDate);
 
                 CollectionReference taskRef = FirebaseFirestore.getInstance().collection("new tasks");
                 taskRef.add(new Task(name_task, address, dateText, floor, cabinet, comment, date_done,
-                        executor, status, time_priority, email));
+                        executor, status, timeText, email));
                 finish();
-
-//                taskID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-//                DocumentReference documentReferenceTask = firebaseFirestore.collection("new tasks").document(taskID);
-//
-//                Map<String,Object> new_task = new HashMap<>();
-//                //Ручное добавление
-//                new_task.put("description", address);
-//                new_task.put("floor", floor);
-//                new_task.put("cabinet", cabinet);
-//                new_task.put("title", name_task);
-//                new_task.put("comment", comment);
-//
-//                new_task.put("date_task", null);
-//                new_task.put("executor", null);
-//                new_task.put("status", "Новая заявка");
-//
-//                //Автоматическое добавление
-//                new_task.put("priority", dateText);
-//                new_task.put("time_create", timeText);
-//                new_task.put("email_creator", email);
-//
-//                documentReferenceTask.set(new_task)
-//                        .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: task - " + taskID))
-//                        .addOnFailureListener(e -> Log.d("TAG", "Failure - " + e.toString()));
-
             }
 
         });
@@ -136,10 +123,8 @@ public class AddTaskUserActivity extends AppCompatActivity {
         boolean check_floor = errorsUtils.validate_field(floor);
         boolean check_cabinet = errorsUtils.validate_field(cabinet);
         boolean check_name_task = errorsUtils.validate_field(name_task);
-        boolean check_comment = errorsUtils.validate_field(comment);
 
-
-        if(check_address & check_floor & check_cabinet & check_name_task & check_comment) {
+        if(check_address & check_floor & check_cabinet & check_name_task ) {
             return true;
         } else {
 
@@ -154,9 +139,6 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
             if(!check_name_task)
                 text_input_layout_name_task.setError("Это поле не может быть пустым");
-
-            if(!check_comment)
-                text_input_layout_comment.setError("Это поле не может быть пустым");
 
             return false;
         }

@@ -49,13 +49,5 @@ public class ActivityProfile extends AppCompatActivity {
             finish();
         });
 
-        userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
-        documentReference.addSnapshotListener(this, (value, error) -> {
-            assert value != null;
-            name_text_view.setText(value.getString("name"));
-            role_text_view.setText(value.getString("role"));
-        });
-
     }
 }

@@ -128,31 +128,6 @@ public class AddTaskAdminActivity extends AppCompatActivity {
                 CollectionReference taskRef = FirebaseFirestore.getInstance().collection("new tasks");
                 taskRef.add(new Task(name_task, address, dateText, floor, cabinet, comment, date_task, executor, status, timeText, email));
                 finish();
-
-//                taskID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-//                DocumentReference documentReferenceTask = firebaseFirestore.collection("new tasks").document(taskID);
-//
-//                Map<String,Object> new_task = new HashMap<>();
-//                //Ручное добавление
-//                new_task.put("description", address);
-//                new_task.put("floor", floor);
-//                new_task.put("cabinet", cabinet);
-//                new_task.put("title", name_task);
-//                new_task.put("comment", comment);
-//                new_task.put("date_task", date_task);
-//                new_task.put("executor", executor);
-//                new_task.put("status", status);
-//
-//                //Автоматическое добавление
-//                new_task.put("priority", dateText);
-//                new_task.put("time_create", timeText);
-//                new_task.put("email_creator", email);
-//
-//                documentReferenceTask.set(new_task)
-//                        .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: task - " + taskID))
-//                        .addOnFailureListener(e -> Log.d("TAG", "Failure - " + e.toString()));
-
-
             }
 
         });

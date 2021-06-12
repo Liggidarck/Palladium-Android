@@ -9,6 +9,12 @@
 
     </string-array>
 
+    <string-array name="executors_ostafyevo">
+
+        <item>Зенкин Анатолий Венидиктович</item>
+        <item>Коннов Алексей Юрьевич</item>
+
+    </string-array>
 
     <string-array name="status" >
 
@@ -22,7 +28,7 @@
 
         <item>Администратор</item>
         <item>Пользователь</item>
-        <item>Рабочий</item>
+        <item>Исполнитель</item>
 
     </string-array>
 

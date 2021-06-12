@@ -17,6 +17,7 @@ import com.george.vector.R;
 import com.george.vector.admin.tasks.sort_by_category.FolderActivity;
 import com.george.vector.common.ErrorsUtils;
 import com.george.vector.user.MainUserActivity;
+import com.george.vector.worker.MainWorkerActivity;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -75,6 +76,12 @@ public class ActivityLogin extends AppCompatActivity {
                     startActivity(intent);
                 }
 
+                if (check_role.equals("Исполнитель")) {
+                    Intent intent = new Intent(this, MainWorkerActivity.class);
+                    intent.putExtra("email", check_email);
+                    startActivity(intent);
+                }
+
             });
 
         }
@@ -97,14 +104,18 @@ public class ActivityLogin extends AppCompatActivity {
                             assert value != null;
 
                             String check_role = value.getString("role");
+                            String check_email = value.getString("email");
                             Log.d(TAG, "ROLE - " + check_role);
 
                             assert check_role != null;
                             if (check_role.equals("Администратор"))
                                 startActivity(new Intent(this, MainAdminActivity.class));
 
-                            if (check_role.equals("Пользователь"))
-                                startActivity(new Intent(this, MainUserActivity.class));
+                            if (check_role.equals("Пользователь")) {
+                                Intent intent = new Intent(this, MainUserActivity.class);
+                                intent.putExtra("email", check_email);
+                                startActivity(intent);
+                            }
                         });
 
                     } else {
