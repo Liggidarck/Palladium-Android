@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.george.vector.R;
 import com.george.vector.admin.tasks.AddTaskAdminActivity;
 import com.george.vector.admin.tasks.sort_by_category.FolderActivity;
-import com.george.vector.common.ActivityProfile;
+import com.george.vector.common.ProfileBottomSheet;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,8 +35,6 @@ public class MainAdminActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 
-    String userID;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.MainActivity);
@@ -53,15 +51,6 @@ public class MainAdminActivity extends AppCompatActivity {
         bottomAppBar = findViewById(R.id.bottomAppBar);
 
         setSupportActionBar(bottomAppBar);
-
-        userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
-        documentReference.addSnapshotListener(this, (value, error) -> {
-            assert value != null;
-            String name = value.getString("name");
-            String role = value.getString("role");
-            Toast.makeText(this, "Name: " + name + " Role: " + role, Toast.LENGTH_SHORT).show();
-        });
 
         bottomAppBar.setNavigationOnClickListener(v -> {
             AdminBottomSheet bottomSheet = new AdminBottomSheet();
@@ -100,8 +89,10 @@ public class MainAdminActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.profile_item)
-            startActivity(new Intent(this, ActivityProfile.class));
+        if(item.getItemId() == R.id.profile_item) {
+            ProfileBottomSheet bottomSheet = new ProfileBottomSheet();
+            bottomSheet.show(getSupportFragmentManager(), "ProfileBottomSheet");
+        }
 
         return super.onOptionsItemSelected(item);
     }

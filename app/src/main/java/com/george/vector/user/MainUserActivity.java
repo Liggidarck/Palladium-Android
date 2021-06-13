@@ -15,18 +15,15 @@ import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
-import com.george.vector.common.ActivityProfile;
+import com.george.vector.common.ProfileBottomSheet;
 import com.george.vector.common.Task;
 import com.george.vector.common.TaskAdapter;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-
-import java.util.Objects;
 
 public class MainUserActivity extends AppCompatActivity {
 
@@ -42,7 +39,7 @@ public class MainUserActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 
-    static String MAIN_EMAIL, userID;
+    static String MAIN_EMAIL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,16 +54,12 @@ public class MainUserActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         setSupportActionBar(bottomAppBar);
-        fab_add_user.setOnClickListener(v -> startActivity(new Intent(this, AddTaskUserActivity.class)));
-
-        userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
-        documentReference.addSnapshotListener(this, (value, error) -> {
-            assert value != null;
-            String name = value.getString("name");
-            String role = value.getString("role");
-            Toast.makeText(this, "Name: " + name + " Role: " + role, Toast.LENGTH_SHORT).show();
+        bottomAppBar.setNavigationOnClickListener(v -> {
+            SettingsUserBottomSheet bottomSheet = new SettingsUserBottomSheet();
+            bottomSheet.show(getSupportFragmentManager(), "SettingsUserBottomSheet");
         });
+
+        fab_add_user.setOnClickListener(v -> startActivity(new Intent(this, AddTaskUserActivity.class)));
 
         setUpRecyclerView();
     }
@@ -124,8 +117,10 @@ public class MainUserActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.profile_item)
-            startActivity(new Intent(this, ActivityProfile.class));
+        if(item.getItemId() == R.id.profile_item){
+            ProfileBottomSheet bottomSheet = new ProfileBottomSheet();
+            bottomSheet.show(getSupportFragmentManager(), "ProfileBottomSheet");
+        }
 
         return super.onOptionsItemSelected(item);
     }
