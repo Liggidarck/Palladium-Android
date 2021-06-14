@@ -19,7 +19,6 @@ import com.george.vector.R;
 import com.george.vector.admin.TaskActivity;
 import com.george.vector.common.Task;
 import com.george.vector.common.TaskAdapter;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;

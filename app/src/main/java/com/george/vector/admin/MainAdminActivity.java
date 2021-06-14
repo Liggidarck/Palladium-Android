@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.george.vector.R;
 import com.george.vector.admin.tasks.AddTaskAdminActivity;
@@ -19,10 +18,8 @@ import com.george.vector.common.ProfileBottomSheet;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Objects;
 
 public class MainAdminActivity extends AppCompatActivity {
 

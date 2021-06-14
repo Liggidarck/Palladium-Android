@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.george.vector.R;
+import com.george.vector.admin.edit_users.ListUsersActivity;
 import com.george.vector.auth.ActivityLogin;
 import com.george.vector.auth.ActivityRegisterUser;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -22,7 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class AdminBottomSheet extends BottomSheetDialogFragment {
 
     ImageView close_btn;
-    RelativeLayout layout_new_person;
+    RelativeLayout layout_new_person, layout_edit_person;
     Button btn_logout;
 
     FirebaseAuth firebaseAuth;
@@ -36,6 +37,7 @@ public class AdminBottomSheet extends BottomSheetDialogFragment {
         close_btn = view.findViewById(R.id.close_btn);
         layout_new_person = view.findViewById(R.id.layout_new_person);
         btn_logout = view.findViewById(R.id.btn_logout);
+        layout_edit_person = view.findViewById(R.id.layout_edit_person);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -46,6 +48,7 @@ public class AdminBottomSheet extends BottomSheetDialogFragment {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(AdminBottomSheet.this.getContext(), ActivityLogin.class));
         });
+        layout_edit_person.setOnClickListener(v -> startActivity(new Intent(AdminBottomSheet.this.getContext(), ListUsersActivity.class)));
 
         return view;
     }

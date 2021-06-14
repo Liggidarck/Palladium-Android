@@ -55,9 +55,8 @@ public class TaskAdapter extends FirestoreRecyclerAdapter<Task, TaskAdapter.Task
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
-                if(position != RecyclerView.NO_POSITION && listener != null) {
+                if(position != RecyclerView.NO_POSITION && listener != null)
                     listener.onItemClick(getSnapshots().getSnapshot(position), position);
-                }
             });
 
         }

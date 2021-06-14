@@ -67,6 +67,35 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/layout_edit_person"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true" >
+
+        <ImageView
+            android:id="@+id/following_edit_sheet"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/ic_baseline_edit_24"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Отредактировать данные"
+            android:layout_toEndOf="@id/following_edit_sheet"
+            android:textSize="17sp"
+            android:textColor="@color/black"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp" />
+
+    </RelativeLayout>
+
     <Button
         android:id="@+id/btn_logout"
         android:layout_width="match_parent"

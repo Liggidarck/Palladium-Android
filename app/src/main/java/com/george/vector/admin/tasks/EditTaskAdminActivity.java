@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
 import com.george.vector.admin.MainAdminActivity;
-import com.george.vector.admin.tasks.sort_by_category.FolderActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
@@ -20,10 +19,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -101,10 +98,14 @@ public class EditTaskAdminActivity extends AppCompatActivity {
             Objects.requireNonNull(text_input_layout_floor.getEditText()).setText(floor);
             Objects.requireNonNull(text_input_layout_cabinet.getEditText()).setText(cabinet);
             Objects.requireNonNull(text_input_layout_name_task.getEditText()).setText(name_task);
-            Objects.requireNonNull(text_input_layout_comment.getEditText()).setText(comment);
             Objects.requireNonNull(text_input_layout_date_task.getEditText()).setText(date_done);
             Objects.requireNonNull(text_input_layout_executor.getEditText()).setText(executor);
             Objects.requireNonNull(text_input_layout_status.getEditText()).setText(status);
+
+            if(comment.equals("Нет коментария к заявке"))
+                Objects.requireNonNull(text_input_layout_comment.getEditText()).setText("");
+            else
+                Objects.requireNonNull(text_input_layout_comment.getEditText()).setText(comment);
 
             String[] addresses = getResources().getStringArray(R.array.addresses);
             ArrayAdapter<String> arrayAdapterAddresses = new ArrayAdapter<>(
@@ -146,6 +147,9 @@ public class EditTaskAdminActivity extends AppCompatActivity {
             String update_date_task = Objects.requireNonNull(text_input_layout_date_task.getEditText()).getText().toString();
             String update_executor = Objects.requireNonNull(text_input_layout_executor.getEditText()).getText().toString();
             String update_status = Objects.requireNonNull(text_input_layout_status.getEditText()).getText().toString();
+
+            if(update_comment.isEmpty())
+                update_comment = "Нет коментария к заявке";
 
             DocumentReference documentReferenceTask = firebaseFirestore.collection("new tasks").document(id);
             Map<String,Object> new_task = new HashMap<>();
