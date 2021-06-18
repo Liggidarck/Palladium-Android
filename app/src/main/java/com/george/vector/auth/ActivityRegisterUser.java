@@ -2,6 +2,7 @@ package com.george.vector.auth;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.george.vector.R;
+import com.george.vector.admin.MainAdminActivity;
 import com.george.vector.common.ErrorsUtils;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
@@ -78,8 +80,6 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
 
             if(validateFields()) {
-                Toast.makeText(this, "Register", Toast.LENGTH_SHORT).show();
-
                 firebaseAuth.createUserWithEmailAndPassword(email_user, password_user).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(ActivityRegisterUser.this, "User Added", Toast.LENGTH_LONG).show();
@@ -96,12 +96,10 @@ public class ActivityRegisterUser extends AppCompatActivity {
                                 .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user - " + userID))
                                 .addOnFailureListener(e -> Log.d("TAG", "Failure - " + e.toString()));
 
-                    } else {
+                        startActivity(new Intent(this, MainAdminActivity.class));
+
+                    } else
                         Toast.makeText(ActivityRegisterUser.this, "Error" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
-
-                    }
-
-
                 });
             }
 

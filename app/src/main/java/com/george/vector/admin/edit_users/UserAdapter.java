@@ -23,9 +23,12 @@ public class UserAdapter extends FirestoreRecyclerAdapter<User, UserAdapter.User
 
     @Override
     protected void onBindViewHolder(@NonNull UserAdapter.UserHolder holder, int position, @NonNull User model) {
-        holder.textViewName.setText(model.getName());
-        holder.textViewLastName.setText(model.getLast_name());
-        holder.textViewPatronymic.setText(model.getPatronymic());
+        String name = model.getName();
+        String last_name = model.getLast_name();
+        String patronymic = model.getPatronymic();
+        String full_name = String.format("%s %s %s", name, last_name, patronymic);
+
+        holder.textViewName.setText(full_name);
         holder.textViewEmail.setText(model.getEmail());
         holder.textViewRole.setText(model.getRole());
     }
@@ -42,14 +45,14 @@ public class UserAdapter extends FirestoreRecyclerAdapter<User, UserAdapter.User
     }
 
     class UserHolder extends RecyclerView.ViewHolder {
-        TextView textViewName, textViewLastName, textViewPatronymic, textViewEmail, textViewRole;
+        final TextView textViewName;
+        final TextView textViewEmail;
+        final TextView textViewRole;
 
         public UserHolder(@NonNull View itemView) {
             super(itemView);
 
             textViewName = itemView.findViewById(R.id.text_view_name_user);
-            textViewLastName = itemView.findViewById(R.id.text_view_last_name_user);
-            textViewPatronymic = itemView.findViewById(R.id.text_view_patronymic_user);
             textViewEmail = itemView.findViewById(R.id.text_view_email_user);
             textViewRole = itemView.findViewById(R.id.text_view_role_user);
 

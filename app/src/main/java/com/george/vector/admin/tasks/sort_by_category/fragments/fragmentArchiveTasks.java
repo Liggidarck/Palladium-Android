@@ -2,10 +2,10 @@ package com.george.vector.admin.tasks.sort_by_category.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +25,7 @@ import com.google.firebase.firestore.Query;
 
 public class fragmentArchiveTasks extends Fragment {
 
+    private static final String TAG = "fragmentArchiveTasks";
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference taskRef = db.collection("new tasks");
 
@@ -64,7 +65,8 @@ public class fragmentArchiveTasks extends Fragment {
             Task task = documentSnapshot.toObject(Task.class);
             String id = documentSnapshot.getId();
             String path = documentSnapshot.getReference().getPath();
-            Toast.makeText(fragmentArchiveTasks.this.getContext(), "Position: " + position + " ID: " + id, Toast.LENGTH_SHORT).show();
+
+            Log.i(TAG, "Position: " + position + " ID: " + id);
 
             Intent intent = new Intent(fragmentArchiveTasks.this.getContext(), TaskActivity.class);
             intent.putExtra("id_task", id);

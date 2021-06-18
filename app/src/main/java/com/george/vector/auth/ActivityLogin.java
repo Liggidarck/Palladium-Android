@@ -2,19 +2,20 @@ package com.george.vector.auth;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.george.vector.admin.MainAdminActivity;
 import com.george.vector.R;
-import com.george.vector.admin.tasks.sort_by_category.FolderActivity;
 import com.george.vector.common.ErrorsUtils;
 import com.george.vector.user.MainUserActivity;
 import com.george.vector.worker.MainWorkerActivity;
@@ -23,8 +24,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public class ActivityLogin extends AppCompatActivity {
@@ -35,7 +34,7 @@ public class ActivityLogin extends AppCompatActivity {
 
     // Все глобальные переменные
     String emailED, passwordED, userID;
-    private static final String TAG = "Login Activity";
+    private static final String TAG = "LoginActivity";
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -53,9 +52,10 @@ public class ActivityLogin extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        if(firebaseAuth.getCurrentUser() != null) {
-            Toast.makeText(ActivityLogin.this, "Start Application", Toast.LENGTH_SHORT).show();
+        boolean check = isOnline();
+        Log.d(TAG, "check internet: " + check);
 
+        if(firebaseAuth.getCurrentUser() != null) {
             userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
 
             DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
@@ -95,7 +95,7 @@ public class ActivityLogin extends AppCompatActivity {
                 firebaseAuth.signInWithEmailAndPassword(emailED, passwordED).addOnCompleteListener(task -> {
 
                     if (task.isSuccessful()) {
-                        Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Login success");
 
                         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
 
@@ -185,6 +185,12 @@ public class ActivityLogin extends AppCompatActivity {
 
             }
         });
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
     }
 
 

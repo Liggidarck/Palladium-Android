@@ -1,5 +1,6 @@
 package com.george.vector.admin.edit_users;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -115,6 +116,7 @@ public class EditUserActivity extends AppCompatActivity {
                         .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user - " + userID))
                         .addOnFailureListener(e -> Log.d("TAG", "Failure - " + e.toString()));
 
+                startActivity(new Intent(this, ListUsersActivity.class));
 
             }
 

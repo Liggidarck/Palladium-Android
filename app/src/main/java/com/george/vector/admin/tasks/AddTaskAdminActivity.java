@@ -1,15 +1,22 @@
 package com.george.vector.admin.tasks;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.george.vector.R;
+import com.george.vector.admin.MainAdminActivity;
 import com.george.vector.common.ErrorsUtils;
 import com.george.vector.common.Task;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -33,6 +40,7 @@ public class AddTaskAdminActivity extends AppCompatActivity {
 
     MaterialToolbar toolbar;
     ExtendedFloatingActionButton crate_task_fab;
+
     MaterialAutoCompleteTextView address_autoComplete, status_autoComplete, executor_autoComplete;
     TextInputLayout text_input_layout_address, text_input_layout_floor, text_input_layout_cabinet,
             text_input_layout_name_task, text_input_layout_comment, text_input_layout_date_task,
@@ -129,32 +137,62 @@ public class AddTaskAdminActivity extends AppCompatActivity {
             status = Objects.requireNonNull(text_input_layout_status.getEditText()).getText().toString();
 
             if(validateFields()){
-                Date currentDate = new Date();
-                DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-                String dateText = dateFormat.format(currentDate);
-                DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                String timeText = timeFormat.format(currentDate);
 
-                Log.i(TAG, "address: " + address);
-                Log.i(TAG, "floor: " + floor);
-                Log.i(TAG, "cabinet: " + cabinet);
-                Log.i(TAG, "name_task: " + name_task);
-                Log.i(TAG, "comment: " + comment);
+                if(!isOnline()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-                if(comment.isEmpty())
-                    comment = "Нет коментария к заявке";
+                    builder.setTitle("Внимание!")
+                            .setMessage("Отсуствует интернет подключение. Вы можете сохранить заявку у себя в телефоне и когда интренет снова появиться заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку заявку позже, когда появиться интрнет.")
 
-                Log.i(TAG, "comment(update): " + comment);
+                            .setPositiveButton("Сохранить",
+                                    (DialogInterface.OnClickListener) (dialog, id) -> saveTask())
 
-                CollectionReference taskRef = FirebaseFirestore.getInstance().collection("new tasks");
-                taskRef.add(new Task(name_task, address, dateText, floor, cabinet, comment, date_task, executor, status, timeText, email));
-                finish();
+                            .setNegativeButton(android.R.string.cancel,
+                                    (DialogInterface.OnClickListener) (dialog, id) -> startActivity(new Intent(this, MainAdminActivity.class)));
+
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                } else
+                    saveTask();
+
             }
 
         });
 
         clearErrors();
     }
+
+    void saveTask() {
+        Date currentDate = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        String dateText = dateFormat.format(currentDate);
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        String timeText = timeFormat.format(currentDate);
+
+        Log.i(TAG, "address: " + address);
+        Log.i(TAG, "floor: " + floor);
+        Log.i(TAG, "cabinet: " + cabinet);
+        Log.i(TAG, "name_task: " + name_task);
+        Log.i(TAG, "comment: " + comment);
+
+        if (comment.isEmpty())
+            comment = "Нет коментария к заявке";
+
+        Log.i(TAG, "comment(update): " + comment);
+
+        CollectionReference taskRef = FirebaseFirestore.getInstance().collection("new tasks");
+        taskRef.add(new Task(name_task, address, dateText, floor, cabinet, comment, date_task, executor, status, timeText, email));
+        finish();
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
+    }
+
     void updateLabel() {
         String date_text = "MM.dd.yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(date_text, Locale.US);

@@ -1,42 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="5dp"
     android:layout_marginStart="10dp"
     android:layout_marginEnd="10dp"
     android:foreground="?android:attr/selectableItemBackground"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:padding="8dp">
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/text_view_nate_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="title"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+    <TextView
+        android:id="@+id/text_view_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Address"
+        android:layout_below="@id/text_view_nate_task"
+        android:textColor="@color/black"
+        android:textSize="17sp"/>
+
+    <TextView
+        android:id="@+id/date_create"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10.06.2021"
+        android:layout_below="@id/text_view_address"
+        android:layout_marginTop="5dp"/>
+
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="8dp" >
+        android:layout_height="3dp"
+        android:src="@drawable/line_gray"
+        android:layout_below="@+id/date_create"
+        android:layout_marginTop="10dp"/>
 
-        <TextView
-            android:id="@+id/text_view_nate_task"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="title"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
-
-        <TextView
-            android:id="@+id/text_view_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Address"
-            android:layout_below="@id/text_view_nate_task" />
-
-        <TextView
-            android:id="@+id/date_create"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="10.06.2021"
-            android:layout_below="@id/text_view_address" />
-
-    </RelativeLayout>
-
-</androidx.cardview.widget.CardView>
+</RelativeLayout>

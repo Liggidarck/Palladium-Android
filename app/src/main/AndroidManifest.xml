@@ -20,7 +20,6 @@
         <activity android:name=".admin.TaskActivity" />
         <activity android:name=".admin.tasks.AddTaskAdminActivity" />
         <activity android:name=".admin.tasks.sort_by_category.FolderActivity" />
-        <activity android:name=".common.ActivityProfile" />
         <activity android:name=".user.MainUserActivity" />
         <activity android:name=".auth.ActivityRegisterUser" />
         <activity android:name=".admin.MainAdminActivity" />

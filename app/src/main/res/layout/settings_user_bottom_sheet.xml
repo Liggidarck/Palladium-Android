@@ -36,7 +36,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="выйти из аккаунта"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
     <View
         android:layout_width="match_parent"

@@ -42,9 +42,9 @@ public class TaskAdapter extends FirestoreRecyclerAdapter<Task, TaskAdapter.Task
 
     class TaskHolder extends RecyclerView.ViewHolder {
 
-        TextView textViewTitle;
-        TextView textViewDescription;
-        TextView textViewPriority;
+        final TextView textViewTitle;
+        final TextView textViewDescription;
+        final TextView textViewPriority;
 
         public TaskHolder(@NonNull View itemView) {
             super(itemView);

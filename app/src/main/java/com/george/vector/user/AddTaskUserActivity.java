@@ -2,6 +2,11 @@ package com.george.vector.user;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -37,9 +42,9 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
     String address, floor, cabinet, name_task, comment, userID, email;
 
-    String  date_done = null;
-    String  executor = null;
-    String  status = "Новая заявка";
+    final String  date_done = null;
+    final String  executor = null;
+    final String  status = "Новая заявка";
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -98,22 +103,48 @@ public class AddTaskUserActivity extends AppCompatActivity {
             Log.i(TAG, "comment(update): " + comment);
 
             if(validateFields()) {
-                Date currentDate = new Date();
-                DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-                String dateText = dateFormat.format(currentDate);
-                DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                String timeText = timeFormat.format(currentDate);
+                if(!isOnline()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-                CollectionReference taskRef = FirebaseFirestore.getInstance().collection("new tasks");
-                taskRef.add(new Task(name_task, address, dateText, floor, cabinet, comment, date_done,
-                        executor, status, timeText, email));
-                finish();
+                    builder.setTitle("Внимание!")
+                            .setMessage("Отсуствует интернет подключение. Вы можете сохранить заявку у себя в телефоне и когда интренет снова появиться заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку заявку позже, когда появиться интрнет.")
+
+                            .setPositiveButton("Сохранить",
+                                    (DialogInterface.OnClickListener) (dialog, id) -> saveTask())
+
+                            .setNegativeButton(android.R.string.cancel,
+                                    (DialogInterface.OnClickListener) (dialog, id) -> onBackPressed());
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                } else
+                    saveTask();
             }
 
         });
 
         clear_errors();
 
+    }
+
+    void saveTask() {
+        Date currentDate = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        String dateText = dateFormat.format(currentDate);
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        String timeText = timeFormat.format(currentDate);
+
+        CollectionReference taskRef = FirebaseFirestore.getInstance().collection("new tasks");
+        taskRef.add(new Task(name_task, address, dateText, floor, cabinet, comment, date_done,
+                executor, status, timeText, email));
+        finish();
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
     }
 
     boolean validateFields() {
