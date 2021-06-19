@@ -16,12 +16,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
-import com.george.vector.admin.TaskActivity;
+import com.george.vector.admin.tasks.TaskActivity;
 import com.george.vector.common.Task;
 import com.george.vector.common.TaskAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class fragmentArchiveTasks extends Fragment {
 
@@ -31,10 +39,14 @@ public class fragmentArchiveTasks extends Fragment {
 
     private TaskAdapter adapter;
 
+    FirebaseFirestore firebaseFirestore;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_archive_tasks, container, false);
+
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
         Query query = taskRef.whereEqualTo("status", "Архив");
 
@@ -74,6 +86,18 @@ public class fragmentArchiveTasks extends Fragment {
         });
 
         return view;
+    }
+
+    void delete_image(String image_key) {
+        String storageUrl = "images/" + image_key;
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(storageUrl);
+        storageReference.delete().addOnSuccessListener(aVoid -> {
+            // File deleted successfully
+            Log.d(TAG, "onSuccess: deleted file");
+        }).addOnFailureListener(exception -> {
+            // Uh-oh, an error occurred!
+            Log.d(TAG, "onFailure: did not delete file");
+        });
     }
 
     @Override

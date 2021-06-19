@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
@@ -12,8 +13,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
+import com.george.vector.admin.MainAdminActivity;
 import com.george.vector.common.ErrorsUtils;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,10 +30,14 @@ import java.util.Objects;
 public class EditUserActivity extends AppCompatActivity {
 
     MaterialToolbar topAppBar_register;
-    Button update_user_btn;
+
     TextInputLayout text_input_layout_name_user, text_input_layout_last_name_user,
             text_input_layout_patronymic_user, text_input_layout_email_user, text_input_layout_role_user;
     MaterialAutoCompleteTextView auto_complete_text_view_role_user;
+
+    Button update_user_btn;
+
+    LinearProgressIndicator progress_bar_edit_user;
 
     String name_user, last_name_user, patronymic_user, email_user, role_user, userID;
 
@@ -53,6 +60,7 @@ public class EditUserActivity extends AppCompatActivity {
         text_input_layout_role_user = findViewById(R.id.text_input_layout_edit_role_user);
         auto_complete_text_view_role_user = findViewById(R.id.auto_complete_text_view_edit_role_user);
         update_user_btn = findViewById(R.id.update_user_btn);
+        progress_bar_edit_user = findViewById(R.id.progress_bar_edit_user);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -102,9 +110,8 @@ public class EditUserActivity extends AppCompatActivity {
             email_user = Objects.requireNonNull(text_input_layout_email_user.getEditText()).getText().toString();
             role_user = Objects.requireNonNull(text_input_layout_role_user.getEditText()).getText().toString();
 
-
             if(validateFields()) {
-                Toast.makeText(this, "Update", Toast.LENGTH_SHORT).show();
+                progress_bar_edit_user.setVisibility(View.VISIBLE);
 
                 Map<String, Object> user = new HashMap<>();
                 user.put("name", name_user);
@@ -112,11 +119,21 @@ public class EditUserActivity extends AppCompatActivity {
                 user.put("patronymic", patronymic_user);
                 user.put("email", email_user);
                 user.put("role", role_user);
+
+                documentReference.get().addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        Log.i(TAG, "update completed!");
+                        progress_bar_edit_user.setVisibility(View.INVISIBLE);
+                         startActivity(new Intent(this, ListUsersActivity.class));
+                    } else {
+                        Log.i(TAG, "Error: " + task.getException());
+                    }
+
+                });
+
                 documentReference.set(user)
                         .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user - " + userID))
                         .addOnFailureListener(e -> Log.d("TAG", "Failure - " + e.toString()));
-
-                startActivity(new Intent(this, ListUsersActivity.class));
 
             }
 

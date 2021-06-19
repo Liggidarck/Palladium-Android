@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
@@ -47,6 +46,10 @@ public class MainUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_user);
 
+        Bundle arguments = getIntent().getExtras();
+        MAIN_EMAIL = arguments.get("email").toString();
+        Log.i(TAG, "email - " + MAIN_EMAIL);
+
         bottomAppBar = findViewById(R.id.bottomAppBarUser);
         fab_add_user = findViewById(R.id.fab_add_user);
 
@@ -65,10 +68,6 @@ public class MainUserActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerView() {
-        Bundle arguments = getIntent().getExtras();
-        MAIN_EMAIL = arguments.get("email").toString();
-        Log.i(TAG, "email - " + MAIN_EMAIL);
-
         Query query = taskRef.whereEqualTo("email_creator", MAIN_EMAIL);
 
         FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
@@ -86,7 +85,7 @@ public class MainUserActivity extends AppCompatActivity {
             Task task = documentSnapshot.toObject(Task.class);
             String id = documentSnapshot.getId();
             String path = documentSnapshot.getReference().getPath();
-            Toast.makeText(MainUserActivity.this, "Position: " + position + " ID: " + id, Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "Position: " + position + " ID: " + id);
 
             Intent intent = new Intent(this, TaskUserActivity.class);
             intent.putExtra("id_task", id);

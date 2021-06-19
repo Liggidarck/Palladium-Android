@@ -7,12 +7,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
@@ -21,6 +26,7 @@ import com.george.vector.common.ErrorsUtils;
 import com.george.vector.common.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -28,6 +34,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -35,6 +47,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.UUID;
 
 public class AddTaskAdminActivity extends AppCompatActivity {
 
@@ -47,14 +60,22 @@ public class AddTaskAdminActivity extends AppCompatActivity {
             text_input_layout_executor, text_input_layout_status;
     TextInputEditText edit_text_date_task;
 
-    String address, floor, cabinet, name_task, comment, date_task, executor, status, userID, email;
+    ImageView task_image_admin;
+
+    LinearProgressIndicator progress_bar_add_task_admin;
+
+    String address, floor, cabinet, name_task, comment, date_task, executor, status, userID, email, randomKey;
 
     Calendar datePickCalendar;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
+    FirebaseStorage firebaseStorage;
+    StorageReference storageReference;
 
     private static final String TAG = "AddTaskAdmin";
+
+    public Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +96,16 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.topAppBar_new_task);
         edit_text_date_task = findViewById(R.id.edit_text_date_task);
         executor_autoComplete = findViewById(R.id.executor_autoComplete);
+        progress_bar_add_task_admin = findViewById(R.id.progress_bar_add_task_admin);
+        task_image_admin = findViewById(R.id.task_image_admin);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
+
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
+
+        task_image_admin.setOnClickListener(v -> chooseImage());
 
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         DocumentReference documentReferenceUser = firebaseFirestore.collection("users").document(userID);
@@ -145,10 +173,10 @@ public class AddTaskAdminActivity extends AppCompatActivity {
                             .setMessage("Отсуствует интернет подключение. Вы можете сохранить заявку у себя в телефоне и когда интренет снова появиться заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку заявку позже, когда появиться интрнет.")
 
                             .setPositiveButton("Сохранить",
-                                    (DialogInterface.OnClickListener) (dialog, id) -> saveTask())
+                                    (dialog, id) -> saveTask())
 
                             .setNegativeButton(android.R.string.cancel,
-                                    (DialogInterface.OnClickListener) (dialog, id) -> startActivity(new Intent(this, MainAdminActivity.class)));
+                                    (dialog, id) -> startActivity(new Intent(this, MainAdminActivity.class)));
 
 
                     AlertDialog dialog = builder.create();
@@ -164,7 +192,53 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         clearErrors();
     }
 
+    void chooseImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            task_image_admin.setImageURI(imageUri);
+        }
+
+    }
+
+    private void uploadImage() {
+        randomKey = UUID.randomUUID().toString();
+        String final_url = String.format("images/%s", randomKey);
+
+        Log.i(TAG, "url: " + final_url);
+
+        StorageReference reference = storageReference.child(final_url);
+
+        reference.putFile(imageUri)
+                .addOnSuccessListener(taskSnapshot -> {
+                    progress_bar_add_task_admin.setVisibility(View.INVISIBLE);
+                    Log.i(TAG, "Image Uploaded");
+
+                })
+                .addOnFailureListener(e -> {
+                    progress_bar_add_task_admin.setVisibility(View.INVISIBLE);
+                    Log.i(TAG, "Error! " + e);
+                })
+                .addOnProgressListener(snapshot -> {
+                    progress_bar_add_task_admin.setVisibility(View.VISIBLE);
+                    double progress = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                    Log.i(TAG, "Progress: " + (int) progress + "%");
+                    progress_bar_add_task_admin.setProgress((int) progress);
+                });
+    }
+
     void saveTask() {
+        progress_bar_add_task_admin.setVisibility(View.VISIBLE);
+
         Date currentDate = new Date();
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         String dateText = dateFormat.format(currentDate);
@@ -183,8 +257,22 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         Log.i(TAG, "comment(update): " + comment);
 
         CollectionReference taskRef = FirebaseFirestore.getInstance().collection("new tasks");
-        taskRef.add(new Task(name_task, address, dateText, floor, cabinet, comment, date_task, executor, status, timeText, email));
-        finish();
+        uploadImage();
+        taskRef.add(new Task(name_task, address, dateText, floor, cabinet, comment,
+                date_task, executor, status, timeText, email, randomKey));
+
+        taskRef.get().addOnCompleteListener(task -> {
+
+            if(task.isSuccessful()) {
+                Log.i(TAG, "add completed!");
+                progress_bar_add_task_admin.setVisibility(View.INVISIBLE);
+                startActivity(new Intent(this, MainAdminActivity.class));
+            } else {
+                Log.i(TAG, "Error: " + task.getException());
+            }
+
+        });
+
     }
 
     public boolean isOnline() {

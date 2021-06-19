@@ -1,53 +1,69 @@
 package com.george.vector.user;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 
 import com.george.vector.R;
 import com.george.vector.common.ErrorsUtils;
 import com.george.vector.common.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.UUID;
 
 public class AddTaskUserActivity extends AppCompatActivity {
 
-    private static final String TAG = "AddTaskUserActivity";
+
     MaterialToolbar topAppBar_new_task_user;
+
     TextInputLayout text_input_layout_address, text_input_layout_floor, text_input_layout_cabinet,
             text_input_layout_name_task, text_input_layout_comment;
     MaterialAutoCompleteTextView address_autoComplete;
+
     ExtendedFloatingActionButton crate_task;
+    LinearProgressIndicator progress_bar_add_task_user;
+    ImageView image_view_task_user;
 
-    String address, floor, cabinet, name_task, comment, userID, email;
+    String address, floor, cabinet, name_task, comment, userID, email, randomKey;
 
-    final String  date_done = null;
-    final String  executor = null;
     final String  status = "Новая заявка";
+    private static final String TAG = "AddTaskUserActivity";
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
+    FirebaseStorage firebaseStorage;
+    StorageReference storageReference;
+
+    public Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +78,17 @@ public class AddTaskUserActivity extends AppCompatActivity {
         text_input_layout_comment = findViewById(R.id.text_input_layout_comment);
         address_autoComplete = findViewById(R.id.address_autoComplete);
         crate_task = findViewById(R.id.crate_task);
+        progress_bar_add_task_user = findViewById(R.id.progress_bar_add_task_user);
+        image_view_task_user = findViewById(R.id.image_view_add_task_user);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
 
         topAppBar_new_task_user.setNavigationOnClickListener(v -> onBackPressed());
+
+        image_view_task_user.setOnClickListener(v -> chooseImage());
 
         String[] items = getResources().getStringArray(R.array.addresses);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -128,7 +150,53 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
     }
 
+    void chooseImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            image_view_task_user.setImageURI(imageUri);
+        }
+
+    }
+
+    private void uploadImage() {
+        randomKey = UUID.randomUUID().toString();
+        String final_url = String.format("images/%s", randomKey);
+
+        Log.i(TAG, "url: " + final_url);
+
+        StorageReference reference = storageReference.child(final_url);
+
+        reference.putFile(imageUri)
+                .addOnSuccessListener(taskSnapshot -> {
+                    progress_bar_add_task_user.setVisibility(View.INVISIBLE);
+                    Log.i(TAG, "Image Uploaded");
+
+                })
+                .addOnFailureListener(e -> {
+                    progress_bar_add_task_user.setVisibility(View.INVISIBLE);
+                    Log.i(TAG, "Error! " + e);
+                })
+                .addOnProgressListener(snapshot -> {
+                    progress_bar_add_task_user.setVisibility(View.VISIBLE);
+                    double progress = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                    Log.i(TAG, "Progress: " + (int) progress + "%");
+                    progress_bar_add_task_user.setProgress((int) progress);
+                });
+    }
+
     void saveTask() {
+        progress_bar_add_task_user.setVisibility(View.VISIBLE);
+
         Date currentDate = new Date();
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         String dateText = dateFormat.format(currentDate);
@@ -136,9 +204,23 @@ public class AddTaskUserActivity extends AppCompatActivity {
         String timeText = timeFormat.format(currentDate);
 
         CollectionReference taskRef = FirebaseFirestore.getInstance().collection("new tasks");
-        taskRef.add(new Task(name_task, address, dateText, floor, cabinet, comment, date_done,
-                executor, status, timeText, email));
-        finish();
+        uploadImage();
+        taskRef.add(new Task(name_task, address, dateText, floor, cabinet, comment, null,
+                null, status, timeText, email, randomKey));
+
+        taskRef.get().addOnCompleteListener(task -> {
+
+            if(task.isSuccessful()) {
+                Log.i(TAG, "add completed!");
+                progress_bar_add_task_user.setVisibility(View.INVISIBLE);
+                finish();
+            } else {
+                Log.i(TAG, "Error: " + task.getException());
+            }
+
+        });
+
+
     }
 
     public boolean isOnline() {

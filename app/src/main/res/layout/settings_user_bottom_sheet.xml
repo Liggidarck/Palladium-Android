@@ -39,6 +39,14 @@
         android:layout_marginTop="10dp"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
+    <Button
+        android:id="@+id/edit_data_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="отредактировать данные"
+        android:layout_marginTop="10dp"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="100dp" />

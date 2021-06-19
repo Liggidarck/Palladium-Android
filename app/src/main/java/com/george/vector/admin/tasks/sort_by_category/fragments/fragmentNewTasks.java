@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
-import com.george.vector.admin.TaskActivity;
+import com.george.vector.admin.tasks.TaskActivity;
 import com.george.vector.common.Task;
 import com.george.vector.common.TaskAdapter;
 import com.google.firebase.firestore.CollectionReference;

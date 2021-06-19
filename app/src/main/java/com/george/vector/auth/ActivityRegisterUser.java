@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import com.george.vector.R;
 import com.george.vector.admin.MainAdminActivity;
 import com.george.vector.common.ErrorsUtils;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,10 +30,15 @@ import java.util.Objects;
 public class ActivityRegisterUser extends AppCompatActivity {
 
     MaterialToolbar topAppBar_register;
+
     Button register_user_btn;
+
+    LinearProgressIndicator progress_bar_register;
+
     TextInputLayout text_input_layout_name_user, text_input_layout_last_name_user,
             text_input_layout_patronymic_user, text_input_layout_email_user,
             text_input_layout_password_user, text_input_layout_role_user;
+
     MaterialAutoCompleteTextView auto_complete_text_view_role_user;
 
     String name_user, last_name_user, patronymic_user, email_user, password_user, role_user, userID;
@@ -55,6 +62,7 @@ public class ActivityRegisterUser extends AppCompatActivity {
         text_input_layout_password_user = findViewById(R.id.text_input_layout_password_user);
         text_input_layout_role_user = findViewById(R.id.text_input_layout_role_user);
         auto_complete_text_view_role_user = findViewById(R.id.auto_complete_text_view_role_user);
+        progress_bar_register = findViewById(R.id.progress_bar_register);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -80,9 +88,13 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
 
             if(validateFields()) {
+                progress_bar_register.setVisibility(View.VISIBLE);
+
                 firebaseAuth.createUserWithEmailAndPassword(email_user, password_user).addOnCompleteListener(task -> {
+
                     if (task.isSuccessful()) {
-                        Toast.makeText(ActivityRegisterUser.this, "User Added", Toast.LENGTH_LONG).show();
+
+                        Log.i(TAG, "User added");
 
                         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
                         DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
@@ -98,8 +110,11 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
                         startActivity(new Intent(this, MainAdminActivity.class));
 
-                    } else
+                    } else {
                         Toast.makeText(ActivityRegisterUser.this, "Error" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                    progress_bar_register.setVisibility(View.INVISIBLE);
+
                 });
             }
 

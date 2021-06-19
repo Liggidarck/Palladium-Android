@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.george.vector.R;
+import com.george.vector.admin.edit_users.EditUserActivity;
 import com.george.vector.auth.ActivityLogin;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,7 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SettingsUserBottomSheet extends BottomSheetDialogFragment {
 
-    Button btn_logout;
+    Button btn_logout, edit_data_user;
     ImageView close_btn;
 
     FirebaseAuth firebaseAuth;
@@ -32,6 +33,7 @@ public class SettingsUserBottomSheet extends BottomSheetDialogFragment {
 
         btn_logout = view.findViewById(R.id.btn_logout);
         close_btn = view.findViewById(R.id.close_btn);
+        edit_data_user = view.findViewById(R.id.edit_data_user);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -41,6 +43,7 @@ public class SettingsUserBottomSheet extends BottomSheetDialogFragment {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(SettingsUserBottomSheet.this.getContext(), ActivityLogin.class));
         });
+        edit_data_user.setOnClickListener(v -> startActivity(new Intent(SettingsUserBottomSheet.this.getContext(), EditDataUserActivity.class)));
 
         return view;
     }

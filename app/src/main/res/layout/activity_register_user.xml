@@ -17,6 +17,14 @@
         app:layout_collapseMode="pin"
         android:background="@color/blue_primary" />
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_bar_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        android:layout_below="@+id/topAppBar_register" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

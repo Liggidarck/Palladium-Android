@@ -1,19 +1,25 @@
-package com.george.vector.admin;
+package com.george.vector.admin.tasks;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.george.vector.R;
-import com.george.vector.admin.tasks.EditTaskAdminActivity;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -25,13 +31,17 @@ public class TaskActivity extends AppCompatActivity {
             text_view_date_create_task_admin;
     Button edit_task_btn;
     CircleImageView circle_status;
+    ImageView image_view_task_admin;
+    LinearProgressIndicator progress_bar_task_admin;
 
     private static final String TAG = "TaskActivity";
 
-    String id, address, floor, cabinet, name_task, comment, status, date_create, time_create;
+    String id, address, floor, cabinet, name_task, comment, status, date_create, time_create, image_key;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
+    FirebaseStorage firebaseStorage;
+    StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +58,8 @@ public class TaskActivity extends AppCompatActivity {
         text_view_date_create_task_admin = findViewById(R.id.text_view_date_create_task_admin);
         edit_task_btn = findViewById(R.id.edit_task_btn);
         circle_status = findViewById(R.id.circle_status);
+        image_view_task_admin = findViewById(R.id.image_view_task_admin);
+        progress_bar_task_admin = findViewById(R.id.progress_bar_task_admin);
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.get("id_task").toString();
@@ -55,11 +67,15 @@ public class TaskActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
 
         topAppBar_tasks_admin.setNavigationOnClickListener(v -> onBackPressed());
 
         DocumentReference documentReference = firebaseFirestore.collection("new tasks").document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
+            progress_bar_task_admin.setVisibility(View.VISIBLE);
+
             assert value != null;
             address = value.getString("description");
             floor = value.getString("floor");
@@ -69,6 +85,22 @@ public class TaskActivity extends AppCompatActivity {
             status = value.getString("status");
             date_create = value.getString("priority");
             time_create = value.getString("time_priority");
+            image_key = value.getString("uri_image");
+
+            String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image_key);
+            Picasso.with(this)
+                    .load(IMAGE_URL)
+                    .into(image_view_task_admin, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            progress_bar_task_admin.setVisibility(View.INVISIBLE);
+                        }
+
+                        @Override
+                        public void onError() {
+                            Log.i(TAG, "Error on download");
+                        }
+                    });
 
             text_view_address_task_admin.setText(address);
             text_view_floor_task_admin.setText("Этаж - " +  floor);

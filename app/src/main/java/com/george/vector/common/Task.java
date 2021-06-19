@@ -1,5 +1,7 @@
 package com.george.vector.common;
 
+import com.google.firebase.firestore.DocumentChange;
+
 public class Task {
 
     private String title; // Название заявки
@@ -17,11 +19,13 @@ public class Task {
     private String time_priority;
     private String email_creator;
 
+    private String uri_image;
+
     public Task() {}
 
     public Task(String name_task, String description, String priority, String floor,
                 String cabinet, String comment, String date_done, String executor, String status,
-                String time_priority, String email_creator) {
+                String time_priority, String email_creator, String uri_image) {
         this.title = name_task;
         this.description = description;
         this.priority = priority;
@@ -35,6 +39,8 @@ public class Task {
 
         this.time_priority = time_priority;
         this.email_creator = email_creator;
+
+        this.uri_image = uri_image;
     }
 
     public String getTitle() {
@@ -48,7 +54,6 @@ public class Task {
     public String getPriority() {
         return priority;
     }
-
 
     public String getFloor() {
         return floor;
@@ -80,5 +85,9 @@ public class Task {
 
     public String getEmail_creator() {
         return email_creator;
+    }
+
+    public String getUri_image() {
+        return uri_image;
     }
 }

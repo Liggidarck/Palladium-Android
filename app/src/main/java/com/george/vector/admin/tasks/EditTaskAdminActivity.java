@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import com.george.vector.admin.MainAdminActivity;
 import com.george.vector.common.ErrorsUtils;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -46,6 +48,8 @@ public class EditTaskAdminActivity extends AppCompatActivity {
 
     MaterialAutoCompleteTextView status_autoComplete, address_autoComplete, executor_autoComplete;
     ExtendedFloatingActionButton update_task;
+
+    LinearProgressIndicator progress_bar_add_task_admin;
 
     Calendar datePickCalendar;
 
@@ -76,6 +80,7 @@ public class EditTaskAdminActivity extends AppCompatActivity {
         update_task = findViewById(R.id.crate_task);
         edit_text_date_task = findViewById(R.id.edit_text_date_task);
         executor_autoComplete = findViewById(R.id.executor_autoComplete);
+        progress_bar_add_task_admin = findViewById(R.id.progress_bar_add_task_admin);
 
         topAppBar_new_task.setNavigationOnClickListener(v -> onBackPressed());
 
@@ -192,6 +197,8 @@ public class EditTaskAdminActivity extends AppCompatActivity {
 
 
     void updateTask() {
+        progress_bar_add_task_admin.setVisibility(View.VISIBLE);
+
         Log.i(TAG, "date create: " + date_create);
         Log.i(TAG, "time create: " + time_create);
 
@@ -209,6 +216,7 @@ public class EditTaskAdminActivity extends AppCompatActivity {
 
         DocumentReference documentReferenceTask = firebaseFirestore.collection("new tasks").document(id);
         Map<String, Object> new_task = new HashMap<>();
+
         //Ручное добавление
         new_task.put("description", update_address);
         new_task.put("floor", update_floor);
@@ -225,12 +233,21 @@ public class EditTaskAdminActivity extends AppCompatActivity {
         new_task.put("time_priority", time_create);
         new_task.put("email_creator", email);
 
+        documentReferenceTask.get().addOnCompleteListener(task -> {
+
+            if(task.isSuccessful()) {
+                Log.i(TAG, "update completed!");
+                progress_bar_add_task_admin.setVisibility(View.INVISIBLE);
+                startActivity(new Intent(this, MainAdminActivity.class));
+            } else {
+                Log.i(TAG, "Error: " + task.getException());
+            }
+
+        });
+
         documentReferenceTask.set(new_task)
                 .addOnSuccessListener(unused -> Log.i(TAG, "onSuccess: task - " + id))
                 .addOnFailureListener(e -> Log.i(TAG, "Failure - " + e.toString()));
-
-        Intent intent = new Intent(this, MainAdminActivity.class);
-        startActivity(intent);
     }
 
     void updateLabel() {
