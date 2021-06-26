@@ -1,4 +1,4 @@
-package com.george.vector.admin.tasks.sort_by_category;
+package com.george.vector.local_admin.tasks.sort_by_category;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.george.vector.R;
-import com.george.vector.admin.tasks.sort_by_category.fragments.fragmentArchiveTasks;
-import com.george.vector.admin.tasks.sort_by_category.fragments.fragmentNewTasks;
-import com.george.vector.admin.tasks.sort_by_category.fragments.fragmentProgressTasks;
+import com.george.vector.local_admin.tasks.sort_by_category.fragments.fragmentArchiveTasks;
+import com.george.vector.local_admin.tasks.sort_by_category.fragments.fragmentNewTasks;
+import com.george.vector.local_admin.tasks.sort_by_category.fragments.fragmentProgressTasks;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class FolderActivity extends AppCompatActivity {

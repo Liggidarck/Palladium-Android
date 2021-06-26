@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp" >
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Новая заявка"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+
+        <ImageView
+            android:id="@+id/close_btn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/ic_baseline_close_24"
+            android:layout_alignParentEnd="true"/>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:src="@drawable/line_gray"
+        android:layout_marginTop="12dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Остафьево"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:layout_marginTop="15dp" />
+
+    <Button
+        android:id="@+id/ost_school_new_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="школа"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_marginTop="10dp" />
+
+    <Button
+        android:id="@+id/ost_aist_new_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Детский сад Аист"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_marginTop="10dp" />
+
+    <Button
+        android:id="@+id/ost_yagodka_new_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Детский сад ягодка"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Барыши"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:layout_marginTop="15dp" />
+
+    <Button
+        android:id="@+id/bar_school_new_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="школа"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_marginTop="10dp" />
+
+    <Button
+        android:id="@+id/bar_rucheek_new_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Детский сад речеек"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_marginTop="10dp" />
+
+    <Button
+        android:id="@+id/bar_start_new_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Детский сад Звездочка"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_marginTop="10dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
+</LinearLayout>

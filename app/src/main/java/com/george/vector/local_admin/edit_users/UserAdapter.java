@@ -1,4 +1,4 @@
-package com.george.vector.admin.edit_users;
+package com.george.vector.local_admin.edit_users;
 
 import android.view.LayoutInflater;
 import android.view.View;

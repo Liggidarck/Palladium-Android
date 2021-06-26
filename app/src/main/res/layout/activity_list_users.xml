@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".admin.edit_users.ListUsersActivity" >
+    tools:context=".local_admin.edit_users.ListUsersActivity" >
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_list_users"

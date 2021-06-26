@@ -5,10 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".local_admin.tasks.AddTaskAdminActivity" >
+    tools:context=".root.tasks.AddTaskRootActivity" >
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/topAppBar_new_task"
+        android:id="@+id/topAppBar_new_task_root"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:title="Заявка"
@@ -18,15 +18,15 @@
         android:background="@color/blue_primary" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/progress_bar_add_task_admin"
+        android:id="@+id/progress_bar_add_task_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:visibility="invisible"
-        android:layout_below="@+id/topAppBar_new_task"/>
+        android:layout_below="@+id/topAppBar_new_task_root"/>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/crate_task"
+        android:id="@+id/done_task_root"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="готово"
@@ -41,7 +41,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/topAppBar_new_task" >
+        android:layout_below="@+id/topAppBar_new_task_root" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,7 +49,7 @@
             android:orientation="vertical" >
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_address"
+                android:id="@+id/text_input_layout_address_root"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Адрес"
@@ -61,7 +61,7 @@
                 android:layout_marginTop="20dp" >
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/address_autoComplete"
+                    android:id="@+id/address_autoComplete_root"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -70,7 +70,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_floor"
+                android:id="@+id/text_input_layout_floor_root"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Этаж"
@@ -89,7 +89,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_cabinet"
+                android:id="@+id/text_input_layout_cabinet_root"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Кабинет"
@@ -108,7 +108,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_name_task"
+                android:id="@+id/text_input_layout_name_task_root"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Название заявки"
@@ -129,7 +129,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_comment"
+                android:id="@+id/text_input_layout_comment_root"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Коментарий"
@@ -150,7 +150,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_date_task"
+                android:id="@+id/text_input_layout_date_task_root"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Дата выполнения"
@@ -164,7 +164,7 @@
                 app:helperTextEnabled="true" >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_text_date_task"
+                    android:id="@+id/edit_text_date_task_root"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -173,7 +173,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_executor"
+                android:id="@+id/text_input_layout_executor_root"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Исполнитель"
@@ -185,7 +185,7 @@
                 android:layout_marginTop="20dp" >
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/executor_autoComplete"
+                    android:id="@+id/executor_autoComplete_root"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -194,7 +194,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_status"
+                android:id="@+id/text_input_layout_status_root"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Статус"
@@ -206,22 +206,13 @@
                 android:layout_marginTop="20dp" >
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/status_autoComplete"
+                    android:id="@+id/status_autoComplete_root"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
                     android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <ImageView
-                android:id="@+id/task_image_admin"
-                android:layout_width="match_parent"
-                android:layout_height="230dp"
-                android:src="@drawable/demo_image"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp"/>
 
             <View
                 android:layout_width="match_parent"
@@ -230,5 +221,4 @@
         </LinearLayout>
 
     </ScrollView>
-
 </RelativeLayout>

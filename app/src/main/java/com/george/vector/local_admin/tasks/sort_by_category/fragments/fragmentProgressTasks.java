@@ -1,4 +1,4 @@
-package com.george.vector.admin.tasks.sort_by_category.fragments;
+package com.george.vector.local_admin.tasks.sort_by_category.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,39 +16,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
-import com.george.vector.admin.tasks.TaskActivity;
+import com.george.vector.local_admin.tasks.TaskActivity;
 import com.george.vector.common.Task;
 import com.george.vector.common.TaskAdapter;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-public class fragmentArchiveTasks extends Fragment {
+public class fragmentProgressTasks extends Fragment {
 
-    private static final String TAG = "fragmentArchiveTasks";
+    private static final String TAG = "fragmentProgressTasks";
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference taskRef = db.collection("new tasks");
 
     private TaskAdapter adapter;
 
-    FirebaseFirestore firebaseFirestore;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_archive_tasks, container, false);
+        View view = inflater.inflate(R.layout.fragment_progress_tasks, container, false);
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
-
-        Query query = taskRef.whereEqualTo("status", "Архив");
+        Query query = taskRef.whereEqualTo("status", "В работе");
 
         FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
                 .setQuery(query, Task.class)
@@ -56,10 +44,10 @@ public class fragmentArchiveTasks extends Fragment {
 
         adapter = new TaskAdapter(options);
 
-        RecyclerView recyclerview_archive_admin = view.findViewById(R.id.recyclerview_archive_admin);
-        recyclerview_archive_admin.setHasFixedSize(true);
-        recyclerview_archive_admin.setLayoutManager(new LinearLayoutManager(fragmentArchiveTasks.this.getContext()));
-        recyclerview_archive_admin.setAdapter(adapter);
+        RecyclerView recyclerview_in_progress_admin = view.findViewById(R.id.recyclerview_in_progress_admin);
+        recyclerview_in_progress_admin.setHasFixedSize(true);
+        recyclerview_in_progress_admin.setLayoutManager(new LinearLayoutManager(fragmentProgressTasks.this.getContext()));
+        recyclerview_in_progress_admin.setAdapter(adapter);
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -71,7 +59,7 @@ public class fragmentArchiveTasks extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 adapter.deleteItem(viewHolder.getAdapterPosition());
             }
-        }).attachToRecyclerView(recyclerview_archive_admin);
+        }).attachToRecyclerView(recyclerview_in_progress_admin);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             Task task = documentSnapshot.toObject(Task.class);
@@ -80,24 +68,13 @@ public class fragmentArchiveTasks extends Fragment {
 
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
-            Intent intent = new Intent(fragmentArchiveTasks.this.getContext(), TaskActivity.class);
+            Intent intent = new Intent(fragmentProgressTasks.this.getContext(), TaskActivity.class);
             intent.putExtra("id_task", id);
             startActivity(intent);
+
         });
 
         return view;
-    }
-
-    void delete_image(String image_key) {
-        String storageUrl = "images/" + image_key;
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(storageUrl);
-        storageReference.delete().addOnSuccessListener(aVoid -> {
-            // File deleted successfully
-            Log.d(TAG, "onSuccess: deleted file");
-        }).addOnFailureListener(exception -> {
-            // Uh-oh, an error occurred!
-            Log.d(TAG, "onFailure: did not delete file");
-        });
     }
 
     @Override
@@ -111,4 +88,5 @@ public class fragmentArchiveTasks extends Fragment {
         super.onStop();
         adapter.stopListening();
     }
+
 }

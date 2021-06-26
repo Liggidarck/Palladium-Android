@@ -1,4 +1,4 @@
-package com.george.vector.admin.tasks.sort_by_category.fragments;
+package com.george.vector.local_admin.tasks.sort_by_category.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,16 +16,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
-import com.george.vector.admin.tasks.TaskActivity;
+import com.george.vector.local_admin.tasks.TaskActivity;
 import com.george.vector.common.Task;
 import com.george.vector.common.TaskAdapter;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-public class fragmentProgressTasks extends Fragment {
+public class fragmentNewTasks extends Fragment {
 
-    private static final String TAG = "fragmentProgressTasks";
+    private static final String TAG = "fragmentNewTasks";
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference taskRef = db.collection("new tasks");
 
@@ -34,9 +34,9 @@ public class fragmentProgressTasks extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_progress_tasks, container, false);
+        View view = inflater.inflate(R.layout.fragment_new_tasks, container, false);
 
-        Query query = taskRef.whereEqualTo("status", "В работе");
+        Query query = taskRef.whereEqualTo("status", "Новая заявка");
 
         FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
                 .setQuery(query, Task.class)
@@ -44,10 +44,10 @@ public class fragmentProgressTasks extends Fragment {
 
         adapter = new TaskAdapter(options);
 
-        RecyclerView recyclerview_in_progress_admin = view.findViewById(R.id.recyclerview_in_progress_admin);
-        recyclerview_in_progress_admin.setHasFixedSize(true);
-        recyclerview_in_progress_admin.setLayoutManager(new LinearLayoutManager(fragmentProgressTasks.this.getContext()));
-        recyclerview_in_progress_admin.setAdapter(adapter);
+        RecyclerView recyclerview_new_tasks_admin = view.findViewById(R.id.recyclerview_new_tasks_admin);
+        recyclerview_new_tasks_admin.setHasFixedSize(true);
+        recyclerview_new_tasks_admin.setLayoutManager(new LinearLayoutManager(fragmentNewTasks.this.getContext()));
+        recyclerview_new_tasks_admin.setAdapter(adapter);
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -57,9 +57,10 @@ public class fragmentProgressTasks extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                Log.i(TAG, "Position viewHolder: " + viewHolder.getAdapterPosition());
                 adapter.deleteItem(viewHolder.getAdapterPosition());
             }
-        }).attachToRecyclerView(recyclerview_in_progress_admin);
+        }).attachToRecyclerView(recyclerview_new_tasks_admin);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             Task task = documentSnapshot.toObject(Task.class);
@@ -68,11 +69,12 @@ public class fragmentProgressTasks extends Fragment {
 
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
-            Intent intent = new Intent(fragmentProgressTasks.this.getContext(), TaskActivity.class);
+            Intent intent = new Intent(fragmentNewTasks.this.getContext(), TaskActivity.class);
             intent.putExtra("id_task", id);
             startActivity(intent);
 
         });
+
 
         return view;
     }
@@ -88,5 +90,4 @@ public class fragmentProgressTasks extends Fragment {
         super.onStop();
         adapter.stopListening();
     }
-
 }

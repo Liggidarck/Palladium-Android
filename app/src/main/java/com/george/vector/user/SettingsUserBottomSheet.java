@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.george.vector.R;
-import com.george.vector.admin.edit_users.EditUserActivity;
 import com.george.vector.auth.ActivityLogin;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;

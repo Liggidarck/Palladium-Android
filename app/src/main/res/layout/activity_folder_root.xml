@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".local_admin.tasks.sort_by_category.FolderActivity" >
+    tools:context=".root.main.FolderRootActivity">
 
     <FrameLayout
-        android:id="@+id/frame_folder"
+        android:id="@+id/frame_folder_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar_folder_activity"/>
+        android:layout_below="@id/toolbar_folder_root_activity"/>
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar_folder_activity"
+        android:id="@+id/toolbar_folder_root_activity"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:titleTextColor="@android:color/white"

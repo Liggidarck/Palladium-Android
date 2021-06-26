@@ -1,4 +1,4 @@
-package com.george.vector.admin;
+package com.george.vector.local_admin;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.george.vector.R;
-import com.george.vector.admin.edit_users.ListUsersActivity;
+import com.george.vector.local_admin.edit_users.ListUsersActivity;
 import com.george.vector.auth.ActivityLogin;
 import com.george.vector.auth.ActivityRegisterUser;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;

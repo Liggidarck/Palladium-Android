@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.george.vector.R;
-import com.george.vector.admin.MainAdminActivity;
+import com.george.vector.local_admin.MainAdminActivity;
 import com.george.vector.common.ErrorsUtils;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;

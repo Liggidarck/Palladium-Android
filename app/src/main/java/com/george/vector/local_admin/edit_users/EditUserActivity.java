@@ -1,4 +1,4 @@
-package com.george.vector.admin.edit_users;
+package com.george.vector.local_admin.edit_users;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,12 +8,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
-import com.george.vector.admin.MainAdminActivity;
 import com.george.vector.common.ErrorsUtils;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;

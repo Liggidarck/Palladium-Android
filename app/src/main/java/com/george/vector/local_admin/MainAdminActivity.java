@@ -1,4 +1,4 @@
-package com.george.vector.admin;
+package com.george.vector.local_admin;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,8 +15,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.george.vector.R;
-import com.george.vector.admin.tasks.AddTaskAdminActivity;
-import com.george.vector.admin.tasks.sort_by_category.FolderActivity;
+import com.george.vector.local_admin.tasks.AddTaskAdminActivity;
+import com.george.vector.local_admin.tasks.sort_by_category.FolderActivity;
 import com.george.vector.common.ProfileBottomSheet;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

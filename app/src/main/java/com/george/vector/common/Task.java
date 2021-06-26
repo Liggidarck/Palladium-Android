@@ -1,7 +1,5 @@
 package com.george.vector.common;
 
-import com.google.firebase.firestore.DocumentChange;
-
 public class Task {
 
     private String title; // Название заявки

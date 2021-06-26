@@ -1,4 +1,4 @@
-package com.george.vector.admin.tasks;
+package com.george.vector.local_admin.tasks;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,7 +29,7 @@ public class TaskActivity extends AppCompatActivity {
     TextView text_view_address_task_admin, text_view_floor_task_admin, text_view_cabinet_task_admin,
             text_view_name_task_admin, text_view_comment_task_admin, text_view_status_task_admin,
             text_view_date_create_task_admin;
-    Button edit_task_btn;
+    Button edit_task_btn, delete_task_btn;
     CircleImageView circle_status;
     ImageView image_view_task_admin;
     LinearProgressIndicator progress_bar_task_admin;
@@ -60,6 +60,7 @@ public class TaskActivity extends AppCompatActivity {
         circle_status = findViewById(R.id.circle_status);
         image_view_task_admin = findViewById(R.id.image_view_task_admin);
         progress_bar_task_admin = findViewById(R.id.progress_bar_task_admin);
+        delete_task_btn = findViewById(R.id.delete_task_btn);
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.get("id_task").toString();
@@ -112,14 +113,18 @@ public class TaskActivity extends AppCompatActivity {
             String date_create_text = "Созданно: " + date_create + " " + time_create;
             text_view_date_create_task_admin.setText(date_create_text);
 
-            if(status.equals("Новая заявка"))
-                circle_status.setImageResource(R.color.red);
+            try {
+                if (status.equals("Новая заявка"))
+                    circle_status.setImageResource(R.color.red);
 
-            if(status.equals("В работе"))
-                circle_status.setImageResource(R.color.orange);
+                if (status.equals("В работе"))
+                    circle_status.setImageResource(R.color.orange);
 
-            if(status.equals("Архив"))
-                circle_status.setImageResource(R.color.green);
+                if (status.equals("Архив"))
+                    circle_status.setImageResource(R.color.green);
+            } catch (Exception e){
+                System.out.print(e);
+            }
 
         });
 
@@ -129,5 +134,28 @@ public class TaskActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        delete_task_btn.setOnClickListener(v -> {
+            Log.i(TAG, "Delete data key: " + image_key);
+            delete_image(image_key);
+        });
+
     }
+
+    void delete_image(String image_key) {
+        finish();
+
+        String storageUrl = "images/" + image_key;
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(storageUrl);
+        storageReference.delete().addOnSuccessListener(aVoid -> {
+            // File deleted successfully
+            Log.d(TAG, "onSuccess: deleted file");
+        }).addOnFailureListener(exception -> {
+            // Uh-oh, an error occurred!
+            Log.d(TAG, "onFailure: did not delete file");
+        });
+
+        DocumentReference documentReference = firebaseFirestore.collection("new tasks").document(id);
+        documentReference.delete();
+    }
+
 }
