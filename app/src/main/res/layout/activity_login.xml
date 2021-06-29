@@ -30,6 +30,7 @@
         android:layout_below="@+id/topAppBar_login" />
 
     <ImageView
+        android:id="@+id/logo_img"
         android:layout_width="match_parent"
         android:layout_height="230dp"
         android:layout_below="@+id/topAppBar_login"
@@ -46,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="20sp"
         android:layout_marginLeft="20sp"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/logo_img"
         app:errorEnabled="true"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 

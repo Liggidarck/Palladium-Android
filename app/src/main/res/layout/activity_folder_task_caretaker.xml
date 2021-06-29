@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".сaretaker.main.FolderTaskCaretakerActivity"
+    android:orientation="vertical" >
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_location_folder_caretaker"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:titleTextColor="@android:color/white"
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        app:layout_collapseMode="pin"
+        android:background="@color/blue_primary" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/new_tasks_card_caretaker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        app:cardElevation="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp">
+
+            <RelativeLayout
+                android:id="@+id/ava_folder_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="#85C2FF" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_folder_24"
+                    android:layout_centerInParent="true"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Новые заявки"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:layout_toEndOf="@+id/ava_folder_1"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"/>
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/task_progress_card_caretaker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        app:cardElevation="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp">
+
+            <RelativeLayout
+                android:id="@+id/ava_folder_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="#85C2FF" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_folder_24"
+                    android:layout_centerInParent="true"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="В работе"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:layout_toEndOf="@+id/ava_folder_2"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"/>
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/archive_tasks_card_caretaker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        app:cardElevation="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp">
+
+            <RelativeLayout
+                android:id="@+id/ava_folder_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="#85C2FF" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_folder_24"
+                    android:layout_centerInParent="true"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Архив"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:layout_toEndOf="@+id/ava_folder_3"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"/>
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+
+
+</LinearLayout>

@@ -19,7 +19,7 @@ import com.george.vector.R;
 import com.george.vector.common.ErrorsUtils;
 import com.george.vector.root.main.RootMainActivity;
 import com.george.vector.user.MainUserActivity;
-import com.george.vector.worker.MainWorkerActivity;
+import com.george.vector.сaretaker.main.CaretakerMainActivity;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
@@ -71,24 +71,11 @@ public class ActivityLogin extends AppCompatActivity {
 
                 String check_role = value.getString("role");
                 String check_email = value.getString("email");
+                String permission = value.getString("permission");
                 Log.d(TAG, "ROLE - " + check_role);
 
-                //TODO: Добавить все роли. И справить root.
                 assert check_role != null;
-                if(check_role.equals("Администратор"))
-                    startActivity(new Intent(this, RootMainActivity.class));
-
-                if (check_role.equals("Пользователь")) {
-                    Intent intent = new Intent(this, MainUserActivity.class);
-                    intent.putExtra("email", check_email);
-                    startActivity(intent);
-                }
-
-                if (check_role.equals("Исполнитель")) {
-                    Intent intent = new Intent(this, MainWorkerActivity.class);
-                    intent.putExtra("email", check_email);
-                    startActivity(intent);
-                }
+                startApp(check_role, check_email, permission);
 
             });
 
@@ -114,17 +101,12 @@ public class ActivityLogin extends AppCompatActivity {
 
                             String check_role = value.getString("role");
                             String check_email = value.getString("email");
+                            String permission = value.getString("permission");
                             Log.d(TAG, "ROLE - " + check_role);
 
                             assert check_role != null;
-                            if (check_role.equals("Администратор"))
-                                startActivity(new Intent(this, MainAdminActivity.class));
+                            startApp(check_role, check_email, permission);
 
-                            if (check_role.equals("Пользователь")) {
-                                Intent intent = new Intent(this, MainUserActivity.class);
-                                intent.putExtra("email", check_email);
-                                startActivity(intent);
-                            }
                         });
 
                     } else {
@@ -141,6 +123,26 @@ public class ActivityLogin extends AppCompatActivity {
 
         clearErrors();
 
+    }
+
+    void startApp(String check_role,String check_email, String permission) {
+        if (check_role.equals("Root"))
+            startActivity(new Intent(this, RootMainActivity.class));
+
+        if(check_role.equals("Завхоз")) {
+            Intent intent = new Intent(this, CaretakerMainActivity.class);
+            intent.putExtra("permission", permission);
+            startActivity(intent);
+        }
+
+        if(check_role.equals("Администратор"))
+            startActivity(new Intent(this, MainAdminActivity.class));
+
+        if (check_role.equals("Пользователь")) {
+            Intent intent = new Intent(this, MainUserActivity.class);
+            intent.putExtra("email", check_email);
+            startActivity(intent);
+        }
     }
 
     boolean validateFields() {

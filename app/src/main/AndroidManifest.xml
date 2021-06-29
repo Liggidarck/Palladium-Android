@@ -11,10 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Vector">
-        <activity android:name=".root.tasks.AddTaskRootActivity"></activity>
+        <activity android:name=".сaretaker.main.FolderTaskCaretakerActivity"></activity>
+        <activity android:name=".root.tasks.EditTaskActivity" />
+        <activity android:name=".root.tasks.TaskRootActivity" />
+        <activity android:name=".root.tasks.AddTaskRootActivity" />
         <activity android:name=".root.main.FolderRootActivity" />
         <activity android:name=".root.main.LocationFolderActivity" />
-        <activity android:name=".сaretaker.CaretakerMainActivity" />
+        <activity android:name=".сaretaker.main.CaretakerMainActivity" />
         <activity android:name=".root.main.RootMainActivity" />
         <activity android:name=".user.EditDataUserActivity" />
         <activity android:name=".local_admin.edit_users.EditUserActivity" />
