@@ -14,12 +14,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.george.vector.local_admin.MainAdminActivity;
+import com.george.vector.admin.MainAdminActivity;
 import com.george.vector.R;
-import com.george.vector.common.ErrorsUtils;
+import com.george.vector.common.utils.ErrorsUtils;
 import com.george.vector.root.main.RootMainActivity;
 import com.george.vector.user.MainUserActivity;
-import com.george.vector.сaretaker.main.CaretakerMainActivity;
+import com.george.vector.caretaker.main.MainCaretakerActivity;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
@@ -130,7 +130,7 @@ public class ActivityLogin extends AppCompatActivity {
             startActivity(new Intent(this, RootMainActivity.class));
 
         if(check_role.equals("Завхоз")) {
-            Intent intent = new Intent(this, CaretakerMainActivity.class);
+            Intent intent = new Intent(this, MainCaretakerActivity.class);
             intent.putExtra("permission", permission);
             startActivity(intent);
         }

@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".admin.tasks.TaskActivity">
+    tools:context=".caretaker.tasks.TaskCaretakerActivity" >
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/topAppBar_tasks_admin"
+        android:id="@+id/topAppBar_tasks_caretaker"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:title="Заявка"
@@ -18,17 +17,17 @@
         android:background="@color/blue_primary" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/progress_bar_task_admin"
+        android:id="@+id/progress_bar_task_caretaker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:visibility="invisible"
-        android:layout_below="@+id/topAppBar_tasks_admin"/>
+        android:layout_below="@+id/topAppBar_tasks_caretaker"/>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/topAppBar_tasks_admin">
+        android:layout_below="@+id/topAppBar_tasks_caretaker">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,7 +49,7 @@
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:id="@+id/text_view_address_task_admin"
+                    android:id="@+id/text_view_address_task_caretaker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Улица Авиаторов дом 9."
@@ -62,7 +61,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/text_view_floor_task_admin"
+                android:id="@+id/text_view_floor_task_caretaker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Этаж - 3"
@@ -72,7 +71,7 @@
                 android:layout_marginTop="10dp"/>
 
             <TextView
-                android:id="@+id/text_view_cabinet_task_admin"
+                android:id="@+id/text_view_cabinet_task_caretaker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Кабинет - 999А"
@@ -90,7 +89,7 @@
                 android:layout_marginEnd="20dp" />
 
             <TextView
-                android:id="@+id/text_view_name_task_admin"
+                android:id="@+id/text_view_name_task_caretaker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Сломаная дверь"
@@ -100,7 +99,7 @@
                 android:layout_marginStart="20dp" />
 
             <ImageView
-                android:id="@+id/image_view_task_admin"
+                android:id="@+id/image_view_task_caretaker"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginStart="20dp"
@@ -117,7 +116,7 @@
                 android:layout_marginTop="10dp"/>
 
             <TextView
-                android:id="@+id/text_view_comment_task_admin"
+                android:id="@+id/text_view_comment_task_caretaker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Нет коментариев к заявке"
@@ -170,14 +169,14 @@
                             android:orientation="vertical" >
 
                             <TextView
-                                android:id="@+id/text_view_status_task_admin"
+                                android:id="@+id/text_view_status_task_caretaker"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Новая заявка"
                                 android:textAppearance="?attr/textAppearanceHeadline6" />
 
                             <TextView
-                                android:id="@+id/text_view_date_create_task_admin"
+                                android:id="@+id/text_view_date_create_task_caretaker"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
@@ -188,7 +187,7 @@
                         </LinearLayout>
 
                         <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/circle_status"
+                            android:id="@+id/circle_status_caretaker"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_alignParentEnd="true"

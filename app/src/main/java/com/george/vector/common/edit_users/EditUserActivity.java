@@ -1,6 +1,4 @@
-package com.george.vector.auth;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.george.vector.common.edit_users;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,10 +8,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
-import com.george.vector.admin.MainAdminActivity;
 import com.george.vector.common.utils.ErrorsUtils;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -27,101 +25,122 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class ActivityRegisterUser extends AppCompatActivity {
+public class EditUserActivity extends AppCompatActivity {
 
     MaterialToolbar topAppBar_register;
 
-    Button register_user_btn;
-
-    LinearProgressIndicator progress_bar_register;
-
     TextInputLayout text_input_layout_name_user, text_input_layout_last_name_user,
-            text_input_layout_patronymic_user, text_input_layout_email_user,
-            text_input_layout_password_user, text_input_layout_role_user;
-
+            text_input_layout_patronymic_user, text_input_layout_email_user, text_input_layout_role_user;
     MaterialAutoCompleteTextView auto_complete_text_view_role_user;
 
-    String name_user, last_name_user, patronymic_user, email_user, password_user, role_user, userID;
+    Button update_user_btn;
+
+    LinearProgressIndicator progress_bar_edit_user;
+
+    String name_user, last_name_user, patronymic_user, email_user, role_user, userID;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 
-    private static final String TAG = "RegisterActivity";
+    private static final String TAG = "EditUserActivity";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register_user);
+        setContentView(R.layout.edit_user_activity);
 
-        topAppBar_register = findViewById(R.id.topAppBar_register);
-        register_user_btn = findViewById(R.id.register_user_btn);
-        text_input_layout_name_user = findViewById(R.id.text_input_layout_name_user);
-        text_input_layout_last_name_user = findViewById(R.id.text_input_layout_last_name_user);
-        text_input_layout_patronymic_user = findViewById(R.id.text_input_layout_patronymic_user);
-        text_input_layout_email_user = findViewById(R.id.text_input_layout_email_user);
-        text_input_layout_password_user = findViewById(R.id.text_input_layout_password_user);
-        text_input_layout_role_user = findViewById(R.id.text_input_layout_role_user);
-        auto_complete_text_view_role_user = findViewById(R.id.auto_complete_text_view_role_user);
-        progress_bar_register = findViewById(R.id.progress_bar_register);
+        topAppBar_register = findViewById(R.id.topAppBar_edit);
+        text_input_layout_name_user = findViewById(R.id.text_input_layout_edit_name_user);
+        text_input_layout_last_name_user = findViewById(R.id.text_input_layout_edit_last_name_user);
+        text_input_layout_patronymic_user = findViewById(R.id.text_input_layout_edit_patronymic_user);
+        text_input_layout_email_user = findViewById(R.id.text_input_layout_edit_email_user);
+        text_input_layout_role_user = findViewById(R.id.text_input_layout_edit_role_user);
+        auto_complete_text_view_role_user = findViewById(R.id.auto_complete_text_view_edit_role_user);
+        update_user_btn = findViewById(R.id.update_user_btn);
+        progress_bar_edit_user = findViewById(R.id.progress_bar_edit_user);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
+        Bundle arguments = getIntent().getExtras();
+        userID = arguments.get("user_id").toString();
+        Log.i(TAG, "id: " + userID);
+
         topAppBar_register.setNavigationOnClickListener(v -> onBackPressed());
 
-        String[] items = getResources().getStringArray(R.array.roles);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
-                ActivityRegisterUser.this,
-                R.layout.dropdown_menu_categories,
-                items
-        );
+        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+        documentReference.addSnapshotListener(this, (value, error) -> {
+            assert value != null;
+            name_user = value.getString("name");
+            last_name_user = value.getString("last_name");
+            patronymic_user = value.getString("patronymic");
+            email_user = value.getString("email");
+            role_user = value.getString("role");
 
-        auto_complete_text_view_role_user.setAdapter(arrayAdapter);
+            Log.i(TAG, "name: " + name_user);
+            Log.i(TAG, "last_name: " + last_name_user);
+            Log.i(TAG, "patronymic: " + patronymic_user);
+            Log.i(TAG, "email: " + email_user);
+            Log.i(TAG, "role: " + role_user);
 
-        register_user_btn.setOnClickListener(v -> {
+            Objects.requireNonNull(text_input_layout_name_user.getEditText()).setText(name_user);
+            Objects.requireNonNull(text_input_layout_last_name_user.getEditText()).setText(last_name_user);
+            Objects.requireNonNull(text_input_layout_patronymic_user.getEditText()).setText(patronymic_user);
+            Objects.requireNonNull(text_input_layout_email_user.getEditText()).setText(email_user);
+            Objects.requireNonNull(text_input_layout_role_user.getEditText()).setText(role_user);
+
+            String[] items = getResources().getStringArray(R.array.roles);
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+                    EditUserActivity.this,
+                    R.layout.dropdown_menu_categories,
+                    items
+            );
+
+            auto_complete_text_view_role_user.setAdapter(arrayAdapter);
+
+        });
+
+        update_user_btn.setOnClickListener(v -> {
             name_user = Objects.requireNonNull(text_input_layout_name_user.getEditText()).getText().toString();
             last_name_user = Objects.requireNonNull(text_input_layout_last_name_user.getEditText()).getText().toString();
             patronymic_user = Objects.requireNonNull(text_input_layout_patronymic_user.getEditText()).getText().toString();
             email_user = Objects.requireNonNull(text_input_layout_email_user.getEditText()).getText().toString();
-            password_user = Objects.requireNonNull(text_input_layout_password_user.getEditText()).getText().toString();
             role_user = Objects.requireNonNull(text_input_layout_role_user.getEditText()).getText().toString();
 
-
             if(validateFields()) {
-                progress_bar_register.setVisibility(View.VISIBLE);
+                progress_bar_edit_user.setVisibility(View.VISIBLE);
 
-                firebaseAuth.createUserWithEmailAndPassword(email_user, password_user).addOnCompleteListener(task -> {
+                Map<String, Object> user = new HashMap<>();
+                user.put("name", name_user);
+                user.put("last_name", last_name_user);
+                user.put("patronymic", patronymic_user);
+                user.put("email", email_user);
+                user.put("role", role_user);
 
-                    if (task.isSuccessful()) {
-
-                        Log.i(TAG, "User added");
-
-                        userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-                        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
-                        Map<String, Object> user = new HashMap<>();
-                        user.put("name", name_user);
-                        user.put("last_name", last_name_user);
-                        user.put("patronymic", patronymic_user);
-                        user.put("email", email_user);
-                        user.put("role", role_user);
-                        documentReference.set(user)
-                                .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user - " + userID))
-                                .addOnFailureListener(e -> Log.d("TAG", "Failure - " + e.toString()));
-
-                        startActivity(new Intent(this, MainAdminActivity.class));
-
+                documentReference.get().addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        Log.i(TAG, "update completed!");
+                        progress_bar_edit_user.setVisibility(View.INVISIBLE);
+                         startActivity(new Intent(this, ListUsersActivity.class));
                     } else {
-                        Toast.makeText(ActivityRegisterUser.this, "Error" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
+                        Log.i(TAG, "Error: " + task.getException());
                     }
-                    progress_bar_register.setVisibility(View.INVISIBLE);
 
                 });
+
+                documentReference.set(user)
+                        .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user - " + userID))
+                        .addOnFailureListener(e -> Log.d("TAG", "Failure - " + e.toString()));
+
             }
 
         });
 
         clearErrors();
+
     }
+
     boolean validateFields() {
         ErrorsUtils errorsUtils = new ErrorsUtils();
 
@@ -129,10 +148,9 @@ public class ActivityRegisterUser extends AppCompatActivity {
         boolean checkLastName = errorsUtils.validate_field(last_name_user);
         boolean checkPatronymic = errorsUtils.validate_field(patronymic_user);
         boolean checkEmail = errorsUtils.validate_field(email_user);
-        boolean checkPassword = errorsUtils.validate_field(password_user);
         boolean checkRole = errorsUtils.validate_field(role_user);
 
-        if(checkName & checkLastName & checkPatronymic & checkEmail & checkPassword & checkRole)
+        if(checkName & checkLastName & checkPatronymic & checkEmail & checkRole)
             return true;
         else {
 
@@ -147,9 +165,6 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
             if(!checkEmail)
                 text_input_layout_email_user.setError("Это  поле не может быть пустым");
-
-            if(!checkPassword)
-                text_input_layout_password_user.setError("Это поле не может быть пустым");
 
             if(!checkRole)
                 text_input_layout_role_user.setError("Это поле не может быть пустым");
@@ -228,22 +243,6 @@ public class ActivityRegisterUser extends AppCompatActivity {
             }
         });
 
-        Objects.requireNonNull(text_input_layout_password_user.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_password_user.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
 
         Objects.requireNonNull(text_input_layout_role_user.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override

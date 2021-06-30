@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
-import com.george.vector.common.Task;
-import com.george.vector.common.TaskAdapter;
+import com.george.vector.common.tasks.Task;
+import com.george.vector.common.tasks.TaskAdapter;
 import com.george.vector.root.tasks.TaskRootActivity;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -65,6 +65,7 @@ public class fragment_school_ost_archive_tasks extends Fragment {
 
             Intent intent = new Intent(fragment_school_ost_archive_tasks.this.getContext(), TaskRootActivity.class);
             intent.putExtra("id_task_root", id);
+            intent.putExtra("zone", "ost_school");
             intent.putExtra("collection", "ost_school_archive");
             startActivity(intent);
 

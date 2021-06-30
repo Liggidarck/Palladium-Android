@@ -16,7 +16,8 @@ import android.widget.ArrayAdapter;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
-import com.george.vector.common.ErrorsUtils;
+import com.george.vector.common.utils.ErrorsUtils;
+import com.george.vector.common.tasks.Task;
 import com.george.vector.root.main.RootMainActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -25,14 +26,13 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 
 public class EditTaskActivity extends AppCompatActivity {
@@ -54,7 +54,7 @@ public class EditTaskActivity extends AppCompatActivity {
             status_autoComplete_root;
 
     String id, collection, address, floor, cabinet, name_task, comment, status, date_create, time_create,
-            date_done, executor, email, URI_IMAGE;
+            date_done, executor, email, URI_IMAGE, location;
     Calendar datePickCalendar;
 
     FirebaseAuth firebaseAuth;
@@ -89,8 +89,7 @@ public class EditTaskActivity extends AppCompatActivity {
         Bundle arguments = getIntent().getExtras();
         id = arguments.get("id_task").toString();
         collection = arguments.get("collection").toString();
-        Log.i(TAG, "id: " + id);
-        Log.i(TAG, "collection: " + collection);
+        location = arguments.get("zone").toString();
 
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
@@ -123,70 +122,31 @@ public class EditTaskActivity extends AppCompatActivity {
                     Objects.requireNonNull(text_input_layout_comment_root.getEditText()).setText("");
                 else
                     Objects.requireNonNull(text_input_layout_comment_root.getEditText()).setText(comment);
+
             } catch (Exception e) {
                 Log.i(TAG, "Error! " + e);
             }
-            initialize_fields();
 
+            initialize_fields();
         });
 
         done_task_root.setOnClickListener(v -> {
 
             if(validateFields()) {
-
-                if(!isOnline()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-                    builder.setTitle("Внимание!")
-                            .setMessage("Отсуствует интернет подключение. Вы можете сохранить обновленную заявку у себя в телефоне и когда интренет снова появиться заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку заявку позже, когда появиться интрнет.")
-                            .setPositiveButton("Сохранить", (dialog, id) -> {
-
-                                switch (status) {
-                                    case "Новая заявка":
-                                        updateTask("ost_school_new", collection);
-                                    case "В работе":
-                                        updateTask("ost_school_progress", collection);
-                                    case "Архив":
-                                        updateTask("ost_school_archive", collection);
-                                }
-
-                            })
-                            .setNegativeButton(android.R.string.cancel, (dialog, id) -> startActivity(new Intent(this, RootMainActivity.class)));
-
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-
-                } else {
-
-                    switch (status){
-                        case "Новая заявка":
-                            updateTask("ost_school_new", collection);
-                        case "В работе":
-                            updateTask("ost_school_progress", collection);
-                        case "Архив":
-                            updateTask("ost_school_archive", collection);
-
-                    }
-                }
+                if(!isOnline())
+                    show_dialog();
+                else
+                    updateTask(collection);
             }
-        });
 
+        });
 
         clearErrors();
     }
 
-    void delete_task(String collection, String id) {
-        DocumentReference documentReferenceTask = firebaseFirestore.collection(collection).document(id);
-        documentReferenceTask.delete();
-    }
-
-    void updateTask(String collection, String current) {
+    void updateTask(String collection) {
         progress_bar_add_task_root.setVisibility(View.VISIBLE);
-
-        Log.i(TAG, "collection: " + collection);
-        Log.i(TAG, "current: " + current);
-        Log.i(TAG, "date create: " + date_create);
-        Log.i(TAG, "time create: " + time_create);
+        delete_task(collection, id);
 
         String update_address = Objects.requireNonNull(text_input_layout_address_root.getEditText()).getText().toString();
         String update_floor = Objects.requireNonNull(text_input_layout_floor_root.getEditText()).getText().toString();
@@ -200,31 +160,39 @@ public class EditTaskActivity extends AppCompatActivity {
         if (update_comment.isEmpty())
             update_comment = "Нет коментария к заявке";
 
-        DocumentReference documentReferenceTask = firebaseFirestore.collection(collection).document(id);
-        Map<String, Object> new_task = new HashMap<>();
+        if(location.equals("ost_school")) {
+            if (update_status.equals("Новая заявка")) {
+                load_data("ost_school_new", update_name, update_address, update_date_task,
+                        update_floor, update_cabinet, update_comment, date_create, update_executor,
+                        update_status, time_create, email);
+            }
 
-        //Ручное добавление
-        new_task.put("description", update_address);
-        new_task.put("floor", update_floor);
-        new_task.put("cabinet", update_cabinet);
-        new_task.put("title", update_name);
-        new_task.put("comment", update_comment);
+            if (update_status.equals("В работе")) {
+                load_data("ost_school_progress", update_name, update_address, update_date_task,
+                        update_floor, update_cabinet, update_comment, date_create, update_executor,
+                        update_status, time_create, email);
+            }
 
-        new_task.put("date_done", update_date_task);
-        new_task.put("executor", update_executor);
-        new_task.put("status", update_status);
+            if (update_status.equals("Архив"))
+                load_data("ost_school_archive", update_name, update_address, update_date_task,
+                        update_floor, update_cabinet, update_comment, date_create, update_executor,
+                        update_status, time_create, email);
+        }
 
-        //Автоматическое добавление
-        new_task.put("priority", date_create);
-        new_task.put("time_priority", time_create);
-        new_task.put("email_creator", email);
 
-        new_task.put("uri_image", URI_IMAGE);
+    }
 
-        documentReferenceTask.get().addOnCompleteListener(task -> {
+    void load_data(String collection, String update_name, String  update_address, String update_date_task,
+                   String update_floor, String update_cabinet, String update_comment, String date_create,
+                   String update_executor, String update_status, String time_create, String email) {
 
+        CollectionReference taskRef = FirebaseFirestore.getInstance().collection(collection);
+        taskRef.add(new Task(update_name, update_address, update_date_task, update_floor, update_cabinet, update_comment,
+                date_create, update_executor, update_status, time_create, email, "62d7f792-2144-4da4-bfe6-b1ea80d348d7"));
+
+        taskRef.get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
-                Log.i(TAG, "update completed!");
+                Log.i(TAG, "add completed!");
                 progress_bar_add_task_root.setVisibility(View.INVISIBLE);
                 startActivity(new Intent(this, RootMainActivity.class));
             } else {
@@ -232,12 +200,25 @@ public class EditTaskActivity extends AppCompatActivity {
             }
 
         });
+    }
 
-        documentReferenceTask.set(new_task)
-                .addOnSuccessListener(unused -> Log.i(TAG, "onSuccess: task - " + id))
-                .addOnFailureListener(e -> Log.i(TAG, "Failure - " + e.toString()));
+    void delete_task(String collection, String id) {
+        DocumentReference documentReferenceTask = firebaseFirestore.collection(collection).document(id);
+        documentReferenceTask.delete();
+    }
 
-        delete_task(current, id);
+    void show_dialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Внимание!")
+                .setMessage("Отсуствует интернет подключение. Вы можете сохранить обновленную заявку у себя в телефоне и когда интренет снова появиться заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку заявку позже, когда появиться интрнет.")
+                .setPositiveButton("Сохранить", (dialog, id) -> {
+                    updateTask(collection);
+                })
+                .setNegativeButton(android.R.string.cancel, (dialog, id) -> startActivity(new Intent(this, RootMainActivity.class)));
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     boolean validateFields() {

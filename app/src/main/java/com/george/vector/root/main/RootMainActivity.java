@@ -1,17 +1,20 @@
 package com.george.vector.root.main;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.george.vector.R;
-import com.george.vector.local_admin.AdminBottomSheet;
+import com.george.vector.common.bottom_sheets.ProfileBottomSheet;
+import com.george.vector.common.bottom_sheets.ConsoleBottomSheet;
 import com.george.vector.root.main.fragments.fragment_bar;
 import com.george.vector.root.main.fragments.fragment_ost;
-import com.george.vector.root.tasks.AddTaskRootActivity;
 import com.george.vector.root.tasks.BottomSheetAddTask;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.chip.Chip;
@@ -40,6 +43,11 @@ public class RootMainActivity extends AppCompatActivity {
         bottomAppBar_root = findViewById(R.id.bottomAppBar_root);
 
         setSupportActionBar(bottomAppBar_root);
+
+        bottomAppBar_root.setNavigationOnClickListener(v -> {
+            ConsoleBottomSheet bottomSheet = new ConsoleBottomSheet();
+            bottomSheet.show(getSupportFragmentManager(), "ConsoleBottomSheet");
+        });
 
         fab_add_root.setOnClickListener(v -> {
             BottomSheetAddTask bottomSheet = new BottomSheetAddTask();
@@ -85,4 +93,20 @@ public class RootMainActivity extends AppCompatActivity {
                 .commit();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.bottom_app_bar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.profile_item) {
+            ProfileBottomSheet bottomSheet = new ProfileBottomSheet();
+            bottomSheet.show(getSupportFragmentManager(), "ProfileBottomSheet");
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

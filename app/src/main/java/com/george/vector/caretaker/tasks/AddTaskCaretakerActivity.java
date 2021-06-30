@@ -1,4 +1,4 @@
-package com.george.vector.root.tasks;
+package com.george.vector.caretaker.tasks;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,9 +16,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 
 import com.george.vector.R;
+import com.george.vector.caretaker.main.MainCaretakerActivity;
 import com.george.vector.common.utils.ErrorsUtils;
 import com.george.vector.common.tasks.Task;
-import com.george.vector.root.main.RootMainActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -39,24 +39,21 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
-public class AddTaskRootActivity extends AppCompatActivity {
+public class AddTaskCaretakerActivity extends AppCompatActivity {
 
-    MaterialToolbar topAppBar_new_task_root;
-    LinearProgressIndicator progress_bar_add_task_root;
-    ExtendedFloatingActionButton done_task_root;
+    private static final String TAG = "AddTaskCaretaker";
+    MaterialToolbar topAppBar_new_task_caretaker;
+    LinearProgressIndicator progress_bar_add_task_caretaker;
+    ExtendedFloatingActionButton done_task_caretaker;
 
-    TextInputLayout text_input_layout_address_root, text_input_layout_floor_root,
-            text_input_layout_cabinet_root, text_input_layout_name_task_root,
-            text_input_layout_comment_root, text_input_layout_date_task_root,
-            text_input_layout_executor_root, text_input_layout_status_root;
+    TextInputEditText edit_text_date_task_caretaker;
+    TextInputLayout text_input_layout_address_caretaker, text_input_layout_floor_caretaker, text_input_layout_cabinet_caretaker,
+            text_input_layout_name_task_caretaker, text_input_layout_comment_caretaker,
+            text_input_layout_executor_caretaker, text_input_layout_status_caretaker, text_input_layout_date_task_caretaker;
 
-    TextInputEditText edit_text_date_task_root;
-
-    MaterialAutoCompleteTextView address_autoComplete_root, executor_autoComplete_root,
-            status_autoComplete_root;
+    MaterialAutoCompleteTextView address_autoComplete_caretaker, executor_autoComplete_caretaker, status_autoComplete_caretaker;
 
     String location, userID, email, address, floor, cabinet, executor, name_task, date_task, status, comment;
-    private static final String TAG = "AddTaskRoot";
 
     Calendar datePickCalendar;
 
@@ -66,32 +63,31 @@ public class AddTaskRootActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_task_root);
+        setContentView(R.layout.activity_add_task_caretaker);
 
-        topAppBar_new_task_root = findViewById(R.id.topAppBar_new_task_root);
-        progress_bar_add_task_root = findViewById(R.id.progress_bar_add_task_root);
-        done_task_root = findViewById(R.id.done_task_root);
-        text_input_layout_address_root = findViewById(R.id.text_input_layout_address_root);
-        text_input_layout_floor_root = findViewById(R.id.text_input_layout_floor_root);
-        text_input_layout_cabinet_root = findViewById(R.id.text_input_layout_cabinet_root);
-        text_input_layout_name_task_root = findViewById(R.id.text_input_layout_name_task_root);
-        text_input_layout_comment_root = findViewById(R.id.text_input_layout_comment_root);
-        text_input_layout_date_task_root = findViewById(R.id.text_input_layout_date_task_root);
-        text_input_layout_executor_root = findViewById(R.id.text_input_layout_executor_root);
-        text_input_layout_status_root = findViewById(R.id.text_input_layout_status_root);
-        edit_text_date_task_root = findViewById(R.id.edit_text_date_task_root);
-        address_autoComplete_root = findViewById(R.id.address_autoComplete_root);
-        executor_autoComplete_root = findViewById(R.id.executor_autoComplete_root);
-        status_autoComplete_root = findViewById(R.id.status_autoComplete_root);
+        topAppBar_new_task_caretaker = findViewById(R.id.topAppBar_new_task_caretaker);
+        progress_bar_add_task_caretaker = findViewById(R.id.progress_bar_add_task_caretaker);
+        done_task_caretaker = findViewById(R.id.done_task_caretaker);
+        edit_text_date_task_caretaker = findViewById(R.id.edit_text_date_task_caretaker);
+        text_input_layout_address_caretaker = findViewById(R.id.text_input_layout_address_caretaker);
+        text_input_layout_name_task_caretaker = findViewById(R.id.text_input_layout_name_task_caretaker);
+        text_input_layout_comment_caretaker = findViewById(R.id.text_input_layout_comment_caretaker);
+        text_input_layout_floor_caretaker = findViewById(R.id.text_input_layout_floor_caretaker);
+        text_input_layout_cabinet_caretaker = findViewById(R.id.text_input_layout_cabinet_caretaker);
+        text_input_layout_executor_caretaker = findViewById(R.id.text_input_layout_executor_caretaker);
+        text_input_layout_status_caretaker = findViewById(R.id.text_input_layout_status_caretaker);
+        address_autoComplete_caretaker = findViewById(R.id.address_autoComplete_caretaker);
+        text_input_layout_date_task_caretaker = findViewById(R.id.text_input_layout_date_task_caretaker);
+        executor_autoComplete_caretaker = findViewById(R.id.executor_autoComplete_caretaker);
+        status_autoComplete_caretaker = findViewById(R.id.status_autoComplete_caretaker);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        topAppBar_new_task_root.setNavigationOnClickListener(v -> onBackPressed());
-
         Bundle arguments = getIntent().getExtras();
-        location = arguments.get("location").toString();
-        Log.i(TAG, location);
+        String location = arguments.get("location").toString();
+
+        topAppBar_new_task_caretaker.setNavigationOnClickListener(v -> onBackPressed());
 
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         DocumentReference documentReferenceUser = firebaseFirestore.collection("users").document(userID);
@@ -100,21 +96,21 @@ public class AddTaskRootActivity extends AppCompatActivity {
             email = value.getString("email");
         });
 
-        done_task_root.setOnClickListener(v -> {
+        done_task_caretaker.setOnClickListener(v -> {
 
-            address = Objects.requireNonNull(text_input_layout_address_root.getEditText()).getText().toString();
-            floor = Objects.requireNonNull(text_input_layout_floor_root.getEditText()).getText().toString();
-            cabinet = Objects.requireNonNull(text_input_layout_cabinet_root.getEditText()).getText().toString();
-            name_task = Objects.requireNonNull(text_input_layout_name_task_root.getEditText()).getText().toString();
-            comment = Objects.requireNonNull(text_input_layout_comment_root.getEditText()).getText().toString();
-            date_task = Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).getText().toString();
-            executor = Objects.requireNonNull(text_input_layout_executor_root.getEditText()).getText().toString();
-            status = Objects.requireNonNull(text_input_layout_status_root.getEditText()).getText().toString();
+            address = Objects.requireNonNull(text_input_layout_address_caretaker.getEditText()).getText().toString();
+            floor = Objects.requireNonNull(text_input_layout_floor_caretaker.getEditText()).getText().toString();
+            cabinet = Objects.requireNonNull(text_input_layout_cabinet_caretaker.getEditText()).getText().toString();
+            name_task = Objects.requireNonNull(text_input_layout_name_task_caretaker.getEditText()).getText().toString();
+            comment = Objects.requireNonNull(text_input_layout_comment_caretaker.getEditText()).getText().toString();
+            date_task = Objects.requireNonNull(text_input_layout_date_task_caretaker.getEditText()).getText().toString();
+            executor = Objects.requireNonNull(text_input_layout_executor_caretaker.getEditText()).getText().toString();
+            status = Objects.requireNonNull(text_input_layout_status_caretaker.getEditText()).getText().toString();
 
             if(validateFields()){
                 if(!isOnline())
                     show_alert_dialog();
-                 else
+                else
                     initialize_location(location);
             }
 
@@ -144,14 +140,14 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
                 })
                 .setNegativeButton(android.R.string.cancel,
-                        (dialog, id) -> startActivity(new Intent(this, RootMainActivity.class)));
+                        (dialog, id) -> startActivity(new Intent(this, MainCaretakerActivity.class)));
 
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
     void initialize_location(@NotNull String location) {
-        if(location.equals("ost_school")) {
+        if (location.equals("ost_school")) {
             if (status.equals("Новая заявка"))
                 saveTask("ost_school_new");
 
@@ -161,12 +157,10 @@ public class AddTaskRootActivity extends AppCompatActivity {
             if (status.equals("Архив"))
                 saveTask("ost_school_archive");
         }
-
-
     }
 
     void saveTask(@NotNull String collection) {
-        progress_bar_add_task_root.setVisibility(View.VISIBLE);
+        progress_bar_add_task_caretaker.setVisibility(View.VISIBLE);
 
         Date currentDate = new Date();
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
@@ -194,8 +188,8 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
             if(task.isSuccessful()) {
                 Log.i(TAG, "add completed!");
-                progress_bar_add_task_root.setVisibility(View.INVISIBLE);
-                startActivity(new Intent(this, RootMainActivity.class));
+                progress_bar_add_task_caretaker.setVisibility(View.INVISIBLE);
+                startActivity(new Intent(this, MainCaretakerActivity.class));
             } else {
                 Log.i(TAG, "Error: " + task.getException());
             }
@@ -214,30 +208,30 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
         String[] items = getResources().getStringArray(R.array.addresses);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                AddTaskRootActivity.this,
+                AddTaskCaretakerActivity.this,
                 R.layout.dropdown_menu_categories,
                 items
         );
 
-        address_autoComplete_root.setAdapter(adapter);
+        address_autoComplete_caretaker.setAdapter(adapter);
 
         String[] items_status = getResources().getStringArray(R.array.status);
         ArrayAdapter<String> adapter_status = new ArrayAdapter<>(
-                AddTaskRootActivity.this,
+                AddTaskCaretakerActivity.this,
                 R.layout.dropdown_menu_categories,
                 items_status
         );
 
-        status_autoComplete_root.setAdapter(adapter_status);
+        status_autoComplete_caretaker.setAdapter(adapter_status);
 
         String[] items_executors = getResources().getStringArray(R.array.executors_ostafyevo);
         ArrayAdapter<String> adapter_executors = new ArrayAdapter<>(
-                AddTaskRootActivity.this,
+                AddTaskCaretakerActivity.this,
                 R.layout.dropdown_menu_categories,
                 items_executors
         );
 
-        executor_autoComplete_root.setAdapter(adapter_executors);
+        executor_autoComplete_caretaker.setAdapter(adapter_executors);
 
         datePickCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
@@ -247,7 +241,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
             updateLabel();
         };
 
-        edit_text_date_task_root.setOnClickListener(v -> new DatePickerDialog(AddTaskRootActivity.this, date, datePickCalendar
+        edit_text_date_task_caretaker.setOnClickListener(v -> new DatePickerDialog(AddTaskCaretakerActivity.this, date, datePickCalendar
                 .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
 
     }
@@ -256,7 +250,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         String date_text = "MM.dd.yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(date_text, Locale.US);
 
-        Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).setText(sdf.format(datePickCalendar.getTime()));
+        Objects.requireNonNull(text_input_layout_date_task_caretaker.getEditText()).setText(sdf.format(datePickCalendar.getTime()));
     }
 
     boolean validateFields() {
@@ -275,35 +269,35 @@ public class AddTaskRootActivity extends AppCompatActivity {
         } else {
 
             if(!check_address)
-                text_input_layout_address_root.setError("Это поле не может быть пустым");
+                text_input_layout_address_caretaker.setError("Это поле не может быть пустым");
 
             if(!check_floor)
-                text_input_layout_floor_root.setError("Это поле не может быть пустым");
+                text_input_layout_floor_caretaker.setError("Это поле не может быть пустым");
 
             if(!check_cabinet)
-                text_input_layout_cabinet_root.setError("Это поле не может быть пустым");
+                text_input_layout_cabinet_caretaker.setError("Это поле не может быть пустым");
 
             if(!check_name_task)
-                text_input_layout_name_task_root.setError("Это поле не может быть пустым");
+                text_input_layout_name_task_caretaker.setError("Это поле не может быть пустым");
 
             if(!check_date_task)
-                text_input_layout_date_task_root.setError("Это поле не может быть пустым");
+                text_input_layout_date_task_caretaker.setError("Это поле не может быть пустым");
 
             if(!check_executor)
-                text_input_layout_executor_root.setError("Это поле не может быть пустым");
+                text_input_layout_executor_caretaker.setError("Это поле не может быть пустым");
 
             if(!check_status)
-                text_input_layout_status_root.setError("Это поле не может быть пустым");
+                text_input_layout_status_caretaker.setError("Это поле не может быть пустым");
 
             return false;
         }
     }
 
     void clearErrors() {
-        Objects.requireNonNull(text_input_layout_address_root.getEditText()).addTextChangedListener(new TextWatcher() {
+        Objects.requireNonNull(text_input_layout_address_caretaker.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_address_root.setError(null);
+                text_input_layout_address_caretaker.setError(null);
             }
 
             @Override
@@ -317,10 +311,10 @@ public class AddTaskRootActivity extends AppCompatActivity {
             }
         });
 
-        Objects.requireNonNull(text_input_layout_floor_root.getEditText()).addTextChangedListener(new TextWatcher() {
+        Objects.requireNonNull(text_input_layout_floor_caretaker.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_floor_root.setError(null);
+                text_input_layout_floor_caretaker.setError(null);
             }
 
             @Override
@@ -334,10 +328,10 @@ public class AddTaskRootActivity extends AppCompatActivity {
             }
         });
 
-        Objects.requireNonNull(text_input_layout_cabinet_root.getEditText()).addTextChangedListener(new TextWatcher() {
+        Objects.requireNonNull(text_input_layout_cabinet_caretaker.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_cabinet_root.setError(null);
+                text_input_layout_cabinet_caretaker.setError(null);
             }
 
             @Override
@@ -351,10 +345,10 @@ public class AddTaskRootActivity extends AppCompatActivity {
             }
         });
 
-        Objects.requireNonNull(text_input_layout_name_task_root.getEditText()).addTextChangedListener(new TextWatcher() {
+        Objects.requireNonNull(text_input_layout_name_task_caretaker.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_name_task_root.setError(null);
+                text_input_layout_name_task_caretaker.setError(null);
             }
 
             @Override
@@ -368,10 +362,10 @@ public class AddTaskRootActivity extends AppCompatActivity {
             }
         });
 
-        Objects.requireNonNull(text_input_layout_comment_root.getEditText()).addTextChangedListener(new TextWatcher() {
+        Objects.requireNonNull(text_input_layout_comment_caretaker.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_comment_root.setError(null);
+                text_input_layout_comment_caretaker.setError(null);
             }
 
             @Override
@@ -385,10 +379,10 @@ public class AddTaskRootActivity extends AppCompatActivity {
             }
         });
 
-        Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).addTextChangedListener(new TextWatcher() {
+        Objects.requireNonNull(text_input_layout_date_task_caretaker.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_date_task_root.setError(null);
+                text_input_layout_date_task_caretaker.setError(null);
             }
 
             @Override
@@ -402,10 +396,10 @@ public class AddTaskRootActivity extends AppCompatActivity {
             }
         });
 
-        Objects.requireNonNull(text_input_layout_executor_root.getEditText()).addTextChangedListener(new TextWatcher() {
+        Objects.requireNonNull(text_input_layout_executor_caretaker.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_executor_root.setError(null);
+                text_input_layout_executor_caretaker.setError(null);
             }
 
             @Override
@@ -419,10 +413,10 @@ public class AddTaskRootActivity extends AppCompatActivity {
             }
         });
 
-        Objects.requireNonNull(text_input_layout_status_root.getEditText()).addTextChangedListener(new TextWatcher() {
+        Objects.requireNonNull(text_input_layout_status_caretaker.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_status_root.setError(null);
+                text_input_layout_status_caretaker.setError(null);
             }
 
             @Override

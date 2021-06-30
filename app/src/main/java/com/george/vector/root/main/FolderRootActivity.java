@@ -5,10 +5,8 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.FrameLayout;
 
 import com.george.vector.R;
-import com.george.vector.local_admin.tasks.sort_by_category.fragments.fragmentNewTasks;
 import com.george.vector.root.main.location_fragments.fragment_school_ost_archive_tasks;
 import com.george.vector.root.main.location_fragments.fragment_school_ost_new_tasks;
 import com.george.vector.root.main.location_fragments.fragment_school_ost_progress_tasks;

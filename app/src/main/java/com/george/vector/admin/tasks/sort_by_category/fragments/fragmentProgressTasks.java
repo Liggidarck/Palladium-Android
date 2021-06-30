@@ -1,4 +1,4 @@
-package com.george.vector.root.main.location_fragments;
+package com.george.vector.admin.tasks.sort_by_category.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,39 +10,31 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
+import com.george.vector.admin.tasks.TaskActivity;
 import com.george.vector.common.tasks.Task;
 import com.george.vector.common.tasks.TaskAdapter;
-import com.george.vector.root.tasks.TaskRootActivity;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-import org.jetbrains.annotations.NotNull;
+public class fragmentProgressTasks extends Fragment {
 
-public class fragment_school_ost_progress_tasks extends Fragment {
-
-    private static final String TAG = "ProgressTaskOstSchool";
+    private static final String TAG = "fragmentProgressTasks";
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference taskRef = db.collection("ost_school_progress");
+    private final CollectionReference taskRef = db.collection("new tasks");
 
     private TaskAdapter adapter;
 
-    FirebaseFirestore firebaseFirestore;
-
     @Nullable
-    @org.jetbrains.annotations.Nullable
     @Override
-    public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_school_ost_progress_tasks, container, false);
-
-        RecyclerView recyclerview_school_ost_new_tasks = view.findViewById(R.id.recyclerview_school_ost_progress_tasks);
-
-        firebaseFirestore = FirebaseFirestore.getInstance();
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_progress_tasks, container, false);
 
         Query query = taskRef.whereEqualTo("status", "В работе");
 
@@ -52,9 +44,22 @@ public class fragment_school_ost_progress_tasks extends Fragment {
 
         adapter = new TaskAdapter(options);
 
-        recyclerview_school_ost_new_tasks.setHasFixedSize(true);
-        recyclerview_school_ost_new_tasks.setLayoutManager(new LinearLayoutManager(fragment_school_ost_progress_tasks.this.getContext()));
-        recyclerview_school_ost_new_tasks.setAdapter(adapter);
+        RecyclerView recyclerview_in_progress_admin = view.findViewById(R.id.recyclerview_in_progress_admin);
+        recyclerview_in_progress_admin.setHasFixedSize(true);
+        recyclerview_in_progress_admin.setLayoutManager(new LinearLayoutManager(fragmentProgressTasks.this.getContext()));
+        recyclerview_in_progress_admin.setAdapter(adapter);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                adapter.deleteItem(viewHolder.getAdapterPosition());
+            }
+        }).attachToRecyclerView(recyclerview_in_progress_admin);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             Task task = documentSnapshot.toObject(Task.class);
@@ -63,10 +68,8 @@ public class fragment_school_ost_progress_tasks extends Fragment {
 
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
-            Intent intent = new Intent(fragment_school_ost_progress_tasks.this.getContext(), TaskRootActivity.class);
-            intent.putExtra("id_task_root", id);
-            intent.putExtra("zone", "ost_school");
-            intent.putExtra("collection", "ost_school_progress");
+            Intent intent = new Intent(fragmentProgressTasks.this.getContext(), TaskActivity.class);
+            intent.putExtra("id_task", id);
             startActivity(intent);
 
         });
@@ -85,4 +88,5 @@ public class fragment_school_ost_progress_tasks extends Fragment {
         super.onStop();
         adapter.stopListening();
     }
+
 }

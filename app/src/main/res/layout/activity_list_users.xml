@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".local_admin.edit_users.ListUsersActivity" >
+    tools:context=".common.edit_users.ListUsersActivity" >
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_list_users"
@@ -31,7 +31,21 @@
             android:layout_height="wrap_content"
             app:singleSelection="true"
             app:singleLine="true"
-            app:checkedChip="@id/chip_admin">
+            app:checkedChip="@id/chip_root">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_root"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Супер пользователи"
+                style="@style/Widget.MaterialComponents.Chip.Filter" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_zav"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Завхозы"
+                style="@style/Widget.MaterialComponents.Chip.Filter" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_admin"
