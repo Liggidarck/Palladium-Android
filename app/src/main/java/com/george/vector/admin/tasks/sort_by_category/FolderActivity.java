@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.george.vector.R;
-import com.george.vector.admin.tasks.sort_by_category.fragments.fragmentArchiveTasks;
-import com.george.vector.admin.tasks.sort_by_category.fragments.fragmentNewTasks;
-import com.george.vector.admin.tasks.sort_by_category.fragments.fragmentProgressTasks;
+import com.george.vector.admin.tasks.sort_by_category.fragments.ost_school.fragmentArchiveTasks;
+import com.george.vector.admin.tasks.sort_by_category.fragments.ost_school.fragmentNewTasks;
+import com.george.vector.admin.tasks.sort_by_category.fragments.ost_school.fragmentProgressTasks;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class FolderActivity extends AppCompatActivity {
@@ -17,7 +17,7 @@ public class FolderActivity extends AppCompatActivity {
     MaterialToolbar toolbar_folder_activity;
 
     private static final String TAG = "Folder Activity";
-    String section;
+    String section, permission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +28,7 @@ public class FolderActivity extends AppCompatActivity {
 
         Bundle arguments = getIntent().getExtras();
         section = arguments.get("section").toString();
+        permission = arguments.get("permission").toString();
 
         toolbar_folder_activity.setNavigationOnClickListener(v -> onBackPressed());
 
@@ -36,16 +37,31 @@ public class FolderActivity extends AppCompatActivity {
             case "new tasks":
                 Log.i(TAG, "Запуск фрагмента New Tasks");
                 currentFragment = new fragmentNewTasks();
+
+                Bundle args = new Bundle();
+                args.putString("permission", permission);
+                currentFragment.setArguments(args);
+
                 toolbar_folder_activity.setTitle("Новые заявки");
                 break;
             case "in progress tasks":
                 Log.i(TAG, "Запуск фрагмента Progress Tasks");
                 currentFragment = new fragmentProgressTasks();
+
+                Bundle bundle = new Bundle();
+                bundle.putString("permission", permission);
+                currentFragment.setArguments(bundle);
+
                 toolbar_folder_activity.setTitle("Заявки в работе");
                 break;
             case "archive tasks":
                 Log.i(TAG, "Запуск фрагмента Archive");
                 currentFragment = new fragmentArchiveTasks();
+
+                Bundle data = new Bundle();
+                data.putString("permission", permission);
+                currentFragment.setArguments(data);
+
                 toolbar_folder_activity.setTitle("Архив");
                 break;
         }

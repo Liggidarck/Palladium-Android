@@ -160,9 +160,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
 
         builder.setTitle("Внимание!")
                 .setMessage("Отсуствует интернет подключение. Вы можете сохранить обновленную заявку у себя в телефоне и когда интренет снова появиться заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку заявку позже, когда появиться интрнет.")
-                .setPositiveButton("Сохранить", (dialog, id) -> {
-                    updateTask(collection);
-                })
+                .setPositiveButton("Сохранить", (dialog, id) -> updateTask(collection))
                 .setNegativeButton(android.R.string.cancel, (dialog, id) -> startActivity(new Intent(this, MainCaretakerActivity.class)));
 
         AlertDialog dialog = builder.create();

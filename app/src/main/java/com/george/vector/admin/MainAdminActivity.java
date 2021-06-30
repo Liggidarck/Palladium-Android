@@ -36,11 +36,16 @@ public class MainAdminActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 
+    String permission, collection;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.MainActivity);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_main);
+
+        Bundle arguments = getIntent().getExtras();
+        permission = arguments.get("permission").toString();
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -53,26 +58,32 @@ public class MainAdminActivity extends AppCompatActivity {
 
         setSupportActionBar(bottomAppBar);
 
-        add.setOnClickListener(v -> startActivity(new Intent(this, AddTaskAdminActivity.class)));
+        add.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AddTaskAdminActivity.class);
+            intent.putExtra("permission", permission);
+            startActivity(intent);
+        });
 
         new_tasks_card.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderActivity.class);
             intent.putExtra("section", "new tasks");
+            intent.putExtra("permission", permission);
             startActivity(intent);
         });
 
         in_progress_tasks_card.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderActivity.class);
             intent.putExtra("section", "in progress tasks");
+            intent.putExtra("permission", permission);
             startActivity(intent);
         });
 
         archive_tasks_card.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderActivity.class);
             intent.putExtra("section", "archive tasks");
+            intent.putExtra("permission", permission);
             startActivity(intent);
         });
-
 
     }
 

@@ -1,4 +1,4 @@
-package com.george.vector.user;
+package com.george.vector.user.tasks;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -30,7 +30,7 @@ public class TaskUserActivity extends AppCompatActivity {
     ImageView image_view_task_user;
     LinearProgressIndicator progress_bar_task_user;
 
-    String id, address, floor, cabinet, name_task, comment, status, date_create, time_create, image_key;
+    String id, permission, collection, address, floor, cabinet, name_task, comment, status, date_create, time_create, image_key;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -44,6 +44,7 @@ public class TaskUserActivity extends AppCompatActivity {
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.get("id_task").toString();
+        permission = arguments.getString("permission");
 
         toolbar = findViewById(R.id.topAppBar_task_user);
         text_view_address_task_user = findViewById(R.id.text_view_address_task_user);
@@ -64,9 +65,10 @@ public class TaskUserActivity extends AppCompatActivity {
          setSupportActionBar(toolbar);
          toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
-         Log.i(TAG, "id: " + id);
+         if(permission.equals("ost_school"))
+             collection = "ost_school_new";
 
-        DocumentReference documentReference = firebaseFirestore.collection("new tasks").document(id);
+        DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
             progress_bar_task_user.setVisibility(View.VISIBLE);
             assert value != null;

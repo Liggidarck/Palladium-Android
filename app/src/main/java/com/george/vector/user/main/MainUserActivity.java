@@ -1,4 +1,4 @@
-package com.george.vector.user;
+package com.george.vector.user.main;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +17,8 @@ import com.george.vector.R;
 import com.george.vector.common.bottom_sheets.ProfileBottomSheet;
 import com.george.vector.common.tasks.Task;
 import com.george.vector.common.tasks.TaskAdapter;
+import com.george.vector.user.tasks.AddTaskUserActivity;
+import com.george.vector.user.tasks.TaskUserActivity;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,15 +32,15 @@ public class MainUserActivity extends AppCompatActivity {
     FloatingActionButton fab_add_user;
     BottomAppBar bottomAppBar;
 
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference taskRef = db.collection("new tasks");
+    FirebaseFirestore db;
+    CollectionReference taskRef;
 
     private TaskAdapter adapter;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 
-    static String MAIN_EMAIL;
+    String permission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +49,14 @@ public class MainUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_user);
 
         Bundle arguments = getIntent().getExtras();
-        MAIN_EMAIL = arguments.get("email").toString();
-        Log.i(TAG, "email - " + MAIN_EMAIL);
+        String email = arguments.get("email").toString();
+        permission = arguments.getString("permission");
+        String collection = null;
 
         bottomAppBar = findViewById(R.id.bottomAppBarUser);
         fab_add_user = findViewById(R.id.fab_add_user);
+
+        db = FirebaseFirestore.getInstance();
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -62,14 +67,22 @@ public class MainUserActivity extends AppCompatActivity {
             bottomSheet.show(getSupportFragmentManager(), "SettingsUserBottomSheet");
         });
 
-        fab_add_user.setOnClickListener(v -> startActivity(new Intent(this, AddTaskUserActivity.class)));
+        fab_add_user.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AddTaskUserActivity.class);
+            intent.putExtra("permission", permission);
+            startActivity(intent);
+        });
 
-        setUpRecyclerView();
+        if(permission.equals("ost_school"))
+            collection = "ost_school_new";
+
+        setUpRecyclerView(email, collection);
     }
 
-    private void setUpRecyclerView() {
-        Query query = taskRef.whereEqualTo("email_creator", MAIN_EMAIL);
+    private void setUpRecyclerView(String email, String collection) {
+        taskRef = db.collection(collection);
 
+        Query query = taskRef.whereEqualTo("email_creator", email);
         FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
                 .setQuery(query, Task.class)
                 .build();
@@ -89,6 +102,7 @@ public class MainUserActivity extends AppCompatActivity {
 
             Intent intent = new Intent(this, TaskUserActivity.class);
             intent.putExtra("id_task", id);
+            intent.putExtra("permission", permission);
             startActivity(intent);
 
         });

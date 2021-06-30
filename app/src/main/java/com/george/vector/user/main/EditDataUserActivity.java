@@ -1,4 +1,4 @@
-package com.george.vector.user;
+package com.george.vector.user.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,6 +12,7 @@ import android.widget.Button;
 
 import com.george.vector.R;
 import com.george.vector.common.utils.ErrorsUtils;
+import com.george.vector.user.main.MainUserActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputLayout;

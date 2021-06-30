@@ -1,4 +1,4 @@
-package com.george.vector.user;
+package com.george.vector.user.main;
 
 import android.content.Intent;
 import android.os.Bundle;

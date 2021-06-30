@@ -1,4 +1,4 @@
-package com.george.vector.admin.tasks.sort_by_category.fragments;
+package com.george.vector.admin.tasks.sort_by_category.fragments.ost_school;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,24 +23,41 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-public class fragmentArchiveTasks extends Fragment {
+public class fragmentNewTasks extends Fragment {
 
-    private static final String TAG = "fragmentArchiveTasks";
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference taskRef = db.collection("new tasks");
+    private static final String TAG = "fragmentNewTasks";
+    FirebaseFirestore db;
+    CollectionReference taskRef;
+
+    String collection, permission;
 
     private TaskAdapter adapter;
-
-    FirebaseFirestore firebaseFirestore;
+    RecyclerView recyclerview_new_tasks_admin;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_archive_tasks, container, false);
+        View view = inflater.inflate(R.layout.fragment_new_tasks, container, false);
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        recyclerview_new_tasks_admin = view.findViewById(R.id.recyclerview_new_tasks_admin);
 
-        Query query = taskRef.whereEqualTo("status", "Архив");
+        Bundle args = getArguments();
+        assert args != null;
+        permission = args.getString("permission");
+
+        if(permission.equals("ost_school")) {
+            collection = "ost_school_new";
+            init_rec(collection);
+        }
+
+        return view;
+    }
+
+    void init_rec(String collection) {
+        db = FirebaseFirestore.getInstance();
+        taskRef = db.collection(collection);
+
+        Query query = taskRef.whereEqualTo("status", "Новая заявка");
 
         FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
                 .setQuery(query, Task.class)
@@ -48,22 +65,9 @@ public class fragmentArchiveTasks extends Fragment {
 
         adapter = new TaskAdapter(options);
 
-        RecyclerView recyclerview_archive_admin = view.findViewById(R.id.recyclerview_archive_admin);
-        recyclerview_archive_admin.setHasFixedSize(true);
-        recyclerview_archive_admin.setLayoutManager(new LinearLayoutManager(fragmentArchiveTasks.this.getContext()));
-        recyclerview_archive_admin.setAdapter(adapter);
-
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                adapter.deleteItem(viewHolder.getAdapterPosition());
-            }
-        }).attachToRecyclerView(recyclerview_archive_admin);
+        recyclerview_new_tasks_admin.setHasFixedSize(true);
+        recyclerview_new_tasks_admin.setLayoutManager(new LinearLayoutManager(fragmentNewTasks.this.getContext()));
+        recyclerview_new_tasks_admin.setAdapter(adapter);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             Task task = documentSnapshot.toObject(Task.class);
@@ -72,12 +76,13 @@ public class fragmentArchiveTasks extends Fragment {
 
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
-            Intent intent = new Intent(fragmentArchiveTasks.this.getContext(), TaskActivity.class);
+            Intent intent = new Intent(fragmentNewTasks.this.getContext(), TaskActivity.class);
             intent.putExtra("id_task", id);
+            intent.putExtra("location", permission);
+            intent.putExtra("collection", collection);
             startActivity(intent);
-        });
 
-        return view;
+        });
     }
 
     @Override

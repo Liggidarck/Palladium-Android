@@ -18,7 +18,7 @@ import com.george.vector.admin.MainAdminActivity;
 import com.george.vector.R;
 import com.george.vector.common.utils.ErrorsUtils;
 import com.george.vector.root.main.RootMainActivity;
-import com.george.vector.user.MainUserActivity;
+import com.george.vector.user.main.MainUserActivity;
 import com.george.vector.caretaker.main.MainCaretakerActivity;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
@@ -135,12 +135,16 @@ public class ActivityLogin extends AppCompatActivity {
             startActivity(intent);
         }
 
-        if(check_role.equals("Администратор"))
-            startActivity(new Intent(this, MainAdminActivity.class));
+        if(check_role.equals("Администратор")) {
+            Intent intent = new Intent(this, MainAdminActivity.class);
+            intent.putExtra("permission", permission);
+            startActivity(intent);
+        }
 
         if (check_role.equals("Пользователь")) {
             Intent intent = new Intent(this, MainUserActivity.class);
             intent.putExtra("email", check_email);
+            intent.putExtra("permission", permission);
             startActivity(intent);
         }
     }

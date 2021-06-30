@@ -161,8 +161,6 @@ public class AddTaskRootActivity extends AppCompatActivity {
             if (status.equals("Архив"))
                 saveTask("ost_school_archive");
         }
-
-
     }
 
     void saveTask(@NotNull String collection) {

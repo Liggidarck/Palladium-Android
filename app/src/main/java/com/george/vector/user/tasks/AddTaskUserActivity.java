@@ -1,4 +1,4 @@
-package com.george.vector.user;
+package com.george.vector.user.tasks;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +33,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -55,7 +57,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
     String address, floor, cabinet, name_task, comment, userID, email, randomKey;
 
-    final String  status = "Новая заявка";
+    String  status = "Новая заявка";
     private static final String TAG = "AddTaskUserActivity";
 
     FirebaseAuth firebaseAuth;
@@ -64,6 +66,8 @@ public class AddTaskUserActivity extends AppCompatActivity {
     StorageReference storageReference;
 
     public Uri imageUri;
+
+    String permission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,9 +90,10 @@ public class AddTaskUserActivity extends AppCompatActivity {
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
 
-        topAppBar_new_task_user.setNavigationOnClickListener(v -> onBackPressed());
+        Bundle arguments = getIntent().getExtras();
+        permission = arguments.get("permission").toString();
 
-        image_view_task_user.setOnClickListener(v -> chooseImage());
+        topAppBar_new_task_user.setNavigationOnClickListener(v -> onBackPressed());
 
         String[] items = getResources().getStringArray(R.array.addresses);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -126,28 +131,68 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
             if(validateFields()) {
                 if(!isOnline()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-                    builder.setTitle("Внимание!")
-                            .setMessage("Отсуствует интернет подключение. Вы можете сохранить заявку у себя в телефоне и когда интренет снова появиться заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку заявку позже, когда появиться интрнет.")
-
-                            .setPositiveButton("Сохранить",
-                                    (DialogInterface.OnClickListener) (dialog, id) -> saveTask())
-
-                            .setNegativeButton(android.R.string.cancel,
-                                    (DialogInterface.OnClickListener) (dialog, id) -> onBackPressed());
-
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-
+                    show_dialog();
                 } else
-                    saveTask();
+                    initialize_location(permission);
             }
 
         });
 
         clear_errors();
 
+    }
+
+    void saveTask(String collection) {
+        progress_bar_add_task_user.setVisibility(View.VISIBLE);
+
+        Date currentDate = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        String dateText = dateFormat.format(currentDate);
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        String timeText = timeFormat.format(currentDate);
+
+        CollectionReference taskRef = FirebaseFirestore.getInstance().collection(collection);
+
+        taskRef.add(new Task(name_task, address, dateText, floor, cabinet, comment, null,
+                null, status, timeText, email, "62d7f792-2144-4da4-bfe6-b1ea80d348d7"));
+
+        taskRef.get().addOnCompleteListener(task -> {
+
+            if(task.isSuccessful()) {
+                Log.i(TAG, "add completed!");
+                progress_bar_add_task_user.setVisibility(View.INVISIBLE);
+                finish();
+            } else {
+                Log.i(TAG, "Error: " + task.getException());
+            }
+        });
+    }
+
+    void initialize_location(@NotNull String location) {
+        if(location.equals("ost_school")) {
+            if (status.equals("Новая заявка"))
+                saveTask("ost_school_new");
+
+            if (status.equals("В работе"))
+                saveTask("ost_school_progress");
+
+            if (status.equals("Архив"))
+                saveTask("ost_school_archive");
+        }
+    }
+
+    void show_dialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Внимание!")
+                .setMessage("Отсуствует интернет подключение. Вы можете сохранить заявку у себя в телефоне и когда интренет снова появиться заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку заявку позже, когда появиться интрнет.")
+
+                .setPositiveButton("Сохранить", (dialog, id) -> initialize_location(permission))
+
+                .setNegativeButton(android.R.string.cancel, (dialog, id) -> onBackPressed());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     void chooseImage() {
@@ -192,35 +237,6 @@ public class AddTaskUserActivity extends AppCompatActivity {
                     Log.i(TAG, "Progress: " + (int) progress + "%");
                     progress_bar_add_task_user.setProgress((int) progress);
                 });
-    }
-
-    void saveTask() {
-        progress_bar_add_task_user.setVisibility(View.VISIBLE);
-
-        Date currentDate = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        String dateText = dateFormat.format(currentDate);
-        DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        String timeText = timeFormat.format(currentDate);
-
-        CollectionReference taskRef = FirebaseFirestore.getInstance().collection("new tasks");
-        uploadImage();
-        taskRef.add(new Task(name_task, address, dateText, floor, cabinet, comment, null,
-                null, status, timeText, email, randomKey));
-
-        taskRef.get().addOnCompleteListener(task -> {
-
-            if(task.isSuccessful()) {
-                Log.i(TAG, "add completed!");
-                progress_bar_add_task_user.setVisibility(View.INVISIBLE);
-                finish();
-            } else {
-                Log.i(TAG, "Error: " + task.getException());
-            }
-
-        });
-
-
     }
 
     public boolean isOnline() {

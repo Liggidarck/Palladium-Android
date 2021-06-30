@@ -35,6 +35,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -58,7 +60,7 @@ public class AddTaskAdminActivity extends AppCompatActivity {
 
     LinearProgressIndicator progress_bar_add_task_admin;
 
-    String address, floor, cabinet, name_task, comment, date_task, executor, status, userID, email, randomKey;
+    String permission, address, floor, cabinet, name_task, comment, date_task, executor, status, userID, email, randomKey;
 
     Calendar datePickCalendar;
 
@@ -95,11 +97,11 @@ public class AddTaskAdminActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
-
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
 
-        task_image_admin.setOnClickListener(v -> chooseImage());
+        Bundle arguments = getIntent().getExtras();
+        permission = arguments.get("permission").toString();
 
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         DocumentReference documentReferenceUser = firebaseFirestore.collection("users").document(userID);
@@ -110,6 +112,103 @@ public class AddTaskAdminActivity extends AppCompatActivity {
 
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
+        crate_task_fab.setOnClickListener(v -> {
+            address = Objects.requireNonNull(text_input_layout_address.getEditText()).getText().toString();
+            floor = Objects.requireNonNull(text_input_layout_floor.getEditText()).getText().toString();
+            cabinet = Objects.requireNonNull(text_input_layout_cabinet.getEditText()).getText().toString();
+            name_task = Objects.requireNonNull(text_input_layout_name_task.getEditText()).getText().toString();
+            comment = Objects.requireNonNull(text_input_layout_comment.getEditText()).getText().toString();
+            date_task = Objects.requireNonNull(text_input_layout_date_task.getEditText()).getText().toString();
+            executor = Objects.requireNonNull(text_input_layout_executor.getEditText()).getText().toString();
+            status = Objects.requireNonNull(text_input_layout_status.getEditText()).getText().toString();
+
+            if(validateFields()) {
+                if(!isOnline())
+                    show_dialog();
+                else
+                    initialize_location(permission);
+            }
+
+        });
+
+        clearErrors();
+        initialize_fields();
+    }
+
+    void initialize_location(@NotNull String location) {
+        if(location.equals("ost_school")) {
+            if (status.equals("Новая заявка"))
+                saveTask("ost_school_new");
+
+            if (status.equals("В работе"))
+                saveTask("ost_school_progress");
+
+            if (status.equals("Архив"))
+                saveTask("ost_school_archive");
+        }
+    }
+
+    void saveTask(String collection) {
+        progress_bar_add_task_admin.setVisibility(View.VISIBLE);
+
+        Date currentDate = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        String dateText = dateFormat.format(currentDate);
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        String timeText = timeFormat.format(currentDate);
+
+        Log.i(TAG, "address: " + address);
+        Log.i(TAG, "floor: " + floor);
+        Log.i(TAG, "cabinet: " + cabinet);
+        Log.i(TAG, "name_task: " + name_task);
+        Log.i(TAG, "comment: " + comment);
+
+        if (comment.isEmpty())
+            comment = "Нет коментария к заявке";
+
+        CollectionReference taskRef = FirebaseFirestore.getInstance().collection(collection);
+        taskRef.add(new Task(name_task, address, dateText, floor, cabinet, comment,
+                date_task, executor, status, timeText, email, "62d7f792-2144-4da4-bfe6-b1ea80d348d7"));
+
+        taskRef.get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                Log.i(TAG, "add completed!");
+                progress_bar_add_task_admin.setVisibility(View.INVISIBLE);
+                Intent intent = new Intent(this, MainAdminActivity.class);
+                intent.putExtra("permission", permission);
+                startActivity(intent);
+            } else {
+                Log.i(TAG, "Error: " + task.getException());
+            }
+
+        });
+
+    }
+
+    void chooseImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, 1);
+    }
+
+    void show_dialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Внимание!")
+                .setMessage("Отсуствует интернет подключение. Вы можете сохранить заявку у себя в телефоне и когда интренет снова появиться заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку заявку позже, когда появиться интрнет.")
+
+                .setPositiveButton("Сохранить", (dialog, id) -> initialize_location(permission))
+
+                .setNegativeButton(android.R.string.cancel,
+                        (dialog, id) -> startActivity(new Intent(this, MainAdminActivity.class)));
+
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    void initialize_fields() {
         String[] items = getResources().getStringArray(R.array.addresses);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 AddTaskAdminActivity.this,
@@ -148,49 +247,6 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         edit_text_date_task.setOnClickListener(v -> new DatePickerDialog(AddTaskAdminActivity.this, date, datePickCalendar
                 .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
 
-        crate_task_fab.setOnClickListener(v -> {
-            address = Objects.requireNonNull(text_input_layout_address.getEditText()).getText().toString();
-            floor = Objects.requireNonNull(text_input_layout_floor.getEditText()).getText().toString();
-            cabinet = Objects.requireNonNull(text_input_layout_cabinet.getEditText()).getText().toString();
-            name_task = Objects.requireNonNull(text_input_layout_name_task.getEditText()).getText().toString();
-            comment = Objects.requireNonNull(text_input_layout_comment.getEditText()).getText().toString();
-            date_task = Objects.requireNonNull(text_input_layout_date_task.getEditText()).getText().toString();
-            executor = Objects.requireNonNull(text_input_layout_executor.getEditText()).getText().toString();
-            status = Objects.requireNonNull(text_input_layout_status.getEditText()).getText().toString();
-
-            if(validateFields()){
-
-                if(!isOnline()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-                    builder.setTitle("Внимание!")
-                            .setMessage("Отсуствует интернет подключение. Вы можете сохранить заявку у себя в телефоне и когда интренет снова появиться заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку заявку позже, когда появиться интрнет.")
-
-                            .setPositiveButton("Сохранить",
-                                    (dialog, id) -> saveTask())
-
-                            .setNegativeButton(android.R.string.cancel,
-                                    (dialog, id) -> startActivity(new Intent(this, MainAdminActivity.class)));
-
-
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-
-                } else
-                    saveTask();
-
-            }
-
-        });
-
-        clearErrors();
-    }
-
-    void chooseImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, 1);
     }
 
     @Override
@@ -228,45 +284,6 @@ public class AddTaskAdminActivity extends AppCompatActivity {
                     Log.i(TAG, "Progress: " + (int) progress + "%");
                     progress_bar_add_task_admin.setProgress((int) progress);
                 });
-    }
-
-    void saveTask() {
-        progress_bar_add_task_admin.setVisibility(View.VISIBLE);
-
-        Date currentDate = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        String dateText = dateFormat.format(currentDate);
-        DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        String timeText = timeFormat.format(currentDate);
-
-        Log.i(TAG, "address: " + address);
-        Log.i(TAG, "floor: " + floor);
-        Log.i(TAG, "cabinet: " + cabinet);
-        Log.i(TAG, "name_task: " + name_task);
-        Log.i(TAG, "comment: " + comment);
-
-        if (comment.isEmpty())
-            comment = "Нет коментария к заявке";
-
-        Log.i(TAG, "comment(update): " + comment);
-
-        CollectionReference taskRef = FirebaseFirestore.getInstance().collection("new tasks");
-        uploadImage();
-        taskRef.add(new Task(name_task, address, dateText, floor, cabinet, comment,
-                date_task, executor, status, timeText, email, randomKey));
-
-        taskRef.get().addOnCompleteListener(task -> {
-
-            if(task.isSuccessful()) {
-                Log.i(TAG, "add completed!");
-                progress_bar_add_task_admin.setVisibility(View.INVISIBLE);
-                startActivity(new Intent(this, MainAdminActivity.class));
-            } else {
-                Log.i(TAG, "Error: " + task.getException());
-            }
-
-        });
-
     }
 
     public boolean isOnline() {
@@ -460,5 +477,4 @@ public class AddTaskAdminActivity extends AppCompatActivity {
             }
         });
     }
-
 }

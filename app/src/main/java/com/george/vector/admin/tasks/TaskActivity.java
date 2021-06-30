@@ -36,7 +36,7 @@ public class TaskActivity extends AppCompatActivity {
 
     private static final String TAG = "TaskActivity";
 
-    String id, address, floor, cabinet, name_task, comment, status, date_create, time_create, image_key;
+    String id, location, collection, address, floor, cabinet, name_task, comment, status, date_create, time_create, image_key;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -64,7 +64,8 @@ public class TaskActivity extends AppCompatActivity {
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.get("id_task").toString();
-        Log.i(TAG, "id: " + id);
+        location = arguments.get("location").toString();
+        collection = arguments.get("collection").toString();
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -73,7 +74,7 @@ public class TaskActivity extends AppCompatActivity {
 
         topAppBar_tasks_admin.setNavigationOnClickListener(v -> onBackPressed());
 
-        DocumentReference documentReference = firebaseFirestore.collection("new tasks").document(id);
+        DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
             progress_bar_task_admin.setVisibility(View.VISIBLE);
 
@@ -130,7 +131,9 @@ public class TaskActivity extends AppCompatActivity {
 
         edit_task_btn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskAdminActivity.class);
-            intent.putExtra("id", id);
+            intent.putExtra("id_task", id);
+            intent.putExtra("collection", collection);
+            intent.putExtra("location", location);
             startActivity(intent);
         });
 

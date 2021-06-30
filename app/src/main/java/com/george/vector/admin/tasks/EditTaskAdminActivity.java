@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
 import com.george.vector.admin.MainAdminActivity;
+import com.george.vector.common.tasks.Task;
 import com.george.vector.common.utils.ErrorsUtils;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -25,14 +26,13 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 
 public class EditTaskAdminActivity extends AppCompatActivity {
@@ -55,7 +55,7 @@ public class EditTaskAdminActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 
-    String id, address, floor, cabinet, name_task, comment, status, date_create, time_create,
+    String id, location, collection, permission, address, floor, cabinet, name_task, comment, status, date_create, time_create,
             date_done, executor, email, URI_IMAGE;
 
     private static final String TAG = "EditTaskAdmin";
@@ -87,10 +87,18 @@ public class EditTaskAdminActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get("id").toString();
-        Log.i(TAG, "id: " + id);
+        id = arguments.get("id_task").toString();
+        collection = arguments.get("collection").toString();
+        location = arguments.get("location").toString(); //PERMISSION TO
 
-        DocumentReference documentReference = firebaseFirestore.collection("new tasks").document(id);
+        String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        DocumentReference user_ref = firebaseFirestore.collection("users").document(userID);
+        user_ref.addSnapshotListener(this, (value, error) -> {
+            assert value != null;
+            permission = value.getString("permission");
+        });
+
+        DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
             assert value != null;
             address = value.getString("description");
@@ -108,45 +116,24 @@ public class EditTaskAdminActivity extends AppCompatActivity {
             email = value.getString("email_creator");
             URI_IMAGE = value.getString("uri_image");
 
-            Objects.requireNonNull(text_input_layout_address.getEditText()).setText(address);
-            Objects.requireNonNull(text_input_layout_floor.getEditText()).setText(floor);
-            Objects.requireNonNull(text_input_layout_cabinet.getEditText()).setText(cabinet);
-            Objects.requireNonNull(text_input_layout_name_task.getEditText()).setText(name_task);
-            Objects.requireNonNull(text_input_layout_date_task.getEditText()).setText(date_done);
-            Objects.requireNonNull(text_input_layout_executor.getEditText()).setText(executor);
-            Objects.requireNonNull(text_input_layout_status.getEditText()).setText(status);
+            try {
+                Objects.requireNonNull(text_input_layout_address.getEditText()).setText(address);
+                Objects.requireNonNull(text_input_layout_floor.getEditText()).setText(floor);
+                Objects.requireNonNull(text_input_layout_cabinet.getEditText()).setText(cabinet);
+                Objects.requireNonNull(text_input_layout_name_task.getEditText()).setText(name_task);
+                Objects.requireNonNull(text_input_layout_date_task.getEditText()).setText(date_done);
+                Objects.requireNonNull(text_input_layout_executor.getEditText()).setText(executor);
+                Objects.requireNonNull(text_input_layout_status.getEditText()).setText(status);
 
-            if(comment.equals("Нет коментария к заявке"))
-                Objects.requireNonNull(text_input_layout_comment.getEditText()).setText("");
-            else
-                Objects.requireNonNull(text_input_layout_comment.getEditText()).setText(comment);
+                if (comment.equals("Нет коментария к заявке"))
+                    Objects.requireNonNull(text_input_layout_comment.getEditText()).setText("");
+                else
+                    Objects.requireNonNull(text_input_layout_comment.getEditText()).setText(comment);
+            } catch (Exception e) {
+                Log.i(TAG, "Error! " + e);
+            }
 
-            String[] addresses = getResources().getStringArray(R.array.addresses);
-            ArrayAdapter<String> arrayAdapterAddresses = new ArrayAdapter<>(
-                    EditTaskAdminActivity.this,
-                    R.layout.dropdown_menu_categories,
-                    addresses
-            );
-            address_autoComplete.setAdapter(arrayAdapterAddresses);
-
-            String[] items_status = getResources().getStringArray(R.array.status);
-            ArrayAdapter<String> adapter_status = new ArrayAdapter<>(
-                    EditTaskAdminActivity.this,
-                    R.layout.dropdown_menu_categories,
-                    items_status
-            );
-
-            status_autoComplete.setAdapter(adapter_status);
-
-            String[] items_executors = getResources().getStringArray(R.array.executors_ostafyevo);
-            ArrayAdapter<String> adapter_executors = new ArrayAdapter<>(
-                    EditTaskAdminActivity.this,
-                    R.layout.dropdown_menu_categories,
-                    items_executors
-            );
-
-            executor_autoComplete.setAdapter(adapter_executors);
-
+            initialize_fields();
         });
 
         update_task.setOnClickListener(v -> {
@@ -154,45 +141,19 @@ public class EditTaskAdminActivity extends AppCompatActivity {
             if(validateFields()) {
 
                 if(!isOnline()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-                    builder.setTitle("Внимание!")
-                            .setMessage("Отсуствует интернет подключение. Вы можете сохранить обновленную заявку у себя в телефоне и когда интренет снова появиться заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку заявку позже, когда появиться интрнет.")
-                            .setPositiveButton("Сохранить", (dialog, id) -> updateTask())
-                            .setNegativeButton(android.R.string.cancel, (dialog, id) -> startActivity(new Intent(this, MainAdminActivity.class)));
-
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-
+                    show_dialog();
                 } else {
-                    updateTask();
+                    updateTask(collection);
                 }
             }
         });
 
-        datePickCalendar = Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
-            datePickCalendar.set(Calendar.YEAR, year);
-            datePickCalendar.set(Calendar.MONTH, month);
-            datePickCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            updateLabel();
-        };
-
-        edit_text_date_task.setOnClickListener(v -> new DatePickerDialog(EditTaskAdminActivity.this, date, datePickCalendar
-                .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
-
         clearErrors();
     }
 
-    public boolean isOnline() {
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
-    }
-
-
-    void updateTask() {
+    void updateTask(String collection) {
         progress_bar_add_task_admin.setVisibility(View.VISIBLE);
+        delete_task(collection, id);
 
         Log.i(TAG, "date create: " + date_create);
         Log.i(TAG, "time create: " + time_create);
@@ -209,42 +170,72 @@ public class EditTaskAdminActivity extends AppCompatActivity {
         if (update_comment.isEmpty())
             update_comment = "Нет коментария к заявке";
 
-        DocumentReference documentReferenceTask = firebaseFirestore.collection("new tasks").document(id);
-        Map<String, Object> new_task = new HashMap<>();
+        if(location.equals("ost_school")) {
+            if (update_status.equals("Новая заявка")) {
+                load_data("ost_school_new", update_name, update_address, update_date_task,
+                        update_floor, update_cabinet, update_comment, date_create, update_executor,
+                        update_status, time_create, email);
+            }
 
-        //Ручное добавление
-        new_task.put("description", update_address);
-        new_task.put("floor", update_floor);
-        new_task.put("cabinet", update_cabinet);
-        new_task.put("title", update_name);
-        new_task.put("comment", update_comment);
+            if (update_status.equals("В работе")) {
+                load_data("ost_school_progress", update_name, update_address, update_date_task,
+                        update_floor, update_cabinet, update_comment, date_create, update_executor,
+                        update_status, time_create, email);
+            }
 
-        new_task.put("date_done", update_date_task);
-        new_task.put("executor", update_executor);
-        new_task.put("status", update_status);
+            if (update_status.equals("Архив"))
+                load_data("ost_school_archive", update_name, update_address, update_date_task,
+                        update_floor, update_cabinet, update_comment, date_create, update_executor,
+                        update_status, time_create, email);
+        }
 
-        //Автоматическое добавление
-        new_task.put("priority", date_create);
-        new_task.put("time_priority", time_create);
-        new_task.put("email_creator", email);
+    }
 
-        new_task.put("uri_image", URI_IMAGE);
+    void load_data(String collection, String update_name, String  update_address, String update_date_task,
+                   String update_floor, String update_cabinet, String update_comment, String date_create,
+                   String update_executor, String update_status, String time_create, String email) {
 
-        documentReferenceTask.get().addOnCompleteListener(task -> {
+        CollectionReference taskRef = FirebaseFirestore.getInstance().collection(collection);
+        taskRef.add(new Task(update_name, update_address, update_date_task, update_floor, update_cabinet, update_comment,
+                date_create, update_executor, update_status, time_create, email, "62d7f792-2144-4da4-bfe6-b1ea80d348d7"));
 
+        taskRef.get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
-                Log.i(TAG, "update completed!");
+                Log.i(TAG, "add completed!");
                 progress_bar_add_task_admin.setVisibility(View.INVISIBLE);
-                startActivity(new Intent(this, MainAdminActivity.class));
+
+                Intent intent = new Intent(this, MainAdminActivity.class);
+                intent.putExtra("permission", location);
+                startActivity(intent);
+
             } else {
                 Log.i(TAG, "Error: " + task.getException());
             }
 
         });
+    }
 
-        documentReferenceTask.set(new_task)
-                .addOnSuccessListener(unused -> Log.i(TAG, "onSuccess: task - " + id))
-                .addOnFailureListener(e -> Log.i(TAG, "Failure - " + e.toString()));
+    void delete_task(String collection, String id) {
+        DocumentReference documentReferenceTask = firebaseFirestore.collection(collection).document(id);
+        documentReferenceTask.delete();
+    }
+
+    void show_dialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Внимание!")
+                .setMessage("Отсуствует интернет подключение. Вы можете сохранить обновленную заявку у себя в телефоне и когда интренет снова появиться заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку заявку позже, когда появиться интрнет.")
+                .setPositiveButton("Сохранить", (dialog, id) -> updateTask(collection))
+                .setNegativeButton(android.R.string.cancel, (dialog, id) -> startActivity(new Intent(this, MainAdminActivity.class)));
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
     }
 
     void updateLabel() {
@@ -252,6 +243,45 @@ public class EditTaskAdminActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat(date_text, Locale.US);
 
         Objects.requireNonNull(text_input_layout_date_task.getEditText()).setText(sdf.format(datePickCalendar.getTime()));
+    }
+
+    void initialize_fields() {
+        String[] addresses = getResources().getStringArray(R.array.addresses);
+        ArrayAdapter<String> arrayAdapterAddresses = new ArrayAdapter<>(
+                EditTaskAdminActivity.this,
+                R.layout.dropdown_menu_categories,
+                addresses
+        );
+        address_autoComplete.setAdapter(arrayAdapterAddresses);
+
+        String[] items_status = getResources().getStringArray(R.array.status);
+        ArrayAdapter<String> adapter_status = new ArrayAdapter<>(
+                EditTaskAdminActivity.this,
+                R.layout.dropdown_menu_categories,
+                items_status
+        );
+
+        status_autoComplete.setAdapter(adapter_status);
+
+        String[] items_executors = getResources().getStringArray(R.array.executors_ostafyevo);
+        ArrayAdapter<String> adapter_executors = new ArrayAdapter<>(
+                EditTaskAdminActivity.this,
+                R.layout.dropdown_menu_categories,
+                items_executors
+        );
+
+        executor_autoComplete.setAdapter(adapter_executors);
+
+        datePickCalendar = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
+            datePickCalendar.set(Calendar.YEAR, year);
+            datePickCalendar.set(Calendar.MONTH, month);
+            datePickCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateLabel();
+        };
+
+        edit_text_date_task.setOnClickListener(v -> new DatePickerDialog(EditTaskAdminActivity.this, date, datePickCalendar
+                .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
     }
 
     boolean validateFields() {

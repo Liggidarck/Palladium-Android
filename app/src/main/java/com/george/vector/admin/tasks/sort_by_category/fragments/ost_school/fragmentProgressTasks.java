@@ -1,4 +1,4 @@
-package com.george.vector.admin.tasks.sort_by_category.fragments;
+package com.george.vector.admin.tasks.sort_by_category.fragments.ost_school;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,15 +26,35 @@ import com.google.firebase.firestore.Query;
 public class fragmentProgressTasks extends Fragment {
 
     private static final String TAG = "fragmentProgressTasks";
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference taskRef = db.collection("new tasks");
+    FirebaseFirestore db;
+    CollectionReference taskRef;
 
     private TaskAdapter adapter;
+    RecyclerView recyclerview_in_progress_admin;
+    String collection, permission;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_progress_tasks, container, false);
+
+        recyclerview_in_progress_admin = view.findViewById(R.id.recyclerview_in_progress_admin);
+
+        Bundle args = getArguments();
+        assert args != null;
+        permission = args.getString("permission");
+
+        if(permission.equals("ost_school")) {
+            collection = "ost_school_progress";
+            init(collection);
+        }
+
+        return view;
+    }
+
+    void init(String collection) {
+        db = FirebaseFirestore.getInstance();
+        taskRef = db.collection(collection);
 
         Query query = taskRef.whereEqualTo("status", "В работе");
 
@@ -44,22 +64,9 @@ public class fragmentProgressTasks extends Fragment {
 
         adapter = new TaskAdapter(options);
 
-        RecyclerView recyclerview_in_progress_admin = view.findViewById(R.id.recyclerview_in_progress_admin);
         recyclerview_in_progress_admin.setHasFixedSize(true);
         recyclerview_in_progress_admin.setLayoutManager(new LinearLayoutManager(fragmentProgressTasks.this.getContext()));
         recyclerview_in_progress_admin.setAdapter(adapter);
-
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                adapter.deleteItem(viewHolder.getAdapterPosition());
-            }
-        }).attachToRecyclerView(recyclerview_in_progress_admin);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             Task task = documentSnapshot.toObject(Task.class);
@@ -70,11 +77,12 @@ public class fragmentProgressTasks extends Fragment {
 
             Intent intent = new Intent(fragmentProgressTasks.this.getContext(), TaskActivity.class);
             intent.putExtra("id_task", id);
+            intent.putExtra("location", permission);
+            intent.putExtra("collection", collection);
             startActivity(intent);
 
         });
 
-        return view;
     }
 
     @Override
