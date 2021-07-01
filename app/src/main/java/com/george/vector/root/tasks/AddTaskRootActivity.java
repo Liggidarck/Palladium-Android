@@ -1,9 +1,12 @@
 package com.george.vector.root.tasks;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -13,9 +16,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
+import com.george.vector.common.edit_users.User;
+import com.george.vector.common.edit_users.UserAdapter;
 import com.george.vector.common.utils.ErrorsUtils;
 import com.george.vector.common.tasks.Task;
 import com.george.vector.root.main.RootMainActivity;
@@ -29,6 +37,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -44,6 +53,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
     MaterialToolbar topAppBar_new_task_root;
     LinearProgressIndicator progress_bar_add_task_root;
     ExtendedFloatingActionButton done_task_root;
+    Button add_executor_root;
 
     TextInputLayout text_input_layout_address_root, text_input_layout_floor_root,
             text_input_layout_cabinet_root, text_input_layout_name_task_root,
@@ -52,16 +62,23 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
     TextInputEditText edit_text_date_task_root;
 
-    MaterialAutoCompleteTextView address_autoComplete_root, executor_autoComplete_root,
-            status_autoComplete_root;
+    MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root;
 
-    String location, userID, email, address, floor, cabinet, executor, name_task, date_task, status, comment;
+    String location, userID, email, address, floor, cabinet, name_task, date_task, status, comment;
     private static final String TAG = "AddTaskRoot";
 
     Calendar datePickCalendar;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
+
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference usersRef = db.collection("users");
+
+    String name_executor;
+    String last_name_executor;
+    String patronymic_executor;
+    String email_executor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +98,8 @@ public class AddTaskRootActivity extends AppCompatActivity {
         text_input_layout_status_root = findViewById(R.id.text_input_layout_status_root);
         edit_text_date_task_root = findViewById(R.id.edit_text_date_task_root);
         address_autoComplete_root = findViewById(R.id.address_autoComplete_root);
-        executor_autoComplete_root = findViewById(R.id.executor_autoComplete_root);
         status_autoComplete_root = findViewById(R.id.status_autoComplete_root);
+        add_executor_root = findViewById(R.id.add_executor_root);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -100,6 +117,10 @@ public class AddTaskRootActivity extends AppCompatActivity {
             email = value.getString("email");
         });
 
+        add_executor_root.setOnClickListener(v -> {
+            show_add_executor_dialog();
+        });
+
         done_task_root.setOnClickListener(v -> {
 
             address = Objects.requireNonNull(text_input_layout_address_root.getEditText()).getText().toString();
@@ -108,7 +129,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
             name_task = Objects.requireNonNull(text_input_layout_name_task_root.getEditText()).getText().toString();
             comment = Objects.requireNonNull(text_input_layout_comment_root.getEditText()).getText().toString();
             date_task = Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).getText().toString();
-            executor = Objects.requireNonNull(text_input_layout_executor_root.getEditText()).getText().toString();
+            email_executor = Objects.requireNonNull(text_input_layout_executor_root.getEditText()).getText().toString();
             status = Objects.requireNonNull(text_input_layout_status_root.getEditText()).getText().toString();
 
             if(validateFields()){
@@ -123,6 +144,53 @@ public class AddTaskRootActivity extends AppCompatActivity {
         initialize_fields();
         clearErrors();
     }
+
+    public void show_add_executor_dialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_choose_executor);
+
+        RecyclerView recycler_view_list_executors = dialog.findViewById(R.id.recycler_view_list_executors);
+
+        Query query = usersRef.whereEqualTo("role", "Исполнитель");
+
+        FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
+                .setQuery(query, User.class)
+                .build();
+
+        UserAdapter adapter = new UserAdapter(options);
+
+        recycler_view_list_executors.setHasFixedSize(true);
+        recycler_view_list_executors.setLayoutManager(new LinearLayoutManager(this));
+        recycler_view_list_executors.setAdapter(adapter);
+
+        adapter.setOnItemClickListener((documentSnapshot, position) -> {
+            String id = documentSnapshot.getId();
+
+            DocumentReference documentReference = firebaseFirestore.collection("users").document(id);
+            documentReference.addSnapshotListener((value, error) -> {
+                assert value != null;
+                name_executor = value.getString("name");
+                last_name_executor = value.getString("last_name");
+                patronymic_executor = value.getString("patronymic");
+                email_executor = value.getString("email");
+
+                Log.i(TAG, "name: " + name_executor);
+                Log.i(TAG, "last_name: " + last_name_executor);
+                Log.i(TAG, "patronymic: " + patronymic_executor);
+                Log.i(TAG, "email: " + email_executor);
+
+                Objects.requireNonNull(text_input_layout_executor_root.getEditText()).setText(email_executor);
+                dialog.dismiss();
+            });
+
+
+        });
+
+        adapter.startListening();
+        dialog.show();
+    }
+
 
     void show_alert_dialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -186,7 +254,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         CollectionReference taskRef = FirebaseFirestore.getInstance().collection(collection);
 
         taskRef.add(new Task(name_task, address, dateText, floor, cabinet, comment,
-                date_task, executor, status, timeText, email, "62d7f792-2144-4da4-bfe6-b1ea80d348d7"));
+                date_task, email_executor, status, timeText, email, "62d7f792-2144-4da4-bfe6-b1ea80d348d7"));
 
         taskRef.get().addOnCompleteListener(task -> {
 
@@ -228,15 +296,6 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
         status_autoComplete_root.setAdapter(adapter_status);
 
-        String[] items_executors = getResources().getStringArray(R.array.executors_ostafyevo);
-        ArrayAdapter<String> adapter_executors = new ArrayAdapter<>(
-                AddTaskRootActivity.this,
-                R.layout.dropdown_menu_categories,
-                items_executors
-        );
-
-        executor_autoComplete_root.setAdapter(adapter_executors);
-
         datePickCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
             datePickCalendar.set(Calendar.YEAR, year);
@@ -265,7 +324,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         boolean check_cabinet = errorsUtils.validate_field(cabinet);
         boolean check_name_task = errorsUtils.validate_field(name_task);
         boolean check_date_task = errorsUtils.validate_field(date_task);
-        boolean check_executor = errorsUtils.validate_field(executor);
+        boolean check_executor = errorsUtils.validate_field(email_executor);
         boolean check_status = errorsUtils.validate_field(status);
 
         if(check_address & check_floor & check_cabinet & check_name_task & check_date_task & check_executor & check_status) {

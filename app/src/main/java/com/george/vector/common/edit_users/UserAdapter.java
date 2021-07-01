@@ -44,7 +44,7 @@ public class UserAdapter extends FirestoreRecyclerAdapter<User, UserAdapter.User
         getSnapshots().getSnapshot(position).getReference().delete();
     }
 
-    class UserHolder extends RecyclerView.ViewHolder {
+    public class UserHolder extends RecyclerView.ViewHolder {
         final TextView textViewName;
         final TextView textViewEmail;
         final TextView textViewRole;
@@ -65,7 +65,7 @@ public class UserAdapter extends FirestoreRecyclerAdapter<User, UserAdapter.User
         }
     }
 
-    interface onItemUserClickListener {
+    public interface onItemUserClickListener {
         void onItemClick(DocumentSnapshot documentSnapshot, int position);
     }
 

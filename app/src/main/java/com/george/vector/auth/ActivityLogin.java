@@ -17,6 +17,7 @@ import android.widget.Button;
 import com.george.vector.admin.MainAdminActivity;
 import com.george.vector.R;
 import com.george.vector.common.utils.ErrorsUtils;
+import com.george.vector.executor.MainExecutorActivity;
 import com.george.vector.root.main.RootMainActivity;
 import com.george.vector.user.main.MainUserActivity;
 import com.george.vector.caretaker.main.MainCaretakerActivity;
@@ -26,6 +27,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -125,26 +128,32 @@ public class ActivityLogin extends AppCompatActivity {
 
     }
 
-    void startApp(String check_role,String check_email, String permission) {
-        if (check_role.equals("Root"))
+    void startApp(@NotNull String role, String email, String permission) {
+        if (role.equals("Root"))
             startActivity(new Intent(this, RootMainActivity.class));
 
-        if(check_role.equals("Завхоз")) {
+        if(role.equals("Завхоз")) {
             Intent intent = new Intent(this, MainCaretakerActivity.class);
             intent.putExtra("permission", permission);
             startActivity(intent);
         }
 
-        if(check_role.equals("Администратор")) {
+        if(role.equals("Администратор")) {
             Intent intent = new Intent(this, MainAdminActivity.class);
             intent.putExtra("permission", permission);
             startActivity(intent);
         }
 
-        if (check_role.equals("Пользователь")) {
+        if (role.equals("Пользователь")) {
             Intent intent = new Intent(this, MainUserActivity.class);
-            intent.putExtra("email", check_email);
+            intent.putExtra("email", email);
             intent.putExtra("permission", permission);
+            startActivity(intent);
+        }
+
+        if (role.equals("Исполнитель")) {
+            Intent intent = new Intent(this, MainExecutorActivity.class);
+            intent.putExtra("email", email);
             startActivity(intent);
         }
     }

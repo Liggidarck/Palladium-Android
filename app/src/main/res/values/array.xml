@@ -26,6 +26,8 @@
 
     <string-array name="roles" >
 
+        <item>Root</item>
+        <item>Завхоз</item>
         <item>Администратор</item>
         <item>Пользователь</item>
         <item>Исполнитель</item>

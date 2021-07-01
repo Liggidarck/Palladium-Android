@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".worker.MainWorkerActivity">
+    tools:context=".executor.MainExecutorActivity">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -13,6 +13,48 @@
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" >
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:scrollbars="none">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:singleSelection="true"
+                    app:singleLine="true"
+                    app:checkedChip="@id/chip_executor_ost">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_executor_ost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Оставьево"
+                        style="@style/Widget.MaterialComponents.Chip.Filter" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_executor_bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Барыши"
+                        style="@style/Widget.MaterialComponents.Chip.Filter" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+            </HorizontalScrollView>
+
+            <FrameLayout
+                android:id="@+id/main_frame_executor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
 
 
     </androidx.core.widget.NestedScrollView>
@@ -45,7 +87,6 @@
                 app:layout_collapseParallaxMultiplier="0.7" />
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/topAppBar_user"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:title="Ваши заявки"
@@ -62,7 +103,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
-        app:navigationIcon="@drawable/ic_baseline_menu_24"
         app:menu="@menu/bottom_app_bar" />
 
 

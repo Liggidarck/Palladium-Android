@@ -17,7 +17,6 @@ public class TaskAdapter extends FirestoreRecyclerAdapter<Task, TaskAdapter.Task
 
     private OnItemClickListener listener;
 
-
     public TaskAdapter(@NonNull FirestoreRecyclerOptions<Task> options) {
         super(options);
     }

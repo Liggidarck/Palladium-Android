@@ -86,16 +86,12 @@ public class ActivityRegisterUser extends AppCompatActivity {
             password_user = Objects.requireNonNull(text_input_layout_password_user.getEditText()).getText().toString();
             role_user = Objects.requireNonNull(text_input_layout_role_user.getEditText()).getText().toString();
 
-
             if(validateFields()) {
                 progress_bar_register.setVisibility(View.VISIBLE);
 
                 firebaseAuth.createUserWithEmailAndPassword(email_user, password_user).addOnCompleteListener(task -> {
 
                     if (task.isSuccessful()) {
-
-                        Log.i(TAG, "User added");
-
                         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
                         DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
                         Map<String, Object> user = new HashMap<>();
@@ -110,9 +106,9 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
                         startActivity(new Intent(this, MainAdminActivity.class));
 
-                    } else {
+                    } else
                         Toast.makeText(ActivityRegisterUser.this, "Error" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
-                    }
+
                     progress_bar_register.setVisibility(View.INVISIBLE);
 
                 });

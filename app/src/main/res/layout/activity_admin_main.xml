@@ -191,7 +191,6 @@
                 app:layout_collapseParallaxMultiplier="0.7" />
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/topAppBar_search"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:title="Заявки"
