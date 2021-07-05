@@ -2,6 +2,7 @@ package com.george.vector.admin.tasks;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -12,14 +13,21 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.george.vector.admin.MainAdminActivity;
+import com.george.vector.common.edit_users.User;
+import com.george.vector.common.edit_users.UserAdapter;
 import com.george.vector.common.utils.ErrorsUtils;
 import com.george.vector.common.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -32,6 +40,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -52,15 +61,16 @@ public class AddTaskAdminActivity extends AppCompatActivity {
 
     MaterialAutoCompleteTextView address_autoComplete, status_autoComplete, executor_autoComplete;
     TextInputLayout text_input_layout_address, text_input_layout_floor, text_input_layout_cabinet,
-            text_input_layout_name_task, text_input_layout_comment, text_input_layout_date_task,
-            text_input_layout_executor, text_input_layout_status;
+            text_input_layout_name_task, text_input_layout_comment, text_input_layout_date_task
+            , text_input_layout_status, text_input_layout_executor_admin;
     TextInputEditText edit_text_date_task;
 
     ImageView task_image_admin;
 
     LinearProgressIndicator progress_bar_add_task_admin;
+    Button add_executor_admin;
 
-    String permission, address, floor, cabinet, name_task, comment, date_task, executor, status, userID, email, randomKey;
+    String permission, address, floor, cabinet, name_task, comment, date_task, status, userID, email, randomKey;
 
     Calendar datePickCalendar;
 
@@ -68,6 +78,14 @@ public class AddTaskAdminActivity extends AppCompatActivity {
     FirebaseFirestore firebaseFirestore;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
+
+    String name_executor;
+    String last_name_executor;
+    String patronymic_executor;
+    String email_executor;
+
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference usersRef = db.collection("users");
 
     private static final String TAG = "AddTaskAdmin";
 
@@ -87,13 +105,13 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         text_input_layout_name_task = findViewById(R.id.text_input_layout_name_task);
         text_input_layout_comment = findViewById(R.id.text_input_layout_comment);
         text_input_layout_date_task = findViewById(R.id.text_input_layout_date_task);
-        text_input_layout_executor = findViewById(R.id.text_input_layout_executor);
         text_input_layout_status = findViewById(R.id.text_input_layout_status);
         toolbar = findViewById(R.id.topAppBar_new_task);
+        text_input_layout_executor_admin = findViewById(R.id.text_input_layout_executor_admin);
         edit_text_date_task = findViewById(R.id.edit_text_date_task);
-        executor_autoComplete = findViewById(R.id.executor_autoComplete);
         progress_bar_add_task_admin = findViewById(R.id.progress_bar_add_task_admin);
         task_image_admin = findViewById(R.id.task_image_admin);
+        add_executor_admin = findViewById(R.id.add_executor_admin);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -112,6 +130,8 @@ public class AddTaskAdminActivity extends AppCompatActivity {
 
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
+        add_executor_admin.setOnClickListener(v -> show_add_executor_dialog());
+
         crate_task_fab.setOnClickListener(v -> {
             address = Objects.requireNonNull(text_input_layout_address.getEditText()).getText().toString();
             floor = Objects.requireNonNull(text_input_layout_floor.getEditText()).getText().toString();
@@ -119,7 +139,7 @@ public class AddTaskAdminActivity extends AppCompatActivity {
             name_task = Objects.requireNonNull(text_input_layout_name_task.getEditText()).getText().toString();
             comment = Objects.requireNonNull(text_input_layout_comment.getEditText()).getText().toString();
             date_task = Objects.requireNonNull(text_input_layout_date_task.getEditText()).getText().toString();
-            executor = Objects.requireNonNull(text_input_layout_executor.getEditText()).getText().toString();
+            email_executor = Objects.requireNonNull(text_input_layout_executor_admin.getEditText()).getText().toString();
             status = Objects.requireNonNull(text_input_layout_status.getEditText()).getText().toString();
 
             if(validateFields()) {
@@ -148,6 +168,52 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         }
     }
 
+    public void show_add_executor_dialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_choose_executor);
+
+        RecyclerView recycler_view_list_executors = dialog.findViewById(R.id.recycler_view_list_executors);
+
+        Query query = usersRef.whereEqualTo("role", "Исполнитель");
+
+        FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
+                .setQuery(query, User.class)
+                .build();
+
+        UserAdapter adapter = new UserAdapter(options);
+
+        recycler_view_list_executors.setHasFixedSize(true);
+        recycler_view_list_executors.setLayoutManager(new LinearLayoutManager(this));
+        recycler_view_list_executors.setAdapter(adapter);
+
+        adapter.setOnItemClickListener((documentSnapshot, position) -> {
+            String id = documentSnapshot.getId();
+
+            DocumentReference documentReference = firebaseFirestore.collection("users").document(id);
+            documentReference.addSnapshotListener((value, error) -> {
+                assert value != null;
+                name_executor = value.getString("name");
+                last_name_executor = value.getString("last_name");
+                patronymic_executor = value.getString("patronymic");
+                email_executor = value.getString("email");
+
+                Log.i(TAG, "name: " + name_executor);
+                Log.i(TAG, "last_name: " + last_name_executor);
+                Log.i(TAG, "patronymic: " + patronymic_executor);
+                Log.i(TAG, "email: " + email_executor);
+
+                Objects.requireNonNull(text_input_layout_executor_admin.getEditText()).setText(email_executor);
+                dialog.dismiss();
+            });
+
+
+        });
+
+        adapter.startListening();
+        dialog.show();
+    }
+
     void saveTask(String collection) {
         progress_bar_add_task_admin.setVisibility(View.VISIBLE);
 
@@ -168,7 +234,7 @@ public class AddTaskAdminActivity extends AppCompatActivity {
 
         CollectionReference taskRef = FirebaseFirestore.getInstance().collection(collection);
         taskRef.add(new Task(name_task, address, dateText, floor, cabinet, comment,
-                date_task, executor, status, timeText, email, "62d7f792-2144-4da4-bfe6-b1ea80d348d7"));
+                date_task, email_executor, status, timeText, email, "62d7f792-2144-4da4-bfe6-b1ea80d348d7"));
 
         taskRef.get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
@@ -226,15 +292,6 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         );
 
         status_autoComplete.setAdapter(adapter_status);
-
-        String[] items_executors = getResources().getStringArray(R.array.executors_ostafyevo);
-        ArrayAdapter<String> adapter_executors = new ArrayAdapter<>(
-                AddTaskAdminActivity.this,
-                R.layout.dropdown_menu_categories,
-                items_executors
-        );
-
-        executor_autoComplete.setAdapter(adapter_executors);
 
         datePickCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
@@ -307,7 +364,7 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         boolean check_cabinet = errorsUtils.validate_field(cabinet);
         boolean check_name_task = errorsUtils.validate_field(name_task);
         boolean check_date_task = errorsUtils.validate_field(date_task);
-        boolean check_executor = errorsUtils.validate_field(executor);
+        boolean check_executor = errorsUtils.validate_field(email_executor);
         boolean check_status = errorsUtils.validate_field(status);
 
         if(check_address & check_floor & check_cabinet & check_name_task & check_date_task & check_executor & check_status) {
@@ -330,7 +387,7 @@ public class AddTaskAdminActivity extends AppCompatActivity {
                 text_input_layout_date_task.setError("Это поле не может быть пустым");
 
             if(!check_executor)
-                text_input_layout_executor.setError("Это поле не может быть пустым");
+                text_input_layout_executor_admin.setError("Это поле не может быть пустым");
 
             if(!check_status)
                 text_input_layout_status.setError("Это поле не может быть пустым");
@@ -443,10 +500,10 @@ public class AddTaskAdminActivity extends AppCompatActivity {
             }
         });
 
-        Objects.requireNonNull(text_input_layout_executor.getEditText()).addTextChangedListener(new TextWatcher() {
+        Objects.requireNonNull(text_input_layout_executor_admin.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_executor.setError(null);
+                text_input_layout_executor_admin.setError(null);
             }
 
             @Override

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.george.vector.common.bottom_sheets.ProfileBottomSheet;
+import com.george.vector.common.bottom_sheets.SettingsUserBottomSheet;
 import com.george.vector.common.tasks.Task;
 import com.george.vector.common.tasks.TaskAdapter;
 import com.george.vector.user.tasks.AddTaskUserActivity;

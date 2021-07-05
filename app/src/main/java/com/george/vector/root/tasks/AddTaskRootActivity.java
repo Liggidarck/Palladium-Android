@@ -117,9 +117,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
             email = value.getString("email");
         });
 
-        add_executor_root.setOnClickListener(v -> {
-            show_add_executor_dialog();
-        });
+        add_executor_root.setOnClickListener(v -> show_add_executor_dialog());
 
         done_task_root.setOnClickListener(v -> {
 

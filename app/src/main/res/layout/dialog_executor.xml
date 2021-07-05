@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="340dp"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Заявка"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:src="@drawable/line_gray"
+        android:layout_marginTop="12dp" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup_setting_task"
+        android:checkedButton="@+id/radio_button_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <RadioButton
+            android:id="@+id/radio_button_new_task"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Новая заявка" />
+
+        <RadioButton
+            android:id="@+id/radio_button_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="В работе" />
+
+        <RadioButton
+            android:id="@+id/radio_button_archive"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Архив" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/done_btn_executor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="готово"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+</LinearLayout>

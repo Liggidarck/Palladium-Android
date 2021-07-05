@@ -2,6 +2,7 @@ package com.george.vector.caretaker.tasks;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -11,12 +12,19 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.george.vector.caretaker.main.MainCaretakerActivity;
+import com.george.vector.common.edit_users.User;
+import com.george.vector.common.edit_users.UserAdapter;
 import com.george.vector.common.utils.ErrorsUtils;
 import com.george.vector.common.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -29,6 +37,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -47,14 +56,23 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
             text_input_layout_name_task_caretaker, text_input_layout_comment_caretaker,
             text_input_layout_executor_caretaker, text_input_layout_status_caretaker, text_input_layout_date_task_caretaker;
 
-    MaterialAutoCompleteTextView address_autoComplete_caretaker, executor_autoComplete_caretaker, status_autoComplete_caretaker;
+    MaterialAutoCompleteTextView address_autoComplete_caretaker, status_autoComplete_caretaker;
+    Button add_executor_caretaker;
 
     String id, collection, address, floor, cabinet, name_task, comment, status, date_create, time_create,
-            date_done, executor, email, URI_IMAGE, permission, location;
+            date_done, email, URI_IMAGE, permission, location;
     Calendar datePickCalendar;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
+
+    String name_executor;
+    String last_name_executor;
+    String patronymic_executor;
+    String email_executor;
+
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference usersRef = db.collection("users");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +92,8 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         text_input_layout_status_caretaker = findViewById(R.id.text_input_layout_status_caretaker);
         address_autoComplete_caretaker = findViewById(R.id.address_autoComplete_caretaker);
         text_input_layout_date_task_caretaker = findViewById(R.id.text_input_layout_date_task_caretaker);
-        executor_autoComplete_caretaker = findViewById(R.id.executor_autoComplete_caretaker);
         status_autoComplete_caretaker = findViewById(R.id.status_autoComplete_caretaker);
+        add_executor_caretaker = findViewById(R.id.add_executor_caretaker);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -86,6 +104,8 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         location = arguments.get("location").toString();
 
         topAppBar_new_task_caretaker.setNavigationOnClickListener(v -> onBackPressed());
+
+        add_executor_caretaker.setOnClickListener(v -> show_add_executor_dialog());
 
         String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         DocumentReference user_ref = firebaseFirestore.collection("users").document(userID);
@@ -105,7 +125,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
             status = value.getString("status");
 
             date_done = value.getString("date_done");
-            executor = value.getString("executor");
+            email_executor = value.getString("executor");
 
             date_create = value.getString("priority");
             time_create = value.getString("time_priority");
@@ -118,7 +138,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
                 Objects.requireNonNull(text_input_layout_cabinet_caretaker.getEditText()).setText(cabinet);
                 Objects.requireNonNull(text_input_layout_name_task_caretaker.getEditText()).setText(name_task);
                 Objects.requireNonNull(text_input_layout_date_task_caretaker.getEditText()).setText(date_done);
-                Objects.requireNonNull(text_input_layout_executor_caretaker.getEditText()).setText(executor);
+                Objects.requireNonNull(text_input_layout_executor_caretaker.getEditText()).setText(email_executor);
                 Objects.requireNonNull(text_input_layout_status_caretaker.getEditText()).setText(status);
 
                 if (comment.equals("Нет коментария к заявке"))
@@ -161,7 +181,11 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         builder.setTitle("Внимание!")
                 .setMessage("Отсуствует интернет подключение. Вы можете сохранить обновленную заявку у себя в телефоне и когда интренет снова появиться заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку заявку позже, когда появиться интрнет.")
                 .setPositiveButton("Сохранить", (dialog, id) -> updateTask(collection))
-                .setNegativeButton(android.R.string.cancel, (dialog, id) -> startActivity(new Intent(this, MainCaretakerActivity.class)));
+                .setNegativeButton(android.R.string.cancel, (dialog, id) -> {
+                    Intent intent = new Intent(this, MainCaretakerActivity.class);
+                    intent.putExtra("permission", permission);
+                    startActivity(intent);
+                });
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -203,6 +227,53 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         }
 
     }
+
+    public void show_add_executor_dialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_choose_executor);
+
+        RecyclerView recycler_view_list_executors = dialog.findViewById(R.id.recycler_view_list_executors);
+
+        Query query = usersRef.whereEqualTo("role", "Исполнитель");
+
+        FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
+                .setQuery(query, User.class)
+                .build();
+
+        UserAdapter adapter = new UserAdapter(options);
+
+        recycler_view_list_executors.setHasFixedSize(true);
+        recycler_view_list_executors.setLayoutManager(new LinearLayoutManager(this));
+        recycler_view_list_executors.setAdapter(adapter);
+
+        adapter.setOnItemClickListener((documentSnapshot, position) -> {
+            String id = documentSnapshot.getId();
+
+            DocumentReference documentReference = firebaseFirestore.collection("users").document(id);
+            documentReference.addSnapshotListener((value, error) -> {
+                assert value != null;
+                name_executor = value.getString("name");
+                last_name_executor = value.getString("last_name");
+                patronymic_executor = value.getString("patronymic");
+                email_executor = value.getString("email");
+
+                Log.i(TAG, "name: " + name_executor);
+                Log.i(TAG, "last_name: " + last_name_executor);
+                Log.i(TAG, "patronymic: " + patronymic_executor);
+                Log.i(TAG, "email: " + email_executor);
+
+                Objects.requireNonNull(text_input_layout_executor_caretaker.getEditText()).setText(email_executor);
+                dialog.dismiss();
+            });
+
+
+        });
+
+        adapter.startListening();
+        dialog.show();
+    }
+
 
     void load_data(String collection, String update_name, String  update_address, String update_date_task,
                    String update_floor, String update_cabinet, String update_comment, String date_create,
@@ -253,15 +324,6 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
 
         status_autoComplete_caretaker.setAdapter(adapter_status);
 
-        String[] items_executors = getResources().getStringArray(R.array.executors_ostafyevo);
-        ArrayAdapter<String> adapter_executors = new ArrayAdapter<>(
-                EdtTaskCaretakerActivity.this,
-                R.layout.dropdown_menu_categories,
-                items_executors
-        );
-
-        executor_autoComplete_caretaker.setAdapter(adapter_executors);
-
         datePickCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
             datePickCalendar.set(Calendar.YEAR, year);
@@ -290,7 +352,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         boolean check_cabinet = errorsUtils.validate_field(cabinet);
         boolean check_name_task = errorsUtils.validate_field(name_task);
         boolean check_date_task = errorsUtils.validate_field(date_done);
-        boolean check_executor = errorsUtils.validate_field(executor);
+        boolean check_executor = errorsUtils.validate_field(email_executor);
         boolean check_status = errorsUtils.validate_field(status);
 
         if(check_address & check_floor & check_cabinet & check_name_task & check_date_task & check_executor & check_status) {

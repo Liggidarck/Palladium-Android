@@ -1,4 +1,4 @@
-package com.george.vector.executor;
+package com.george.vector.executor.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -7,11 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.george.vector.R;
-import com.george.vector.executor.fragments_location.fragment_ost_school_new;
-import com.george.vector.executor.fragments_location.fragment_ost_school_progress;
-import com.george.vector.root.main.location_fragments.fragment_school_ost_archive_tasks;
-import com.george.vector.root.main.location_fragments.fragment_school_ost_new_tasks;
-import com.george.vector.root.main.location_fragments.fragment_school_ost_progress_tasks;
+import com.george.vector.executor.main.fragments_location.fragment_ost_school_new;
+import com.george.vector.executor.main.fragments_location.fragment_ost_school_progress;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class ExecutorTasksActivity extends AppCompatActivity {

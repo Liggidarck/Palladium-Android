@@ -173,27 +173,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_executor_caretaker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Исполнитель"
-                app:endIconMode="dropdown_menu"
-                app:errorEnabled="true"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp" >
-
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/executor_autoComplete_caretaker"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:inputType="none" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_status_caretaker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -213,6 +192,34 @@
                     android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_layout_executor_caretaker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Исполнитель"
+                app:errorEnabled="true"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp" >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/add_executor_caretaker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="назначить исполнителя"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp" />
 
             <View
                 android:layout_width="match_parent"

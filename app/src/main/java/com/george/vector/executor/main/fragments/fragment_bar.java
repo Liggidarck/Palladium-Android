@@ -1,4 +1,4 @@
-package com.george.vector.executor.fragments;
+package com.george.vector.executor.main.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

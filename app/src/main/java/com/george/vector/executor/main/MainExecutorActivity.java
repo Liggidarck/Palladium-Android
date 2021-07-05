@@ -1,4 +1,4 @@
-package com.george.vector.executor;
+package com.george.vector.executor.main;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,11 +12,11 @@ import android.view.MenuItem;
 
 import com.george.vector.R;
 import com.george.vector.common.bottom_sheets.ProfileBottomSheet;
-import com.george.vector.executor.fragments.fragment_bar;
-import com.george.vector.executor.fragments.fragment_ost;
+import com.george.vector.common.bottom_sheets.SettingsUserBottomSheet;
+import com.george.vector.executor.main.fragments.fragment_bar;
+import com.george.vector.executor.main.fragments.fragment_ost;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -43,6 +43,10 @@ public class MainExecutorActivity extends AppCompatActivity {
         chip_executor_bar = findViewById(R.id.chip_executor_bar);
 
         setSupportActionBar(bottomAppBarWorker);
+        bottomAppBarWorker.setNavigationOnClickListener(v -> {
+            SettingsUserBottomSheet bottomSheet = new SettingsUserBottomSheet();
+            bottomSheet.show(getSupportFragmentManager(), "SettingsUserBottomSheet");
+        });
 
         chip_executor_ost.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked){

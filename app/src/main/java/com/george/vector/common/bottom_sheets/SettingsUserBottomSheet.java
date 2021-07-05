@@ -1,4 +1,4 @@
-package com.george.vector.user.main;
+package com.george.vector.common.bottom_sheets;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 
 import com.george.vector.R;
 import com.george.vector.auth.ActivityLogin;
+import com.george.vector.common.edit_users.EditDataUserActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;

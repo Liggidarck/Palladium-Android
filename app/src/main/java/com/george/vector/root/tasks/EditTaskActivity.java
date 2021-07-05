@@ -244,8 +244,6 @@ public class EditTaskActivity extends AppCompatActivity {
                         update_floor, update_cabinet, update_comment, date_create, update_executor,
                         update_status, time_create, email);
         }
-
-
     }
 
     void load_data(String collection, String update_name, String  update_address, String update_date_task,

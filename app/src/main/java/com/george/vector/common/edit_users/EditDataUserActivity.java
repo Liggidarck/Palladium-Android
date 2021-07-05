@@ -1,4 +1,4 @@
-package com.george.vector.user.main;
+package com.george.vector.common.edit_users;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,6 +12,7 @@ import android.widget.Button;
 
 import com.george.vector.R;
 import com.george.vector.common.utils.ErrorsUtils;
+import com.george.vector.user.main.MainUserActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputLayout;
@@ -100,10 +101,9 @@ public class EditDataUserActivity extends AppCompatActivity {
                         Intent intent = new Intent(this, MainUserActivity.class);
                         intent.putExtra("email", email_user);
                         startActivity(intent);
-                    } else {
+                    } else
                         Log.i(TAG, "Error: " + task.getException());
-                    }
-
+                    
                 });
 
                 documentReference.set(user)

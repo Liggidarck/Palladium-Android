@@ -1,5 +1,6 @@
-package com.george.vector.executor.fragments_location;
+package com.george.vector.executor.main.fragments_location;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.george.vector.common.tasks.Task;
 import com.george.vector.common.tasks.TaskAdapter;
+import com.george.vector.executor.tasks.TaskExecutorActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -60,6 +62,19 @@ public class fragment_ost_school_progress extends Fragment {
         recycler_view_ost_school_progress_exec.setHasFixedSize(true);
         recycler_view_ost_school_progress_exec.setLayoutManager(new LinearLayoutManager(fragment_ost_school_progress.this.getContext()));
         recycler_view_ost_school_progress_exec.setAdapter(adapter);
+
+        adapter.setOnItemClickListener((documentSnapshot, position) -> {
+            Task task = documentSnapshot.toObject(Task.class);
+            String id = documentSnapshot.getId();
+            String path = documentSnapshot.getReference().getPath();
+
+            Intent intent = new Intent(fragment_ost_school_progress.this.getContext(), TaskExecutorActivity.class);
+            intent.putExtra("id_task", id);
+            intent.putExtra("location", "ost_school");
+            intent.putExtra("collection", "ost_school_progress");
+            startActivity(intent);
+
+        });
 
         return view;
     }

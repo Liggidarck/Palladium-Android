@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".executor.tasks.TaskExecutorActivity">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBar_task_executor"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:title="Заявка"
+        app:titleTextColor="@android:color/white"
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        app:layout_collapseMode="pin"
+        android:background="@color/blue_primary" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_bar_task_executor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        android:layout_below="@+id/topAppBar_task_executor"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/topAppBar_task_executor">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Адрес"
+                android:textSize="22sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/text_view_address_task_executor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Улица Авиаторов дом 9."
+                    android:textColor="@color/black"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/text_view_floor_task_executor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Этаж - 3"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/text_view_cabinet_task_executor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Кабинет - 999А"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:src="@drawable/line_gray"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp" />
+
+            <TextView
+                android:id="@+id/text_view_name_task_executor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Сломаная дверь"
+                android:textSize="22sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp" />
+
+            <ImageView
+                android:id="@+id/image_view_task_executor"
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                android:src="@drawable/demo_image"
+                android:scaleType="centerCrop"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Коментарий"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/text_view_comment_task_executor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Нет коментариев к заявке"
+                android:textStyle="italic"
+                android:textColor="#999999"
+                android:textSize="15sp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:src="@drawable/line_gray"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Статус"
+                android:textSize="22sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                app:cardElevation="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" >
+
+                            <TextView
+                                android:id="@+id/text_view_status_task_executor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Новая заявка"
+                                android:textAppearance="?attr/textAppearanceHeadline6" />
+
+                            <TextView
+                                android:id="@+id/text_view_date_create_task_executor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="Создано: 27.04.2021 23:43"
+                                android:textAppearance="?attr/textAppearanceBody2"
+                                android:textColor="?android:attr/textColorSecondary" />
+
+                        </LinearLayout>
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/circle_status_executor"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="#FF6B6B"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <Button
+                android:id="@+id/edit_btn_executor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="изменить"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                app:icon="@drawable/ic_baseline_edit_24"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="80dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>

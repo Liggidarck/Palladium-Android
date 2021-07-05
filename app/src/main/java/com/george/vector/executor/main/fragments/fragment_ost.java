@@ -1,8 +1,7 @@
-package com.george.vector.executor.fragments;
+package com.george.vector.executor.main.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
-import com.george.vector.executor.FolderExecutorActivity;
-import com.george.vector.root.main.LocationFolderActivity;
+import com.george.vector.executor.main.FolderExecutorActivity;
 import com.google.android.material.card.MaterialCardView;
 
 import org.jetbrains.annotations.NotNull;
