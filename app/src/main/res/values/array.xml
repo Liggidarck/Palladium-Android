@@ -9,12 +9,6 @@
 
     </string-array>
 
-    <string-array name="executors_ostafyevo">
-
-        <item>Зенкин Анатолий Венидиктович</item>
-        <item>Коннов Алексей Юрьевич</item>
-
-    </string-array>
 
     <string-array name="status" >
 
@@ -32,6 +26,21 @@
         <item>Пользователь</item>
         <item>Исполнитель</item>
 
+    </string-array>
+
+    <string-array name="permissions" >
+        <item>all</item>
+
+        <item>ost</item>
+        <item>bar</item>
+
+        <item>ost_school</item>
+        <item>ost_aist</item>
+        <item>ost_yagodka</item>
+
+        <item>bar_school</item>
+        <item>bar_rucheek</item>
+        <item>bar_star</item>
     </string-array>
 
 </resources>

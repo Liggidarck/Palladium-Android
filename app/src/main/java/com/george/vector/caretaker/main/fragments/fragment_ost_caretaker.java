@@ -36,6 +36,18 @@ public class fragment_ost_caretaker extends Fragment {
             startActivity(intent);
         });
 
+//        ost_kids_one_caretaker.setOnClickListener(v -> {
+//            Intent intent = new Intent(fragment_ost_caretaker.this.getContext(), FolderTaskCaretakerActivity.class);
+//            intent.putExtra("location", "ost_aist");
+//            startActivity(intent);
+//        });
+//
+//        ost_kids_two_caretaker.setOnClickListener(v -> {
+//            Intent intent = new Intent(fragment_ost_caretaker.this.getContext(), FolderTaskCaretakerActivity.class);
+//            intent.putExtra("location", "ost_yagodka");
+//            startActivity(intent);
+//        });
+
         return view;
     }
 }

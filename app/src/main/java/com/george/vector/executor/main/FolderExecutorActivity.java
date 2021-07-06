@@ -30,6 +30,33 @@ public class FolderExecutorActivity extends AppCompatActivity {
         location = arguments.get("location").toString();
         email = arguments.get("email").toString();
 
+        String text_toolbar = null;
+        switch (location) {
+            case "ost_school":
+            case "bar_school":
+                text_toolbar = "Школа";
+                break;
+
+            case "ost_aist":
+                text_toolbar = "Детский сад 'Аист'";
+                break;
+
+            case "ost_yagodka":
+                text_toolbar = "Детский сад 'Ягодка'";
+                break;
+
+            case "bar_rucheek":
+                text_toolbar = "Детский сад 'Ручеек'";
+                break;
+
+            case "bar_star":
+                text_toolbar = "Детский сад 'Звездочка'";
+                break;
+        }
+
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        toolbar.setTitle(text_toolbar);
+
         new_tasks_card_executor.setOnClickListener(v -> {
             Intent intent = new Intent(this, ExecutorTasksActivity.class);
             intent.putExtra("location", location);

@@ -60,7 +60,7 @@ public class TaskCaretakerActivity extends AppCompatActivity {
         image_view_task_caretaker = findViewById(R.id.image_view_task_caretaker);
         circle_status_caretaker = findViewById(R.id.circle_status_caretaker);
         edit_task_btn = findViewById(R.id.edit_task_btn);
-        delete_task_btn = findViewById(R.id.delete_task_btn);
+        delete_task_btn = findViewById(R.id.delete_task_btn_caretaker);
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.get("id_task_caretaker").toString();
@@ -141,7 +141,25 @@ public class TaskCaretakerActivity extends AppCompatActivity {
 
         });
 
+        delete_task_btn.setOnClickListener(v -> delete_task(image_key));
+
     }
 
+    void delete_task(String image_key) {
+        finish();
+
+//        String storageUrl = "images/" + image_key;
+//        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(storageUrl);
+//        storageReference.delete().addOnSuccessListener(aVoid -> {
+//            // File deleted successfully
+//            Log.d(TAG, "onSuccess: deleted file");
+//        }).addOnFailureListener(exception -> {
+//            // Uh-oh, an error occurred!
+//            Log.d(TAG, "onFailure: did not delete file");
+//        });
+
+        DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
+        documentReference.delete();
+    }
 
 }

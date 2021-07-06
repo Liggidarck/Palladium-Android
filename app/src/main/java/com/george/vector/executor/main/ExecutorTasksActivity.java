@@ -29,6 +29,33 @@ public class ExecutorTasksActivity extends AppCompatActivity {
         task_folder = arguments.get("task_folder").toString();
         email = arguments.get("email").toString();
 
+        String text_toolbar = null;
+        switch (location) {
+            case "ost_school":
+            case "bar_school":
+                text_toolbar = "Школа";
+                break;
+
+            case "ost_aist":
+                text_toolbar = "Детский сад 'Аист'";
+                break;
+
+            case "ost_yagodka":
+                text_toolbar = "Детский сад 'Ягодка'";
+                break;
+
+            case "bar_rucheek":
+                text_toolbar = "Детский сад 'Ручеек'";
+                break;
+
+            case "bar_star":
+                text_toolbar = "Детский сад 'Звездочка'";
+                break;
+        }
+
+        toolbar_tasks_executor_activity.setNavigationOnClickListener(v -> onBackPressed());
+        toolbar_tasks_executor_activity.setTitle(text_toolbar);
+
         Fragment currentFragment = null;
         if(location.equals("ost_school") && task_folder.equals("new_tasks")){
             Log.i(TAG, "Запуск фрагмента Школа новые заявки");

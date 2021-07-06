@@ -41,7 +41,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Шкила"
+                android:text="Школа"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:layout_toEndOf="@+id/ava_folder_1"
                 android:layout_centerVertical="true"

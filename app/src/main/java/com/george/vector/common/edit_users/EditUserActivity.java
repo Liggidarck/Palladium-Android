@@ -12,7 +12,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
-import com.george.vector.common.utils.ErrorsUtils;
+import com.george.vector.common.utils.Utils;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
@@ -30,14 +30,16 @@ public class EditUserActivity extends AppCompatActivity {
     MaterialToolbar topAppBar_register;
 
     TextInputLayout text_input_layout_name_user, text_input_layout_last_name_user,
-            text_input_layout_patronymic_user, text_input_layout_email_user, text_input_layout_role_user;
-    MaterialAutoCompleteTextView auto_complete_text_view_role_user;
+            text_input_layout_patronymic_user, text_input_layout_email_user,
+            text_input_layout_role_user, text_input_layout_edit_permission_user;
+
+    MaterialAutoCompleteTextView auto_complete_text_view_role_user, auto_complete_text_view_edit_permission_user;
 
     Button update_user_btn;
 
     LinearProgressIndicator progress_bar_edit_user;
 
-    String name_user, last_name_user, patronymic_user, email_user, role_user, userID;
+    String name_user, last_name_user, patronymic_user, email_user, role_user, permission_user, userID;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -59,6 +61,8 @@ public class EditUserActivity extends AppCompatActivity {
         auto_complete_text_view_role_user = findViewById(R.id.auto_complete_text_view_edit_role_user);
         update_user_btn = findViewById(R.id.update_user_btn);
         progress_bar_edit_user = findViewById(R.id.progress_bar_edit_user);
+        text_input_layout_edit_permission_user = findViewById(R.id.text_input_layout_edit_permission_user);
+        auto_complete_text_view_edit_permission_user = findViewById(R.id.auto_complete_text_view_edit_permission_user);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -77,6 +81,7 @@ public class EditUserActivity extends AppCompatActivity {
             patronymic_user = value.getString("patronymic");
             email_user = value.getString("email");
             role_user = value.getString("role");
+            permission_user = value.getString("permission");
 
             Log.i(TAG, "name: " + name_user);
             Log.i(TAG, "last_name: " + last_name_user);
@@ -89,6 +94,7 @@ public class EditUserActivity extends AppCompatActivity {
             Objects.requireNonNull(text_input_layout_patronymic_user.getEditText()).setText(patronymic_user);
             Objects.requireNonNull(text_input_layout_email_user.getEditText()).setText(email_user);
             Objects.requireNonNull(text_input_layout_role_user.getEditText()).setText(role_user);
+            Objects.requireNonNull(text_input_layout_edit_permission_user.getEditText()).setText(permission_user);
 
             String[] items = getResources().getStringArray(R.array.roles);
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
@@ -99,6 +105,15 @@ public class EditUserActivity extends AppCompatActivity {
 
             auto_complete_text_view_role_user.setAdapter(arrayAdapter);
 
+            String[] permissions = getResources().getStringArray(R.array.permissions);
+            ArrayAdapter<String> arrayAdapterPermission = new ArrayAdapter<>(
+                    EditUserActivity.this,
+                    R.layout.dropdown_menu_categories,
+                    permissions
+            );
+
+            auto_complete_text_view_edit_permission_user.setAdapter(arrayAdapterPermission);
+
         });
 
         update_user_btn.setOnClickListener(v -> {
@@ -107,6 +122,7 @@ public class EditUserActivity extends AppCompatActivity {
             patronymic_user = Objects.requireNonNull(text_input_layout_patronymic_user.getEditText()).getText().toString();
             email_user = Objects.requireNonNull(text_input_layout_email_user.getEditText()).getText().toString();
             role_user = Objects.requireNonNull(text_input_layout_role_user.getEditText()).getText().toString();
+            permission_user = Objects.requireNonNull(text_input_layout_edit_permission_user.getEditText()).getText().toString();
 
             if(validateFields()) {
                 progress_bar_edit_user.setVisibility(View.VISIBLE);
@@ -117,16 +133,15 @@ public class EditUserActivity extends AppCompatActivity {
                 user.put("patronymic", patronymic_user);
                 user.put("email", email_user);
                 user.put("role", role_user);
+                user.put("permission", permission_user);
 
                 documentReference.get().addOnCompleteListener(task -> {
                     if(task.isSuccessful()) {
                         Log.i(TAG, "update completed!");
                         progress_bar_edit_user.setVisibility(View.INVISIBLE);
                          startActivity(new Intent(this, ListUsersActivity.class));
-                    } else {
+                    } else
                         Log.i(TAG, "Error: " + task.getException());
-                    }
-
                 });
 
                 documentReference.set(user)
@@ -142,13 +157,13 @@ public class EditUserActivity extends AppCompatActivity {
     }
 
     boolean validateFields() {
-        ErrorsUtils errorsUtils = new ErrorsUtils();
+        Utils utils = new Utils();
 
-        boolean checkName = errorsUtils.validate_field(name_user);
-        boolean checkLastName = errorsUtils.validate_field(last_name_user);
-        boolean checkPatronymic = errorsUtils.validate_field(patronymic_user);
-        boolean checkEmail = errorsUtils.validate_field(email_user);
-        boolean checkRole = errorsUtils.validate_field(role_user);
+        boolean checkName = utils.validate_field(name_user);
+        boolean checkLastName = utils.validate_field(last_name_user);
+        boolean checkPatronymic = utils.validate_field(patronymic_user);
+        boolean checkEmail = utils.validate_field(email_user);
+        boolean checkRole = utils.validate_field(role_user);
 
         if(checkName & checkLastName & checkPatronymic & checkEmail & checkRole)
             return true;

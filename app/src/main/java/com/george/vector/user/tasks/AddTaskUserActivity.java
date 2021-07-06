@@ -18,7 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
 import com.george.vector.R;
-import com.george.vector.common.utils.ErrorsUtils;
+import com.george.vector.common.utils.Utils;
 import com.george.vector.common.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -245,12 +245,12 @@ public class AddTaskUserActivity extends AppCompatActivity {
     }
 
     boolean validateFields() {
-        ErrorsUtils errorsUtils = new ErrorsUtils();
+        Utils utils = new Utils();
 
-        boolean check_address = errorsUtils.validate_field(address);
-        boolean check_floor = errorsUtils.validate_field(floor);
-        boolean check_cabinet = errorsUtils.validate_field(cabinet);
-        boolean check_name_task = errorsUtils.validate_field(name_task);
+        boolean check_address = utils.validate_field(address);
+        boolean check_floor = utils.validate_field(floor);
+        boolean check_cabinet = utils.validate_field(cabinet);
+        boolean check_name_task = utils.validate_field(name_task);
 
         if(check_address & check_floor & check_cabinet & check_name_task ) {
             return true;

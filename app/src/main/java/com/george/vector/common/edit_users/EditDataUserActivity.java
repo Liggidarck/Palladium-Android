@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.george.vector.R;
-import com.george.vector.common.utils.ErrorsUtils;
+import com.george.vector.common.utils.Utils;
 import com.george.vector.user.main.MainUserActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -116,12 +116,12 @@ public class EditDataUserActivity extends AppCompatActivity {
     }
 
     boolean validateFields(){
-        ErrorsUtils errorsUtils = new ErrorsUtils();
+        Utils utils = new Utils();
 
-        boolean checkName = errorsUtils.validate_field(name_user);
-        boolean checkLastName = errorsUtils.validate_field(last_name_user);
-        boolean checkPatronymic = errorsUtils.validate_field(patronymic_user);
-        boolean checkEmail = errorsUtils.validate_field(email_user);
+        boolean checkName = utils.validate_field(name_user);
+        boolean checkLastName = utils.validate_field(last_name_user);
+        boolean checkPatronymic = utils.validate_field(patronymic_user);
+        boolean checkEmail = utils.validate_field(email_user);
 
         if(checkName & checkLastName & checkPatronymic & checkEmail)
             return true;

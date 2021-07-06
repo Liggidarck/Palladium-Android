@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import com.george.vector.R;
 import com.george.vector.admin.tasks.AddTaskAdminActivity;
 import com.george.vector.admin.tasks.sort_by_category.FolderActivity;
+import com.george.vector.common.bottom_sheets.ConsoleBottomSheet;
 import com.george.vector.common.bottom_sheets.ProfileBottomSheet;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -57,6 +58,10 @@ public class MainAdminActivity extends AppCompatActivity {
         bottomAppBar = findViewById(R.id.bottomAppBar);
 
         setSupportActionBar(bottomAppBar);
+        bottomAppBar.setNavigationOnClickListener(v -> {
+            ConsoleBottomSheet bottomSheet = new ConsoleBottomSheet();
+            bottomSheet.show(getSupportFragmentManager(), "ConsoleBottomSheet");
+        });
 
         add.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddTaskAdminActivity.class);

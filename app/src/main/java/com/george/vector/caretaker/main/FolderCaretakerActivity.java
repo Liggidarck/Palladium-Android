@@ -43,7 +43,31 @@ public class FolderCaretakerActivity extends AppCompatActivity {
         location = arguments.get("location").toString();
         String data_location_folder = arguments.get("data_location_folder").toString();
 
-        toolbar_caretaker_tasks.setTitle(location);
+        String text_toolbar = null;
+        switch (location) {
+            case "ost_school":
+            case "bar_school":
+                text_toolbar = "Школа";
+                break;
+
+            case "ost_aist":
+                text_toolbar = "Детский сад 'Аист'";
+                break;
+
+            case "ost_yagodka":
+                text_toolbar = "Детский сад 'Ягодка'";
+                break;
+
+            case "bar_rucheek":
+                text_toolbar = "Детский сад 'Ручеек'";
+                break;
+
+            case "bar_star":
+                text_toolbar = "Детский сад 'Звездочка'";
+                break;
+        }
+
+        toolbar_caretaker_tasks.setTitle(text_toolbar);
         toolbar_caretaker_tasks.setNavigationOnClickListener(v -> onBackPressed());
 
         if(location.equals("ost_school") & data_location_folder.equals("new tasks"))

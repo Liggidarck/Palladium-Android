@@ -60,7 +60,7 @@ public class TaskRootActivity extends AppCompatActivity {
         image_view_task_root = findViewById(R.id.image_view_task_root);
         circle_status_root = findViewById(R.id.circle_status_root);
         edit_task_btn = findViewById(R.id.edit_task_btn);
-        delete_task_btn = findViewById(R.id.delete_task_btn);
+        delete_task_btn = findViewById(R.id.delete_task_btn_root);
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.get("id_task_root").toString();
@@ -136,10 +136,29 @@ public class TaskRootActivity extends AppCompatActivity {
                 if (status.equals("Архив"))
                     circle_status_root.setImageResource(R.color.green);
             } catch (Exception e){
-                System.out.print(e);
+                Log.i(TAG, "Error! " + e);
             }
 
         });
 
+        delete_task_btn.setOnClickListener(v -> delete_task(image_key));
     }
+
+    void delete_task(String image_key) {
+        finish();
+
+//        String storageUrl = "images/" + image_key;
+//        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(storageUrl);
+//        storageReference.delete().addOnSuccessListener(aVoid -> {
+//            // File deleted successfully
+//            Log.d(TAG, "onSuccess: deleted file");
+//        }).addOnFailureListener(exception -> {
+//            // Uh-oh, an error occurred!
+//            Log.d(TAG, "onFailure: did not delete file");
+//        });
+
+        DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
+        documentReference.delete();
+    }
+
 }

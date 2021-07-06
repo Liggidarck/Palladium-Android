@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.george.vector.R;
 import com.george.vector.admin.MainAdminActivity;
-import com.george.vector.common.utils.ErrorsUtils;
+import com.george.vector.common.utils.Utils;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
@@ -37,11 +37,11 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
     TextInputLayout text_input_layout_name_user, text_input_layout_last_name_user,
             text_input_layout_patronymic_user, text_input_layout_email_user,
-            text_input_layout_password_user, text_input_layout_role_user;
+            text_input_layout_password_user, text_input_layout_role_user, text_input_layout_permission_user;
 
-    MaterialAutoCompleteTextView auto_complete_text_view_role_user;
+    MaterialAutoCompleteTextView auto_complete_text_view_role_user, auto_complete_text_view_permission_user;
 
-    String name_user, last_name_user, patronymic_user, email_user, password_user, role_user, userID;
+    String name_user, last_name_user, patronymic_user, email_user, password_user, role_user, permission_user, userID;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -63,6 +63,8 @@ public class ActivityRegisterUser extends AppCompatActivity {
         text_input_layout_role_user = findViewById(R.id.text_input_layout_role_user);
         auto_complete_text_view_role_user = findViewById(R.id.auto_complete_text_view_role_user);
         progress_bar_register = findViewById(R.id.progress_bar_register);
+        text_input_layout_permission_user = findViewById(R.id.text_input_layout_permission_user);
+        auto_complete_text_view_permission_user = findViewById(R.id.auto_complete_text_view_permission_user);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -78,6 +80,15 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
         auto_complete_text_view_role_user.setAdapter(arrayAdapter);
 
+        String[] permissions = getResources().getStringArray(R.array.permissions);
+        ArrayAdapter<String> arrayAdapterPermissions = new ArrayAdapter<>(
+                ActivityRegisterUser.this,
+                R.layout.dropdown_menu_categories,
+                permissions
+        );
+
+        auto_complete_text_view_permission_user.setAdapter(arrayAdapterPermissions);
+
         register_user_btn.setOnClickListener(v -> {
             name_user = Objects.requireNonNull(text_input_layout_name_user.getEditText()).getText().toString();
             last_name_user = Objects.requireNonNull(text_input_layout_last_name_user.getEditText()).getText().toString();
@@ -85,6 +96,7 @@ public class ActivityRegisterUser extends AppCompatActivity {
             email_user = Objects.requireNonNull(text_input_layout_email_user.getEditText()).getText().toString();
             password_user = Objects.requireNonNull(text_input_layout_password_user.getEditText()).getText().toString();
             role_user = Objects.requireNonNull(text_input_layout_role_user.getEditText()).getText().toString();
+            permission_user = Objects.requireNonNull(text_input_layout_permission_user.getEditText()).getText().toString();
 
             if(validateFields()) {
                 progress_bar_register.setVisibility(View.VISIBLE);
@@ -100,6 +112,7 @@ public class ActivityRegisterUser extends AppCompatActivity {
                         user.put("patronymic", patronymic_user);
                         user.put("email", email_user);
                         user.put("role", role_user);
+                        user.put("permission", permission_user);
                         documentReference.set(user)
                                 .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user - " + userID))
                                 .addOnFailureListener(e -> Log.d("TAG", "Failure - " + e.toString()));
@@ -119,14 +132,14 @@ public class ActivityRegisterUser extends AppCompatActivity {
         clearErrors();
     }
     boolean validateFields() {
-        ErrorsUtils errorsUtils = new ErrorsUtils();
+        Utils utils = new Utils();
 
-        boolean checkName = errorsUtils.validate_field(name_user);
-        boolean checkLastName = errorsUtils.validate_field(last_name_user);
-        boolean checkPatronymic = errorsUtils.validate_field(patronymic_user);
-        boolean checkEmail = errorsUtils.validate_field(email_user);
-        boolean checkPassword = errorsUtils.validate_field(password_user);
-        boolean checkRole = errorsUtils.validate_field(role_user);
+        boolean checkName = utils.validate_field(name_user);
+        boolean checkLastName = utils.validate_field(last_name_user);
+        boolean checkPatronymic = utils.validate_field(patronymic_user);
+        boolean checkEmail = utils.validate_field(email_user);
+        boolean checkPassword = utils.validate_field(password_user);
+        boolean checkRole = utils.validate_field(role_user);
 
         if(checkName & checkLastName & checkPatronymic & checkEmail & checkPassword & checkRole)
             return true;

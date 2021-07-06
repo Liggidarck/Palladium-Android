@@ -16,7 +16,7 @@ import android.widget.Button;
 
 import com.george.vector.admin.MainAdminActivity;
 import com.george.vector.R;
-import com.george.vector.common.utils.ErrorsUtils;
+import com.george.vector.common.utils.Utils;
 import com.george.vector.executor.main.MainExecutorActivity;
 import com.george.vector.root.main.RootMainActivity;
 import com.george.vector.user.main.MainUserActivity;
@@ -75,7 +75,7 @@ public class ActivityLogin extends AppCompatActivity {
                 String check_role = value.getString("role");
                 String check_email = value.getString("email");
                 String permission = value.getString("permission");
-                Log.d(TAG, "ROLE - " + check_role);
+                Log.d(TAG, "permission - " + permission);
 
                 assert check_role != null;
                 startApp(check_role, check_email, permission);
@@ -105,7 +105,7 @@ public class ActivityLogin extends AppCompatActivity {
                             String check_role = value.getString("role");
                             String check_email = value.getString("email");
                             String permission = value.getString("permission");
-                            Log.d(TAG, "ROLE - " + check_role);
+                            Log.d(TAG, "permission - " + permission);
 
                             assert check_role != null;
                             startApp(check_role, check_email, permission);
@@ -159,10 +159,10 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
     boolean validateFields() {
-        ErrorsUtils errorsUtils = new ErrorsUtils();
+        Utils utils = new Utils();
 
-        boolean checkEmail = errorsUtils.validate_field(emailED);
-        boolean checkPassword = errorsUtils.validate_field(passwordED);
+        boolean checkEmail = utils.validate_field(emailED);
+        boolean checkPassword = utils.validate_field(passwordED);
 
         Log.i(TAG, "Email: " + checkEmail + " Password: " + checkPassword);
 

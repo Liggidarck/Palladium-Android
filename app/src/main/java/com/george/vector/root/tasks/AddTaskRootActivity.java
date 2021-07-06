@@ -24,7 +24,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.george.vector.common.edit_users.User;
 import com.george.vector.common.edit_users.UserAdapter;
-import com.george.vector.common.utils.ErrorsUtils;
+import com.george.vector.common.utils.Utils;
 import com.george.vector.common.tasks.Task;
 import com.george.vector.root.main.RootMainActivity;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -110,12 +110,17 @@ public class AddTaskRootActivity extends AppCompatActivity {
         location = arguments.get("location").toString();
         Log.i(TAG, location);
 
-        userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReferenceUser = firebaseFirestore.collection("users").document(userID);
-        documentReferenceUser.addSnapshotListener(this, (value, error) -> {
-            assert value != null;
-            email = value.getString("email");
-        });
+        //При выходе из аккаунта крашится тут
+        try {
+            userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+            DocumentReference documentReferenceUser = firebaseFirestore.collection("users").document(userID);
+            documentReferenceUser.addSnapshotListener(this, (value, error) -> {
+                assert value != null;
+                email = value.getString("email");
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "Error! " + e);
+        }
 
         add_executor_root.setOnClickListener(v -> show_add_executor_dialog());
 
@@ -315,15 +320,15 @@ public class AddTaskRootActivity extends AppCompatActivity {
     }
 
     boolean validateFields() {
-        ErrorsUtils errorsUtils = new ErrorsUtils();
+        Utils utils = new Utils();
 
-        boolean check_address = errorsUtils.validate_field(address);
-        boolean check_floor = errorsUtils.validate_field(floor);
-        boolean check_cabinet = errorsUtils.validate_field(cabinet);
-        boolean check_name_task = errorsUtils.validate_field(name_task);
-        boolean check_date_task = errorsUtils.validate_field(date_task);
-        boolean check_executor = errorsUtils.validate_field(email_executor);
-        boolean check_status = errorsUtils.validate_field(status);
+        boolean check_address = utils.validate_field(address);
+        boolean check_floor = utils.validate_field(floor);
+        boolean check_cabinet = utils.validate_field(cabinet);
+        boolean check_name_task = utils.validate_field(name_task);
+        boolean check_date_task = utils.validate_field(date_task);
+        boolean check_executor = utils.validate_field(email_executor);
+        boolean check_status = utils.validate_field(status);
 
         if(check_address & check_floor & check_cabinet & check_name_task & check_date_task & check_executor & check_status) {
             return true;

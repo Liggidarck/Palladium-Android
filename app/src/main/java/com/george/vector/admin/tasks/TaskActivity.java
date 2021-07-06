@@ -60,7 +60,7 @@ public class TaskActivity extends AppCompatActivity {
         circle_status = findViewById(R.id.circle_status);
         image_view_task_admin = findViewById(R.id.image_view_task_admin);
         progress_bar_task_admin = findViewById(R.id.progress_bar_task_admin);
-        delete_task_btn = findViewById(R.id.delete_task_btn);
+        delete_task_btn = findViewById(R.id.delete_task_btn_admin);
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.get("id_task").toString();
@@ -139,25 +139,25 @@ public class TaskActivity extends AppCompatActivity {
 
         delete_task_btn.setOnClickListener(v -> {
             Log.i(TAG, "Delete data key: " + image_key);
-            delete_image(image_key);
+            delete_task(image_key);
         });
 
     }
 
-    void delete_image(String image_key) {
+    void delete_task(String image_key) {
         finish();
 
-        String storageUrl = "images/" + image_key;
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(storageUrl);
-        storageReference.delete().addOnSuccessListener(aVoid -> {
-            // File deleted successfully
-            Log.d(TAG, "onSuccess: deleted file");
-        }).addOnFailureListener(exception -> {
-            // Uh-oh, an error occurred!
-            Log.d(TAG, "onFailure: did not delete file");
-        });
+//        String storageUrl = "images/" + image_key;
+//        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(storageUrl);
+//        storageReference.delete().addOnSuccessListener(aVoid -> {
+//            // File deleted successfully
+//            Log.d(TAG, "onSuccess: deleted file");
+//        }).addOnFailureListener(exception -> {
+//            // Uh-oh, an error occurred!
+//            Log.d(TAG, "onFailure: did not delete file");
+//        });
 
-        DocumentReference documentReference = firebaseFirestore.collection("new tasks").document(id);
+        DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.delete();
     }
 

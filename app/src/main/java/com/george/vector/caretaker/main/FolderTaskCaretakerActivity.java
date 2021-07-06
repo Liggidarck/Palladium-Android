@@ -28,7 +28,32 @@ public class FolderTaskCaretakerActivity extends AppCompatActivity {
         archive_tasks_card_caretaker = findViewById(R.id.archive_tasks_card_caretaker);
 
         toolbar_location_folder_caretaker.setNavigationOnClickListener(v -> onBackPressed());
-        toolbar_location_folder_caretaker.setTitle(location);
+
+        String text_toolbar = null;
+        switch (location) {
+            case "ost_school":
+            case "bar_school":
+                text_toolbar = "Школа";
+                break;
+
+            case "ost_aist":
+                text_toolbar = "Детский сад 'Аист'";
+                break;
+
+            case "ost_yagodka":
+                text_toolbar = "Детский сад 'Ягодка'";
+                 break;
+
+            case "bar_rucheek":
+                text_toolbar = "Детский сад 'Ручеек'";
+                break;
+
+            case "bar_star":
+                text_toolbar = "Детский сад 'Звездочка'";
+                break;
+        }
+
+        toolbar_location_folder_caretaker.setTitle(text_toolbar);
 
         new_tasks_card_caretaker.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderCaretakerActivity.class);
