@@ -102,7 +102,7 @@ public class AddTaskCaretakerActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         Bundle arguments = getIntent().getExtras();
-        String location = arguments.get("location").toString();
+        location = arguments.get("location").toString();
 
         topAppBar_new_task_caretaker.setNavigationOnClickListener(v -> onBackPressed());
         add_executor_caretaker.setOnClickListener(v -> show_add_executor_dialog());
@@ -278,14 +278,20 @@ public class AddTaskCaretakerActivity extends AppCompatActivity {
 
     void initialize_fields() {
 
-        String[] items = getResources().getStringArray(R.array.addresses);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                AddTaskCaretakerActivity.this,
-                R.layout.dropdown_menu_categories,
-                items
-        );
+        if(location.equals("ost_school")) {
 
-        address_autoComplete_caretaker.setAdapter(adapter);
+            String[] items = getResources().getStringArray(R.array.addresses_ost_school);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                    AddTaskCaretakerActivity.this,
+                    R.layout.dropdown_menu_categories,
+                    items
+            );
+
+            address_autoComplete_caretaker.setAdapter(adapter);
+        }
+
+        if(location.equals("bar_school"))
+            Objects.requireNonNull(text_input_layout_address_caretaker.getEditText()).setText("Улица Местечко Барыши дом 25");
 
         String[] items_status = getResources().getStringArray(R.array.status);
         ArrayAdapter<String> adapter_status = new ArrayAdapter<>(

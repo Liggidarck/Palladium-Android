@@ -41,7 +41,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Школа"
+                android:text="@string/school"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:layout_toEndOf="@+id/ava_folder_1"
                 android:layout_centerVertical="true"
@@ -86,7 +86,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Детский сад 'Аист' "
+                android:text="@string/ost_aist"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:layout_toEndOf="@+id/ava_folder_2"
                 android:layout_centerVertical="true"
@@ -131,7 +131,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Детский сад 'Ягодка'"
+                android:text="@string/ost_yagodka"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:layout_toEndOf="@+id/ava_folder_3"
                 android:layout_centerVertical="true"

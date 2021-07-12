@@ -1,3 +1,64 @@
 <resources>
     <string name="app_name">Palladium</string>
+
+    <string name="tasks">Заявки</string>
+    <string name="task">Заявка</string>
+    <string name="new_tasks">Новые заявки</string>
+    <string name="progress_tasks">Заявки в работе</string>
+    <string name="archive_tasks">Архив</string>
+    <string name="address">Адрес</string>
+    <string name="comment">Коментарий</string>
+    <string name="no_comment">Нет коментариев к заявке</string>
+    <string name="status">Статус</string>
+    <string name="edit">Изменить</string>
+    <string name="delete">Удалить</string>
+    <string name="floor">Этаж</string>
+    <string name="cabinet">Кабинет</string>
+    <string name="name_task">Название заявки</string>
+    <string name="example_task">Например: Сломаная дверь</string>
+    <string name="optional">Опционально</string>
+    <string name="date_complete">Дата выполнения</string>
+    <string name="executor">Исполнитель</string>
+    <string name="set_executor">назначить исполнителя</string>
+    <string name="done">Готово</string>
+
+
+    <string name="authorization">Авторизация</string>
+    <string name="email">Электронный адрес</string>
+    <string name="password">Пароль</string>
+    <string name="login">Войти</string>
+
+    <string name="registration">Регистрация</string>
+    <string name="name">Имя</string>
+    <string name="last_name">Фамилия</string>
+    <string name="patronymic">Отчество</string>
+    <string name="role">Роль</string>
+    <string name="permission">Разрешения</string>
+    <string name="add_user">добавить пользователя</string>
+
+    <string name="school">Школа</string>
+    <string name="ost_aist">Детский сад Аист</string>
+    <string name="ost_yagodka">Детский сад Ягодка</string>
+    <string name="new_task">Новая заявка</string>
+    <string name="ost">Остафьево</string>
+    <string name="bar">Барыши</string>
+
+
+    <string name="users">Пользователи</string>
+    <string name="add_new_user">Добавить нового пользователя</string>
+    <string name="edit_data_user">Отредактировать данные</string>
+    <string name="logout">выйти из аккаунта</string>
+    <string name="profile">Профиль</string>
+    <string name="settings">Настройки</string>
+
+    <string name="editing">Редактирование</string>
+    <string name="save">сохранить</string>
+
+    <string name="super_users">Супер пользователи</string>
+    <string name="caretakers">Завхозы</string>
+    <string name="admins">Администраторы</string>
+    <string name="executors">Исполнители</string>
+
+
+
 </resources>

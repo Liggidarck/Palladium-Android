@@ -306,7 +306,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
 
     void initialize_fields() {
 
-        String[] items = getResources().getStringArray(R.array.addresses);
+        String[] items = getResources().getStringArray(R.array.addresses_ost_school);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 EdtTaskCaretakerActivity.this,
                 R.layout.dropdown_menu_categories,

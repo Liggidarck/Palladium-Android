@@ -47,6 +47,7 @@ public class MainAdminActivity extends AppCompatActivity {
 
         Bundle arguments = getIntent().getExtras();
         permission = arguments.get("permission").toString();
+        Log.i(TAG, "permission: " + permission);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();

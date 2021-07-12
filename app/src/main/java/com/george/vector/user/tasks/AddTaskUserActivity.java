@@ -94,7 +94,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
         topAppBar_new_task_user.setNavigationOnClickListener(v -> onBackPressed());
 
-        String[] items = getResources().getStringArray(R.array.addresses);
+        String[] items = getResources().getStringArray(R.array.addresses_ost_school);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 AddTaskUserActivity.this,
                 R.layout.dropdown_menu_categories,

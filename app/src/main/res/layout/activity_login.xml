@@ -16,7 +16,7 @@
         android:id="@+id/topAppBar_login"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="Авторизация"
+        app:title="@string/authorization"
         app:titleTextColor="@android:color/white"
         app:layout_collapseMode="pin"
         android:background="@color/blue_primary" />
@@ -54,7 +54,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Электрнонный адресс"
+            android:hint="@string/email"
             android:layout_gravity="center"
             android:inputType="textEmailAddress" />
 
@@ -75,7 +75,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Пароль"
+            android:hint="@string/password"
             android:layout_gravity="center"
             android:inputType="textPassword"/>
 
@@ -85,7 +85,7 @@
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="войти"
+        android:text="@string/login"
         android:layout_below="@+id/password_login_text_layout"
         android:layout_marginRight="20sp"
         android:layout_marginLeft="20sp"

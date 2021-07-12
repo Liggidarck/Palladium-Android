@@ -12,7 +12,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Новая заявка"
+            android:text="@string/new_task"
             android:textColor="@color/black"
             android:textSize="22sp" />
 
@@ -34,7 +34,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Остафьево"
+        android:text="@string/ost"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:layout_marginTop="15dp" />
@@ -43,7 +43,7 @@
         android:id="@+id/ost_school_new_task_caretaker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="школа"
+        android:text="@string/school"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_marginTop="10dp" />
 
@@ -51,7 +51,7 @@
         android:id="@+id/ost_aist_new_task_caretaker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Детский сад Аист"
+        android:text="@string/ost_aist"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_marginTop="10dp" />
 
@@ -59,7 +59,7 @@
         android:id="@+id/ost_yagodka_new_task_caretaker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Детский сад ягодка"
+        android:text="@string/ost_yagodka"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_marginTop="10dp" />
 

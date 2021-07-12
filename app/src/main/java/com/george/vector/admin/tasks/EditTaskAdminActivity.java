@@ -266,7 +266,7 @@ public class EditTaskAdminActivity extends AppCompatActivity {
     }
 
     void initialize_fields() {
-        String[] addresses = getResources().getStringArray(R.array.addresses);
+        String[] addresses = getResources().getStringArray(R.array.addresses_ost_school);
         ArrayAdapter<String> arrayAdapterAddresses = new ArrayAdapter<>(
                 EditTaskAdminActivity.this,
                 R.layout.dropdown_menu_categories,

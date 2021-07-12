@@ -281,14 +281,19 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
     void initialize_fields() {
 
-        String[] items = getResources().getStringArray(R.array.addresses);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                AddTaskRootActivity.this,
-                R.layout.dropdown_menu_categories,
-                items
-        );
+        if(location.equals("ost_school")) {
+            String[] items = getResources().getStringArray(R.array.addresses_ost_school);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                    AddTaskRootActivity.this,
+                    R.layout.dropdown_menu_categories,
+                    items
+            );
 
-        address_autoComplete_root.setAdapter(adapter);
+            address_autoComplete_root.setAdapter(adapter);
+        }
+
+        if (location.equals("bar_school"))
+            Objects.requireNonNull(text_input_layout_address_root.getEditText()).setText("Улица Местечко Барыши дом 25");
 
         String[] items_status = getResources().getStringArray(R.array.status);
         ArrayAdapter<String> adapter_status = new ArrayAdapter<>(
@@ -309,7 +314,6 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
         edit_text_date_task_root.setOnClickListener(v -> new DatePickerDialog(AddTaskRootActivity.this, date, datePickCalendar
                 .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
-
     }
 
     void updateLabel() {

@@ -39,14 +39,14 @@
                             android:id="@+id/chip_root_ost"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Оставьево"
+                            android:text="@string/ost"
                             style="@style/Widget.MaterialComponents.Chip.Filter" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chip_root_bar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Барыши"
+                            android:text="@string/bar"
                             style="@style/Widget.MaterialComponents.Chip.Filter" />
 
                     </com.google.android.material.chip.ChipGroup>
@@ -92,7 +92,7 @@
                 <com.google.android.material.appbar.MaterialToolbar
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:title="Заявки"
+                    app:title="@string/tasks"
                     app:layout_collapseMode="pin"
                     android:background="@android:color/transparent" />
 

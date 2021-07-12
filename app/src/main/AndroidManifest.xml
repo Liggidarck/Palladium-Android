@@ -12,7 +12,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Vector">
-        <activity android:name=".executor.tasks.EditTaskExecutorActivity"></activity>
+        <activity android:name=".auth.LoadingActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".executor.tasks.TaskExecutorActivity" />
         <activity android:name=".executor.main.ExecutorTasksActivity" />
         <activity android:name=".executor.main.FolderExecutorActivity" />
@@ -41,13 +47,7 @@
         <activity android:name=".user.main.MainUserActivity" />
         <activity android:name=".auth.ActivityRegisterUser" />
         <activity android:name=".admin.MainAdminActivity" />
-        <activity android:name=".auth.ActivityLogin">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".auth.ActivityLogin"/>
     </application>
 
 </manifest>

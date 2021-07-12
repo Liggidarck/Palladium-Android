@@ -11,7 +11,7 @@
         android:id="@+id/topAppBar_tasks_admin"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="Заявка"
+        app:title="@string/task"
         app:titleTextColor="@android:color/white"
         app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
         app:layout_collapseMode="pin"
@@ -38,7 +38,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Адрес"
+                android:text="@string/address"
                 android:textSize="22sp"
                 android:textColor="@color/black"
                 android:layout_marginTop="10dp"
@@ -53,7 +53,6 @@
                     android:id="@+id/text_view_address_task_admin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Улица Авиаторов дом 9."
                     android:textColor="@color/black"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
@@ -65,7 +64,6 @@
                 android:id="@+id/text_view_floor_task_admin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Этаж - 3"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:layout_marginStart="20dp"
@@ -75,7 +73,6 @@
                 android:id="@+id/text_view_cabinet_task_admin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Кабинет - 999А"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:layout_marginStart="20dp"
@@ -93,7 +90,6 @@
                 android:id="@+id/text_view_name_task_admin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Сломаная дверь"
                 android:textSize="22sp"
                 android:textColor="@color/black"
                 android:layout_marginTop="10dp"
@@ -110,7 +106,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Коментарий"
+                android:text="@string/comment"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:layout_marginStart="20dp"
@@ -120,7 +116,7 @@
                 android:id="@+id/text_view_comment_task_admin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Нет коментариев к заявке"
+                android:text="@string/no_comment"
                 android:textStyle="italic"
                 android:textColor="#999999"
                 android:textSize="15sp"
@@ -138,7 +134,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Статус"
+                android:text="@string/status"
                 android:textSize="22sp"
                 android:textColor="@color/black"
                 android:layout_marginTop="20dp"
@@ -151,11 +147,6 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="10dp"
                 app:cardElevation="8dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -172,7 +163,6 @@
                                 android:id="@+id/text_view_status_task_admin"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Новая заявка"
                                 android:textAppearance="?attr/textAppearanceHeadline6" />
 
                             <TextView
@@ -180,7 +170,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
-                                android:text="Созданно: 27.04.2021 23:43"
                                 android:textAppearance="?attr/textAppearanceBody2"
                                 android:textColor="?android:attr/textColorSecondary" />
 
@@ -194,9 +183,6 @@
                             android:layout_centerVertical="true" />
 
                     </RelativeLayout>
-
-                </LinearLayout>
-
             </com.google.android.material.card.MaterialCardView>
 
 
@@ -209,7 +195,7 @@
                     android:id="@+id/edit_task_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Изменить"
+                    android:text="@string/edit"
                     android:layout_marginTop="20dp"
                     android:layout_marginStart="20dp"
                     app:icon="@drawable/ic_baseline_edit_24"
@@ -219,7 +205,7 @@
                     android:id="@+id/delete_task_btn_admin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="удалить"
+                    android:text="@string/delete"
                     android:layout_marginTop="20dp"
                     android:layout_marginStart="20dp"
                     style="@style/Widget.MaterialComponents.Button.Icon"

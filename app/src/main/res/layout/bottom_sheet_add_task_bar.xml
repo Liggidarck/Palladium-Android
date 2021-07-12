@@ -12,7 +12,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Новая заявка"
+            android:text="@string/new_task"
             android:textColor="@color/black"
             android:textSize="22sp" />
 
@@ -59,7 +59,7 @@
         android:id="@+id/bar_start_new_task_caretaker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Детский сад звуздочка"
+        android:text="Детский сад звездочка"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_marginTop="10dp" />
 

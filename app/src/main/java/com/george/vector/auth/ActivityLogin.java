@@ -64,26 +64,6 @@ public class ActivityLogin extends AppCompatActivity {
         boolean check = isOnline();
         Log.d(TAG, "check internet: " + check);
 
-        if(firebaseAuth.getCurrentUser() != null) {
-            progress_bar_auth.setVisibility(View.VISIBLE);
-            userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-
-            DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
-            documentReference.addSnapshotListener(this, (value, error) -> {
-                assert value != null;
-
-                String check_role = value.getString("role");
-                String check_email = value.getString("email");
-                String permission = value.getString("permission");
-                Log.d(TAG, "permission - " + permission);
-
-                assert check_role != null;
-                startApp(check_role, check_email, permission);
-
-            });
-
-        }
-
         btn_login.setOnClickListener(v -> {
             emailED = Objects.requireNonNull(email_login_text_layout.getEditText()).getText().toString();
             passwordED = Objects.requireNonNull(password_login_text_layout.getEditText()).getText().toString();

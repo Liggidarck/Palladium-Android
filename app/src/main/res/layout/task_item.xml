@@ -15,7 +15,6 @@
         android:id="@+id/text_view_nate_task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="title"
         android:maxLines="1"
         android:ellipsize="end"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
@@ -24,7 +23,6 @@
         android:id="@+id/text_view_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Address"
         android:layout_below="@id/text_view_nate_task"
         android:textColor="@color/black"
         android:textSize="17sp"/>
@@ -33,7 +31,6 @@
         android:id="@+id/date_create"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="10.06.2021"
         android:layout_below="@id/text_view_address"
         android:layout_marginTop="5dp"/>
 

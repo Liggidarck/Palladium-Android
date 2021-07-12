@@ -11,7 +11,7 @@
         android:id="@+id/toolbar_list_users"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="Пользователи"
+        app:title="@string/users"
         app:titleTextColor="@android:color/white"
         app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
         app:layout_collapseMode="pin"
@@ -37,54 +37,45 @@
                 android:id="@+id/chip_root"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Суперпользователи"
+                android:text="@string/super_users"
                 style="@style/Widget.MaterialComponents.Chip.Filter" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_zav"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Завхозы"
+                android:text="@string/caretakers"
                 style="@style/Widget.MaterialComponents.Chip.Filter" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_admin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Администраторы"
+                android:text="@string/admins"
                 style="@style/Widget.MaterialComponents.Chip.Filter" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Пользователи"
+                android:text="@string/users"
                 style="@style/Widget.MaterialComponents.Chip.Filter" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_worker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Исполнители"
+                android:text="@string/executors"
                 style="@style/Widget.MaterialComponents.Chip.Filter" />
 
         </com.google.android.material.chip.ChipGroup>
 
     </HorizontalScrollView>
 
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/refresh_users"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_list_users"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/chip_scroll" >
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_list_users"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
+        android:layout_below="@id/chip_scroll" />
 
 </RelativeLayout>

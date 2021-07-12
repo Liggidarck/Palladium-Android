@@ -12,7 +12,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Настройки"
+            android:text="@string/settings"
             android:textColor="@color/black"
             android:textSize="22sp" />
 
@@ -35,7 +35,7 @@
         android:id="@+id/btn_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="выйти из аккаунта"
+        android:text="@string/logout"
         android:layout_marginTop="10dp"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
@@ -43,7 +43,7 @@
         android:id="@+id/edit_data_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="отредактировать данные"
+        android:text="@string/edit_data_user"
         android:layout_marginTop="10dp"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 

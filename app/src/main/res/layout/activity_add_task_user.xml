@@ -10,7 +10,7 @@
         android:id="@+id/topAppBar_new_task_user"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="Заявка"
+        app:title="@string/task"
         app:titleTextColor="@android:color/white"
         app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
         app:layout_collapseMode="pin"
@@ -28,7 +28,7 @@
         android:id="@+id/crate_task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="готово"
+        android:text="@string/done"
         app:icon="@drawable/ic_baseline_done_24"
         app:iconTint="@color/white"
         android:textColor="@color/white"
@@ -51,7 +51,7 @@
                 android:id="@+id/text_input_layout_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Адрес"
+                android:hint="@string/address"
                 app:endIconMode="dropdown_menu"
                 app:errorEnabled="true"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -72,7 +72,7 @@
                 android:id="@+id/text_input_layout_floor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Этаж"
+                android:hint="@string/floor"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
@@ -91,7 +91,7 @@
                 android:id="@+id/text_input_layout_cabinet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Кабинет"
+                android:hint="@string/cabinet"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
@@ -110,7 +110,7 @@
                 android:id="@+id/text_input_layout_name_task"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Название заявки"
+                android:hint="@string/name_task"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
@@ -118,7 +118,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:errorEnabled="true"
                 app:helperTextEnabled="true"
-                app:helperText="Например: Сломаная дверь" >
+                app:helperText="@string/example_task" >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -131,7 +131,7 @@
                 android:id="@+id/text_input_layout_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Коментарий"
+                android:hint="@string/comment"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
@@ -139,7 +139,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:errorEnabled="true"
                 app:helperTextEnabled="true"
-                app:helperText="Опционально" >
+                app:helperText="@string/optional" >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"

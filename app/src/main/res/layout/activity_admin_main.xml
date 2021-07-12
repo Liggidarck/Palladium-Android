@@ -58,7 +58,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Новые заявки"
+                        android:text="@string/new_tasks"
                         android:textAppearance="?attr/textAppearanceHeadline6"
                         android:layout_toEndOf="@+id/ava_folder_1"
                         android:layout_centerVertical="true"
@@ -103,7 +103,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Заявки в работе"
+                        android:text="@string/progress_tasks"
                         android:textAppearance="?attr/textAppearanceHeadline6"
                         android:layout_toEndOf="@+id/ava_folder_2"
                         android:layout_centerVertical="true"
@@ -149,7 +149,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Архив"
+                        android:text="@string/archive_tasks"
                         android:textAppearance="?attr/textAppearanceHeadline6"
                         android:layout_toEndOf="@+id/ava_folder_3"
                         android:layout_centerVertical="true"
@@ -193,7 +193,7 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:title="Заявки"
+                app:title="@string/tasks"
                 app:layout_collapseMode="pin"
                 android:background="@android:color/transparent" />
 

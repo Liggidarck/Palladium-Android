@@ -33,7 +33,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Пользователи"
+        android:text="@string/users"
         android:textColor="@color/black"
         android:textSize="22sp"
         android:layout_marginTop="20dp"/>
@@ -58,7 +58,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Добавить нового пользователя"
+            android:text="@string/add_new_user"
             android:layout_toEndOf="@id/following_image_sheet"
             android:textSize="17sp"
             android:textColor="@color/black"
@@ -87,7 +87,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Отредактировать данные"
+            android:text="@string/edit_data_user"
             android:layout_toEndOf="@id/following_edit_sheet"
             android:textSize="17sp"
             android:textColor="@color/black"
@@ -100,7 +100,7 @@
         android:id="@+id/btn_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="выйти из аккаунта"
+        android:text="@string/logout"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_marginTop="5dp"/>
 

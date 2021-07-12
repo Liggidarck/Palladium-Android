@@ -24,7 +24,6 @@ public class ListUsersActivity extends AppCompatActivity {
     RecyclerView recycler_view_list_users;
     Chip chip_root, chip_zav, chip_admin, chip_user, chip_worker;
     MaterialToolbar toolbar_list_users;
-    SwipeRefreshLayout refresh_users;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference usersRef = db.collection("users");
@@ -45,7 +44,6 @@ public class ListUsersActivity extends AppCompatActivity {
 
         recycler_view_list_users = findViewById(R.id.recycler_view_list_users);
         toolbar_list_users = findViewById(R.id.toolbar_list_users);
-        refresh_users = findViewById(R.id.refresh_users);
 
         toolbar_list_users.setNavigationOnClickListener(v -> onBackPressed());
 

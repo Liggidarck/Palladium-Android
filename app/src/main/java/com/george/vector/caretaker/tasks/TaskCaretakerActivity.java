@@ -136,7 +136,7 @@ public class TaskCaretakerActivity extends AppCompatActivity {
                 if (status.equals("Архив"))
                     circle_status_caretaker.setImageResource(R.color.green);
             } catch (Exception e){
-                System.out.print(e);
+                Log.e(TAG, "Error! " + e);
             }
 
         });

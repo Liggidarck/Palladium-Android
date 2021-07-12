@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="addresses" >
-
-        <item>Уллица Авиаторов дом 9 - старое здание</item>
-        <item>Уллица Авиаторов дом 9 - новое здание</item>
-        <item>Улица Местечко Барыши дом 25</item>
-
+    <string-array name="addresses_ost_school" >
+        <item>Уллица Авиаторов дом 9. Старое здание</item>
+        <item>Уллица Авиаторов дом 9. Новое здание</item>
     </string-array>
 
 
