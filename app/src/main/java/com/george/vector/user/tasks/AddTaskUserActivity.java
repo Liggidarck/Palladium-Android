@@ -91,17 +91,19 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
         Bundle arguments = getIntent().getExtras();
         permission = arguments.get("permission").toString();
+        Log.i(TAG, "Permission: " + permission);
 
         topAppBar_new_task_user.setNavigationOnClickListener(v -> onBackPressed());
 
-        String[] items = getResources().getStringArray(R.array.addresses_ost_school);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                AddTaskUserActivity.this,
-                R.layout.dropdown_menu_categories,
-                items
-        );
-
-        address_autoComplete.setAdapter(adapter);
+        if(permission.equals("ost_school")) {
+            String[] items = getResources().getStringArray(R.array.addresses_ost_school);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                    AddTaskUserActivity.this,
+                    R.layout.dropdown_menu_categories,
+                    items
+            );
+            address_autoComplete.setAdapter(adapter);
+        }
 
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         DocumentReference documentReferenceUser = firebaseFirestore.collection("users").document(userID);
@@ -183,11 +185,9 @@ public class AddTaskUserActivity extends AppCompatActivity {
     void show_dialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Внимание!")
-                .setMessage("Отсуствует интернет подключение. Вы можете сохранить заявку у себя в телефоне и когда интренет снова появиться заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку заявку позже, когда появиться интрнет.")
-
-                .setPositiveButton("Сохранить", (dialog, id) -> initialize_location(permission))
-
+        builder.setTitle(getText(R.string.warning))
+                .setMessage(getText(R.string.warning_no_connection))
+                .setPositiveButton(getText(R.string.save), (dialog, id) -> initialize_location(permission))
                 .setNegativeButton(android.R.string.cancel, (dialog, id) -> onBackPressed());
 
         AlertDialog dialog = builder.create();

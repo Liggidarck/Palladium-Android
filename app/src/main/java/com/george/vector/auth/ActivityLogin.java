@@ -3,10 +3,7 @@ package com.george.vector.auth;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -60,9 +57,6 @@ public class ActivityLogin extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
-
-        boolean check = isOnline();
-        Log.d(TAG, "check internet: " + check);
 
         btn_login.setOnClickListener(v -> {
             emailED = Objects.requireNonNull(email_login_text_layout.getEditText()).getText().toString();
@@ -193,12 +187,4 @@ public class ActivityLogin extends AppCompatActivity {
             }
         });
     }
-
-    public boolean isOnline() {
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
-    }
-
-
 }

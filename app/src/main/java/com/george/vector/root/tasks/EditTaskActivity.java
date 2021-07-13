@@ -146,7 +146,7 @@ public class EditTaskActivity extends AppCompatActivity {
                 Log.i(TAG, "Error! " + e);
             }
 
-            initialize_fields();
+            initialize_fields(location);
         });
 
         done_task_root.setOnClickListener(v -> {
@@ -274,9 +274,9 @@ public class EditTaskActivity extends AppCompatActivity {
     void show_dialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Внимание!")
-                .setMessage("Отсуствует интернет подключение. Вы можете сохранить обновленную заявку у себя в телефоне и когда интренет снова появиться заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку заявку позже, когда появиться интрнет.")
-                .setPositiveButton("Сохранить", (dialog, id) -> updateTask(collection))
+        builder.setTitle(getText(R.string.warning))
+                .setMessage(getText(R.string.warning_no_connection))
+                .setPositiveButton(getText(R.string.save), (dialog, id) -> updateTask(collection))
                 .setNegativeButton(android.R.string.cancel, (dialog, id) -> startActivity(new Intent(this, RootMainActivity.class)));
 
         AlertDialog dialog = builder.create();
@@ -338,16 +338,16 @@ public class EditTaskActivity extends AppCompatActivity {
         return (networkInfo != null && networkInfo.isConnected());
     }
 
-    void initialize_fields() {
-
-        String[] items = getResources().getStringArray(R.array.addresses_ost_school);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                EditTaskActivity.this,
-                R.layout.dropdown_menu_categories,
-                items
-        );
-
-        address_autoComplete_root.setAdapter(adapter);
+    void initialize_fields(String location) {
+        if (location.equals("ost_school")) {
+            String[] items = getResources().getStringArray(R.array.addresses_ost_school);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                    EditTaskActivity.this,
+                    R.layout.dropdown_menu_categories,
+                    items
+            );
+            address_autoComplete_root.setAdapter(adapter);
+        }
 
         String[] items_status = getResources().getStringArray(R.array.status);
         ArrayAdapter<String> adapter_status = new ArrayAdapter<>(

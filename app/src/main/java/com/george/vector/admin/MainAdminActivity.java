@@ -25,7 +25,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-
 public class MainAdminActivity extends AppCompatActivity {
 
     private static final String TAG = "MainAdminActivity";
@@ -37,7 +36,7 @@ public class MainAdminActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 
-    String permission, collection;
+    String permission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +106,6 @@ public class MainAdminActivity extends AppCompatActivity {
             Snackbar.make(findViewById(R.id.coordinator_main_admin), "Ошибка! Проверьте подключение к интернету", Snackbar.LENGTH_LONG)
                     .setAction("Повторить", v -> Log.i(TAG, "Update status: " + isOnline()))
                     .show();
-
     }
 
     @Override

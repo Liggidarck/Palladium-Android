@@ -69,10 +69,7 @@ public class fragmentNewTasks extends Fragment {
         recyclerview_new_tasks_admin.setAdapter(adapter);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
-            Task task = documentSnapshot.toObject(Task.class);
             String id = documentSnapshot.getId();
-            String path = documentSnapshot.getReference().getPath();
-
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
             Intent intent = new Intent(fragmentNewTasks.this.getContext(), TaskActivity.class);

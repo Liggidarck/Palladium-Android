@@ -147,10 +147,10 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
                     Objects.requireNonNull(text_input_layout_comment_caretaker.getEditText()).setText(comment);
 
             } catch (Exception e) {
-                Log.i(TAG, "Error! " + e);
+                Log.e(TAG, "Error! " + e);
             }
 
-            initialize_fields();
+            initialize_fields(location);
 
         });
 
@@ -304,17 +304,17 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         documentReferenceTask.delete();
     }
 
-    void initialize_fields() {
+    void initialize_fields(String location) {
+        if(location.equals("ost_school")) {
+            String[] items = getResources().getStringArray(R.array.addresses_ost_school);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                    EdtTaskCaretakerActivity.this,
+                    R.layout.dropdown_menu_categories,
+                    items
+            );
 
-        String[] items = getResources().getStringArray(R.array.addresses_ost_school);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                EdtTaskCaretakerActivity.this,
-                R.layout.dropdown_menu_categories,
-                items
-        );
-
-        address_autoComplete_caretaker.setAdapter(adapter);
-
+            address_autoComplete_caretaker.setAdapter(adapter);
+        }
         String[] items_status = getResources().getStringArray(R.array.status);
         ArrayAdapter<String> adapter_status = new ArrayAdapter<>(
                 EdtTaskCaretakerActivity.this,

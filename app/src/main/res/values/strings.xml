@@ -43,7 +43,6 @@
     <string name="ost">Остафьево</string>
     <string name="bar">Барыши</string>
 
-
     <string name="users">Пользователи</string>
     <string name="add_new_user">Добавить нового пользователя</string>
     <string name="edit_data_user">Отредактировать данные</string>
@@ -52,13 +51,14 @@
     <string name="settings">Настройки</string>
 
     <string name="editing">Редактирование</string>
-    <string name="save">сохранить</string>
+    <string name="save">Сохранить</string>
 
     <string name="super_users">Супер пользователи</string>
     <string name="caretakers">Завхозы</string>
     <string name="admins">Администраторы</string>
     <string name="executors">Исполнители</string>
 
-
+    <string name="warning">Внимание!</string>
+    <string name="warning_no_connection">Отсуствует интернет подключение. Вы можете сохранить заявку у себя в телефоне и когда интренет снова появиться заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку позже, когда появиться интрнет.</string>
 
 </resources>

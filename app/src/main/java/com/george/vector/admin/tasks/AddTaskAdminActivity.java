@@ -1,10 +1,13 @@
 package com.george.vector.admin.tasks;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -18,6 +21,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,6 +53,8 @@ import com.google.firebase.storage.StorageReference;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -59,10 +68,10 @@ public class AddTaskAdminActivity extends AppCompatActivity {
     MaterialToolbar toolbar;
     ExtendedFloatingActionButton crate_task_fab;
 
-    MaterialAutoCompleteTextView address_autoComplete, status_autoComplete, executor_autoComplete;
+    MaterialAutoCompleteTextView address_autoComplete, status_autoComplete;
     TextInputLayout text_input_layout_address, text_input_layout_floor, text_input_layout_cabinet,
-            text_input_layout_name_task, text_input_layout_comment, text_input_layout_date_task
-            , text_input_layout_status, text_input_layout_executor_admin;
+            text_input_layout_name_task, text_input_layout_comment, text_input_layout_date_task,
+            text_input_layout_status, text_input_layout_executor_admin;
     TextInputEditText edit_text_date_task;
 
     ImageView task_image_admin;
@@ -120,6 +129,7 @@ public class AddTaskAdminActivity extends AppCompatActivity {
 
         Bundle arguments = getIntent().getExtras();
         permission = arguments.get("permission").toString();
+        Log.i(TAG, "Permission: " + permission);
 
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         DocumentReference documentReferenceUser = firebaseFirestore.collection("users").document(userID);
@@ -129,7 +139,6 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         });
 
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
-
         add_executor_admin.setOnClickListener(v -> show_add_executor_dialog());
 
         crate_task_fab.setOnClickListener(v -> {
@@ -152,7 +161,7 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         });
 
         clearErrors();
-        initialize_fields();
+        initialize_fields(permission);
     }
 
     void initialize_location(@NotNull String location) {
@@ -252,58 +261,9 @@ public class AddTaskAdminActivity extends AppCompatActivity {
     }
 
     void chooseImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, 1);
-    }
-
-    void show_dialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle("Внимание!")
-                .setMessage("Отсуствует интернет подключение. Вы можете сохранить заявку у себя в телефоне и когда интренет снова появиться заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку заявку позже, когда появиться интрнет.")
-
-                .setPositiveButton("Сохранить", (dialog, id) -> initialize_location(permission))
-
-                .setNegativeButton(android.R.string.cancel,
-                        (dialog, id) -> startActivity(new Intent(this, MainAdminActivity.class)));
-
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    void initialize_fields() {
-        String[] items = getResources().getStringArray(R.array.addresses_ost_school);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                AddTaskAdminActivity.this,
-                R.layout.dropdown_menu_categories,
-                items
-        );
-
-        address_autoComplete.setAdapter(adapter);
-
-        String[] items_status = getResources().getStringArray(R.array.status);
-        ArrayAdapter<String> adapter_status = new ArrayAdapter<>(
-                AddTaskAdminActivity.this,
-                R.layout.dropdown_menu_categories,
-                items_status
-        );
-
-        status_autoComplete.setAdapter(adapter_status);
-
-        datePickCalendar = Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
-            datePickCalendar.set(Calendar.YEAR, year);
-            datePickCalendar.set(Calendar.MONTH, month);
-            datePickCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            updateLabel();
-        };
-
-        edit_text_date_task.setOnClickListener(v -> new DatePickerDialog(AddTaskAdminActivity.this, date, datePickCalendar
-                .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
-
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, 1);
     }
 
     @Override
@@ -341,6 +301,56 @@ public class AddTaskAdminActivity extends AppCompatActivity {
                     Log.i(TAG, "Progress: " + (int) progress + "%");
                     progress_bar_add_task_admin.setProgress((int) progress);
                 });
+    }
+
+    void show_dialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle(getText(R.string.warning))
+                .setMessage(getText(R.string.warning_no_connection))
+
+                .setPositiveButton(getText(R.string.save), (dialog, id) -> initialize_location(permission))
+
+                .setNegativeButton(android.R.string.cancel,
+                        (dialog, id) -> startActivity(new Intent(this, MainAdminActivity.class)));
+
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    void initialize_fields(@NotNull String location) {
+        if(location.equals("ost_school")) {
+            String[] items = getResources().getStringArray(R.array.addresses_ost_school);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                    AddTaskAdminActivity.this,
+                    R.layout.dropdown_menu_categories,
+                    items
+            );
+
+            address_autoComplete.setAdapter(adapter);
+        }
+
+        String[] items_status = getResources().getStringArray(R.array.status);
+        ArrayAdapter<String> adapter_status = new ArrayAdapter<>(
+                AddTaskAdminActivity.this,
+                R.layout.dropdown_menu_categories,
+                items_status
+        );
+
+        status_autoComplete.setAdapter(adapter_status);
+
+        datePickCalendar = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
+            datePickCalendar.set(Calendar.YEAR, year);
+            datePickCalendar.set(Calendar.MONTH, month);
+            datePickCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateLabel();
+        };
+
+        edit_text_date_task.setOnClickListener(v -> new DatePickerDialog(AddTaskAdminActivity.this, date, datePickCalendar
+                .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
+
     }
 
     public boolean isOnline() {

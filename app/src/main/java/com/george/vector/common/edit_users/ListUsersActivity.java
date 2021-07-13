@@ -3,7 +3,6 @@ package com.george.vector.common.edit_users;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -137,22 +136,17 @@ public class ListUsersActivity extends AppCompatActivity {
 
         adapter = new UserAdapter(options);
 
-
         recycler_view_list_users.setHasFixedSize(true);
         recycler_view_list_users.setLayoutManager(new LinearLayoutManager(this));
         recycler_view_list_users.setAdapter(adapter);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
-           User user = documentSnapshot.toObject(User.class);
-           String id = documentSnapshot.getId();
-           String path = documentSnapshot.getReference().getPath();
-
+            String id = documentSnapshot.getId();
             Intent intent = new Intent(this, EditUserActivity.class);
             intent.putExtra("user_id", id);
             startActivity(intent);
 
         });
-
     }
 
     @Override
