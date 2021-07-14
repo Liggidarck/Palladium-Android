@@ -41,6 +41,13 @@ public class BottomSheetAddTask extends BottomSheetDialogFragment {
             intent.putExtra("location", "ost_school");
             startActivity(intent);
         });
+
+        bar_school_new_task.setOnClickListener(v -> {
+            Intent intent = new Intent(BottomSheetAddTask.this.getContext(), AddTaskRootActivity.class);
+            intent.putExtra("location", "bar_school");
+            startActivity(intent);
+        });
+
         close_btn.setOnClickListener(v -> dismiss());
 
         return view;

@@ -25,7 +25,10 @@ import com.george.vector.R;
 import com.george.vector.admin.MainAdminActivity;
 import com.george.vector.common.edit_users.User;
 import com.george.vector.common.edit_users.UserAdapter;
-import com.george.vector.common.tasks.Task;
+import com.george.vector.common.tasks.ui.TaskUi;
+import com.george.vector.common.tasks.utils.DeleteTask;
+import com.george.vector.common.tasks.utils.SaveTask;
+import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.Utils;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -47,29 +50,23 @@ import java.util.Objects;
 public class EditTaskAdminActivity extends AppCompatActivity {
 
     MaterialToolbar topAppBar_new_task;
+    LinearProgressIndicator progress_bar_add_task_admin;
 
     TextInputLayout text_input_layout_address, text_input_layout_floor, text_input_layout_cabinet,
-            text_input_layout_name_task, text_input_layout_comment, text_input_layout_date_task,
-            text_input_layout_status, text_input_layout_executor_admin;
-
+                    text_input_layout_name_task, text_input_layout_comment, text_input_layout_date_task,
+                    text_input_layout_status, text_input_layout_executor_admin;
     TextInputEditText edit_text_date_task;
-
     MaterialAutoCompleteTextView status_autoComplete, address_autoComplete;
+
     ExtendedFloatingActionButton update_task;
     Button add_executor_admin;
 
-    LinearProgressIndicator progress_bar_add_task_admin;
-
     Calendar datePickCalendar;
 
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
-
-    String id, location, collection, permission, address, floor, cabinet, name_task, comment, status, date_create, time_create,
-            date_done, email, URI_IMAGE;
-
     private static final String TAG = "EditTaskAdmin";
-
+    String id, location, collection, permission, address, floor,
+            cabinet, name_task, comment, status, date_create,
+            time_create, date_done, email, URI_IMAGE;
     String name_executor;
     String last_name_executor;
     String patronymic_executor;
@@ -77,6 +74,8 @@ public class EditTaskAdminActivity extends AppCompatActivity {
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference usersRef = db.collection("users");
+    FirebaseAuth firebaseAuth;
+    FirebaseFirestore firebaseFirestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,19 +160,17 @@ public class EditTaskAdminActivity extends AppCompatActivity {
                 if(!isOnline())
                     show_dialog();
                  else
-                     updateTask(collection);
+                     updateTask(location);
             }
         });
 
         clearErrors();
     }
 
-    void updateTask(String collection) {
-        progress_bar_add_task_admin.setVisibility(View.VISIBLE);
-        delete_task(collection, id);
-
-        Log.i(TAG, "date create: " + date_create);
-        Log.i(TAG, "time create: " + time_create);
+    void updateTask(String location) {
+        Task task = new Task();
+        DeleteTask deleteTask = new DeleteTask();
+        deleteTask.delete_task(collection, id);
 
         String update_address = Objects.requireNonNull(text_input_layout_address.getEditText()).getText().toString();
         String update_floor = Objects.requireNonNull(text_input_layout_floor.getEditText()).getText().toString();
@@ -184,57 +181,11 @@ public class EditTaskAdminActivity extends AppCompatActivity {
         String update_executor = Objects.requireNonNull(text_input_layout_executor_admin.getEditText()).getText().toString();
         String update_status = Objects.requireNonNull(text_input_layout_status.getEditText()).getText().toString();
 
-        if (update_comment.isEmpty())
-            update_comment = "Нет коментария к заявке";
-
-        if(location.equals("ost_school")) {
-            if (update_status.equals("Новая заявка")) {
-                load_data("ost_school_new", update_name, update_address, update_date_task,
-                        update_floor, update_cabinet, update_comment, date_create, update_executor,
-                        update_status, time_create, email);
-            }
-
-            if (update_status.equals("В работе")) {
-                load_data("ost_school_progress", update_name, update_address, update_date_task,
-                        update_floor, update_cabinet, update_comment, date_create, update_executor,
-                        update_status, time_create, email);
-            }
-
-            if (update_status.equals("Архив"))
-                load_data("ost_school_archive", update_name, update_address, update_date_task,
-                        update_floor, update_cabinet, update_comment, date_create, update_executor,
-                        update_status, time_create, email);
-        }
-
-    }
-
-    void load_data(String collection, String update_name, String  update_address, String update_date_task,
-                   String update_floor, String update_cabinet, String update_comment, String date_create,
-                   String update_executor, String update_status, String time_create, String email) {
-
-        CollectionReference taskRef = FirebaseFirestore.getInstance().collection(collection);
-        taskRef.add(new Task(update_name, update_address, update_date_task, update_floor, update_cabinet, update_comment,
-                date_create, update_executor, update_status, time_create, email, "62d7f792-2144-4da4-bfe6-b1ea80d348d7"));
-
-        taskRef.get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                Log.i(TAG, "add completed!");
-                progress_bar_add_task_admin.setVisibility(View.INVISIBLE);
-
-                Intent intent = new Intent(this, MainAdminActivity.class);
-                intent.putExtra("permission", location);
-                startActivity(intent);
-
-            } else {
-                Log.e(TAG, "Error: " + task.getException());
-            }
-
-        });
-    }
-
-    void delete_task(String collection, String id) {
-        DocumentReference documentReferenceTask = firebaseFirestore.collection(collection).document(id);
-        documentReferenceTask.delete();
+        task.save(new SaveTask(), location, update_name,
+                update_address, update_date_task, update_floor,
+                update_cabinet, update_comment, date_create,
+                update_executor, update_status, time_create,
+                email, "62d7f792-2144-4da4-bfe6-b1ea80d348d7");
     }
 
     void show_dialog() {
@@ -247,51 +198,6 @@ public class EditTaskAdminActivity extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
-
-    public boolean isOnline() {
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
-    }
-
-    void updateLabel() {
-        String date_text = "MM.dd.yyyy";
-        SimpleDateFormat sdf = new SimpleDateFormat(date_text, Locale.US);
-
-        Objects.requireNonNull(text_input_layout_date_task.getEditText()).setText(sdf.format(datePickCalendar.getTime()));
-    }
-
-    void initialize_fields(String location) {
-        if (location.equals("ost_school")) {
-            String[] addresses = getResources().getStringArray(R.array.addresses_ost_school);
-            ArrayAdapter<String> arrayAdapterAddresses = new ArrayAdapter<>(
-                    EditTaskAdminActivity.this,
-                    R.layout.dropdown_menu_categories,
-                    addresses
-            );
-            address_autoComplete.setAdapter(arrayAdapterAddresses);
-        }
-
-        String[] items_status = getResources().getStringArray(R.array.status);
-        ArrayAdapter<String> adapter_status = new ArrayAdapter<>(
-                EditTaskAdminActivity.this,
-                R.layout.dropdown_menu_categories,
-                items_status
-        );
-
-        status_autoComplete.setAdapter(adapter_status);
-
-        datePickCalendar = Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
-            datePickCalendar.set(Calendar.YEAR, year);
-            datePickCalendar.set(Calendar.MONTH, month);
-            datePickCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            updateLabel();
-        };
-
-        edit_text_date_task.setOnClickListener(v -> new DatePickerDialog(EditTaskAdminActivity.this, date, datePickCalendar
-                .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
     }
 
     public void show_add_executor_dialog() {
@@ -338,6 +244,51 @@ public class EditTaskAdminActivity extends AppCompatActivity {
 
         adapter.startListening();
         dialog.show();
+    }
+
+    void initialize_fields(String location) {
+        if (location.equals("ost_school")) {
+            String[] addresses = getResources().getStringArray(R.array.addresses_ost_school);
+            ArrayAdapter<String> arrayAdapterAddresses = new ArrayAdapter<>(
+                    EditTaskAdminActivity.this,
+                    R.layout.dropdown_menu_categories,
+                    addresses
+            );
+            address_autoComplete.setAdapter(arrayAdapterAddresses);
+        }
+
+        String[] items_status = getResources().getStringArray(R.array.status);
+        ArrayAdapter<String> adapter_status = new ArrayAdapter<>(
+                EditTaskAdminActivity.this,
+                R.layout.dropdown_menu_categories,
+                items_status
+        );
+
+        status_autoComplete.setAdapter(adapter_status);
+
+        datePickCalendar = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
+            datePickCalendar.set(Calendar.YEAR, year);
+            datePickCalendar.set(Calendar.MONTH, month);
+            datePickCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateLabel();
+        };
+
+        edit_text_date_task.setOnClickListener(v -> new DatePickerDialog(EditTaskAdminActivity.this, date, datePickCalendar
+                .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
+    }
+
+    void updateLabel() {
+        String date_text = "MM.dd.yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(date_text, Locale.US);
+
+        Objects.requireNonNull(text_input_layout_date_task.getEditText()).setText(sdf.format(datePickCalendar.getTime()));
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
     }
 
     boolean validateFields() {

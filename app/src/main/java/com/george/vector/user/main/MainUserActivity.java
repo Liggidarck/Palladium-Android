@@ -16,8 +16,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.george.vector.common.bottom_sheets.ProfileBottomSheet;
 import com.george.vector.common.bottom_sheets.SettingsUserBottomSheet;
-import com.george.vector.common.tasks.Task;
-import com.george.vector.common.tasks.TaskAdapter;
+import com.george.vector.common.tasks.ui.TaskUi;
+import com.george.vector.common.tasks.ui.TaskAdapter;
 import com.george.vector.user.tasks.AddTaskUserActivity;
 import com.george.vector.user.tasks.TaskUserActivity;
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -77,6 +77,9 @@ public class MainUserActivity extends AppCompatActivity {
         if(permission.equals("ost_school"))
             collection = "ost_school_new";
 
+        if(permission.equals("bar_school"))
+            collection = "bar_school_new";
+
         setUpRecyclerView(email, collection);
     }
 
@@ -84,8 +87,8 @@ public class MainUserActivity extends AppCompatActivity {
         taskRef = db.collection(collection);
 
         Query query = taskRef.whereEqualTo("email_creator", email);
-        FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
-                .setQuery(query, Task.class)
+        FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
                 .build();
 
         adapter = new TaskAdapter(options);
@@ -96,7 +99,7 @@ public class MainUserActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
-            Task task = documentSnapshot.toObject(Task.class);
+            TaskUi task = documentSnapshot.toObject(TaskUi.class);
             String id = documentSnapshot.getId();
             String path = documentSnapshot.getReference().getPath();
             Log.i(TAG, "Position: " + position + " ID: " + id);

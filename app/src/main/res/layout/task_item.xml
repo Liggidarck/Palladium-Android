@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
@@ -9,7 +10,9 @@
     android:foreground="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:padding="8dp">
+    android:padding="8dp"
+    tools:targetApi="m"
+    tools:ignore="UnusedAttribute">
 
     <TextView
         android:id="@+id/text_view_nate_task"
@@ -39,6 +42,7 @@
         android:layout_height="3dp"
         android:src="@drawable/line_gray"
         android:layout_below="@+id/date_create"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        tools:ignore="ContentDescription" />
 
 </RelativeLayout>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -14,14 +15,16 @@
             android:layout_height="wrap_content"
             android:text="@string/new_task"
             android:textColor="@color/black"
-            android:textSize="22sp" />
+            android:textSize="22sp"
+            tools:ignore="RelativeOverlap" />
 
         <ImageView
             android:id="@+id/close_btn"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:src="@drawable/ic_baseline_close_24"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentEnd="true"
+            tools:ignore="ContentDescription" />
 
     </RelativeLayout>
 
@@ -29,12 +32,13 @@
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:src="@drawable/line_gray"
-        android:layout_marginTop="12dp" />
+        android:layout_marginTop="12dp"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Барыши"
+        android:text="@string/bar"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:layout_marginTop="15dp" />
@@ -43,7 +47,7 @@
         android:id="@+id/bar_school_new_task_caretaker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="школа"
+        android:text="@string/school"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_marginTop="10dp" />
 
@@ -51,7 +55,7 @@
         android:id="@+id/bar_rucheek_new_task_caretaker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Детский сад ручеек"
+        android:text="@string/bar_rucheek"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_marginTop="10dp" />
 
@@ -59,13 +63,12 @@
         android:id="@+id/bar_start_new_task_caretaker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Детский сад звездочка"
+        android:text="@string/bar_star"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_marginTop="10dp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="100dp" />
-
 
 </LinearLayout>

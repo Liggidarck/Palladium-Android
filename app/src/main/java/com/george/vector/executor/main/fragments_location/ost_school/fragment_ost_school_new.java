@@ -1,4 +1,4 @@
-package com.george.vector.executor.main.fragments_location;
+package com.george.vector.executor.main.fragments_location.ost_school;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
-import com.george.vector.common.tasks.Task;
-import com.george.vector.common.tasks.TaskAdapter;
+import com.george.vector.common.tasks.ui.TaskUi;
+import com.george.vector.common.tasks.ui.TaskAdapter;
 import com.george.vector.executor.tasks.TaskExecutorActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -54,8 +54,8 @@ public class fragment_ost_school_new extends Fragment {
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         Query query = taskRef.whereEqualTo("executor", email);
-        FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
-                .setQuery(query, Task.class)
+        FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
                 .build();
 
         adapter = new TaskAdapter(options);
@@ -65,9 +65,7 @@ public class fragment_ost_school_new extends Fragment {
         recycler_view_new_tasks_executor.setAdapter(adapter);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
-            Task task = documentSnapshot.toObject(Task.class);
             String id = documentSnapshot.getId();
-            String path = documentSnapshot.getReference().getPath();
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
             Intent intent = new Intent(fragment_ost_school_new.this.getContext(), TaskExecutorActivity.class);

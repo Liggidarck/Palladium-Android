@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.george.vector.R;
-import com.george.vector.admin.tasks.sort_by_category.fragments.ost_school.fragmentArchiveTasks;
-import com.george.vector.admin.tasks.sort_by_category.fragments.ost_school.fragmentNewTasks;
-import com.george.vector.admin.tasks.sort_by_category.fragments.ost_school.fragmentProgressTasks;
+import com.george.vector.admin.tasks.sort_by_category.fragments.fragmentArchiveTasks;
+import com.george.vector.admin.tasks.sort_by_category.fragments.fragmentNewTasks;
+import com.george.vector.admin.tasks.sort_by_category.fragments.fragmentProgressTasks;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class FolderActivity extends AppCompatActivity {
@@ -65,12 +65,11 @@ public class FolderActivity extends AppCompatActivity {
                 toolbar_folder_activity.setTitle("Архив");
                 break;
         }
+
         assert currentFragment != null;
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.frame_folder, currentFragment)
                 .commit();
-
-
     }
 }

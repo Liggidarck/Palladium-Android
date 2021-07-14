@@ -1,12 +1,10 @@
-package com.george.vector.common.tasks;
+package com.george.vector.common.tasks.ui;
 
-public class Task {
+public class TaskUi {
 
     private String title; // Название заявки
     private String description; // Адрес
     private String priority; // Дата создания заявки
-
-
     private String floor;
     private String cabinet;
     private String comment;
@@ -19,15 +17,14 @@ public class Task {
 
     private String uri_image;
 
-    public Task() {}
+    public TaskUi() {}
 
-    public Task(String name_task, String description, String priority, String floor,
-                String cabinet, String comment, String date_done, String executor, String status,
-                String time_priority, String email_creator, String uri_image) {
+    public TaskUi(String name_task, String description, String priority, String floor,
+                  String cabinet, String comment, String date_done, String executor, String status,
+                  String time_priority, String email_creator, String uri_image) {
         this.title = name_task;
         this.description = description;
         this.priority = priority;
-
         this.floor = floor;
         this.cabinet = cabinet;
         this.comment = comment;

@@ -39,9 +39,13 @@
     <string name="school">Школа</string>
     <string name="ost_aist">Детский сад Аист</string>
     <string name="ost_yagodka">Детский сад Ягодка</string>
+    <string name="bar_rucheek">Детский сад Ручеек</string>
+    <string name="bar_star">Детский сад Звездочка</string>
     <string name="new_task">Новая заявка</string>
     <string name="ost">Остафьево</string>
     <string name="bar">Барыши</string>
+
+    <string name="bar_school_address">Улица Местечко Барыши дом 25</string>
 
     <string name="users">Пользователи</string>
     <string name="add_new_user">Добавить нового пользователя</string>

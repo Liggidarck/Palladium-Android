@@ -23,7 +23,7 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class TaskActivity extends AppCompatActivity {
+public class TaskAdminActivity extends AppCompatActivity {
 
     MaterialToolbar topAppBar_tasks_admin;
     TextView text_view_address_task_admin, text_view_floor_task_admin, text_view_cabinet_task_admin,
@@ -80,8 +80,8 @@ public class TaskActivity extends AppCompatActivity {
 
             assert value != null;
             address = value.getString("description");
-            floor = value.getString("floor");
-            cabinet = value.getString("cabinet");
+            floor = String.format("Этаж: %s", value.getString("floor"));
+            cabinet = String.format("Кабинет: %s", value.getString("cabinet"));
             name_task = value.getString("title");
             comment = value.getString("comment");
             status = value.getString("status");
@@ -105,8 +105,8 @@ public class TaskActivity extends AppCompatActivity {
                     });
 
             text_view_address_task_admin.setText(address);
-            text_view_floor_task_admin.setText("Этаж - " +  floor);
-            text_view_cabinet_task_admin.setText("Кабинет - " + cabinet);
+            text_view_floor_task_admin.setText(floor);
+            text_view_cabinet_task_admin.setText(cabinet);
             text_view_name_task_admin.setText(name_task);
             text_view_comment_task_admin.setText(comment);
             text_view_status_task_admin.setText(status);

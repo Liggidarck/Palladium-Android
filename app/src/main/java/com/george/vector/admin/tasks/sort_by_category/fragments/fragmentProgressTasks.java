@@ -1,4 +1,4 @@
-package com.george.vector.admin.tasks.sort_by_category.fragments.ost_school;
+package com.george.vector.admin.tasks.sort_by_category.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,35 +15,41 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
-import com.george.vector.admin.tasks.TaskActivity;
-import com.george.vector.common.tasks.Task;
-import com.george.vector.common.tasks.TaskAdapter;
+import com.george.vector.admin.tasks.TaskAdminActivity;
+import com.george.vector.common.tasks.ui.TaskUi;
+import com.george.vector.common.tasks.ui.TaskAdapter;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-public class fragmentArchiveTasks extends Fragment {
+public class fragmentProgressTasks extends Fragment {
 
-    private static final String TAG = "fragmentArchiveTasks";
+    private static final String TAG = "fragmentProgressTasks";
     FirebaseFirestore db;
     CollectionReference taskRef;
 
     private TaskAdapter adapter;
-    RecyclerView recyclerview_archive_admin;
+    RecyclerView recyclerview_in_progress_admin;
     String collection, permission;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_archive_tasks, container, false);
+        View view = inflater.inflate(R.layout.fragment_progress_tasks, container, false);
 
-        recyclerview_archive_admin = view.findViewById(R.id.recyclerview_archive_admin);
+        recyclerview_in_progress_admin = view.findViewById(R.id.recyclerview_in_progress_admin);
+
         Bundle args = getArguments();
         assert args != null;
         permission = args.getString("permission");
 
         if(permission.equals("ost_school")) {
-            collection = "ost_school_archive";
+            collection = "ost_school_progress";
+            init(collection);
+        }
+
+        if(permission.equals("bar_school")) {
+            collection = "bar_school_progress";
             init(collection);
         }
 
@@ -54,28 +60,30 @@ public class fragmentArchiveTasks extends Fragment {
         db = FirebaseFirestore.getInstance();
         taskRef = db.collection(collection);
 
-        Query query = taskRef.whereEqualTo("status", "Архив");
+        Query query = taskRef.whereEqualTo("status", "В работе");
 
-        FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
-                .setQuery(query, Task.class)
+        FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
                 .build();
 
         adapter = new TaskAdapter(options);
 
-        recyclerview_archive_admin.setHasFixedSize(true);
-        recyclerview_archive_admin.setLayoutManager(new LinearLayoutManager(fragmentArchiveTasks.this.getContext()));
-        recyclerview_archive_admin.setAdapter(adapter);
+        recyclerview_in_progress_admin.setHasFixedSize(true);
+        recyclerview_in_progress_admin.setLayoutManager(new LinearLayoutManager(fragmentProgressTasks.this.getContext()));
+        recyclerview_in_progress_admin.setAdapter(adapter);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
-            Intent intent = new Intent(fragmentArchiveTasks.this.getContext(), TaskActivity.class);
+            Intent intent = new Intent(fragmentProgressTasks.this.getContext(), TaskAdminActivity.class);
             intent.putExtra("id_task", id);
             intent.putExtra("location", permission);
             intent.putExtra("collection", collection);
             startActivity(intent);
+
         });
+
     }
 
     @Override
@@ -89,4 +97,5 @@ public class fragmentArchiveTasks extends Fragment {
         super.onStop();
         adapter.stopListening();
     }
+
 }

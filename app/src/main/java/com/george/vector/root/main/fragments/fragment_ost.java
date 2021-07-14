@@ -32,7 +32,7 @@ public class fragment_ost extends Fragment {
 
         ost_school_root.setOnClickListener(v -> {
             Intent intent = new Intent(fragment_ost.this.getContext(), LocationFolderActivity.class);
-            intent.putExtra("location", "Школа");
+            intent.putExtra("location", "ost_school");
             startActivity(intent);
         });
 

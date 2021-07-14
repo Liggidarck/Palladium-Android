@@ -7,9 +7,12 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.george.vector.R;
-import com.george.vector.root.main.location_fragments.fragment_school_ost_archive_tasks;
-import com.george.vector.root.main.location_fragments.fragment_school_ost_new_tasks;
-import com.george.vector.root.main.location_fragments.fragment_school_ost_progress_tasks;
+import com.george.vector.root.main.location_fragments.bar_school.fragment_school_bar_archive_tasks;
+import com.george.vector.root.main.location_fragments.bar_school.fragment_school_bar_new_tasks;
+import com.george.vector.root.main.location_fragments.bar_school.fragment_school_bar_progress_tasks;
+import com.george.vector.root.main.location_fragments.ost_school.fragment_school_ost_archive_tasks;
+import com.george.vector.root.main.location_fragments.ost_school.fragment_school_ost_new_tasks;
+import com.george.vector.root.main.location_fragments.ost_school.fragment_school_ost_progress_tasks;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class FolderRootActivity extends AppCompatActivity {
@@ -36,19 +39,37 @@ public class FolderRootActivity extends AppCompatActivity {
 
         Fragment currentFragment = null;
 
-        if(location.equals("Школа") && folder.equals("Новые заявки")){
+        if(location.equals("ost_school") && folder.equals("Новые заявки")){
             Log.i(TAG, "Запуск фрагмента Школа новые заявки");
             currentFragment = new fragment_school_ost_new_tasks();
         }
 
-        if(location.equals("Школа") && folder.equals("В работе")) {
+        if(location.equals("ost_school") && folder.equals("В работе")) {
             Log.i(TAG, "Запуск фрагмента Школа заявки в работе");
             currentFragment = new fragment_school_ost_progress_tasks();
         }
 
-        if(location.equals("Школа") && folder.equals("Архив")) {
+        if(location.equals("ost_school") && folder.equals("Архив")) {
             Log.i(TAG, "Запуск фрагмента Школа заявки Архив");
             currentFragment = new fragment_school_ost_archive_tasks();
+        }
+
+
+
+
+        if(location.equals("bar_school") && folder.equals("Новые заявки")){
+            Log.i(TAG, "Запуск фрагмента Школа bar новые заявки");
+            currentFragment = new fragment_school_bar_new_tasks();
+        }
+
+        if(location.equals("bar_school") && folder.equals("В работе")) {
+            Log.i(TAG, "Запуск фрагмента Школа bar заявки в работе");
+            currentFragment = new fragment_school_bar_progress_tasks();
+        }
+
+        if(location.equals("bar_school") && folder.equals("Архив")) {
+            Log.i(TAG, "Запуск фрагмента Школа bar заявки Архив");
+            currentFragment = new fragment_school_bar_archive_tasks();
         }
 
         assert currentFragment != null;

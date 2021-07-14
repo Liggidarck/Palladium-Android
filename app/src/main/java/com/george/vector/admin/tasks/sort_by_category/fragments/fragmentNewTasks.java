@@ -1,4 +1,4 @@
-package com.george.vector.admin.tasks.sort_by_category.fragments.ost_school;
+package com.george.vector.admin.tasks.sort_by_category.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,9 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
-import com.george.vector.admin.tasks.TaskActivity;
-import com.george.vector.common.tasks.Task;
-import com.george.vector.common.tasks.TaskAdapter;
+import com.george.vector.admin.tasks.TaskAdminActivity;
+import com.george.vector.common.tasks.ui.TaskUi;
+import com.george.vector.common.tasks.ui.TaskAdapter;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -49,6 +49,11 @@ public class fragmentNewTasks extends Fragment {
             init_rec(collection);
         }
 
+        if(permission.equals("bar_school")) {
+            collection = "bar_school_new";
+            init_rec(collection);
+        }
+
         return view;
     }
 
@@ -58,8 +63,8 @@ public class fragmentNewTasks extends Fragment {
 
         Query query = taskRef.whereEqualTo("status", "Новая заявка");
 
-        FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
-                .setQuery(query, Task.class)
+        FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
                 .build();
 
         adapter = new TaskAdapter(options);
@@ -72,7 +77,7 @@ public class fragmentNewTasks extends Fragment {
             String id = documentSnapshot.getId();
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
-            Intent intent = new Intent(fragmentNewTasks.this.getContext(), TaskActivity.class);
+            Intent intent = new Intent(fragmentNewTasks.this.getContext(), TaskAdminActivity.class);
             intent.putExtra("id_task", id);
             intent.putExtra("location", permission);
             intent.putExtra("collection", collection);

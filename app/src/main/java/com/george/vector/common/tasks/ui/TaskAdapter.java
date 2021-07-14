@@ -1,4 +1,4 @@
-package com.george.vector.common.tasks;
+package com.george.vector.common.tasks.ui;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,16 +13,16 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-public class TaskAdapter extends FirestoreRecyclerAdapter<Task, TaskAdapter.TaskHolder> {
+public class TaskAdapter extends FirestoreRecyclerAdapter<TaskUi, TaskAdapter.TaskHolder> {
 
     private OnItemClickListener listener;
 
-    public TaskAdapter(@NonNull FirestoreRecyclerOptions<Task> options) {
+    public TaskAdapter(@NonNull FirestoreRecyclerOptions<TaskUi> options) {
         super(options);
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull TaskAdapter.TaskHolder holder, int position, @NonNull Task model) {
+    protected void onBindViewHolder(@NonNull TaskAdapter.TaskHolder holder, int position, @NonNull TaskUi model) {
         holder.textViewTitle.setText(model.getTitle());
         holder.textViewDescription.setText(model.getDescription());
         holder.textViewPriority.setText(model.getPriority());

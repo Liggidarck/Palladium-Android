@@ -1,5 +1,6 @@
 package com.george.vector.root.tasks;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,13 +21,15 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.george.vector.common.edit_users.User;
 import com.george.vector.common.edit_users.UserAdapter;
+import com.george.vector.common.tasks.utils.SaveTask;
+import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.Utils;
-import com.george.vector.common.tasks.Task;
 import com.george.vector.root.main.RootMainActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -38,6 +42,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -47,6 +53,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.UUID;
 
 public class AddTaskRootActivity extends AppCompatActivity {
 
@@ -56,21 +63,24 @@ public class AddTaskRootActivity extends AppCompatActivity {
     Button add_executor_root;
 
     TextInputLayout text_input_layout_address_root, text_input_layout_floor_root,
-            text_input_layout_cabinet_root, text_input_layout_name_task_root,
-            text_input_layout_comment_root, text_input_layout_date_task_root,
-            text_input_layout_executor_root, text_input_layout_status_root;
-
+                    text_input_layout_cabinet_root, text_input_layout_name_task_root,
+                    text_input_layout_comment_root, text_input_layout_date_task_root,
+                    text_input_layout_executor_root, text_input_layout_status_root;
     TextInputEditText edit_text_date_task_root;
-
     MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root;
 
-    String location, userID, email, address, floor, cabinet, name_task, date_task, status, comment;
+    ImageView image_view_add_task_root;
+
+    String location, userID, email, address, floor, cabinet, name_task, date_task, status, comment, randomKey;
     private static final String TAG = "AddTaskRoot";
 
     Calendar datePickCalendar;
+    public Uri imageUri;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
+    StorageReference storageReference;
+    FirebaseStorage firebaseStorage;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference usersRef = db.collection("users");
@@ -100,11 +110,15 @@ public class AddTaskRootActivity extends AppCompatActivity {
         address_autoComplete_root = findViewById(R.id.address_autoComplete_root);
         status_autoComplete_root = findViewById(R.id.status_autoComplete_root);
         add_executor_root = findViewById(R.id.add_executor_root);
+        image_view_add_task_root = findViewById(R.id.image_view_add_task_root);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
 
         topAppBar_new_task_root.setNavigationOnClickListener(v -> onBackPressed());
+        image_view_add_task_root.setOnClickListener(v -> chooseImage());
 
         Bundle arguments = getIntent().getExtras();
         location = arguments.get("location").toString();
@@ -125,7 +139,6 @@ public class AddTaskRootActivity extends AppCompatActivity {
         add_executor_root.setOnClickListener(v -> show_add_executor_dialog());
 
         done_task_root.setOnClickListener(v -> {
-
             address = Objects.requireNonNull(text_input_layout_address_root.getEditText()).getText().toString();
             floor = Objects.requireNonNull(text_input_layout_floor_root.getEditText()).getText().toString();
             cabinet = Objects.requireNonNull(text_input_layout_cabinet_root.getEditText()).getText().toString();
@@ -137,15 +150,30 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
             if(validateFields()){
                 if(!isOnline())
-                    show_alert_dialog();
+                    show_dialog();
                  else
-                    initialize_location(location);
+                    save_task(location);
             }
-
         });
 
         initialize_fields(location);
         clearErrors();
+    }
+
+    void save_task(@NotNull String location) {
+        Task task = new Task();
+
+        Date currentDate = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        String dateText = dateFormat.format(currentDate);
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        String timeText = timeFormat.format(currentDate);
+
+        uploadImage();
+        task.save(new SaveTask(), location, name_task, address, dateText, floor, cabinet, comment,
+                date_task, email_executor, status, timeText, email, "62d7f792-2144-4da4-bfe6-b1ea80d348d7");
+
+        onBackPressed();
     }
 
     public void show_add_executor_dialog() {
@@ -194,86 +222,17 @@ public class AddTaskRootActivity extends AppCompatActivity {
         dialog.show();
     }
 
-
-    void show_alert_dialog() {
+    void show_dialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_no_connection))
-                .setPositiveButton(getText(R.string.save), (dialog, id) -> {
-
-                    if(location.equals("ost_school")) {
-                        if (status.equals("Новая заявка"))
-                            saveTask("ost_school_new");
-
-                        if (status.equals("В работе"))
-                            saveTask("ost_school_progress");
-
-                        if (status.equals("Архив"))
-                            saveTask("ost_school_archive");
-                    }
-
-                })
+                .setPositiveButton(getText(R.string.save), (dialog, id) ->
+                    save_task(location))
                 .setNegativeButton(android.R.string.cancel,
                         (dialog, id) -> startActivity(new Intent(this, RootMainActivity.class)));
 
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
-
-    void initialize_location(@NotNull String location) {
-        if(location.equals("ost_school")) {
-            if (status.equals("Новая заявка"))
-                saveTask("ost_school_new");
-
-            if (status.equals("В работе"))
-                saveTask("ost_school_progress");
-
-            if (status.equals("Архив"))
-                saveTask("ost_school_archive");
-        }
-    }
-
-    void saveTask(@NotNull String collection) {
-        progress_bar_add_task_root.setVisibility(View.VISIBLE);
-
-        Date currentDate = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        String dateText = dateFormat.format(currentDate);
-        DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        String timeText = timeFormat.format(currentDate);
-
-        Log.i(TAG, "address: " + address);
-        Log.i(TAG, "floor: " + floor);
-        Log.i(TAG, "cabinet: " + cabinet);
-        Log.i(TAG, "name_task: " + name_task);
-        Log.i(TAG, "comment: " + comment);
-
-        if (comment.isEmpty())
-            comment = "Нет коментария к заявке";
-
-        Log.i(TAG, "comment(update): " + comment);
-
-        CollectionReference taskRef = FirebaseFirestore.getInstance().collection(collection);
-
-        taskRef.add(new Task(name_task, address, dateText, floor, cabinet, comment,
-                date_task, email_executor, status, timeText, email, "62d7f792-2144-4da4-bfe6-b1ea80d348d7"));
-
-        taskRef.get().addOnCompleteListener(task -> {
-
-            if(task.isSuccessful()) {
-                Log.i(TAG, "add completed!");
-                progress_bar_add_task_root.setVisibility(View.INVISIBLE);
-                startActivity(new Intent(this, RootMainActivity.class));
-            } else
-                Log.e(TAG, "Error: " + task.getException());
-        });
-
-    }
-
-    public boolean isOnline() {
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
     }
 
     void initialize_fields(@NotNull String location) {
@@ -287,6 +246,9 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
             address_autoComplete_root.setAdapter(adapter);
         }
+
+        if (location.equals("bar_school"))
+            Objects.requireNonNull(text_input_layout_address_root.getEditText()).setText(getText(R.string.bar_school_address));
 
         String[] items_status = getResources().getStringArray(R.array.status);
         ArrayAdapter<String> adapter_status = new ArrayAdapter<>(
@@ -307,6 +269,48 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
         edit_text_date_task_root.setOnClickListener(v -> new DatePickerDialog(AddTaskRootActivity.this, date, datePickCalendar
                 .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            image_view_add_task_root.setImageURI(imageUri);
+            Log.e(TAG, "imageUri: " + imageUri);
+        }
+
+    }
+
+    private void uploadImage() {
+        randomKey = UUID.randomUUID().toString();
+        String final_url = String.format("images/%s", randomKey);
+
+        StorageReference reference = storageReference.child(final_url);
+        reference.putFile(imageUri)
+                .addOnSuccessListener(taskSnapshot -> {
+                    progress_bar_add_task_root.setVisibility(View.INVISIBLE);
+                    Log.i(TAG, "Image Uploaded");
+
+                })
+                .addOnFailureListener(e -> {
+                    progress_bar_add_task_root.setVisibility(View.INVISIBLE);
+                    Log.e(TAG, "Error! " + e);
+                })
+                .addOnProgressListener(snapshot -> {
+                    progress_bar_add_task_root.setVisibility(View.VISIBLE);
+                    double progress = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                    Log.i(TAG, "Progress: " + (int) progress + "%");
+                    progress_bar_add_task_root.setProgress((int) progress);
+                });
+    }
+
+    void chooseImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, 1);
     }
 
     void updateLabel() {
@@ -492,6 +496,12 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
     }
 
 }

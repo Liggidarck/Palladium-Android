@@ -18,15 +18,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
 import com.george.vector.R;
+import com.george.vector.common.tasks.utils.SaveTask;
+import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.Utils;
-import com.george.vector.common.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -43,30 +43,26 @@ import java.util.UUID;
 
 public class AddTaskUserActivity extends AppCompatActivity {
 
-
     MaterialToolbar topAppBar_new_task_user;
 
-    TextInputLayout text_input_layout_address, text_input_layout_floor, text_input_layout_cabinet,
-            text_input_layout_name_task, text_input_layout_comment;
+    TextInputLayout text_input_layout_address, text_input_layout_floor,
+                    text_input_layout_cabinet, text_input_layout_name_task,
+                    text_input_layout_comment;
     MaterialAutoCompleteTextView address_autoComplete;
 
     ExtendedFloatingActionButton crate_task;
     LinearProgressIndicator progress_bar_add_task_user;
     ImageView image_view_task_user;
 
-    String address, floor, cabinet, name_task, comment, userID, email, randomKey;
+    public Uri imageUri;
 
-    String  status = "Новая заявка";
+    String address, floor, cabinet, name_task, comment, userID, email, randomKey, status = "Новая заявка", permission;
     private static final String TAG = "AddTaskUserActivity";
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
-
-    public Uri imageUri;
-
-    String permission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,17 +89,8 @@ public class AddTaskUserActivity extends AppCompatActivity {
         permission = arguments.get("permission").toString();
         Log.i(TAG, "Permission: " + permission);
 
+        image_view_task_user.setOnClickListener(v -> chooseImage());
         topAppBar_new_task_user.setNavigationOnClickListener(v -> onBackPressed());
-
-        if(permission.equals("ost_school")) {
-            String[] items = getResources().getStringArray(R.array.addresses_ost_school);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                    AddTaskUserActivity.this,
-                    R.layout.dropdown_menu_categories,
-                    items
-            );
-            address_autoComplete.setAdapter(adapter);
-        }
 
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         DocumentReference documentReferenceUser = firebaseFirestore.collection("users").document(userID);
@@ -119,32 +106,28 @@ public class AddTaskUserActivity extends AppCompatActivity {
             name_task = Objects.requireNonNull(text_input_layout_name_task.getEditText()).getText().toString();
             comment = Objects.requireNonNull(text_input_layout_comment.getEditText()).getText().toString();
 
-            Log.i(TAG, "address: " + address);
-            Log.i(TAG, "floor: " + floor);
-            Log.i(TAG, "cabinet: " + cabinet);
-            Log.i(TAG, "name_task: " + name_task);
-            Log.i(TAG, "comment: " + comment);
-
-            if(comment.isEmpty())
-                comment = "Нет коментария к заявке";
-
-            Log.i(TAG, "comment(update): " + comment);
-
             if(validateFields()) {
                 if(!isOnline()) {
                     show_dialog();
-                } else
-                    initialize_location(permission);
+                } else {
+
+                    // TODO: ДОбавить сообщение для пользователя, об отсуствии картинки
+                    if(imageUri == null) {
+                        Log.e(TAG, "Error! Uri must not be empty");
+                    } else
+                        save_task(permission);
+
+                }
             }
 
         });
 
         clear_errors();
-
+        initialize_field(permission);
     }
 
-    void saveTask(String collection) {
-        progress_bar_add_task_user.setVisibility(View.VISIBLE);
+    void save_task(@NotNull String location) {
+        Task task = new Task();
 
         Date currentDate = new Date();
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
@@ -152,34 +135,27 @@ public class AddTaskUserActivity extends AppCompatActivity {
         DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String timeText = timeFormat.format(currentDate);
 
-        CollectionReference taskRef = FirebaseFirestore.getInstance().collection(collection);
+        uploadImage();
+        task.save(new SaveTask(), location, name_task, address, dateText, floor, cabinet, comment,
+                null, null, status, timeText, email, randomKey);
 
-        taskRef.add(new Task(name_task, address, dateText, floor, cabinet, comment, null,
-                null, status, timeText, email, "62d7f792-2144-4da4-bfe6-b1ea80d348d7"));
-
-        taskRef.get().addOnCompleteListener(task -> {
-
-            if(task.isSuccessful()) {
-                Log.i(TAG, "add completed!");
-                progress_bar_add_task_user.setVisibility(View.INVISIBLE);
-                finish();
-            } else {
-                Log.i(TAG, "Error: " + task.getException());
-            }
-        });
+        onBackPressed();
     }
 
-    void initialize_location(@NotNull String location) {
-        if(location.equals("ost_school")) {
-            if (status.equals("Новая заявка"))
-                saveTask("ost_school_new");
-
-            if (status.equals("В работе"))
-                saveTask("ost_school_progress");
-
-            if (status.equals("Архив"))
-                saveTask("ost_school_archive");
+    void initialize_field(String permission) {
+        if(permission.equals("ost_school")) {
+            String[] items = getResources().getStringArray(R.array.addresses_ost_school);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                    AddTaskUserActivity.this,
+                    R.layout.dropdown_menu_categories,
+                    items
+            );
+            address_autoComplete.setAdapter(adapter);
         }
+
+        if(permission.equals("bar_school"))
+            Objects.requireNonNull(text_input_layout_address.getEditText()).setText(getText(R.string.bar_school_address));
+
     }
 
     void show_dialog() {
@@ -187,11 +163,47 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_no_connection))
-                .setPositiveButton(getText(R.string.save), (dialog, id) -> initialize_location(permission))
+                .setPositiveButton(getText(R.string.save), (dialog, id) -> save_task(permission))
                 .setNegativeButton(android.R.string.cancel, (dialog, id) -> onBackPressed());
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            image_view_task_user.setImageURI(imageUri);
+            Log.e(TAG, "imageUri: " + imageUri);
+        }
+
+    }
+
+    private void uploadImage() {
+        randomKey = UUID.randomUUID().toString();
+        String final_url = String.format("images/%s", randomKey);
+
+        StorageReference reference = storageReference.child(final_url);
+        reference.putFile(imageUri)
+                .addOnSuccessListener(taskSnapshot -> {
+                    progress_bar_add_task_user.setVisibility(View.INVISIBLE);
+                    Log.i(TAG, "Image Uploaded");
+
+                })
+                .addOnFailureListener(e -> {
+                    progress_bar_add_task_user.setVisibility(View.INVISIBLE);
+                    Log.e(TAG, "Error! " + e);
+                })
+                .addOnProgressListener(snapshot -> {
+                    progress_bar_add_task_user.setVisibility(View.VISIBLE);
+                    double progress = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                    Log.i(TAG, "Progress: " + (int) progress + "%");
+                    progress_bar_add_task_user.setProgress((int) progress);
+                });
     }
 
     void chooseImage() {
@@ -201,42 +213,6 @@ public class AddTaskUserActivity extends AppCompatActivity {
         startActivityForResult(intent, 1);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-            image_view_task_user.setImageURI(imageUri);
-        }
-
-    }
-
-    private void uploadImage() {
-        randomKey = UUID.randomUUID().toString();
-        String final_url = String.format("images/%s", randomKey);
-
-        Log.i(TAG, "url: " + final_url);
-
-        StorageReference reference = storageReference.child(final_url);
-
-        reference.putFile(imageUri)
-                .addOnSuccessListener(taskSnapshot -> {
-                    progress_bar_add_task_user.setVisibility(View.INVISIBLE);
-                    Log.i(TAG, "Image Uploaded");
-
-                })
-                .addOnFailureListener(e -> {
-                    progress_bar_add_task_user.setVisibility(View.INVISIBLE);
-                    Log.i(TAG, "Error! " + e);
-                })
-                .addOnProgressListener(snapshot -> {
-                    progress_bar_add_task_user.setVisibility(View.VISIBLE);
-                    double progress = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                    Log.i(TAG, "Progress: " + (int) progress + "%");
-                    progress_bar_add_task_user.setProgress((int) progress);
-                });
-    }
 
     public boolean isOnline() {
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -252,7 +228,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
         boolean check_cabinet = utils.validate_field(cabinet);
         boolean check_name_task = utils.validate_field(name_task);
 
-        if(check_address & check_floor & check_cabinet & check_name_task ) {
+        if(check_address & check_floor & check_cabinet & check_name_task) {
             return true;
         } else {
 

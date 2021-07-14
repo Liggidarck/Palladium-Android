@@ -92,8 +92,8 @@ public class TaskCaretakerActivity extends AppCompatActivity {
 
             assert value != null;
             address = value.getString("description");
-            floor = value.getString("floor");
-            cabinet = value.getString("cabinet");
+            floor = String.format("Этаж: %s", value.getString("floor"));
+            cabinet = String.format("Кабинет: %s", value.getString("cabinet"));
             name_task = value.getString("title");
             comment = value.getString("comment");
             status = value.getString("status");
@@ -117,8 +117,8 @@ public class TaskCaretakerActivity extends AppCompatActivity {
                     });
 
             text_view_address_task_caretaker.setText(address);
-            text_view_floor_task_caretaker.setText("Этаж - " +  floor);
-            text_view_cabinet_task_caretaker.setText("Кабинет - " + cabinet);
+            text_view_floor_task_caretaker.setText(floor);
+            text_view_cabinet_task_caretaker.setText(cabinet);
             text_view_name_task_caretaker.setText(name_task);
             text_view_comment_task_caretaker.setText(comment);
             text_view_status_task_caretaker.setText(status);

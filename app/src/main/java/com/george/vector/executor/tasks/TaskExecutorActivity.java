@@ -13,7 +13,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.george.vector.R;
-import com.george.vector.common.tasks.Task;
+import com.george.vector.common.tasks.ui.TaskUi;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
@@ -82,8 +82,8 @@ public class TaskExecutorActivity extends AppCompatActivity {
             progress_bar_task_executor.setVisibility(View.VISIBLE);
             assert value != null;
             address = value.getString("description");
-            floor = value.getString("floor");
-            cabinet = value.getString("cabinet");
+            floor = String.format("Этаж: %s", value.getString("floor"));
+            cabinet = String.format("Кабинет: %s", value.getString("cabinet"));
             name_task = value.getString("title");
             comment = value.getString("comment");
             status = value.getString("status");
@@ -112,8 +112,8 @@ public class TaskExecutorActivity extends AppCompatActivity {
                     });
 
             text_view_address_task_executor.setText(address);
-            text_view_floor_task_executor.setText("Этаж - " +  floor);
-            text_view_cabinet_task_executor.setText("Кабинет - " + cabinet);
+            text_view_floor_task_executor.setText(floor);
+            text_view_cabinet_task_executor.setText(cabinet);
             text_view_name_task_executor.setText(name_task);
             text_view_comment_task_executor.setText(comment);
             text_view_status_task_executor.setText(status);
@@ -171,11 +171,36 @@ public class TaskExecutorActivity extends AppCompatActivity {
                             status, time_create, email_creator);
                 }
 
-                if (radio_button_archive.isChecked())
+                if (radio_button_archive.isChecked()) {
                     status = "Архив";
                     load_data("ost_school_archive", name_task, address, date_done,
                             floor, cabinet, comment, date_create, email_executor,
                             status, time_create, email_creator);
+                }
+            }
+
+
+            if(location.equals("bar_school")) {
+                if (radio_button_new_task.isChecked()) {
+                    status = "Новая заявка";
+                    load_data("bar_school_new", name_task, address, date_done,
+                            floor, cabinet, comment, date_create, email_executor,
+                            status, time_create, email_creator);
+                }
+
+                if (radio_button_progress.isChecked()) {
+                    status = "В работе";
+                    load_data("bar_school_progress", name_task, address, date_done,
+                            floor, cabinet, comment, date_create, email_executor,
+                            status, time_create, email_creator);
+                }
+
+                if (radio_button_archive.isChecked()) {
+                    status = "Архив";
+                    load_data("bar_school_archive", name_task, address, date_done,
+                            floor, cabinet, comment, date_create, email_executor,
+                            status, time_create, email_creator);
+                }
             }
 
             onBackPressed();
@@ -189,7 +214,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
                    String update_executor, String update_status, String time_create, String email) {
 
         CollectionReference taskRef = FirebaseFirestore.getInstance().collection(collection);
-        taskRef.add(new Task(update_name, update_address, update_date_task, update_floor, update_cabinet, update_comment,
+        taskRef.add(new TaskUi(update_name, update_address, update_date_task, update_floor, update_cabinet, update_comment,
                 date_create, update_executor, update_status, time_create, email, "62d7f792-2144-4da4-bfe6-b1ea80d348d7"));
 
         taskRef.get().addOnCompleteListener(task -> {

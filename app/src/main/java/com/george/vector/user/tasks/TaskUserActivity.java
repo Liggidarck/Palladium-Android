@@ -68,13 +68,16 @@ public class TaskUserActivity extends AppCompatActivity {
          if(permission.equals("ost_school"))
              collection = "ost_school_new";
 
+         if(permission.equals("bar_school"))
+             collection = "bar_school_new";
+
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
             progress_bar_task_user.setVisibility(View.VISIBLE);
             assert value != null;
             address = value.getString("description");
-            floor = value.getString("floor");
-            cabinet = value.getString("cabinet");
+            floor = String.format("Этаж: %s", value.getString("floor"));
+            cabinet = String.format("Кабинет: %s", value.getString("cabinet"));
             name_task = value.getString("title");
             comment = value.getString("comment");
             status = value.getString("status");
@@ -95,13 +98,13 @@ public class TaskUserActivity extends AppCompatActivity {
 
                         @Override
                         public void onError() {
-                            Log.i(TAG, "Error!");
+                            Log.e(TAG, "Error!");
                         }
                     });
 
             text_view_address_task_user.setText(address);
-            text_view_floor_task_user.setText("Этаж - " +  floor);
-            text_view_cabinet_task_user.setText("Кабинет - " + cabinet);
+            text_view_floor_task_user.setText(floor);
+            text_view_cabinet_task_user.setText(cabinet);
             text_view_name_task_user.setText(name_task);
             text_view_comment_task_user.setText(comment);
             text_view_status_task_user.setText(status);

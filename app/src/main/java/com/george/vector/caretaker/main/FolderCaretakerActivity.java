@@ -10,8 +10,8 @@ import android.util.Log;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
-import com.george.vector.common.tasks.Task;
-import com.george.vector.common.tasks.TaskAdapter;
+import com.george.vector.common.tasks.ui.TaskUi;
+import com.george.vector.common.tasks.ui.TaskAdapter;
 import com.george.vector.caretaker.tasks.TaskCaretakerActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.firestore.CollectionReference;
@@ -79,6 +79,17 @@ public class FolderCaretakerActivity extends AppCompatActivity {
         if(location.equals("ost_school") & data_location_folder.equals("archive tasks"))
             init_tasks("ost_school_archive", "Архив");
 
+
+
+        if(location.equals("bar_school") & data_location_folder.equals("new tasks"))
+            init_tasks("bar_school_new", "Новая заявка");
+
+        if(location.equals("bar_school") & data_location_folder.equals("progress tasks"))
+            init_tasks("bar_school_progress", "В работе");
+
+        if(location.equals("bar_school") & data_location_folder.equals("archive tasks"))
+            init_tasks("bar_school_archive", "Архив");
+
     }
 
     void init_tasks(String collection, String query_st) {
@@ -87,8 +98,8 @@ public class FolderCaretakerActivity extends AppCompatActivity {
 
         Query query = taskRef.whereEqualTo("status", query_st);
 
-        FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
-                .setQuery(query, Task.class)
+        FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
                 .build();
 
         adapter = new TaskAdapter(options);
@@ -98,7 +109,7 @@ public class FolderCaretakerActivity extends AppCompatActivity {
         recycler_view_tasks_caretaker.setAdapter(adapter);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
-            Task task = documentSnapshot.toObject(Task.class);
+            TaskUi task = documentSnapshot.toObject(TaskUi.class);
             String id = documentSnapshot.getId();
             String path = documentSnapshot.getReference().getPath();
 

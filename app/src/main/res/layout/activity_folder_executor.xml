@@ -45,14 +45,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_baseline_folder_24"
-                    android:layout_centerInParent="true"/>
+                    android:layout_centerInParent="true"
+                    tools:ignore="ContentDescription" />
 
             </RelativeLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/new_task"
+                android:text="@string/new_tasks"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:layout_toEndOf="@+id/ava_folder_2"
                 android:layout_centerVertical="true"
@@ -90,7 +91,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_baseline_folder_24"
-                    android:layout_centerInParent="true"/>
+                    android:layout_centerInParent="true"
+                    tools:ignore="ContentDescription" />
 
             </RelativeLayout>
 

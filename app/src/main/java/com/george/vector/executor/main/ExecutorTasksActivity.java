@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.george.vector.R;
-import com.george.vector.executor.main.fragments_location.fragment_ost_school_new;
-import com.george.vector.executor.main.fragments_location.fragment_ost_school_progress;
+import com.george.vector.executor.main.fragments_location.bar_school.fragment_bar_school_new;
+import com.george.vector.executor.main.fragments_location.bar_school.fragment_bar_school_progress;
+import com.george.vector.executor.main.fragments_location.ost_school.fragment_ost_school_new;
+import com.george.vector.executor.main.fragments_location.ost_school.fragment_ost_school_progress;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class ExecutorTasksActivity extends AppCompatActivity {
@@ -69,6 +71,25 @@ public class ExecutorTasksActivity extends AppCompatActivity {
         if(location.equals("ost_school") && task_folder.equals("progress_tasks")) {
             Log.i(TAG, "Запуск фрагмента Школа заявки в работе");
             currentFragment = new fragment_ost_school_progress();
+
+            Bundle email = new Bundle();
+            email.putString("email", this.email);
+            currentFragment.setArguments(email);
+        }
+
+
+        if(location.equals("bar_school") && task_folder.equals("new_tasks")){
+            Log.i(TAG, "Запуск фрагмента Школа bar новые заявки");
+            currentFragment = new fragment_bar_school_new();
+
+            Bundle email = new Bundle();
+            email.putString("email", this.email);
+            currentFragment.setArguments(email);
+        }
+
+        if(location.equals("bar_school") && task_folder.equals("progress_tasks")) {
+            Log.i(TAG, "Запуск фрагмента Школа bar заявки в работе");
+            currentFragment = new fragment_bar_school_progress();
 
             Bundle email = new Bundle();
             email.putString("email", this.email);

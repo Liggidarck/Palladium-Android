@@ -117,7 +117,7 @@ public class ActivityRegisterUser extends AppCompatActivity {
                                 .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user - " + userID))
                                 .addOnFailureListener(e -> Log.d("TAG", "Failure - " + e.toString()));
 
-                        startActivity(new Intent(this, MainAdminActivity.class));
+                        onBackPressed();
 
                     } else
                         Toast.makeText(ActivityRegisterUser.this, "Error" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();

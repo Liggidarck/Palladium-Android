@@ -41,7 +41,7 @@
         <activity android:name=".user.tasks.TaskUserActivity" />
         <activity android:name=".user.tasks.AddTaskUserActivity" />
         <activity android:name=".executor.main.MainExecutorActivity" />
-        <activity android:name=".admin.tasks.TaskActivity" />
+        <activity android:name=".admin.tasks.TaskAdminActivity" />
         <activity android:name=".admin.tasks.AddTaskAdminActivity" />
         <activity android:name=".admin.tasks.sort_by_category.FolderActivity" />
         <activity android:name=".user.main.MainUserActivity" />

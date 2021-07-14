@@ -25,8 +25,11 @@ import com.george.vector.R;
 import com.george.vector.caretaker.main.MainCaretakerActivity;
 import com.george.vector.common.edit_users.User;
 import com.george.vector.common.edit_users.UserAdapter;
+import com.george.vector.common.tasks.utils.DeleteTask;
+import com.george.vector.common.tasks.utils.SaveTask;
+import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.Utils;
-import com.george.vector.common.tasks.Task;
+import com.george.vector.common.tasks.ui.TaskUi;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -161,7 +164,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
                 if(!isOnline())
                     show_dialog();
                 else
-                    updateTask(collection);
+                    updateTask(location);
 
             }
         });
@@ -180,7 +183,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
 
         builder.setTitle("Внимание!")
                 .setMessage("Отсуствует интернет подключение. Вы можете сохранить обновленную заявку у себя в телефоне и когда интренет снова появиться заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку заявку позже, когда появиться интрнет.")
-                .setPositiveButton("Сохранить", (dialog, id) -> updateTask(collection))
+                .setPositiveButton("Сохранить", (dialog, id) -> updateTask(location))
                 .setNegativeButton(android.R.string.cancel, (dialog, id) -> {
                     Intent intent = new Intent(this, MainCaretakerActivity.class);
                     intent.putExtra("permission", permission);
@@ -192,8 +195,9 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
     }
 
     void updateTask(String collection) {
-        progress_bar_add_task_caretaker.setVisibility(View.VISIBLE);
-        delete_task(collection, id);
+        Task task = new Task();
+        DeleteTask deleteTask = new DeleteTask();
+        deleteTask.delete_task(collection, id);
 
         String update_address = Objects.requireNonNull(text_input_layout_address_caretaker.getEditText()).getText().toString();
         String update_floor = Objects.requireNonNull(text_input_layout_floor_caretaker.getEditText()).getText().toString();
@@ -204,27 +208,11 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         String update_executor = Objects.requireNonNull(text_input_layout_executor_caretaker.getEditText()).getText().toString();
         String update_status = Objects.requireNonNull(text_input_layout_status_caretaker.getEditText()).getText().toString();
 
-        if (update_comment.isEmpty())
-            update_comment = "Нет коментария к заявке";
-
-        if(location.equals("ost_school")) {
-            if (update_status.equals("Новая заявка")) {
-                load_data("ost_school_new", update_name, update_address, update_date_task,
-                        update_floor, update_cabinet, update_comment, date_create, update_executor,
-                        update_status, time_create, email);
-            }
-
-            if (update_status.equals("В работе")) {
-                load_data("ost_school_progress", update_name, update_address, update_date_task,
-                        update_floor, update_cabinet, update_comment, date_create, update_executor,
-                        update_status, time_create, email);
-            }
-
-            if (update_status.equals("Архив"))
-                load_data("ost_school_archive", update_name, update_address, update_date_task,
-                        update_floor, update_cabinet, update_comment, date_create, update_executor,
-                        update_status, time_create, email);
-        }
+        task.save(new SaveTask(), location, update_name,
+                update_address, update_date_task, update_floor,
+                update_cabinet, update_comment, date_create,
+                update_executor, update_status, time_create,
+                email, "62d7f792-2144-4da4-bfe6-b1ea80d348d7");
 
     }
 
@@ -272,36 +260,6 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
 
         adapter.startListening();
         dialog.show();
-    }
-
-
-    void load_data(String collection, String update_name, String  update_address, String update_date_task,
-                   String update_floor, String update_cabinet, String update_comment, String date_create,
-                   String update_executor, String update_status, String time_create, String email) {
-
-        CollectionReference taskRef = FirebaseFirestore.getInstance().collection(collection);
-        taskRef.add(new Task(update_name, update_address, update_date_task, update_floor, update_cabinet, update_comment,
-                date_create, update_executor, update_status, time_create, email, "62d7f792-2144-4da4-bfe6-b1ea80d348d7"));
-
-        taskRef.get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                Log.i(TAG, "add completed!");
-                progress_bar_add_task_caretaker.setVisibility(View.INVISIBLE);
-
-                Intent intent = new Intent(this, MainCaretakerActivity.class);
-                intent.putExtra("permission", permission);
-                startActivity(intent);
-
-            } else {
-                Log.i(TAG, "Error: " + task.getException());
-            }
-
-        });
-    }
-
-    void delete_task(String collection, String id) {
-        DocumentReference documentReferenceTask = firebaseFirestore.collection(collection).document(id);
-        documentReferenceTask.delete();
     }
 
     void initialize_fields(String location) {
