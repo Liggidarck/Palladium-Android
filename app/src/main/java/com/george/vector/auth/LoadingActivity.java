@@ -7,11 +7,11 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.george.vector.R;
-import com.george.vector.admin.MainAdminActivity;
-import com.george.vector.caretaker.main.MainCaretakerActivity;
-import com.george.vector.executor.main.MainExecutorActivity;
-import com.george.vector.root.main.RootMainActivity;
-import com.george.vector.user.main.MainUserActivity;
+import com.george.vector.users.admin.MainAdminActivity;
+import com.george.vector.users.caretaker.main.MainCaretakerActivity;
+import com.george.vector.users.executor.main.MainExecutorActivity;
+import com.george.vector.users.root.main.RootMainActivity;
+import com.george.vector.users.user.main.MainUserActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;

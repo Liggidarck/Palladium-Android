@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".root.tasks.TaskRootActivity" >
+    tools:context=".users.root.tasks.TaskRootActivity" >
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/topAppBar_tasks_root"

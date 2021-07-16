@@ -2,7 +2,6 @@ package com.george.vector.auth;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,7 +12,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.george.vector.R;
-import com.george.vector.admin.MainAdminActivity;
 import com.george.vector.common.utils.Utils;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;

@@ -12,7 +12,7 @@ import android.widget.Button;
 
 import com.george.vector.R;
 import com.george.vector.common.utils.Utils;
-import com.george.vector.user.main.MainUserActivity;
+import com.george.vector.users.user.main.MainUserActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputLayout;

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".admin.tasks.AddTaskAdminActivity" >
+    tools:context=".users.admin.tasks.AddTaskAdminActivity" >
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/topAppBar_new_task"

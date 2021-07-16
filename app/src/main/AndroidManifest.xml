@@ -3,6 +3,7 @@
     package="com.george.vector">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECIVE" />
 
     <application
         android:allowBackup="true"
@@ -12,6 +13,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Vector">
+
+        <service android:name=".develop.notifications.FirebaseService"
+            android:permission="com.google.android.c2dm.permission.SEND">
+
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.c2dm.intent.RECIVE" />
+            </intent-filter>
+
+        </service>
+
+        <activity android:name=".develop.notifications.NotificationActivity"/>
+        <activity android:name=".develop.DevelopActivity" />
         <activity android:name=".auth.LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,35 +33,35 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".executor.tasks.TaskExecutorActivity" />
-        <activity android:name=".executor.main.ExecutorTasksActivity" />
-        <activity android:name=".executor.main.FolderExecutorActivity" />
-        <activity android:name=".caretaker.tasks.EdtTaskCaretakerActivity" />
-        <activity android:name=".caretaker.tasks.AddTaskCaretakerActivity" />
-        <activity android:name=".caretaker.tasks.TaskCaretakerActivity" />
-        <activity android:name=".caretaker.main.FolderCaretakerActivity" />
-        <activity android:name=".caretaker.main.FolderTaskCaretakerActivity" />
-        <activity android:name=".root.tasks.EditTaskActivity" />
-        <activity android:name=".root.tasks.TaskRootActivity" />
-        <activity android:name=".root.tasks.AddTaskRootActivity" />
-        <activity android:name=".root.main.FolderRootActivity" />
-        <activity android:name=".root.main.LocationFolderActivity" />
-        <activity android:name=".caretaker.main.MainCaretakerActivity" />
-        <activity android:name=".root.main.RootMainActivity" />
+        <activity android:name=".users.executor.tasks.TaskExecutorActivity" />
+        <activity android:name=".users.executor.main.ExecutorTasksActivity" />
+        <activity android:name=".users.executor.main.FolderExecutorActivity" />
+        <activity android:name=".users.caretaker.tasks.EdtTaskCaretakerActivity" />
+        <activity android:name=".users.caretaker.tasks.AddTaskCaretakerActivity" />
+        <activity android:name=".users.caretaker.tasks.TaskCaretakerActivity" />
+        <activity android:name=".users.caretaker.main.FolderCaretakerActivity" />
+        <activity android:name=".users.caretaker.main.FolderTaskCaretakerActivity" />
+        <activity android:name=".users.root.tasks.EditTaskActivity" />
+        <activity android:name=".users.root.tasks.TaskRootActivity" />
+        <activity android:name=".users.root.tasks.AddTaskRootActivity" />
+        <activity android:name=".users.root.main.FolderRootActivity" />
+        <activity android:name=".users.root.main.LocationFolderActivity" />
+        <activity android:name=".users.caretaker.main.MainCaretakerActivity" />
+        <activity android:name=".users.root.main.RootMainActivity" />
         <activity android:name=".common.edit_users.EditDataUserActivity" />
         <activity android:name=".common.edit_users.EditUserActivity" />
         <activity android:name=".common.edit_users.ListUsersActivity" />
-        <activity android:name=".admin.tasks.EditTaskAdminActivity" />
-        <activity android:name=".user.tasks.TaskUserActivity" />
-        <activity android:name=".user.tasks.AddTaskUserActivity" />
-        <activity android:name=".executor.main.MainExecutorActivity" />
-        <activity android:name=".admin.tasks.TaskAdminActivity" />
-        <activity android:name=".admin.tasks.AddTaskAdminActivity" />
-        <activity android:name=".admin.tasks.sort_by_category.FolderActivity" />
-        <activity android:name=".user.main.MainUserActivity" />
+        <activity android:name=".users.admin.tasks.EditTaskAdminActivity" />
+        <activity android:name=".users.user.tasks.TaskUserActivity" />
+        <activity android:name=".users.user.tasks.AddTaskUserActivity" />
+        <activity android:name=".users.executor.main.MainExecutorActivity" />
+        <activity android:name=".users.admin.tasks.TaskAdminActivity" />
+        <activity android:name=".users.admin.tasks.AddTaskAdminActivity" />
+        <activity android:name=".users.admin.tasks.sort_by_category.FolderActivity" />
+        <activity android:name=".users.user.main.MainUserActivity" />
         <activity android:name=".auth.ActivityRegisterUser" />
-        <activity android:name=".admin.MainAdminActivity" />
-        <activity android:name=".auth.ActivityLogin"/>
+        <activity android:name=".users.admin.MainAdminActivity" />
+        <activity android:name=".auth.ActivityLogin" />
     </application>
 
 </manifest>
