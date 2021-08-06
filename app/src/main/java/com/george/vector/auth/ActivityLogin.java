@@ -1,14 +1,17 @@
 package com.george.vector.auth;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 
 import com.george.vector.users.admin.MainAdminActivity;
@@ -18,6 +21,8 @@ import com.george.vector.users.executor.main.MainExecutorActivity;
 import com.george.vector.users.root.main.RootMainActivity;
 import com.george.vector.users.user.main.MainUserActivity;
 import com.george.vector.users.caretaker.main.MainCaretakerActivity;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
@@ -33,7 +38,7 @@ public class ActivityLogin extends AppCompatActivity {
 
     // Все View элементы
     TextInputLayout email_login_text_layout, password_login_text_layout;
-    Button btn_login;
+    Button btn_login, btn_forgot_password;
     LinearProgressIndicator progress_bar_auth;
     CoordinatorLayout coordinator_login;
 
@@ -54,6 +59,7 @@ public class ActivityLogin extends AppCompatActivity {
         password_login_text_layout = findViewById(R.id.password_login_text_layout);
         progress_bar_auth = findViewById(R.id.progress_bar_auth);
         coordinator_login = findViewById(R.id.coordinator_login);
+        btn_forgot_password = findViewById(R.id.btn_forgot_password);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -97,9 +103,42 @@ public class ActivityLogin extends AppCompatActivity {
             }
 
         });
+        btn_forgot_password.setOnClickListener(v -> show_forgot_password_dialog());
 
         clearErrors();
 
+    }
+
+    private void show_forgot_password_dialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.forgot_password_dialog);
+
+        TextInputLayout ti_forgot_password = dialog.findViewById(R.id.ti_forgot_password);
+        Button btn_ok_forgot_password = dialog.findViewById(R.id.btn_ok_forgot_password);
+        Button cancel_dialog_password = dialog.findViewById(R.id.cancel_dialog_password);
+
+        btn_ok_forgot_password.setOnClickListener(v -> {
+            String email = Objects.requireNonNull(ti_forgot_password.getEditText()).getText().toString();
+
+            if(email.isEmpty())
+                ti_forgot_password.setError("Это поле не может быть пустым");
+            else {
+                firebaseAuth.sendPasswordResetEmail(email)
+                        .addOnSuccessListener(unused -> {
+                            Log.i(TAG, "Ссылка для восстановления пароля отправлена");
+                            dialog.dismiss();
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e(TAG, "Error! " + e);
+                        });
+            }
+
+
+        });
+        cancel_dialog_password.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
     }
 
     void startApp(@NotNull String role, String email, String permission) {

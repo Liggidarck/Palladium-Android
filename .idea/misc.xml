@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Projects/AndroidStudioProjects/Vector/app/src/main/res/layout/activity_add_task_admin.xml" value="0.36102564102564105" />
+        <entry key="..\:/Projects/AndroidStudioProjects/Vector/app/src/main/res/layout/activity_add_task_caretaker.xml" value="0.36102564102564105" />
+        <entry key="..\:/Projects/AndroidStudioProjects/Vector/app/src/main/res/layout/activity_add_task_root.xml" value="0.36102564102564105" />
+        <entry key="..\:/Projects/AndroidStudioProjects/Vector/app/src/main/res/layout/activity_add_task_user.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/AndroidStudioProjects/Vector/app/src/main/res/layout/activity_develop.xml" value="0.36102564102564105" />
+        <entry key="..\:/Projects/AndroidStudioProjects/Vector/app/src/main/res/layout/activity_task.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/AndroidStudioProjects/Vector/app/src/main/res/layout/activity_task_acretaker.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/AndroidStudioProjects/Vector/app/src/main/res/layout/activity_task_executor.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/AndroidStudioProjects/Vector/app/src/main/res/layout/activity_task_root.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/AndroidStudioProjects/Vector/app/src/main/res/layout/activity_task_user.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/AndroidStudioProjects/Vector/app/src/main/res/layout/profile_bottom_sheet.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/AndroidStudioProjects/Vector/app/src/main/res/layout/settings_user_bottom_sheet.xml" value="0.36666666666666664" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

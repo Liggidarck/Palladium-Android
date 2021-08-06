@@ -69,8 +69,6 @@ public class AddTaskCaretakerActivity extends AppCompatActivity {
                     text_input_layout_status_caretaker, text_input_layout_date_task_caretaker;
     MaterialAutoCompleteTextView address_autoComplete_caretaker, status_autoComplete_caretaker;
 
-    ImageView image_view_add_task_caretaker;
-
     private static final String TAG = "AddTaskCaretaker";
     String location, userID, email, address, floor, cabinet, name_task, date_task, status, comment, permission, randomKey;
     String name_executor;
@@ -109,7 +107,6 @@ public class AddTaskCaretakerActivity extends AppCompatActivity {
         text_input_layout_date_task_caretaker = findViewById(R.id.text_input_layout_date_task_caretaker);
         status_autoComplete_caretaker = findViewById(R.id.status_autoComplete_caretaker);
         add_executor_caretaker = findViewById(R.id.add_executor_caretaker);
-        image_view_add_task_caretaker = findViewById(R.id.image_view_add_task_caretaker);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -162,53 +159,10 @@ public class AddTaskCaretakerActivity extends AppCompatActivity {
         DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String timeText = timeFormat.format(currentDate);
 
-        uploadImage();
         task.save(new SaveTask(), location, name_task, address, dateText, floor, cabinet, comment,
-                date_task, email_executor, status, timeText, email, randomKey);
+                date_task, email_executor, status, timeText, email);
 
         onBackPressed();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-            image_view_add_task_caretaker.setImageURI(imageUri);
-            Log.e(TAG, "imageUri: " + imageUri);
-        }
-
-    }
-
-    private void uploadImage() {
-        randomKey = UUID.randomUUID().toString();
-        String final_url = String.format("images/%s", randomKey);
-
-        StorageReference reference = storageReference.child(final_url);
-        reference.putFile(imageUri)
-                .addOnSuccessListener(taskSnapshot -> {
-                    progress_bar_add_task_caretaker.setVisibility(View.INVISIBLE);
-                    Log.i(TAG, "Image Uploaded");
-
-                })
-                .addOnFailureListener(e -> {
-                    progress_bar_add_task_caretaker.setVisibility(View.INVISIBLE);
-                    Log.e(TAG, "Error! " + e);
-                })
-                .addOnProgressListener(snapshot -> {
-                    progress_bar_add_task_caretaker.setVisibility(View.VISIBLE);
-                    double progress = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                    Log.i(TAG, "Progress: " + (int) progress + "%");
-                    progress_bar_add_task_caretaker.setProgress((int) progress);
-                });
-    }
-
-    void chooseImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, 1);
     }
 
     void show_alert_dialog() {

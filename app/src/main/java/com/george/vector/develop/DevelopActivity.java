@@ -6,15 +6,24 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.george.vector.R;
 import com.george.vector.develop.notifications.NotificationActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.jetbrains.annotations.NotNull;
 
 public class DevelopActivity extends AppCompatActivity {
 
+    private static final String TAG = "DevelopActivity";
     ImageView image_view_dev;
     Button btn_camera, btn_notifications;
 
@@ -25,12 +34,31 @@ public class DevelopActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_develop);
 
-        btn_camera = findViewById(R.id.btn_camera);
-        image_view_dev = findViewById(R.id.image_view_dev);
-        btn_notifications = findViewById(R.id.btn_notifications);
-
-        btn_camera.setOnClickListener(v -> captureImage());
-        btn_notifications.setOnClickListener(v -> startActivity(new Intent(this, NotificationActivity.class)));
+//        btn_camera = findViewById(R.id.btn_camera);
+//        image_view_dev = findViewById(R.id.image_view_dev);
+//        btn_notifications = findViewById(R.id.btn_notifications);
+//
+//        btn_camera.setOnClickListener(v -> {
+//            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
+//            ref.orderByChild("email").equalTo("api@2122.pro").addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
+//                    for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+//                        Log.i(TAG, userSnapshot.getKey());
+//                        Log.i(TAG, userSnapshot.child("email").getValue(String.class));
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NotNull DatabaseError databaseError) {
+//                    throw databaseError.toException();
+//                }
+//            });
+//        });
+//
+//
+//
+//        btn_notifications.setOnClickListener(v -> startActivity(new Intent(this, NotificationActivity.class)));
 
     }
 

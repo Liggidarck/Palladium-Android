@@ -41,24 +41,24 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/topAppBar_new_task" >
+        android:layout_below="@+id/topAppBar_new_task">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_address"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
                 android:hint="@string/address"
                 app:endIconMode="dropdown_menu"
-                app:errorEnabled="true"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp" >
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/address_autoComplete"
@@ -71,14 +71,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_floor"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/floor"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="@string/floor"
                 app:endIconMode="clear_text"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -90,14 +90,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_cabinet"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/cabinet"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="@string/cabinet"
                 app:endIconMode="clear_text"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -109,17 +109,17 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_name_task"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/name_task"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="@string/name_task"
                 app:endIconMode="clear_text"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:errorEnabled="true"
-                app:helperTextEnabled="true"
-                app:helperText="Например: Сломаная дверь" >
+                app:helperText="Например: Сломаная дверь"
+                app:helperTextEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -130,17 +130,17 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_comment"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/comment"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="@string/comment"
                 app:endIconMode="clear_text"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:errorEnabled="true"
-                app:helperTextEnabled="true"
-                app:helperText="@string/optional" >
+                app:helperText="@string/optional"
+                app:helperTextEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -151,38 +151,38 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_date_task"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/date_complete"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
-                app:endIconMode="custom"
+                android:layout_marginEnd="20dp"
+                android:hint="@string/date_complete"
                 app:endIconDrawable="@drawable/ic_baseline_today_24"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:endIconMode="custom"
                 app:errorEnabled="true"
-                app:helperTextEnabled="true" >
+                app:helperTextEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_text_date_task"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:inputType="none"/>
+                    android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_status"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
                 android:hint="@string/status"
                 app:endIconMode="dropdown_menu"
-                app:errorEnabled="true"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp" >
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/status_autoComplete"
@@ -195,14 +195,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_executor_admin"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/executor"
-                app:errorEnabled="true"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp" >
+                android:hint="@string/executor"
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -216,20 +216,10 @@
                 android:id="@+id/add_executor_admin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/set_executor"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp" />
-
-            <ImageView
-                android:id="@+id/task_image_admin"
-                android:layout_width="match_parent"
-                android:layout_height="230dp"
-                android:src="@drawable/demo_image"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
-                tools:ignore="ContentDescription" />
+                android:layout_marginEnd="20dp"
+                android:text="@string/set_executor" />
 
             <View
                 android:layout_width="match_parent"

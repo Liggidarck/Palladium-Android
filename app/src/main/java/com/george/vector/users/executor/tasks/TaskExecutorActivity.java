@@ -1,5 +1,6 @@
 package com.george.vector.users.executor.tasks;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
@@ -14,11 +15,14 @@ import android.widget.TextView;
 
 import com.george.vector.R;
 import com.george.vector.common.tasks.ui.TaskUi;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -40,7 +44,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
     CircleImageView circle_status_executor;
 
     String id, collection, location, address, floor, cabinet, name_task, comment, status, date_create, time_create,
-            image_key, email_executor, email_creator, date_done;
+            email_executor, email_creator, date_done;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -89,27 +93,24 @@ public class TaskExecutorActivity extends AppCompatActivity {
             status = value.getString("status");
             date_create = value.getString("priority");
             time_create = value.getString("time_priority");
-            image_key = value.getString("uri_image");
             email_executor = value.getString("executor");
             email_creator =value.getString("email_creator");
             date_done = value.getString("date_done");
 
-            Log.i(TAG, "IMAGE: " + image_key);
-
-            String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image_key);
-            Picasso.with(this)
-                    .load(IMAGE_URL)
-                    .into(image_view_task_executor, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            progress_bar_task_executor.setVisibility(View.INVISIBLE);
-                        }
-
-                        @Override
-                        public void onError() {
-                            Log.i(TAG, "Error!");
-                        }
-                    });
+//            String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image_key);
+//            Picasso.with(this)
+//                    .load(IMAGE_URL)
+//                    .into(image_view_task_executor, new Callback() {
+//                        @Override
+//                        public void onSuccess() {
+//                            progress_bar_task_executor.setVisibility(View.INVISIBLE);
+//                        }
+//
+//                        @Override
+//                        public void onError() {
+//                            Log.i(TAG, "Error!");
+//                        }
+//                    });
 
             text_view_address_task_executor.setText(address);
             text_view_floor_task_executor.setText(floor);
@@ -135,6 +136,9 @@ public class TaskExecutorActivity extends AppCompatActivity {
             }
 
         });
+
+        documentReference.get().addOnCompleteListener(task -> progress_bar_task_executor.setVisibility(View.INVISIBLE));
+
     }
 
     void show_dialog() {
@@ -215,7 +219,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
 
         CollectionReference taskRef = FirebaseFirestore.getInstance().collection(collection);
         taskRef.add(new TaskUi(update_name, update_address, update_date_task, update_floor, update_cabinet, update_comment,
-                date_create, update_executor, update_status, time_create, email, "62d7f792-2144-4da4-bfe6-b1ea80d348d7"));
+                date_create, update_executor, update_status, time_create, email));
 
         taskRef.get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {

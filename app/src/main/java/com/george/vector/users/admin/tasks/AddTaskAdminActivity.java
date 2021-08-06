@@ -61,7 +61,6 @@ public class AddTaskAdminActivity extends AppCompatActivity {
     LinearProgressIndicator progress_bar_add_task_admin;
     ExtendedFloatingActionButton crate_task_fab;
     Button add_executor_admin;
-    ImageView task_image_admin;
 
     MaterialAutoCompleteTextView address_autoComplete, status_autoComplete;
     TextInputLayout text_input_layout_address, text_input_layout_floor, text_input_layout_cabinet,
@@ -70,13 +69,11 @@ public class AddTaskAdminActivity extends AppCompatActivity {
     TextInputEditText edit_text_date_task;
 
     private static final String TAG = "AddTaskAdmin";
-    String permission, address, floor, cabinet, name_task, comment, date_task, status, userID, email, randomKey;
+    String permission, address, floor, cabinet, name_task, comment, date_task, status, userID, email;
     String name_executor;
     String last_name_executor;
     String patronymic_executor;
     String email_executor;
-
-    public Uri imageUri;
 
     Calendar datePickCalendar;
 
@@ -107,7 +104,6 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         text_input_layout_executor_admin = findViewById(R.id.text_input_layout_executor_admin);
         edit_text_date_task = findViewById(R.id.edit_text_date_task);
         progress_bar_add_task_admin = findViewById(R.id.progress_bar_add_task_admin);
-        task_image_admin = findViewById(R.id.task_image_admin);
         add_executor_admin = findViewById(R.id.add_executor_admin);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -126,7 +122,6 @@ public class AddTaskAdminActivity extends AppCompatActivity {
             email = value.getString("email");
         });
 
-        task_image_admin.setOnClickListener(v -> chooseImage());
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         add_executor_admin.setOnClickListener(v -> show_add_executor_dialog());
 
@@ -163,7 +158,7 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         String timeText = timeFormat.format(currentDate);
 
         task.save(new SaveTask(), location, name_task, address, dateText, floor, cabinet, comment,
-                date_task, email_executor, status, timeText, email, randomKey);
+                date_task, email_executor, status, timeText, email);
 
         onBackPressed();
     }
@@ -262,53 +257,9 @@ public class AddTaskAdminActivity extends AppCompatActivity {
             updateLabel();
         };
 
-        uploadImage();
         edit_text_date_task.setOnClickListener(v -> new DatePickerDialog(AddTaskAdminActivity.this, date, datePickCalendar
                 .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
 
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-            task_image_admin.setImageURI(imageUri);
-        }
-
-    }
-
-    void chooseImage() {
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, 1);
-    }
-
-    private void uploadImage() {
-        randomKey = UUID.randomUUID().toString();
-        String final_url = String.format("images/%s", randomKey);
-
-        Log.i(TAG, "url: " + final_url);
-
-        StorageReference reference = storageReference.child(final_url);
-
-        reference.putFile(imageUri)
-                .addOnSuccessListener(taskSnapshot -> {
-                    progress_bar_add_task_admin.setVisibility(View.INVISIBLE);
-                    Log.i(TAG, "Image Uploaded");
-
-                })
-                .addOnFailureListener(e -> {
-                    progress_bar_add_task_admin.setVisibility(View.INVISIBLE);
-                    Log.i(TAG, "Error! " + e);
-                })
-                .addOnProgressListener(snapshot -> {
-                    progress_bar_add_task_admin.setVisibility(View.VISIBLE);
-                    double progress = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                    Log.i(TAG, "Progress: " + (int) progress + "%");
-                    progress_bar_add_task_admin.setProgress((int) progress);
-                });
     }
 
     public boolean isOnline() {

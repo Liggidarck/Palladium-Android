@@ -64,7 +64,7 @@ public class EditTaskAdminActivity extends AppCompatActivity {
     private static final String TAG = "EditTaskAdmin";
     String id, location, collection, permission, address, floor,
             cabinet, name_task, comment, status, date_create,
-            time_create, date_done, email, URI_IMAGE;
+            time_create, date_done, email;
     String name_executor;
     String last_name_executor;
     String patronymic_executor;
@@ -131,7 +131,6 @@ public class EditTaskAdminActivity extends AppCompatActivity {
             date_create = value.getString("priority");
             time_create = value.getString("time_priority");
             email = value.getString("email_creator");
-            URI_IMAGE = value.getString("uri_image");
 
             try {
                 Objects.requireNonNull(text_input_layout_address.getEditText()).setText(address);
@@ -183,7 +182,11 @@ public class EditTaskAdminActivity extends AppCompatActivity {
                 update_address, update_date_task, update_floor,
                 update_cabinet, update_comment, date_create,
                 update_executor, update_status, time_create,
-                email, "62d7f792-2144-4da4-bfe6-b1ea80d348d7");
+                email);
+
+        Intent intent = new Intent(this, MainAdminActivity.class);
+        intent.putExtra("permission", permission);
+        startActivity(intent);
     }
 
     void show_dialog() {
@@ -192,7 +195,11 @@ public class EditTaskAdminActivity extends AppCompatActivity {
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_no_connection))
                 .setPositiveButton(getText(R.string.save), (dialog, id) -> updateTask(collection))
-                .setNegativeButton(android.R.string.cancel, (dialog, id) -> startActivity(new Intent(this, MainAdminActivity.class)));
+                .setNegativeButton(android.R.string.cancel, (dialog, id) -> {
+                    Intent intent = new Intent(this, MainAdminActivity.class);
+                    intent.putExtra("permission", permission);
+                    startActivity(intent);
+                });
 
         AlertDialog dialog = builder.create();
         dialog.show();

@@ -120,7 +120,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_comment"
-                android:textStyle="italic"
+                android:fontFamily="@font/product_sans_light"
                 android:textColor="#999999"
                 android:textSize="15sp"
                 android:layout_marginStart="20dp"

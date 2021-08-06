@@ -1,5 +1,6 @@
 package com.george.vector.users.user.tasks;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -9,10 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.george.vector.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -27,10 +31,9 @@ public class TaskUserActivity extends AppCompatActivity {
     TextView text_view_address_task_user, text_view_floor_task_user, text_view_cabinet_task_user,
             text_view_name_task_user, text_view_comment_task_user, text_view_status_task_user,
             text_view_date_create_task_user;
-    ImageView image_view_task_user;
     LinearProgressIndicator progress_bar_task_user;
 
-    String id, permission, collection, address, floor, cabinet, name_task, comment, status, date_create, time_create, image_key;
+    String id, permission, collection, address, floor, cabinet, name_task, comment, status, date_create, time_create;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -54,7 +57,6 @@ public class TaskUserActivity extends AppCompatActivity {
         text_view_comment_task_user = findViewById(R.id.text_view_comment_task_user);
         text_view_status_task_user = findViewById(R.id.text_view_status_task_user);
         text_view_date_create_task_user = findViewById(R.id.text_view_date_create_task_user);
-        image_view_task_user = findViewById(R.id.image_view_task_user);
         progress_bar_task_user = findViewById(R.id.progress_bar_task_user);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -83,24 +85,21 @@ public class TaskUserActivity extends AppCompatActivity {
             status = value.getString("status");
             date_create = value.getString("priority");
             time_create = value.getString("time_priority");
-            image_key = value.getString("uri_image");
 
-            Log.i(TAG, "IMAGE: " + image_key);
-
-            String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image_key);
-            Picasso.with(this)
-                    .load(IMAGE_URL)
-                    .into(image_view_task_user, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            progress_bar_task_user.setVisibility(View.INVISIBLE);
-                        }
-
-                        @Override
-                        public void onError() {
-                            Log.e(TAG, "Error!");
-                        }
-                    });
+//            String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image_key);
+//            Picasso.with(this)
+//                    .load(IMAGE_URL)
+//                    .into(image_view_task_user, new Callback() {
+//                        @Override
+//                        public void onSuccess() {
+//                            progress_bar_task_user.setVisibility(View.INVISIBLE);
+//                        }
+//
+//                        @Override
+//                        public void onError() {
+//                            Log.e(TAG, "Error!");
+//                        }
+//                    });
 
             text_view_address_task_user.setText(address);
             text_view_floor_task_user.setText(floor);
@@ -112,6 +111,8 @@ public class TaskUserActivity extends AppCompatActivity {
             String date_create_text = "Созданно: " + date_create + " " + time_create;
             text_view_date_create_task_user.setText(date_create_text);
         });
+
+        documentReference.get().addOnCompleteListener(task -> progress_bar_task_user.setVisibility(View.INVISIBLE));
 
     }
 }

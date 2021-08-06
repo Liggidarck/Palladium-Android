@@ -219,17 +219,7 @@
                 android:text="@string/set_executor"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp" />
-
-            <ImageView
-                android:id="@+id/image_view_add_task_root"
-                android:layout_width="match_parent"
-                android:layout_height="210dp"
-                android:src="@drawable/demo_image"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp"
-                tools:ignore="ContentDescription" />
+                android:layout_marginTop="10dp" />
 
 
             <View

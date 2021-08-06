@@ -1,5 +1,6 @@
 package com.george.vector.users.admin.tasks;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -12,10 +13,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.george.vector.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -32,12 +36,11 @@ public class TaskAdminActivity extends AppCompatActivity {
             text_view_date_create_task_admin;
     Button edit_task_btn, delete_task_btn;
     CircleImageView circle_status;
-    ImageView image_view_task_admin;
     LinearProgressIndicator progress_bar_task_admin;
 
     private static final String TAG = "TaskActivity";
 
-    String id, location, collection, address, floor, cabinet, name_task, comment, status, date_create, time_create, image_key;
+    String id, location, collection, address, floor, cabinet, name_task, comment, status, date_create, time_create;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -59,7 +62,6 @@ public class TaskAdminActivity extends AppCompatActivity {
         text_view_date_create_task_admin = findViewById(R.id.text_view_date_create_task_admin);
         edit_task_btn = findViewById(R.id.edit_task_btn);
         circle_status = findViewById(R.id.circle_status);
-        image_view_task_admin = findViewById(R.id.image_view_task_admin);
         progress_bar_task_admin = findViewById(R.id.progress_bar_task_admin);
         delete_task_btn = findViewById(R.id.delete_task_btn_admin);
 
@@ -88,22 +90,6 @@ public class TaskAdminActivity extends AppCompatActivity {
             status = value.getString("status");
             date_create = value.getString("priority");
             time_create = value.getString("time_priority");
-            image_key = value.getString("uri_image");
-
-            String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image_key);
-            Picasso.with(this)
-                    .load(IMAGE_URL)
-                    .into(image_view_task_admin, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            progress_bar_task_admin.setVisibility(View.INVISIBLE);
-                        }
-
-                        @Override
-                        public void onError() {
-                            Log.i(TAG, "Error on download");
-                        }
-                    });
 
             text_view_address_task_admin.setText(address);
             text_view_floor_task_admin.setText(floor);
@@ -130,6 +116,8 @@ public class TaskAdminActivity extends AppCompatActivity {
 
         });
 
+        documentReference.get().addOnCompleteListener(task -> progress_bar_task_admin.setVisibility(View.INVISIBLE));
+
         edit_task_btn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskAdminActivity.class);
             intent.putExtra("id_task", id);
@@ -146,20 +134,14 @@ public class TaskAdminActivity extends AppCompatActivity {
 
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_delete_task))
-                .setPositiveButton(getText(R.string.delete), (dialog, id) -> delete_task(image_key))
+                .setPositiveButton(getText(R.string.delete), (dialog, id) -> delete_task())
                 .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.dismiss());
 
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
-    void delete_task(String image_key) {
-        String storageUrl = "images/" + image_key;
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(storageUrl);
-        storageReference.delete()
-                .addOnSuccessListener(aVoid -> Log.d(TAG, "onSuccess: deleted file"))
-                .addOnFailureListener(exception -> Log.e(TAG, "onFailure: did not delete file"));
-
+    void delete_task() {
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.delete();
 

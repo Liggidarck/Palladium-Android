@@ -1,11 +1,9 @@
 package com.george.vector.users.user.tasks;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -13,9 +11,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 
 import com.george.vector.R;
 import com.george.vector.common.tasks.utils.SaveTask;
@@ -52,7 +48,6 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
     ExtendedFloatingActionButton crate_task;
     LinearProgressIndicator progress_bar_add_task_user;
-    ImageView image_view_task_user;
 
     public Uri imageUri;
 
@@ -78,7 +73,6 @@ public class AddTaskUserActivity extends AppCompatActivity {
         address_autoComplete = findViewById(R.id.address_autoComplete);
         crate_task = findViewById(R.id.crate_task);
         progress_bar_add_task_user = findViewById(R.id.progress_bar_add_task_user);
-        image_view_task_user = findViewById(R.id.image_view_add_task_user);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -89,7 +83,6 @@ public class AddTaskUserActivity extends AppCompatActivity {
         permission = arguments.get("permission").toString();
         Log.i(TAG, "Permission: " + permission);
 
-        image_view_task_user.setOnClickListener(v -> chooseImage());
         topAppBar_new_task_user.setNavigationOnClickListener(v -> onBackPressed());
 
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
@@ -135,9 +128,8 @@ public class AddTaskUserActivity extends AppCompatActivity {
         DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String timeText = timeFormat.format(currentDate);
 
-        uploadImage();
         task.save(new SaveTask(), location, name_task, address, dateText, floor, cabinet, comment,
-                null, null, status, timeText, email, randomKey);
+                null, null, status, timeText, email);
 
         onBackPressed();
     }
@@ -171,47 +163,6 @@ public class AddTaskUserActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-            image_view_task_user.setImageURI(imageUri);
-            Log.e(TAG, "imageUri: " + imageUri);
-        }
-
-    }
-
-    private void uploadImage() {
-        randomKey = UUID.randomUUID().toString();
-        String final_url = String.format("images/%s", randomKey);
-
-        StorageReference reference = storageReference.child(final_url);
-        reference.putFile(imageUri)
-                .addOnSuccessListener(taskSnapshot -> {
-                    progress_bar_add_task_user.setVisibility(View.INVISIBLE);
-                    Log.i(TAG, "Image Uploaded");
-
-                })
-                .addOnFailureListener(e -> {
-                    progress_bar_add_task_user.setVisibility(View.INVISIBLE);
-                    Log.e(TAG, "Error! " + e);
-                })
-                .addOnProgressListener(snapshot -> {
-                    progress_bar_add_task_user.setVisibility(View.VISIBLE);
-                    double progress = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                    Log.i(TAG, "Progress: " + (int) progress + "%");
-                    progress_bar_add_task_user.setProgress((int) progress);
-                });
-    }
-
-    void chooseImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, 1);
-    }
 
 
     public boolean isOnline() {

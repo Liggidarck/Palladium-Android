@@ -61,7 +61,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
     Button add_executor_caretaker;
 
     String id, collection, address, floor, cabinet, name_task, comment, status, date_create, time_create,
-            date_done, email, URI_IMAGE, permission, location;
+            date_done, email, permission, location;
     Calendar datePickCalendar;
 
     FirebaseAuth firebaseAuth;
@@ -104,6 +104,10 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         collection = arguments.get("collection").toString();
         location = arguments.get("location").toString();
 
+        Log.d(TAG, "id task: " + id);
+        Log.d(TAG, "collection: " + collection);
+        Log.d(TAG, "location: " + location);
+
         topAppBar_new_task_caretaker.setNavigationOnClickListener(v -> onBackPressed());
 
         add_executor_caretaker.setOnClickListener(v -> show_add_executor_dialog());
@@ -131,7 +135,6 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
             date_create = value.getString("priority");
             time_create = value.getString("time_priority");
             email = value.getString("email_creator");
-            URI_IMAGE = value.getString("uri_image");
 
             try {
                 Objects.requireNonNull(text_input_layout_address_caretaker.getEditText()).setText(address);
@@ -162,7 +165,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
                 if(!isOnline())
                     show_dialog();
                 else
-                    updateTask(location);
+                    updateTask(collection);
 
             }
         });
@@ -179,9 +182,9 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
     void show_dialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Внимание!")
-                .setMessage("Отсуствует интернет подключение. Вы можете сохранить обновленную заявку у себя в телефоне и когда интренет снова появиться заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку заявку позже, когда появиться интрнет.")
-                .setPositiveButton("Сохранить", (dialog, id) -> updateTask(location))
+        builder.setTitle(getText(R.string.warning))
+                .setMessage(getText(R.string.warning_no_connection))
+                .setPositiveButton(getText(R.string.save), (dialog, id) -> updateTask(location))
                 .setNegativeButton(android.R.string.cancel, (dialog, id) -> {
                     Intent intent = new Intent(this, MainCaretakerActivity.class);
                     intent.putExtra("permission", permission);
@@ -210,8 +213,11 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
                 update_address, update_date_task, update_floor,
                 update_cabinet, update_comment, date_create,
                 update_executor, update_status, time_create,
-                email, "62d7f792-2144-4da4-bfe6-b1ea80d348d7");
+                email);
 
+        Intent intent = new Intent(this, MainCaretakerActivity.class);
+        intent.putExtra("permission", permission);
+        startActivity(intent);
     }
 
     public void show_add_executor_dialog() {

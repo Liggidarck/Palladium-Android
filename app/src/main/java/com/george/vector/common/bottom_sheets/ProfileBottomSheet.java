@@ -1,7 +1,6 @@
 package com.george.vector.common.bottom_sheets;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import java.util.Objects;
 
 public class ProfileBottomSheet extends BottomSheetDialogFragment {
 
-    private static final String TAG = "ProfileBottomSheet";
     ImageView close_btn;
     TextView text_view_full_name, text_view_email, text_view_role, text_view_name_ava;
 
@@ -46,6 +44,7 @@ public class ProfileBottomSheet extends BottomSheetDialogFragment {
 
         close_btn.setOnClickListener(v -> dismiss());
 
+        // TODO: Если вызвать ProfileBottomSheet, а затем выйти из аккаунта приложение крашнеться.
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
         documentReference.addSnapshotListener((value, error) -> {
@@ -55,10 +54,8 @@ public class ProfileBottomSheet extends BottomSheetDialogFragment {
             patronymic = value.getString("patronymic");
             email = value.getString("email");
             role = value.getString("role");
-            Log.i(TAG, "data: " + name + " " + last_name + " " + patronymic + " " + email + " " + role);
 
-            String full_name = String.format("%s %s %s", name, last_name, patronymic);
-
+            String full_name = String.format("%s %s %s", last_name, name, patronymic);
             String _name = Character.toString(name.charAt(0));
             String _last_name = Character.toString(last_name.charAt(0));
             String ava = String.format("%s%s", _name, _last_name);

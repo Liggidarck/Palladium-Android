@@ -15,13 +15,11 @@ public class TaskUi {
     private String time_priority;
     private String email_creator;
 
-    private String uri_image;
-
     public TaskUi() {}
 
     public TaskUi(String name_task, String description, String priority, String floor,
                   String cabinet, String comment, String date_done, String executor, String status,
-                  String time_priority, String email_creator, String uri_image) {
+                  String time_priority, String email_creator) {
         this.title = name_task;
         this.description = description;
         this.priority = priority;
@@ -34,8 +32,6 @@ public class TaskUi {
 
         this.time_priority = time_priority;
         this.email_creator = email_creator;
-
-        this.uri_image = uri_image;
     }
 
     public String getTitle() {
@@ -80,9 +76,5 @@ public class TaskUi {
 
     public String getEmail_creator() {
         return email_creator;
-    }
-
-    public String getUri_image() {
-        return uri_image;
     }
 }

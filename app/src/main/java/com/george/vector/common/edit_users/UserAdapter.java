@@ -26,7 +26,7 @@ public class UserAdapter extends FirestoreRecyclerAdapter<User, UserAdapter.User
         String name = model.getName();
         String last_name = model.getLast_name();
         String patronymic = model.getPatronymic();
-        String full_name = String.format("%s %s %s", name, last_name, patronymic);
+        String full_name = String.format("%s %s %s", last_name, name, patronymic);
 
         holder.textViewName.setText(full_name);
         holder.textViewEmail.setText(model.getEmail());

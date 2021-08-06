@@ -1,6 +1,5 @@
 package com.george.vector.users.root.tasks;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,11 +16,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
@@ -53,7 +50,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.UUID;
 
 public class AddTaskRootActivity extends AppCompatActivity {
 
@@ -68,8 +64,6 @@ public class AddTaskRootActivity extends AppCompatActivity {
                     text_input_layout_executor_root, text_input_layout_status_root;
     TextInputEditText edit_text_date_task_root;
     MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root;
-
-    ImageView image_view_add_task_root;
 
     String location, userID, email, address, floor, cabinet, name_task, date_task, status, comment, randomKey;
     private static final String TAG = "AddTaskRoot";
@@ -110,7 +104,6 @@ public class AddTaskRootActivity extends AppCompatActivity {
         address_autoComplete_root = findViewById(R.id.address_autoComplete_root);
         status_autoComplete_root = findViewById(R.id.status_autoComplete_root);
         add_executor_root = findViewById(R.id.add_executor_root);
-        image_view_add_task_root = findViewById(R.id.image_view_add_task_root);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -118,7 +111,6 @@ public class AddTaskRootActivity extends AppCompatActivity {
         storageReference = firebaseStorage.getReference();
 
         topAppBar_new_task_root.setNavigationOnClickListener(v -> onBackPressed());
-        image_view_add_task_root.setOnClickListener(v -> chooseImage());
 
         Bundle arguments = getIntent().getExtras();
         location = arguments.get("location").toString();
@@ -169,9 +161,8 @@ public class AddTaskRootActivity extends AppCompatActivity {
         DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String timeText = timeFormat.format(currentDate);
 
-        uploadImage();
         task.save(new SaveTask(), location, name_task, address, dateText, floor, cabinet, comment,
-                date_task, email_executor, status, timeText, email, randomKey);
+                date_task, email_executor, status, timeText, email);
 
         onBackPressed();
     }
@@ -269,48 +260,6 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
         edit_text_date_task_root.setOnClickListener(v -> new DatePickerDialog(AddTaskRootActivity.this, date, datePickCalendar
                 .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-            image_view_add_task_root.setImageURI(imageUri);
-            Log.e(TAG, "imageUri: " + imageUri);
-        }
-
-    }
-
-    private void uploadImage() {
-        randomKey = UUID.randomUUID().toString();
-        String final_url = String.format("images/%s", randomKey);
-
-        StorageReference reference = storageReference.child(final_url);
-        reference.putFile(imageUri)
-                .addOnSuccessListener(taskSnapshot -> {
-                    progress_bar_add_task_root.setVisibility(View.INVISIBLE);
-                    Log.i(TAG, "Image Uploaded");
-
-                })
-                .addOnFailureListener(e -> {
-                    progress_bar_add_task_root.setVisibility(View.INVISIBLE);
-                    Log.e(TAG, "Error! " + e);
-                })
-                .addOnProgressListener(snapshot -> {
-                    progress_bar_add_task_root.setVisibility(View.VISIBLE);
-                    double progress = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                    Log.i(TAG, "Progress: " + (int) progress + "%");
-                    progress_bar_add_task_root.setProgress((int) progress);
-                });
-    }
-
-    void chooseImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, 1);
     }
 
     void updateLabel() {

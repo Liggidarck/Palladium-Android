@@ -64,7 +64,7 @@ public class EditTaskActivity extends AppCompatActivity {
     MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root;
 
     String id, collection, address, floor, cabinet, name_task, comment, status, date_create, time_create,
-            date_done, email, URI_IMAGE, location;
+            date_done, email, location;
     Calendar datePickCalendar;
 
     FirebaseAuth firebaseAuth;
@@ -127,7 +127,6 @@ public class EditTaskActivity extends AppCompatActivity {
             date_create = value.getString("priority");
             time_create = value.getString("time_priority");
             email = value.getString("email_creator");
-            URI_IMAGE = value.getString("uri_image");
 
             try {
                 Objects.requireNonNull(text_input_layout_address_root.getEditText()).setText(address);
@@ -210,7 +209,6 @@ public class EditTaskActivity extends AppCompatActivity {
         dialog.show();
     }
 
-
     void updateTask(String collection) {
         Task task = new Task();
         DeleteTask deleteTask = new DeleteTask();
@@ -229,7 +227,9 @@ public class EditTaskActivity extends AppCompatActivity {
                 update_address, update_date_task, update_floor,
                 update_cabinet, update_comment, date_create,
                 update_executor, update_status, time_create,
-                email, "62d7f792-2144-4da4-bfe6-b1ea80d348d7");
+                email);
+
+        startActivity(new Intent(this, RootMainActivity.class));
     }
 
     void show_dialog() {
