@@ -65,7 +65,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
     TextInputEditText edit_text_date_task_root;
     MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root;
 
-    String location, userID, email, address, floor, cabinet, name_task, date_task, status, comment, randomKey;
+    String location, userID, email, address, floor, cabinet, name_task, date_complete, status, comment, randomKey;
     private static final String TAG = "AddTaskRoot";
 
     Calendar datePickCalendar;
@@ -136,7 +136,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
             cabinet = Objects.requireNonNull(text_input_layout_cabinet_root.getEditText()).getText().toString();
             name_task = Objects.requireNonNull(text_input_layout_name_task_root.getEditText()).getText().toString();
             comment = Objects.requireNonNull(text_input_layout_comment_root.getEditText()).getText().toString();
-            date_task = Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).getText().toString();
+            date_complete = Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).getText().toString();
             email_executor = Objects.requireNonNull(text_input_layout_executor_root.getEditText()).getText().toString();
             status = Objects.requireNonNull(text_input_layout_status_root.getEditText()).getText().toString();
 
@@ -157,12 +157,12 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
         Date currentDate = new Date();
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        String dateText = dateFormat.format(currentDate);
+        String date_create = dateFormat.format(currentDate);
         DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        String timeText = timeFormat.format(currentDate);
+        String time_create = timeFormat.format(currentDate);
 
-        task.save(new SaveTask(), location, name_task, address, dateText, floor, cabinet, comment,
-                date_task, email_executor, status, timeText, email);
+        task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, comment,
+                date_complete, email_executor, status, time_create, email);
 
         onBackPressed();
     }
@@ -276,7 +276,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         boolean check_floor = utils.validate_field(floor);
         boolean check_cabinet = utils.validate_field(cabinet);
         boolean check_name_task = utils.validate_field(name_task);
-        boolean check_date_task = utils.validate_field(date_task);
+        boolean check_date_task = utils.validate_field(date_complete);
         boolean check_executor = utils.validate_field(email_executor);
         boolean check_status = utils.validate_field(status);
 

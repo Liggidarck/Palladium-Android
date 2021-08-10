@@ -95,29 +95,14 @@ public class TaskCaretakerActivity extends AppCompatActivity {
             progress_bar_task_caretaker.setVisibility(View.VISIBLE);
 
             assert value != null;
-            address = value.getString("description");
+            address = value.getString("address");
             floor = String.format("Этаж: %s", value.getString("floor"));
             cabinet = String.format("Кабинет: %s", value.getString("cabinet"));
-            name_task = value.getString("title");
+            name_task = value.getString("name_task");
             comment = value.getString("comment");
             status = value.getString("status");
-            date_create = value.getString("priority");
-            time_create = value.getString("time_priority");
-
-//            String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image_key);
-//            Picasso.with(this)
-//                    .load(IMAGE_URL)
-//                    .into(image_view_task_caretaker, new Callback() {
-//                        @Override
-//                        public void onSuccess() {
-//                            progress_bar_task_caretaker.setVisibility(View.INVISIBLE);
-//                        }
-//
-//                        @Override
-//                        public void onError() {
-//                            Log.i(TAG, "Error on download");
-//                        }
-//                    });
+            date_create = value.getString("date_create");
+            time_create = value.getString("time_create");
 
             text_view_address_task_caretaker.setText(address);
             text_view_floor_task_caretaker.setText(floor);

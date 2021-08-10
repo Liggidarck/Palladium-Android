@@ -14,26 +14,26 @@ public class SaveTask implements TaskBehavior{
 
     @Override
     public void initialize_task(@NotNull String location, String name_task, String address,
-                                String dateText, String floor, String cabinet, String comment,
-                                String date_done, String executor, String status, String timeText,
+                                String date_create, String floor, String cabinet, String comment,
+                                String date_complete, String executor, String status, String time_create,
                                 String email) {
 
         if(location.equals("ost_school")) {
             switch (status){
                 case "Новая заявка":
                     save("ost_school_new", name_task, address,
-                            dateText, floor, cabinet, comment, date_done, executor, status,
-                            timeText, email);
+                            date_create, floor, cabinet, comment, date_complete, executor, status,
+                            time_create, email);
                     break;
                 case "В работе":
                     save("ost_school_progress", name_task, address,
-                            dateText, floor, cabinet, comment, date_done, executor, status,
-                            timeText, email);
+                            date_create, floor, cabinet, comment, date_complete, executor, status,
+                            time_create, email);
                     break;
                 case "Архив":
                     save("ost_school_archive", name_task, address,
-                            dateText, floor, cabinet, comment, date_done, executor, status,
-                            timeText, email);
+                            date_create, floor, cabinet, comment, date_complete, executor, status,
+                            time_create, email);
                     break;
             }
         }
@@ -42,34 +42,34 @@ public class SaveTask implements TaskBehavior{
             switch (status) {
                 case "Новая заявка":
                     save("bar_school_new", name_task, address,
-                            dateText, floor, cabinet, comment, date_done, executor, status,
-                            timeText, email);
+                            date_create, floor, cabinet, comment, date_complete, executor, status,
+                            time_create, email);
                     break;
                 case "В работе":
                     save("bar_school_progress", name_task, address,
-                            dateText, floor, cabinet, comment, date_done, executor, status,
-                            timeText, email);
+                            date_create, floor, cabinet, comment, date_complete, executor, status,
+                            time_create, email);
                     break;
                 case "Архив":
                     save("ost_school_archive", name_task, address,
-                            dateText, floor, cabinet, comment, date_done, executor, status,
-                            timeText, email);
+                            date_create, floor, cabinet, comment, date_complete, executor, status,
+                            time_create, email);
                     break;
             }
         }
     }
 
-    void save(String collection, String name_task, String address, String dateText,
-              String floor, String cabinet, String comment, String date_done, String executor,
-              String status, String timeText, String email) {
+    void save(String collection, String name_task, String address, String date_create,
+              String floor, String cabinet, String comment, String date_complete, String executor,
+              String status, String time_create, String email) {
 
         CollectionReference taskRef = FirebaseFirestore.getInstance().collection(collection);
 
         if (comment.isEmpty())
             comment = "Нет коментария к заявке";
 
-        taskRef.add(new TaskUi(name_task, address, dateText, floor, cabinet, comment, date_done,
-                executor, status, timeText, email));
+        taskRef.add(new TaskUi(name_task, address, date_create, floor, cabinet, comment, date_complete,
+                executor, status, time_create, email));
 
         taskRef.get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {

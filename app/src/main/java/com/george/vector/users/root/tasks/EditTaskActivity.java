@@ -114,18 +114,18 @@ public class EditTaskActivity extends AppCompatActivity {
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
             assert value != null;
-            address = value.getString("description");
+            address = value.getString("address");
             floor = value.getString("floor");
             cabinet = value.getString("cabinet");
-            name_task = value.getString("title");
+            name_task = value.getString("name_task");
             comment = value.getString("comment");
             status = value.getString("status");
 
             date_done = value.getString("date_done");
             email_executor = value.getString("executor");
 
-            date_create = value.getString("priority");
-            time_create = value.getString("time_priority");
+            date_create = value.getString("date_create");
+            time_create = value.getString("time_create");
             email = value.getString("email_creator");
 
             try {
@@ -223,9 +223,8 @@ public class EditTaskActivity extends AppCompatActivity {
         String update_executor = Objects.requireNonNull(text_input_layout_executor_root.getEditText()).getText().toString();
         String update_status = Objects.requireNonNull(text_input_layout_status_root.getEditText()).getText().toString();
 
-        task.save(new SaveTask(), location, update_name,
-                update_address, update_date_task, update_floor,
-                update_cabinet, update_comment, date_create,
+        task.save(new SaveTask(), location, update_name, update_address, date_create, update_floor,
+                update_cabinet, update_comment, update_date_task,
                 update_executor, update_status, time_create,
                 email);
 
@@ -333,7 +332,7 @@ public class EditTaskActivity extends AppCompatActivity {
     }
 
     void updateLabel() {
-        String date_text = "MM.dd.yyyy";
+        String date_text = "dd.MM.yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(date_text, Locale.US);
 
         Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).setText(sdf.format(datePickCalendar.getTime()));

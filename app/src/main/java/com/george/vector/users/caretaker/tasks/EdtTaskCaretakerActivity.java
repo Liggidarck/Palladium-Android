@@ -122,18 +122,18 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
             assert value != null;
-            address = value.getString("description");
+            address = value.getString("address");
             floor = value.getString("floor");
             cabinet = value.getString("cabinet");
-            name_task = value.getString("title");
+            name_task = value.getString("name_task");
             comment = value.getString("comment");
             status = value.getString("status");
 
             date_done = value.getString("date_done");
             email_executor = value.getString("executor");
 
-            date_create = value.getString("priority");
-            time_create = value.getString("time_priority");
+            date_create = value.getString("date_create");
+            time_create = value.getString("time_create");
             email = value.getString("email_creator");
 
             try {
@@ -209,11 +209,8 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         String update_executor = Objects.requireNonNull(text_input_layout_executor_caretaker.getEditText()).getText().toString();
         String update_status = Objects.requireNonNull(text_input_layout_status_caretaker.getEditText()).getText().toString();
 
-        task.save(new SaveTask(), location, update_name,
-                update_address, update_date_task, update_floor,
-                update_cabinet, update_comment, date_create,
-                update_executor, update_status, time_create,
-                email);
+        task.save(new SaveTask(), location, update_name, update_address, date_create, update_floor,
+                update_cabinet, update_comment, update_date_task, update_executor, update_status, time_create, email);
 
         Intent intent = new Intent(this, MainCaretakerActivity.class);
         intent.putExtra("permission", permission);

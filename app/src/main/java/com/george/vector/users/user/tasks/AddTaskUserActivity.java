@@ -51,7 +51,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
     public Uri imageUri;
 
-    String address, floor, cabinet, name_task, comment, userID, email, randomKey, status = "Новая заявка", permission;
+    String address, floor, cabinet, name_task, comment, userID, email, status = "Новая заявка", permission;
     private static final String TAG = "AddTaskUserActivity";
 
     FirebaseAuth firebaseAuth;
@@ -103,13 +103,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
                 if(!isOnline()) {
                     show_dialog();
                 } else {
-
-                    // TODO: ДОбавить сообщение для пользователя, об отсуствии картинки
-                    if(imageUri == null) {
-                        Log.e(TAG, "Error! Uri must not be empty");
-                    } else
-                        save_task(permission);
-
+                    save_task(permission);
                 }
             }
 
@@ -124,12 +118,12 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
         Date currentDate = new Date();
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        String dateText = dateFormat.format(currentDate);
+        String date_create = dateFormat.format(currentDate);
         DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        String timeText = timeFormat.format(currentDate);
+        String time_create = timeFormat.format(currentDate);
 
-        task.save(new SaveTask(), location, name_task, address, dateText, floor, cabinet, comment,
-                null, null, status, timeText, email);
+        task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, comment,
+                null, null, status, time_create, email);
 
         onBackPressed();
     }

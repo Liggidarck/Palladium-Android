@@ -82,14 +82,14 @@ public class TaskAdminActivity extends AppCompatActivity {
             progress_bar_task_admin.setVisibility(View.VISIBLE);
 
             assert value != null;
-            address = value.getString("description");
+            address = value.getString("address");
             floor = String.format("Этаж: %s", value.getString("floor"));
             cabinet = String.format("Кабинет: %s", value.getString("cabinet"));
-            name_task = value.getString("title");
+            name_task = value.getString("name_task");
             comment = value.getString("comment");
             status = value.getString("status");
-            date_create = value.getString("priority");
-            time_create = value.getString("time_priority");
+            date_create = value.getString("date_create");
+            time_create = value.getString("time_create");
 
             text_view_address_task_admin.setText(address);
             text_view_floor_task_admin.setText(floor);

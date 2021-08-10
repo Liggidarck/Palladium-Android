@@ -45,14 +45,16 @@ public class ConsoleBottomSheet extends BottomSheetDialogFragment {
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         close_btn.setOnClickListener(v -> dismiss());
+
         layout_new_person.setOnClickListener(v -> startActivity(new Intent(ConsoleBottomSheet.this.getActivity(), ActivityRegisterUser.class)));
+        layout_edit_person.setOnClickListener(v -> startActivity(new Intent(ConsoleBottomSheet.this.getContext(), ListUsersActivity.class)));
+
+        btn_develop.setOnClickListener(v -> startActivity(new Intent(ConsoleBottomSheet.this.getContext(), DevelopActivity.class)));
+
         btn_logout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(ConsoleBottomSheet.this.getContext(), ActivityLogin.class));
         });
-        layout_edit_person.setOnClickListener(v -> startActivity(new Intent(ConsoleBottomSheet.this.getContext(), ListUsersActivity.class)));
-        btn_develop.setOnClickListener(v -> startActivity(new Intent(ConsoleBottomSheet.this.getContext(), DevelopActivity.class)));
-
         return view;
     }
 }

@@ -2,9 +2,9 @@ package com.george.vector.common.tasks.ui;
 
 public class TaskUi {
 
-    private String title; // Название заявки
-    private String description; // Адрес
-    private String priority; // Дата создания заявки
+    private String name_task; // Название заявки
+    private String address; // Адрес
+    private String date_create; // Дата создания заявки
     private String floor;
     private String cabinet;
     private String comment;
@@ -12,17 +12,17 @@ public class TaskUi {
     private String executor;
     private String status;
 
-    private String time_priority;
+    private String time_create;
     private String email_creator;
 
     public TaskUi() {}
 
-    public TaskUi(String name_task, String description, String priority, String floor,
+    public TaskUi(String name_task, String address, String date_create, String floor,
                   String cabinet, String comment, String date_done, String executor, String status,
-                  String time_priority, String email_creator) {
-        this.title = name_task;
-        this.description = description;
-        this.priority = priority;
+                  String time_create, String email_creator) {
+        this.name_task = name_task;
+        this.address = address;
+        this.date_create = date_create;
         this.floor = floor;
         this.cabinet = cabinet;
         this.comment = comment;
@@ -30,20 +30,20 @@ public class TaskUi {
         this.executor = executor;
         this.status = status;
 
-        this.time_priority = time_priority;
+        this.time_create = time_create;
         this.email_creator = email_creator;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName_task() {
+        return name_task;
     }
 
-    public String getDescription() {
-        return description;
+    public String getAddress() {
+        return address;
     }
 
-    public String getPriority() {
-        return priority;
+    public String getDate_create() {
+        return date_create;
     }
 
     public String getFloor() {
@@ -70,8 +70,8 @@ public class TaskUi {
         return status;
     }
 
-    public String getTime_priority() {
-        return time_priority;
+    public String getTime_create() {
+        return time_create;
     }
 
     public String getEmail_creator() {
