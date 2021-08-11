@@ -27,8 +27,10 @@ public class LocationFolderActivity extends AppCompatActivity {
         Bundle arguments = getIntent().getExtras();
         String location = arguments.get("location").toString();
 
+        if(location.equals("ost_school") || location.equals("bar_school"))
+            toolbar_location_folder_root.setTitle("Школа");
+
         toolbar_location_folder_root.setNavigationOnClickListener(v -> onBackPressed());
-        toolbar_location_folder_root.setTitle(location);
 
         new_tasks_card_root.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);

@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="Theme.Vector" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.Palladium" parent="Theme.MaterialComponents.Light.NoActionBar">
 
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/blue_primary</item>
@@ -21,7 +21,7 @@
 
     </style>
 
-    <style name="MainActivity" parent="Theme.MaterialComponents.Light.NoActionBar" >
+    <style name="MainActivity" parent="Theme.MaterialComponents.Light.NoActionBar">
 
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/blue_primary</item>
@@ -36,9 +36,18 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <item name="android:windowTranslucentStatus">true</item>
-        
+
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">@font/google_sans_medium</item>
     </style>
+
+    <style name="Theme.Palladium.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Vector.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Vector.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

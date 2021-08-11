@@ -14,12 +14,17 @@ import com.george.vector.users.root.main.location_fragments.ost_school.fragment_
 import com.george.vector.users.root.main.location_fragments.ost_school.fragment_school_ost_new_tasks;
 import com.george.vector.users.root.main.location_fragments.ost_school.fragment_school_ost_progress_tasks;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class FolderRootActivity extends AppCompatActivity {
 
     private static final String TAG = "FolderRootActivity";
 
     MaterialToolbar toolbar_folder_root_activity;
+
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference taskRef = db.collection("ost_school_new");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +58,6 @@ public class FolderRootActivity extends AppCompatActivity {
             Log.i(TAG, "Запуск фрагмента Школа заявки Архив");
             currentFragment = new fragment_school_ost_archive_tasks();
         }
-
-
 
 
         if(location.equals("bar_school") && folder.equals("Новые заявки")){

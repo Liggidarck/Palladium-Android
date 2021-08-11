@@ -6,9 +6,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,11 +18,12 @@ import com.george.vector.R;
 import com.george.vector.common.tasks.ui.TaskUi;
 import com.george.vector.common.tasks.ui.TaskAdapter;
 import com.george.vector.users.root.tasks.TaskRootActivity;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.Objects;
 
 public class fragment_school_ost_new_tasks extends Fragment {
 
@@ -31,20 +32,22 @@ public class fragment_school_ost_new_tasks extends Fragment {
     private final CollectionReference taskRef = db.collection("ost_school_new");
 
     private TaskAdapter adapter;
+    private Query query;
 
     FirebaseFirestore firebaseFirestore;
 
-    @Nullable
-    @org.jetbrains.annotations.Nullable
+    TextInputLayout text_input_search_new_tasks;
+
     @Override
-    public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_school_ost_new_tasks, container, false);
 
         RecyclerView recyclerview_school_ost_new_tasks = view.findViewById(R.id.recyclerview_school_ost_new_tasks);
+        text_input_search_new_tasks = view.findViewById(R.id.text_input_search_new_tasks);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        Query query = taskRef.whereEqualTo("status", "Новая заявка");
+        query = taskRef.whereEqualTo("status", "Новая заявка");
 
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
@@ -59,7 +62,7 @@ public class fragment_school_ost_new_tasks extends Fragment {
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
 
-            Log.i(TAG, "Position: " + position + " ID: " + id);
+            Log.d(TAG, "Position: " + position + " ID: " + id);
 
             Intent intent = new Intent(fragment_school_ost_new_tasks.this.getContext(), TaskRootActivity.class);
             intent.putExtra("id_task_root", id);
@@ -69,9 +72,35 @@ public class fragment_school_ost_new_tasks extends Fragment {
 
         });
 
+        Objects.requireNonNull(text_input_search_new_tasks.getEditText()).setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                String search_value = text_input_search_new_tasks.getEditText().getText().toString();
+
+                if(search_value.isEmpty()) {
+                    query = taskRef.whereEqualTo("status", "Новая заявка");
+
+                    FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                            .setQuery(query, TaskUi.class)
+                            .build();
+
+                    adapter.updateOptions(search_options);
+                } else {
+                    query = taskRef.whereEqualTo("name_task", search_value);
+
+                    FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                            .setQuery(query, TaskUi.class)
+                            .build();
+
+                    adapter.updateOptions(search_options);
+                }
+
+                return true;
+            }
+            return false;
+        });
+
         return view;
     }
-
 
     @Override
     public void onStart() {

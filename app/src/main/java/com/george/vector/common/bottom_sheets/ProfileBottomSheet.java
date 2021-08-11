@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,10 +19,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ProfileBottomSheet extends BottomSheetDialogFragment {
 
     ImageView close_btn;
     TextView text_view_full_name, text_view_email, text_view_role, text_view_name_ava;
+    CircleImageView circle_ava;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -38,6 +42,7 @@ public class ProfileBottomSheet extends BottomSheetDialogFragment {
         text_view_email = view.findViewById(R.id.text_view_email);
         text_view_role = view.findViewById(R.id.text_view_role);
         text_view_name_ava = view.findViewById(R.id.text_view_name_ava);
+        circle_ava = view.findViewById(R.id.circle_ava);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -65,6 +70,8 @@ public class ProfileBottomSheet extends BottomSheetDialogFragment {
             text_view_email.setText(email);
             text_view_role.setText(role);
         });
+
+        circle_ava.setOnClickListener(v -> Toast.makeText(ProfileBottomSheet.this.getContext(), "Аджамир, когда релиз винспире?", Toast.LENGTH_SHORT).show());
 
         return view;
     }

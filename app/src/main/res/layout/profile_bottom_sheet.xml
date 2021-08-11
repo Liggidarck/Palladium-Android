@@ -49,10 +49,11 @@
             android:layout_height="wrap_content"
             android:padding="3dp">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="55dp"
-                android:layout_height="55dp"
-                android:src="@color/blue" />
+             <de.hdodenhof.circleimageview.CircleImageView
+                 android:id="@+id/circle_ava"
+                 android:layout_width="55dp"
+                 android:layout_height="55dp"
+                 android:src="@color/blue" />
 
             <TextView
                 android:id="@+id/text_view_name_ava"

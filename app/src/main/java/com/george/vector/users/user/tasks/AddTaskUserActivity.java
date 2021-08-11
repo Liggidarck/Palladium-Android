@@ -8,8 +8,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
@@ -35,7 +33,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.UUID;
 
 public class AddTaskUserActivity extends AppCompatActivity {
 
@@ -109,7 +106,6 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
         });
 
-        clear_errors();
         initialize_field(permission);
     }
 
@@ -156,9 +152,6 @@ public class AddTaskUserActivity extends AppCompatActivity {
         dialog.show();
     }
 
-
-
-
     public boolean isOnline() {
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -168,119 +161,16 @@ public class AddTaskUserActivity extends AppCompatActivity {
     boolean validateFields() {
         Utils utils = new Utils();
 
-        boolean check_address = utils.validate_field(address);
-        boolean check_floor = utils.validate_field(floor);
-        boolean check_cabinet = utils.validate_field(cabinet);
-        boolean check_name_task = utils.validate_field(name_task);
+        utils.clear_error(text_input_layout_address);
+        utils.clear_error(text_input_layout_floor);
+        utils.clear_error(text_input_layout_cabinet);
+        utils.clear_error(text_input_layout_name_task);
 
-        if(check_address & check_floor & check_cabinet & check_name_task) {
-            return true;
-        } else {
+        boolean check_address = utils.validate_field(address, text_input_layout_address);
+        boolean check_floor = utils.validate_field(floor, text_input_layout_floor);
+        boolean check_cabinet = utils.validate_field(cabinet, text_input_layout_cabinet);
+        boolean check_name_task = utils.validate_field(name_task, text_input_layout_name_task);
 
-            if(!check_address)
-                text_input_layout_address.setError("Это поле не может быть пустым");
-
-            if(!check_floor)
-                text_input_layout_floor.setError("Это поле не может быть пустым");
-
-            if(!check_cabinet)
-                text_input_layout_cabinet.setError("Это поле не может быть пустым");
-
-            if(!check_name_task)
-                text_input_layout_name_task.setError("Это поле не может быть пустым");
-
-            return false;
-        }
-
+        return check_address & check_floor & check_cabinet & check_name_task;
     }
-
-    void clear_errors() {
-
-        Objects.requireNonNull(text_input_layout_address.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_address.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        Objects.requireNonNull(text_input_layout_floor.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_floor.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        Objects.requireNonNull(text_input_layout_cabinet.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_cabinet.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        Objects.requireNonNull(text_input_layout_name_task.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_name_task.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        Objects.requireNonNull(text_input_layout_comment.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_comment.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-    }
-
 }

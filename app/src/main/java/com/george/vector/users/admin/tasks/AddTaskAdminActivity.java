@@ -7,18 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,7 +47,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.UUID;
 
 public class AddTaskAdminActivity extends AppCompatActivity {
 
@@ -144,7 +137,6 @@ public class AddTaskAdminActivity extends AppCompatActivity {
 
         });
 
-        clearErrors();
         initialize_fields(permission);
     }
 
@@ -278,179 +270,23 @@ public class AddTaskAdminActivity extends AppCompatActivity {
     boolean validateFields() {
         Utils utils = new Utils();
 
-        boolean check_address = utils.validate_field(address);
-        boolean check_floor = utils.validate_field(floor);
-        boolean check_cabinet = utils.validate_field(cabinet);
-        boolean check_name_task = utils.validate_field(name_task);
-        boolean check_date_task = utils.validate_field(date_task);
-        boolean check_executor = utils.validate_field(email_executor);
-        boolean check_status = utils.validate_field(status);
+        utils.clear_error(text_input_layout_address);
+        utils.clear_error(text_input_layout_floor);
+        utils.clear_error(text_input_layout_cabinet);
+        utils.clear_error(text_input_layout_name_task);
+        utils.clear_error(text_input_layout_date_task);
+        utils.clear_error(text_input_layout_executor_admin);
+        utils.clear_error(text_input_layout_status);
 
-        if(check_address & check_floor & check_cabinet & check_name_task & check_date_task & check_executor & check_status) {
-            return true;
-        } else {
+        boolean check_address = utils.validate_field(address, text_input_layout_address);
+        boolean check_floor = utils.validate_field(floor, text_input_layout_floor);
+        boolean check_cabinet = utils.validate_field(cabinet, text_input_layout_cabinet);
+        boolean check_name_task = utils.validate_field(name_task, text_input_layout_name_task);
+        boolean check_date_task = utils.validate_field(date_task, text_input_layout_date_task);
+        boolean check_executor = utils.validate_field(email_executor, text_input_layout_executor_admin);
+        boolean check_status = utils.validate_field(status, text_input_layout_status);
 
-            if(!check_address)
-                text_input_layout_address.setError("Это поле не может быть пустым");
-
-            if(!check_floor)
-                text_input_layout_floor.setError("Это поле не может быть пустым");
-
-            if(!check_cabinet)
-                text_input_layout_cabinet.setError("Это поле не может быть пустым");
-
-            if(!check_name_task)
-                text_input_layout_name_task.setError("Это поле не может быть пустым");
-
-            if(!check_date_task)
-                text_input_layout_date_task.setError("Это поле не может быть пустым");
-
-            if(!check_executor)
-                text_input_layout_executor_admin.setError("Это поле не может быть пустым");
-
-            if(!check_status)
-                text_input_layout_status.setError("Это поле не может быть пустым");
-
-            return false;
-        }
-
+        return check_address & check_floor & check_cabinet & check_name_task & check_date_task & check_executor & check_status;
     }
 
-    void clearErrors() {
-        Objects.requireNonNull(text_input_layout_address.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_address.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        Objects.requireNonNull(text_input_layout_floor.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_floor.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        Objects.requireNonNull(text_input_layout_cabinet.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_cabinet.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        Objects.requireNonNull(text_input_layout_name_task.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_name_task.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        Objects.requireNonNull(text_input_layout_comment.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_comment.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        Objects.requireNonNull(text_input_layout_date_task.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_date_task.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        Objects.requireNonNull(text_input_layout_executor_admin.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_executor_admin.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        Objects.requireNonNull(text_input_layout_status.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_status.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-    }
 }
