@@ -3,21 +3,21 @@ package com.george.vector.auth;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 
-import com.george.vector.admin.MainAdminActivity;
+import com.george.vector.users.admin.MainAdminActivity;
 import com.george.vector.R;
 import com.george.vector.common.utils.Utils;
-import com.george.vector.executor.main.MainExecutorActivity;
-import com.george.vector.root.main.RootMainActivity;
-import com.george.vector.user.main.MainUserActivity;
-import com.george.vector.caretaker.main.MainCaretakerActivity;
+import com.george.vector.users.executor.main.MainExecutorActivity;
+import com.george.vector.users.root.main.RootMainActivity;
+import com.george.vector.users.user.main.MainUserActivity;
+import com.george.vector.users.caretaker.main.MainCaretakerActivity;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
@@ -31,13 +31,11 @@ import java.util.Objects;
 
 public class ActivityLogin extends AppCompatActivity {
 
-    // Все View элементы
     TextInputLayout email_login_text_layout, password_login_text_layout;
-    Button btn_login;
+    Button btn_login, btn_forgot_password;
     LinearProgressIndicator progress_bar_auth;
     CoordinatorLayout coordinator_login;
 
-    // Все глобальные переменные
     String emailED, passwordED, userID;
     private static final String TAG = "LoginActivity";
 
@@ -54,6 +52,7 @@ public class ActivityLogin extends AppCompatActivity {
         password_login_text_layout = findViewById(R.id.password_login_text_layout);
         progress_bar_auth = findViewById(R.id.progress_bar_auth);
         coordinator_login = findViewById(R.id.coordinator_login);
+        btn_forgot_password = findViewById(R.id.btn_forgot_password);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -97,9 +96,37 @@ public class ActivityLogin extends AppCompatActivity {
             }
 
         });
+        btn_forgot_password.setOnClickListener(v -> show_forgot_password_dialog());
+    }
 
-        clearErrors();
+    private void show_forgot_password_dialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.forgot_password_dialog);
 
+        TextInputLayout ti_forgot_password = dialog.findViewById(R.id.ti_forgot_password);
+        Button btn_ok_forgot_password = dialog.findViewById(R.id.btn_ok_forgot_password);
+        Button cancel_dialog_password = dialog.findViewById(R.id.cancel_dialog_password);
+
+        btn_ok_forgot_password.setOnClickListener(v -> {
+            String email = Objects.requireNonNull(ti_forgot_password.getEditText()).getText().toString();
+
+            if(email.isEmpty())
+                ti_forgot_password.setError("Это поле не может быть пустым");
+            else {
+                firebaseAuth.sendPasswordResetEmail(email)
+                        .addOnSuccessListener(unused -> {
+                            Log.i(TAG, "Ссылка для восстановления пароля отправлена");
+                            dialog.dismiss();
+                        })
+                        .addOnFailureListener(e -> Log.e(TAG, "Error! " + e));
+            }
+
+
+        });
+        cancel_dialog_password.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
     }
 
     void startApp(@NotNull String role, String email, String permission) {
@@ -135,56 +162,12 @@ public class ActivityLogin extends AppCompatActivity {
     boolean validateFields() {
         Utils utils = new Utils();
 
-        boolean checkEmail = utils.validate_field(emailED);
-        boolean checkPassword = utils.validate_field(passwordED);
+        utils.clear_error(email_login_text_layout);
+        utils.clear_error(password_login_text_layout);
 
-        Log.i(TAG, "Email: " + checkEmail + " Password: " + checkPassword);
-
-        if(checkEmail & checkPassword)
-            return true;
-        else {
-            if(!checkEmail)
-                email_login_text_layout.setError("Это поле не может быть пустым!");
-
-            if(!checkPassword)
-                password_login_text_layout.setError("Это поле не может быть пустым!");
-
-            return false;
-        }
+        boolean checkEmail = utils.validate_field(emailED, email_login_text_layout);
+        boolean checkPassword = utils.validate_field(passwordED, password_login_text_layout);
+        return checkEmail & checkPassword;
     }
 
-    void clearErrors() {
-        Objects.requireNonNull(email_login_text_layout.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                email_login_text_layout.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        Objects.requireNonNull(password_login_text_layout.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                password_login_text_layout.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-    }
 }

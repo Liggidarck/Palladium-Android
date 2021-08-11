@@ -4,9 +4,9 @@ public class Task {
 
     public void save(TaskBehavior taskBehavior, String location, String name_task, String address, String dateText, String floor,
                      String cabinet, String comment, String date_done, String executor, String status, String timeText,
-                     String email, String uri_image) {
+                     String email) {
 
-        taskBehavior.initialize_task(location, name_task, address, dateText, floor, cabinet, comment, date_done, executor, status, timeText, email, uri_image);
+        taskBehavior.initialize_task(location, name_task, address, dateText, floor, cabinet, comment, date_done, executor, status, timeText, email);
 
     }
 

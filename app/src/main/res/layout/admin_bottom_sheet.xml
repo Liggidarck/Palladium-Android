@@ -114,6 +114,14 @@
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_marginTop="5dp"/>
 
+    <Button
+        android:id="@+id/btn_develop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Режим разработчика"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_marginTop="5dp"/>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="100dp" />

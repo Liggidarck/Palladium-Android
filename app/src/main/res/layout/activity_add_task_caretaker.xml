@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".caretaker.tasks.AddTaskCaretakerActivity" >
+    tools:context=".users.caretaker.tasks.AddTaskCaretakerActivity" >
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/topAppBar_new_task_caretaker"
@@ -103,7 +103,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
+                    android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -220,16 +220,6 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp" />
-
-            <ImageView
-                android:id="@+id/image_view_add_task_caretaker"
-                android:layout_width="match_parent"
-                android:layout_height="210dp"
-                android:src="@drawable/demo_image"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp"
-                tools:ignore="ContentDescription" />
 
             <View
                 android:layout_width="match_parent"

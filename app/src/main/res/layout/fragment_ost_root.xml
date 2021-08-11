@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         app:cardElevation="8dp">
 
         <RelativeLayout
@@ -34,7 +34,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_folder_24"
+                    android:src="@drawable/ic_baseline_school_24"
                     android:layout_centerInParent="true"
                     tools:ignore="ContentDescription" />
 
@@ -80,7 +80,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_folder_24"
+                    android:src="@drawable/ic_baseline_face_24"
                     android:layout_centerInParent="true"
                     tools:ignore="ContentDescription" />
 
@@ -126,7 +126,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_folder_24"
+                    android:src="@drawable/ic_baseline_face_24"
                     android:layout_centerInParent="true"
                     tools:ignore="ContentDescription" />
 

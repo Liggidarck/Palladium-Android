@@ -23,9 +23,9 @@ public class TaskAdapter extends FirestoreRecyclerAdapter<TaskUi, TaskAdapter.Ta
 
     @Override
     protected void onBindViewHolder(@NonNull TaskAdapter.TaskHolder holder, int position, @NonNull TaskUi model) {
-        holder.textViewTitle.setText(model.getTitle());
-        holder.textViewDescription.setText(model.getDescription());
-        holder.textViewPriority.setText(model.getPriority());
+        holder.textViewTitle.setText(model.getName_task());
+        holder.textViewDescription.setText(model.getAddress());
+        holder.textViewPriority.setText(model.getDate_create());
     }
 
     @NonNull

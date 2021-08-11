@@ -2,8 +2,6 @@ package com.george.vector.common.edit_users;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -152,129 +150,23 @@ public class EditUserActivity extends AppCompatActivity {
 
         });
 
-        clearErrors();
-
     }
 
     boolean validateFields() {
         Utils utils = new Utils();
 
-        boolean checkName = utils.validate_field(name_user);
-        boolean checkLastName = utils.validate_field(last_name_user);
-        boolean checkPatronymic = utils.validate_field(patronymic_user);
-        boolean checkEmail = utils.validate_field(email_user);
-        boolean checkRole = utils.validate_field(role_user);
+        utils.clear_error(text_input_layout_name_user);
+        utils.clear_error(text_input_layout_last_name_user);
+        utils.clear_error(text_input_layout_patronymic_user);
+        utils.clear_error(text_input_layout_email_user);
+        utils.clear_error(text_input_layout_role_user);
 
-        if(checkName & checkLastName & checkPatronymic & checkEmail & checkRole)
-            return true;
-        else {
+        boolean checkName = utils.validate_field(name_user, text_input_layout_name_user);
+        boolean checkLastName = utils.validate_field(last_name_user, text_input_layout_last_name_user);
+        boolean checkPatronymic = utils.validate_field(patronymic_user, text_input_layout_patronymic_user);
+        boolean checkEmail = utils.validate_field(email_user, text_input_layout_email_user);
+        boolean checkRole = utils.validate_field(role_user, text_input_layout_role_user);
 
-            if(!checkName)
-                text_input_layout_name_user.setError("Это поле не может быьт пустым");
-
-            if(!checkLastName)
-                text_input_layout_last_name_user.setError("Это поле не может быть пустым");
-
-            if(!checkPatronymic)
-                text_input_layout_patronymic_user.setError("Это поле не может быть пустым");
-
-            if(!checkEmail)
-                text_input_layout_email_user.setError("Это  поле не может быть пустым");
-
-            if(!checkRole)
-                text_input_layout_role_user.setError("Это поле не может быть пустым");
-
-            return false;
-        }
-
+        return checkName & checkLastName & checkPatronymic & checkEmail & checkRole;
     }
-
-    void clearErrors() {
-        Objects.requireNonNull(text_input_layout_name_user.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_name_user.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        Objects.requireNonNull(text_input_layout_last_name_user.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_last_name_user.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        Objects.requireNonNull(text_input_layout_patronymic_user.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_patronymic_user.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        Objects.requireNonNull(text_input_layout_email_user.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_email_user.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-
-        Objects.requireNonNull(text_input_layout_role_user.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                text_input_layout_role_user.setError(null);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-    }
-
 }

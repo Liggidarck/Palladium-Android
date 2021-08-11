@@ -76,6 +76,7 @@
         android:id="@+id/recycler_view_list_users"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/chip_scroll" />
+        android:layout_below="@id/chip_scroll"
+        tools:listitem="@layout/user_item"/>
 
 </RelativeLayout>

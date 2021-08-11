@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".caretaker.main.FolderCaretakerActivity">
+    tools:context=".users.caretaker.main.FolderCaretakerActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_caretaker_tasks"

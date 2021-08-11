@@ -16,6 +16,7 @@ import com.george.vector.R;
 import com.george.vector.auth.ActivityLogin;
 import com.george.vector.auth.ActivityRegisterUser;
 import com.george.vector.common.edit_users.ListUsersActivity;
+import com.george.vector.develop.DevelopActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,7 +25,7 @@ public class ConsoleBottomSheet extends BottomSheetDialogFragment {
 
     ImageView close_btn;
     RelativeLayout layout_new_person, layout_edit_person;
-    Button btn_logout;
+    Button btn_logout, btn_develop;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -38,18 +39,22 @@ public class ConsoleBottomSheet extends BottomSheetDialogFragment {
         layout_new_person = view.findViewById(R.id.layout_new_person);
         btn_logout = view.findViewById(R.id.btn_logout);
         layout_edit_person = view.findViewById(R.id.layout_edit_person);
+        btn_develop = view.findViewById(R.id.btn_develop);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         close_btn.setOnClickListener(v -> dismiss());
+
         layout_new_person.setOnClickListener(v -> startActivity(new Intent(ConsoleBottomSheet.this.getActivity(), ActivityRegisterUser.class)));
+        layout_edit_person.setOnClickListener(v -> startActivity(new Intent(ConsoleBottomSheet.this.getContext(), ListUsersActivity.class)));
+
+        btn_develop.setOnClickListener(v -> startActivity(new Intent(ConsoleBottomSheet.this.getContext(), DevelopActivity.class)));
+
         btn_logout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(ConsoleBottomSheet.this.getContext(), ActivityLogin.class));
         });
-        layout_edit_person.setOnClickListener(v -> startActivity(new Intent(ConsoleBottomSheet.this.getContext(), ListUsersActivity.class)));
-
         return view;
     }
 }

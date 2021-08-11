@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".root.main.LocationFolderActivity"
+    tools:context=".users.root.main.LocationFolderActivity"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -53,11 +53,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/new_task"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:layout_toEndOf="@+id/ava_folder_2"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"/>
+                android:layout_marginStart="20dp"
+                android:layout_toEndOf="@+id/ava_folder_2"
+                android:text="@string/new_tasks"
+                android:textAppearance="?attr/textAppearanceHeadline6" />
 
         </RelativeLayout>
 
