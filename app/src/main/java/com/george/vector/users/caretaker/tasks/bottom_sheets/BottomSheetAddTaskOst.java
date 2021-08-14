@@ -37,7 +37,7 @@ public class BottomSheetAddTaskOst extends BottomSheetDialogFragment {
 
         ost_school_new_task_caretaker.setOnClickListener(v -> {
             Intent intent = new Intent(BottomSheetAddTaskOst.this.getContext(), AddTaskCaretakerActivity.class);
-            intent.putExtra("location", "ost_school");
+            intent.putExtra(getString(R.string.location), getString(R.string.ost_school));
             startActivity(intent);
         });
 

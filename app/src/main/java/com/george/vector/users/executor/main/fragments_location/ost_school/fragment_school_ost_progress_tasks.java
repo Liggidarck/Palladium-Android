@@ -31,7 +31,7 @@ public class fragment_school_ost_progress_tasks extends Fragment {
     RecyclerView recycler_view_ost_school_progress_exec;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference taskRef = db.collection(getString(R.string.ost_school_progress));
+    private final CollectionReference taskRef = db.collection("ost_school_progress");
 
     TextInputLayout search_executor_ost_school_progress_tasks;
 

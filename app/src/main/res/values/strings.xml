@@ -64,7 +64,6 @@
     <string name="warning">Внимание!</string>
     <string name="warning_no_connection">Отсутствует интернет подключение. Вы можете сохранить заявку у себя в телефоне и когда интернет снова появиться, заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку позже, когда появиться интернет.</string>
     <string name="warning_delete_task">Выдействительно хотите удалить заявку? Восстановить удаленную заявку будет невозможно.</string>
-    <string name="title_activity_loading_compose">LoadingComposeActivity</string>
-    <string name="title_activity_settings_root">SettingsRootActivity</string>
+    <string name="error_no_connection">Ошибка! Проверьте подключение к интернету</string>
 
 </resources>

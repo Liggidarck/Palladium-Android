@@ -3,7 +3,10 @@ package com.george.vector.users.admin.tasks;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +17,7 @@ import com.george.vector.R;
 import com.george.vector.common.tasks.utils.DeleteTask;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -60,9 +64,9 @@ public class TaskAdminActivity extends AppCompatActivity {
         delete_task_btn = findViewById(R.id.delete_task_btn_admin);
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get((String) getText(R.string.id)).toString();
-        collection = arguments.get((String) getText(R.string.collection)).toString();
-        permission = arguments.get((String) getText(R.string.permission)).toString();
+        id = arguments.get(getString(R.string.id)).toString();
+        collection = arguments.get(getString(R.string.collection)).toString();
+        permission = arguments.get(getString(R.string.permission)).toString();
         Log.d(TAG, "Location: " + permission);
         Log.d(TAG, "Permission: " + collection);
 
@@ -142,6 +146,22 @@ public class TaskAdminActivity extends AppCompatActivity {
         deleteTask.delete_task(collection, id);
 
         onBackPressed();
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(!isOnline())
+            Snackbar.make(findViewById(R.id.coordinator_task_admin), "Ошибка! Проверьте подключение к интернету", Snackbar.LENGTH_LONG)
+                    .setAction("Повторить", v -> Log.i(TAG, "Update status: " + isOnline()))
+                    .show();
     }
 
 }

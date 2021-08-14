@@ -71,7 +71,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
     String email_executor;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference usersRef = db.collection(getString(R.string.users));
+    private final CollectionReference usersRef = db.collection("users");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

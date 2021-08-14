@@ -59,6 +59,10 @@ public class MainAdminActivity extends AppCompatActivity {
         setSupportActionBar(bottomAppBar);
         bottomAppBar.setNavigationOnClickListener(v -> {
             ConsoleBottomSheet bottomSheet = new ConsoleBottomSheet();
+            Bundle bundle = new Bundle();
+
+            bundle.putString(getString(R.string.permission), permission);
+            bottomSheet.setArguments(bundle);
             bottomSheet.show(getSupportFragmentManager(), "ConsoleBottomSheet");
         });
 

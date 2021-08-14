@@ -15,17 +15,7 @@
         android:theme="@style/Theme.Palladium">
         <activity
             android:name=".users.root.main.SettingsRootActivity"
-            android:exported="true"
-            android:label="@string/title_activity_settings_root" />
-
-        <service
-            android:name=".develop.notifications.FirebaseService"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-                <action android:name="com.google.c2dm.intent.RECIVE" />
-            </intent-filter>
-        </service>
+            android:exported="true" />
 
         <activity android:name=".auth.LoadingActivity">
             <intent-filter>
@@ -34,7 +24,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".develop.notifications.NotificationActivity" />
         <activity android:name=".develop.DevelopActivity" />
         <activity android:name=".users.executor.tasks.TaskExecutorActivity" />
         <activity android:name=".users.executor.main.ExecutorTasksActivity" />
