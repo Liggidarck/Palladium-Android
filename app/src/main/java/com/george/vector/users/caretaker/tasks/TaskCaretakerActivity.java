@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.george.vector.R;
+import com.george.vector.common.tasks.utils.DeleteTask;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
@@ -59,9 +60,13 @@ public class TaskCaretakerActivity extends AppCompatActivity {
         delete_task_btn = findViewById(R.id.delete_task_btn_caretaker);
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get("id_task_caretaker").toString();
-        collection = arguments.get("collection").toString();
-        location = arguments.get("location").toString();
+        id = arguments.get(getString(R.string.id)).toString();
+        collection = arguments.get(getString(R.string.collection)).toString();
+        location = arguments.get(getString(R.string.location)).toString();
+
+        Log.d(TAG, "Id: " + id);
+        Log.d(TAG, "Collection: " + collection);
+        Log.d(TAG, "Location: " + location);
 
         topAppBar_tasks_caretaker.setNavigationOnClickListener(v -> onBackPressed());
 
@@ -72,9 +77,9 @@ public class TaskCaretakerActivity extends AppCompatActivity {
 
         edit_task_btn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EdtTaskCaretakerActivity.class);
-            intent.putExtra("id_task", id);
-            intent.putExtra("collection", collection);
-            intent.putExtra("location", location);
+            intent.putExtra(getString(R.string.id), id);
+            intent.putExtra(getString(R.string.collection), collection);
+            intent.putExtra(getString(R.string.location), location);
             startActivity(intent);
         });
         delete_task_btn.setOnClickListener(v -> show_dialog_delete());
@@ -138,8 +143,8 @@ public class TaskCaretakerActivity extends AppCompatActivity {
     }
 
     void delete_task() {
-        DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
-        documentReference.delete();
+        DeleteTask deleteTask = new DeleteTask();
+        deleteTask.delete_task(collection, id);
 
         onBackPressed();
     }

@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.george.vector.R;
+import com.george.vector.common.tasks.utils.DeleteTask;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,9 +32,9 @@ public class TaskAdminActivity extends AppCompatActivity {
     CircleImageView circle_status;
     LinearProgressIndicator progress_bar_task_admin;
 
-    private static final String TAG = "TaskActivity";
+    private static final String TAG = "TaskAdminActivity";
 
-    String id, location, collection, address, floor, cabinet, name_task, comment, status, date_create, time_create;
+    String id, permission, collection, address, floor, cabinet, name_task, comment, status, date_create, time_create;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -59,9 +60,11 @@ public class TaskAdminActivity extends AppCompatActivity {
         delete_task_btn = findViewById(R.id.delete_task_btn_admin);
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get("id_task").toString();
-        location = arguments.get("location").toString();
-        collection = arguments.get("collection").toString();
+        id = arguments.get((String) getText(R.string.id)).toString();
+        collection = arguments.get((String) getText(R.string.collection)).toString();
+        permission = arguments.get((String) getText(R.string.permission)).toString();
+        Log.d(TAG, "Location: " + permission);
+        Log.d(TAG, "Permission: " + collection);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -113,9 +116,9 @@ public class TaskAdminActivity extends AppCompatActivity {
 
         edit_task_btn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskAdminActivity.class);
-            intent.putExtra("id_task", id);
-            intent.putExtra("collection", collection);
-            intent.putExtra("location", location);
+            intent.putExtra(getString(R.string.id), id);
+            intent.putExtra(getString(R.string.collection), collection);
+            intent.putExtra(getString(R.string.permission), permission);
             startActivity(intent);
         });
 
@@ -135,8 +138,8 @@ public class TaskAdminActivity extends AppCompatActivity {
     }
 
     void delete_task() {
-        DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
-        documentReference.delete();
+        DeleteTask deleteTask = new DeleteTask();
+        deleteTask.delete_task(collection, id);
 
         onBackPressed();
     }

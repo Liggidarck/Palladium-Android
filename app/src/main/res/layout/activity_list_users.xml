@@ -11,7 +11,7 @@
         android:id="@+id/toolbar_list_users"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="@string/users"
+        app:title="@string/users_text"
         app:titleTextColor="@android:color/white"
         app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
         app:layout_collapseMode="pin"
@@ -58,7 +58,7 @@
                 android:id="@+id/chip_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/users"
+                android:text="@string/users_text"
                 style="@style/Widget.MaterialComponents.Chip.Filter" />
 
             <com.google.android.material.chip.Chip

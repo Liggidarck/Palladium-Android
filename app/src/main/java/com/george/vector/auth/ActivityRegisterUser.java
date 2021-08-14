@@ -101,7 +101,7 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
                     if (task.isSuccessful()) {
                         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-                        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+                        DocumentReference documentReference = firebaseFirestore.collection(getString(R.string.users)).document(userID);
                         Map<String, Object> user = new HashMap<>();
                         user.put("name", name_user);
                         user.put("last_name", last_name_user);

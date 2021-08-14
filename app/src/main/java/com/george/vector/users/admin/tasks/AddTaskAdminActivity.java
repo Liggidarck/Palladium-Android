@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
-import com.george.vector.users.admin.MainAdminActivity;
+import com.george.vector.users.admin.main.MainAdminActivity;
 import com.george.vector.common.edit_users.User;
 import com.george.vector.common.edit_users.UserAdapter;
 import com.george.vector.common.tasks.utils.SaveTask;
@@ -105,11 +105,11 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         storageReference = firebaseStorage.getReference();
 
         Bundle arguments = getIntent().getExtras();
-        permission = arguments.get("permission").toString();
+        permission = arguments.get(getString(R.string.permission)).toString();
         Log.i(TAG, "Permission: " + permission);
 
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReferenceUser = firebaseFirestore.collection("users").document(userID);
+        DocumentReference documentReferenceUser = firebaseFirestore.collection(getString(R.string.users)).document(userID);
         documentReferenceUser.addSnapshotListener(this, (value, error) -> {
             assert value != null;
             email = value.getString("email");

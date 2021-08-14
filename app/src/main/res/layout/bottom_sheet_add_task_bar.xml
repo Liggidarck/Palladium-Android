@@ -38,7 +38,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/bar"
+        android:text="@string/bar_text"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:layout_marginTop="15dp" />
@@ -55,7 +55,7 @@
         android:id="@+id/bar_rucheek_new_task_caretaker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/bar_rucheek"
+        android:text="@string/bar_rucheek_text"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_marginTop="10dp" />
 
@@ -63,7 +63,7 @@
         android:id="@+id/bar_start_new_task_caretaker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/bar_star"
+        android:text="@string/bar_star_text"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_marginTop="10dp" />
 

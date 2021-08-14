@@ -9,6 +9,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="ic_launcher_background">#FFFFFF</color>
+
     <color name="red">#FF6B6B</color>
     <color name="orange">#FFD66B</color>
     <color name="green">#5BFF6C</color>

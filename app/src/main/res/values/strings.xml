@@ -3,9 +3,9 @@
 
     <string name="tasks">Заявки</string>
     <string name="task">Заявка</string>
-    <string name="new_tasks">Новые заявки</string>
+    <string name="new_tasks_text">Новые заявки</string>
     <string name="progress_tasks">Заявки в работе</string>
-    <string name="archive_tasks">Архив</string>
+    <string name="archive_tasks_text">Архив</string>
     <string name="address">Адрес</string>
     <string name="comment">Коментарий</string>
     <string name="no_comment">Нет коментариев к заявке</string>
@@ -23,7 +23,7 @@
     <string name="done">Готово</string>
 
     <string name="authorization">Авторизация</string>
-    <string name="email">Электронный адрес</string>
+    <string name="email_text">Электронный адрес</string>
     <string name="password">Пароль</string>
     <string name="login">Войти</string>
 
@@ -31,22 +31,22 @@
     <string name="name">Имя</string>
     <string name="last_name">Фамилия</string>
     <string name="patronymic">Отчество</string>
-    <string name="role">Роль</string>
-    <string name="permission">Разрешения</string>
+    <string name="role_text">Роль</string>
+    <string name="permission_text">Разрешения</string>
     <string name="add_user">добавить пользователя</string>
 
     <string name="school">Школа</string>
-    <string name="ost_aist">Детский сад Аист</string>
-    <string name="ost_yagodka">Детский сад Ягодка</string>
-    <string name="bar_rucheek">Детский сад Ручеек</string>
-    <string name="bar_star">Детский сад Звездочка</string>
+    <string name="ost_aist_text">Детский сад Аист</string>
+    <string name="ost_yagodka_text">Детский сад Ягодка</string>
+    <string name="bar_rucheek_text">Детский сад Ручеек</string>
+    <string name="bar_star_text">Детский сад Звездочка</string>
     <string name="new_task">Новая заявка</string>
-    <string name="ost">Остафьево</string>
-    <string name="bar">Барыши</string>
+    <string name="ost_text">Остафьево</string>
+    <string name="bar_text">Барыши</string>
 
     <string name="bar_school_address">Улица Местечко Барыши дом 25</string>
 
-    <string name="users">Пользователи</string>
+    <string name="users_text">Пользователи</string>
     <string name="add_new_user">Добавить нового пользователя</string>
     <string name="edit_data_user">Отредактировать данные</string>
     <string name="logout">выйти из аккаунта</string>

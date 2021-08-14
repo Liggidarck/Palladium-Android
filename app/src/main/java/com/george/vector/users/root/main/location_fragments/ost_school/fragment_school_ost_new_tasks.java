@@ -65,9 +65,9 @@ public class fragment_school_ost_new_tasks extends Fragment {
             Log.d(TAG, "Position: " + position + " ID: " + id);
 
             Intent intent = new Intent(fragment_school_ost_new_tasks.this.getContext(), TaskRootActivity.class);
-            intent.putExtra("id_task_root", id);
-            intent.putExtra("collection", "ost_school_new");
-            intent.putExtra("zone", "ost_school");
+            intent.putExtra(getString(R.string.id), id);
+            intent.putExtra(getString(R.string.collection), getString(R.string.ost_school_new));
+            intent.putExtra(getString(R.string.location), getString(R.string.ost_school));
             startActivity(intent);
 
         });
@@ -76,23 +76,10 @@ public class fragment_school_ost_new_tasks extends Fragment {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 String search_value = text_input_search_new_tasks.getEditText().getText().toString();
 
-                if(search_value.isEmpty()) {
-                    query = taskRef.whereEqualTo("status", "Новая заявка");
-
-                    FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
-                            .setQuery(query, TaskUi.class)
-                            .build();
-
-                    adapter.updateOptions(search_options);
-                } else {
-                    query = taskRef.whereEqualTo("name_task", search_value);
-
-                    FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
-                            .setQuery(query, TaskUi.class)
-                            .build();
-
-                    adapter.updateOptions(search_options);
-                }
+                if(search_value.isEmpty())
+                    defaultQuery();
+                 else
+                     search(search_value);
 
                 return true;
             }
@@ -100,6 +87,26 @@ public class fragment_school_ost_new_tasks extends Fragment {
         });
 
         return view;
+    }
+
+    private void search(String query_text) {
+        query = taskRef.whereEqualTo("name_task", query_text);
+
+        FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
+                .build();
+
+        adapter.updateOptions(search_options);
+    }
+
+    private void defaultQuery() {
+        query = taskRef.whereEqualTo("status", "Новая заявка");
+
+        FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
+                .build();
+
+        adapter.updateOptions(options);
     }
 
     @Override

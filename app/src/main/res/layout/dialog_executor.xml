@@ -48,7 +48,7 @@
             android:id="@+id/radio_button_archive"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/archive_tasks" />
+            android:text="@string/archive_tasks_text" />
 
     </RadioGroup>
 

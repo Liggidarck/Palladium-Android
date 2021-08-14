@@ -69,7 +69,7 @@ public class EditTaskActivity extends AppCompatActivity {
     FirebaseFirestore firebaseFirestore;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference usersRef = db.collection("users");
+    private final CollectionReference usersRef = db.collection(getString(R.string.users));
 
     String name_executor;
     String last_name_executor;
@@ -103,9 +103,9 @@ public class EditTaskActivity extends AppCompatActivity {
         topAppBar_new_task_root.setNavigationOnClickListener(v -> onBackPressed());
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get("id_task").toString();
-        collection = arguments.get("collection").toString();
-        location = arguments.get("zone").toString();
+        id = arguments.get(getString(R.string.id)).toString();
+        collection = arguments.get(getString(R.string.collection)).toString();
+        location = arguments.get(getString(R.string.location)).toString();
 
         add_executor_root.setOnClickListener(v -> show_add_executor_dialog());
 
@@ -276,7 +276,7 @@ public class EditTaskActivity extends AppCompatActivity {
     }
 
     void initialize_fields(String location) {
-        if (location.equals("ost_school")) {
+        if (location.equals(getString(R.string.ost_school))) {
             String[] items = getResources().getStringArray(R.array.addresses_ost_school);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     EditTaskActivity.this,

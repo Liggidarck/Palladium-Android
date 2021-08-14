@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
@@ -22,21 +23,26 @@ import com.george.vector.users.user.tasks.AddTaskUserActivity;
 import com.george.vector.users.user.tasks.TaskUserActivity;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import java.util.Objects;
 
 public class MainUserActivity extends AppCompatActivity {
 
     private static final String TAG = "MainUserActivity";
     FloatingActionButton fab_add_user;
     BottomAppBar bottomAppBar;
+    TextInputLayout text_input_search_user;
 
     FirebaseFirestore db;
     CollectionReference taskRef;
 
     private TaskAdapter adapter;
+    private Query query;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -45,20 +51,19 @@ public class MainUserActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.MainActivity);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_user);
 
         Bundle arguments = getIntent().getExtras();
-        String email = arguments.get("email").toString();
-        permission = arguments.getString("permission");
+        String email = arguments.get(getString(R.string.email)).toString();
+        permission = arguments.getString(getString(R.string.permission));
         String collection = null;
 
         bottomAppBar = findViewById(R.id.bottomAppBarUser);
         fab_add_user = findViewById(R.id.fab_add_user);
+        text_input_search_user = findViewById(R.id.text_input_search_user);
 
         db = FirebaseFirestore.getInstance();
-
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -70,23 +75,59 @@ public class MainUserActivity extends AppCompatActivity {
 
         fab_add_user.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddTaskUserActivity.class);
-            intent.putExtra("permission", permission);
+            intent.putExtra(getString(R.string.permission), permission);
             startActivity(intent);
         });
 
-        if(permission.equals("ost_school"))
-            collection = "ost_school_new";
+        if (permission.equals(getString(R.string.ost_school)))
+            collection = getString(R.string.ost_school_new);
 
-        if(permission.equals("bar_school"))
-            collection = "bar_school_new";
+        if (permission.equals(getString(R.string.bar_school)))
+            collection = getString(R.string.bar_school_new);
 
         setUpRecyclerView(email, collection);
+
+        Objects.requireNonNull(text_input_search_user.getEditText()).setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                String search_value = text_input_search_user.getEditText().getText().toString();
+
+                if(search_value.isEmpty())
+                    defaultQuery(email);
+                else
+                    search(search_value, email);
+
+                return true;
+            }
+            return false;
+        });
+
     }
+
+    private void search(String query_text, String email) {
+        query = taskRef.whereEqualTo("name_task", query_text).whereEqualTo("email_creator", email);
+
+        FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
+                .build();
+
+        adapter.updateOptions(search_options);
+    }
+
+    private void defaultQuery(String email) {
+        query = taskRef.whereEqualTo("email_creator", email);
+
+        FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
+                .build();
+
+        adapter.updateOptions(options);
+    }
+
 
     private void setUpRecyclerView(String email, String collection) {
         taskRef = db.collection(collection);
 
-        Query query = taskRef.whereEqualTo("email_creator", email);
+        query = taskRef.whereEqualTo("email_creator", email);
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
                 .build();
@@ -99,14 +140,12 @@ public class MainUserActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
-            TaskUi task = documentSnapshot.toObject(TaskUi.class);
             String id = documentSnapshot.getId();
-            String path = documentSnapshot.getReference().getPath();
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
             Intent intent = new Intent(this, TaskUserActivity.class);
-            intent.putExtra("id_task", id);
-            intent.putExtra("permission", permission);
+            intent.putExtra(getString(R.string.id), id);
+            intent.putExtra(getString(R.string.permission), permission);
             startActivity(intent);
 
         });
@@ -134,7 +173,7 @@ public class MainUserActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.profile_item){
+        if (item.getItemId() == R.id.profile_item) {
             ProfileBottomSheet bottomSheet = new ProfileBottomSheet();
             bottomSheet.show(getSupportFragmentManager(), "ProfileBottomSheet");
         }

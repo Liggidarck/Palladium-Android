@@ -37,7 +37,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/users"
+        android:text="@string/users_text"
         android:textColor="@color/black"
         android:textSize="22sp"
         android:layout_marginTop="20dp"/>
@@ -111,14 +111,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/logout"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_marginTop="5dp"/>
-
-    <Button
-        android:id="@+id/btn_develop"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Режим разработчика"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_marginTop="5dp"/>
 

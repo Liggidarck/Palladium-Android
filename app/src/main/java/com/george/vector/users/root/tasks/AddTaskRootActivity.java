@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
@@ -40,8 +39,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -63,11 +60,10 @@ public class AddTaskRootActivity extends AppCompatActivity {
     TextInputEditText edit_text_date_task_root;
     MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root;
 
-    String location, userID, email, address, floor, cabinet, name_task, date_complete, status, comment, randomKey;
+    String location, userID, email, address, floor, cabinet, name_task, date_complete, status, comment;
     private static final String TAG = "AddTaskRoot";
 
     Calendar datePickCalendar;
-    public Uri imageUri;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -111,13 +107,13 @@ public class AddTaskRootActivity extends AppCompatActivity {
         topAppBar_new_task_root.setNavigationOnClickListener(v -> onBackPressed());
 
         Bundle arguments = getIntent().getExtras();
-        location = arguments.get("location").toString();
-        Log.i(TAG, location);
+        location = arguments.get(getString(R.string.location)).toString();
+        Log.d(TAG, location);
 
         //При выходе из аккаунта крашится тут
         try {
             userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-            DocumentReference documentReferenceUser = firebaseFirestore.collection("users").document(userID);
+            DocumentReference documentReferenceUser = firebaseFirestore.collection(getString(R.string.users)).document(userID);
             documentReferenceUser.addSnapshotListener(this, (value, error) -> {
                 assert value != null;
                 email = value.getString("email");
@@ -149,7 +145,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         initialize_fields(location);
     }
 
-    void save_task(@NotNull String location) {
+    void save_task(String location) {
         Task task = new Task();
 
         Date currentDate = new Date();
@@ -223,8 +219,8 @@ public class AddTaskRootActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    void initialize_fields(@NotNull String location) {
-        if(location.equals("ost_school")) {
+    void initialize_fields(String location) {
+        if(location.equals(getString(R.string.ost_school))) {
             String[] items = getResources().getStringArray(R.array.addresses_ost_school);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     AddTaskRootActivity.this,
@@ -235,7 +231,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
             address_autoComplete_root.setAdapter(adapter);
         }
 
-        if (location.equals("bar_school"))
+        if (location.equals(getString(R.string.bar_school)))
             Objects.requireNonNull(text_input_layout_address_root.getEditText()).setText(getText(R.string.bar_school_address));
 
         String[] items_status = getResources().getStringArray(R.array.status);

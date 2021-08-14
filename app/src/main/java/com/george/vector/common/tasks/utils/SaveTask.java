@@ -51,7 +51,7 @@ public class SaveTask implements TaskBehavior{
                             time_create, email);
                     break;
                 case "Архив":
-                    save("ost_school_archive", name_task, address,
+                    save("bar_school_archive", name_task, address,
                             date_create, floor, cabinet, comment, date_complete, executor, status,
                             time_create, email);
                     break;

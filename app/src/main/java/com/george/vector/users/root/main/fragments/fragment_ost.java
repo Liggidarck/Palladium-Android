@@ -21,9 +21,8 @@ public class fragment_ost extends Fragment {
     MaterialCardView ost_school_root, ost_kids_one_root, ost_kids_two_root;
 
     @Nullable
-    @org.jetbrains.annotations.Nullable
     @Override
-    public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ost_root, container,false);
 
         ost_school_root = view.findViewById(R.id.ost_school_root);
@@ -32,7 +31,7 @@ public class fragment_ost extends Fragment {
 
         ost_school_root.setOnClickListener(v -> {
             Intent intent = new Intent(fragment_ost.this.getContext(), LocationFolderActivity.class);
-            intent.putExtra("location", "ost_school");
+            intent.putExtra((String) getText(R.string.location), getText(R.string.ost_school));
             startActivity(intent);
         });
 

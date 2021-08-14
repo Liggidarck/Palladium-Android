@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -34,7 +33,6 @@ public class TaskExecutorActivity extends AppCompatActivity {
     TextView text_view_address_task_executor, text_view_floor_task_executor, text_view_cabinet_task_executor,
             text_view_name_task_executor, text_view_comment_task_executor, text_view_status_task_executor,
             text_view_date_create_task_executor;
-    ImageView image_view_task_executor;
     Button edit_btn_executor;
     CircleImageView circle_status_executor;
 
@@ -60,14 +58,13 @@ public class TaskExecutorActivity extends AppCompatActivity {
         text_view_comment_task_executor = findViewById(R.id.text_view_comment_task_executor);
         text_view_status_task_executor = findViewById(R.id.text_view_status_task_executor);
         text_view_date_create_task_executor = findViewById(R.id.text_view_date_create_task_executor);
-        image_view_task_executor = findViewById(R.id.image_view_task_executor);
         edit_btn_executor = findViewById(R.id.edit_btn_executor);
         circle_status_executor = findViewById(R.id.circle_status_executor);
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get("id_task").toString();
-        collection = arguments.get("collection").toString();
-        location = arguments.get("location").toString();
+        id = arguments.get((String) getText(R.string.id)).toString();
+        collection = arguments.get((String) getText(R.string.collection)).toString();
+        location = arguments.get((String) getText(R.string.collection)).toString();
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -80,32 +77,17 @@ public class TaskExecutorActivity extends AppCompatActivity {
         documentReference.addSnapshotListener(this, (value, error) -> {
             progress_bar_task_executor.setVisibility(View.VISIBLE);
             assert value != null;
-            address = value.getString("description");
+            address = value.getString("address");
             floor = String.format("Этаж: %s", value.getString("floor"));
             cabinet = String.format("Кабинет: %s", value.getString("cabinet"));
-            name_task = value.getString("title");
+            name_task = value.getString("name_task");
             comment = value.getString("comment");
             status = value.getString("status");
-            date_create = value.getString("priority");
-            time_create = value.getString("time_priority");
+            date_create = value.getString("date_create");
+            time_create = value.getString("time_create");
             email_executor = value.getString("executor");
             email_creator =value.getString("email_creator");
             date_done = value.getString("date_done");
-
-//            String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image_key);
-//            Picasso.with(this)
-//                    .load(IMAGE_URL)
-//                    .into(image_view_task_executor, new Callback() {
-//                        @Override
-//                        public void onSuccess() {
-//                            progress_bar_task_executor.setVisibility(View.INVISIBLE);
-//                        }
-//
-//                        @Override
-//                        public void onError() {
-//                            Log.i(TAG, "Error!");
-//                        }
-//                    });
 
             text_view_address_task_executor.setText(address);
             text_view_floor_task_executor.setText(floor);
@@ -155,48 +137,48 @@ public class TaskExecutorActivity extends AppCompatActivity {
         done_btn_executor.setOnClickListener(v -> {
             delete_task(collection, id);
 
-            if(location.equals("ost_school")) {
+            if(location.contentEquals(getText(R.string.ost_school))) {
                 if (radio_button_new_task.isChecked()) {
                     status = "Новая заявка";
-                    load_data("ost_school_new", name_task, address, date_done,
+                    load_data((String) getText(R.string.ost_school_new), name_task, address, date_done,
                             floor, cabinet, comment, date_create, email_executor,
                             status, time_create, email_creator);
                 }
 
                 if (radio_button_progress.isChecked()) {
                     status = "В работе";
-                    load_data("ost_school_progress", name_task, address, date_done,
+                    load_data((String) getText(R.string.ost_school_progress), name_task, address, date_done,
                             floor, cabinet, comment, date_create, email_executor,
                             status, time_create, email_creator);
                 }
 
                 if (radio_button_archive.isChecked()) {
                     status = "Архив";
-                    load_data("ost_school_archive", name_task, address, date_done,
+                    load_data((String) getText(R.string.ost_school_archive), name_task, address, date_done,
                             floor, cabinet, comment, date_create, email_executor,
                             status, time_create, email_creator);
                 }
             }
 
 
-            if(location.equals("bar_school")) {
+            if(location.contentEquals(getText(R.string.bar_school))) {
                 if (radio_button_new_task.isChecked()) {
                     status = "Новая заявка";
-                    load_data("bar_school_new", name_task, address, date_done,
+                    load_data((String) getText(R.string.bar_school_new), name_task, address, date_done,
                             floor, cabinet, comment, date_create, email_executor,
                             status, time_create, email_creator);
                 }
 
                 if (radio_button_progress.isChecked()) {
                     status = "В работе";
-                    load_data("bar_school_progress", name_task, address, date_done,
+                    load_data((String) getText(R.string.bar_school_progress), name_task, address, date_done,
                             floor, cabinet, comment, date_create, email_executor,
                             status, time_create, email_creator);
                 }
 
                 if (radio_button_archive.isChecked()) {
                     status = "Архив";
-                    load_data("bar_school_archive", name_task, address, date_done,
+                    load_data((String) getText(R.string.bar_school_progress), name_task, address, date_done,
                             floor, cabinet, comment, date_create, email_executor,
                             status, time_create, email_creator);
                 }

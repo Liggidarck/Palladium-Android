@@ -30,12 +30,12 @@ public class fragment_bar extends Fragment {
 
         Bundle args = getArguments();
         assert args != null;
-        String email = args.getString("email");
+        String email = args.getString(getString(R.string.email));
 
         bar_school_executor.setOnClickListener(v -> {
             Intent intent = new Intent(fragment_bar.this.getContext(), FolderExecutorActivity.class);
-            intent.putExtra("location", "bar_school");
-            intent.putExtra("email", email);
+            intent.putExtra(getString(R.string.location), getString(R.string.bar_school));
+            intent.putExtra(getString(R.string.email), email);
             startActivity(intent);
         });
 

@@ -71,7 +71,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
     String email_executor;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference usersRef = db.collection("users");
+    private final CollectionReference usersRef = db.collection(getString(R.string.users));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,9 +98,9 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get("id_task").toString();
-        collection = arguments.get("collection").toString();
-        location = arguments.get("location").toString();
+        id = arguments.get(getString(R.string.id)).toString();
+        collection = arguments.get(getString(R.string.collection)).toString();
+        location = arguments.get(getString(R.string.location)).toString();
 
         Log.d(TAG, "id task: " + id);
         Log.d(TAG, "collection: " + collection);
@@ -111,10 +111,10 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         add_executor_caretaker.setOnClickListener(v -> show_add_executor_dialog());
 
         String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference user_ref = firebaseFirestore.collection("users").document(userID);
+        DocumentReference user_ref = firebaseFirestore.collection(getString(R.string.users)).document(userID);
         user_ref.addSnapshotListener(this, (value, error) -> {
             assert value != null;
-            permission = value.getString("permission");
+            permission = value.getString(getString(R.string.permission));
         });
 
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
@@ -157,9 +157,9 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         });
 
         done_task_caretaker.setOnClickListener(v -> {
-            if(validateFields()) {
+            if (validateFields()) {
 
-                if(!isOnline())
+                if (!isOnline())
                     show_dialog();
                 else
                     updateTask(collection);
@@ -180,14 +180,16 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_no_connection))
                 .setPositiveButton(getText(R.string.save), (dialog, id) -> updateTask(location))
-                .setNegativeButton(android.R.string.cancel, (dialog, id) -> {
-                    Intent intent = new Intent(this, MainCaretakerActivity.class);
-                    intent.putExtra("permission", permission);
-                    startActivity(intent);
-                });
+                .setNegativeButton(android.R.string.cancel, (dialog, id) -> goHome());
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    void goHome() {
+        Intent intent = new Intent(this, MainCaretakerActivity.class);
+        intent.putExtra((String) getText(R.string.permission), permission);
+        startActivity(intent);
     }
 
     void updateTask(String collection) {
@@ -207,9 +209,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         task.save(new SaveTask(), location, update_name, update_address, date_create, update_floor,
                 update_cabinet, update_comment, update_date_task, update_executor, update_status, time_create, email);
 
-        Intent intent = new Intent(this, MainCaretakerActivity.class);
-        intent.putExtra("permission", permission);
-        startActivity(intent);
+        goHome();
     }
 
     public void show_add_executor_dialog() {
@@ -259,7 +259,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
     }
 
     void initialize_fields(String location) {
-        if(location.equals("ost_school")) {
+        if (location.contentEquals(getText(R.string.ost_school))) {
             String[] items = getResources().getStringArray(R.array.addresses_ost_school);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     EdtTaskCaretakerActivity.this,
@@ -314,14 +314,22 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         utils.clear_error(text_input_layout_executor_caretaker);
         utils.clear_error(text_input_layout_status_caretaker);
 
-        boolean check_address = utils.validate_field(address, text_input_layout_address_caretaker);
-        boolean check_floor = utils.validate_field(floor, text_input_layout_floor_caretaker);
-        boolean check_cabinet = utils.validate_field(cabinet, text_input_layout_cabinet_caretaker);
-        boolean check_name_task = utils.validate_field(name_task, text_input_layout_name_task_caretaker);
-        boolean check_date_task = utils.validate_field(date_done, text_input_layout_date_task_caretaker);
-        boolean check_executor = utils.validate_field(email_executor, text_input_layout_executor_caretaker);
-        boolean check_status = utils.validate_field(status, text_input_layout_status_caretaker);
+        String update_address = Objects.requireNonNull(text_input_layout_address_caretaker.getEditText()).getText().toString();
+        String update_floor = Objects.requireNonNull(text_input_layout_floor_caretaker.getEditText()).getText().toString();
+        String update_cabinet = Objects.requireNonNull(text_input_layout_cabinet_caretaker.getEditText()).getText().toString();
+        String update_name = Objects.requireNonNull(text_input_layout_name_task_caretaker.getEditText()).getText().toString();
+        String update_date_task = Objects.requireNonNull(text_input_layout_date_task_caretaker.getEditText()).getText().toString();
+        String update_executor = Objects.requireNonNull(text_input_layout_executor_caretaker.getEditText()).getText().toString();
+        String update_status = Objects.requireNonNull(text_input_layout_status_caretaker.getEditText()).getText().toString();
 
-        return check_address & check_floor & check_cabinet & check_name_task & check_date_task & check_executor & check_status;
+        boolean check_address = utils.validate_field(update_address, text_input_layout_address_caretaker);
+        boolean check_floor = utils.validate_field(update_floor, text_input_layout_floor_caretaker);
+        boolean check_cabinet = utils.validate_field(update_cabinet, text_input_layout_cabinet_caretaker);
+        boolean check_name_task = utils.validate_field(update_name, text_input_layout_name_task_caretaker);
+        boolean check_date_task = utils.validate_field(update_date_task, text_input_layout_date_task_caretaker);
+        boolean check_executor = utils.validate_field(update_executor, text_input_layout_executor_caretaker);
+        boolean check_status = utils.validate_field(update_status, text_input_layout_status_caretaker);
+
+        return check_address & check_floor & check_cabinet & check_date_task & check_name_task & check_executor & check_status;
     }
 }

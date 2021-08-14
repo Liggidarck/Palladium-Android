@@ -18,25 +18,23 @@ import org.jetbrains.annotations.NotNull;
 
 public class fragment_ost extends Fragment {
 
-    private static final String TAG = "fragment_ost";
     MaterialCardView ost_school_executor;
 
     @Nullable
-    @org.jetbrains.annotations.Nullable
     @Override
-    public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ost_executor, container, false);
 
         ost_school_executor = view.findViewById(R.id.ost_school_executor);
 
         Bundle args = getArguments();
         assert args != null;
-        String email = args.getString("email");
+        String email = args.getString(getString(R.string.email));
 
         ost_school_executor.setOnClickListener(v -> {
             Intent intent = new Intent(fragment_ost.this.getContext(), FolderExecutorActivity.class);
-            intent.putExtra("location", "ost_school");
-            intent.putExtra("email", email);
+            intent.putExtra(getString(R.string.location), getString(R.string.ost_school));
+            intent.putExtra(getString(R.string.email), email);
             startActivity(intent);
         });
 

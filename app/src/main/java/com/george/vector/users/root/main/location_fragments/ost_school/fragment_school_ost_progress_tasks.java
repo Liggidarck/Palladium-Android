@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,11 +19,12 @@ import com.george.vector.R;
 import com.george.vector.common.tasks.ui.TaskUi;
 import com.george.vector.common.tasks.ui.TaskAdapter;
 import com.george.vector.users.root.tasks.TaskRootActivity;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.Objects;
 
 public class fragment_school_ost_progress_tasks extends Fragment {
 
@@ -31,20 +33,22 @@ public class fragment_school_ost_progress_tasks extends Fragment {
     private final CollectionReference taskRef = db.collection("ost_school_progress");
 
     private TaskAdapter adapter;
+    private Query query;
 
     FirebaseFirestore firebaseFirestore;
+    TextInputLayout text_input_search_school_ost_progress_tasks;
 
     @Nullable
-    @org.jetbrains.annotations.Nullable
     @Override
-    public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_school_ost_progress_tasks, container, false);
 
         RecyclerView recyclerview_school_ost_new_tasks = view.findViewById(R.id.recyclerview_school_ost_progress_tasks);
+        text_input_search_school_ost_progress_tasks = view.findViewById(R.id.text_input_search_school_ost_progress_tasks);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        Query query = taskRef.whereEqualTo("status", "В работе");
+        query = taskRef.whereEqualTo("status", "В работе");
 
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
@@ -57,21 +61,53 @@ public class fragment_school_ost_progress_tasks extends Fragment {
         recyclerview_school_ost_new_tasks.setAdapter(adapter);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
-            TaskUi task = documentSnapshot.toObject(TaskUi.class);
             String id = documentSnapshot.getId();
-            String path = documentSnapshot.getReference().getPath();
 
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
             Intent intent = new Intent(fragment_school_ost_progress_tasks.this.getContext(), TaskRootActivity.class);
-            intent.putExtra("id_task_root", id);
-            intent.putExtra("zone", "ost_school");
-            intent.putExtra("collection", "ost_school_progress");
+            intent.putExtra(getString(R.string.id), id);
+            intent.putExtra(getString(R.string.location), getString(R.string.ost_school));
+            intent.putExtra(getString(R.string.collection), getString(R.string.ost_school_progress));
             startActivity(intent);
 
         });
 
+        Objects.requireNonNull(text_input_search_school_ost_progress_tasks.getEditText()).setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                String search_value = text_input_search_school_ost_progress_tasks.getEditText().getText().toString();
+
+                if(search_value.isEmpty())
+                    defaultQuery();
+                else
+                    search(search_value);
+
+                return true;
+            }
+            return false;
+        });
+
         return view;
+    }
+
+    private void search(String query_text) {
+        query = taskRef.whereEqualTo("name_task", query_text);
+
+        FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
+                .build();
+
+        adapter.updateOptions(search_options);
+    }
+
+    private void defaultQuery() {
+        query = taskRef.whereEqualTo("status", "В работе");
+
+        FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
+                .build();
+
+        adapter.updateOptions(options);
     }
 
     @Override

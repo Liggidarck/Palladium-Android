@@ -108,7 +108,7 @@ public class AddTaskCaretakerActivity extends AppCompatActivity {
         storageReference = firebaseStorage.getReference();
 
         Bundle arguments = getIntent().getExtras();
-        location = arguments.get("location").toString();
+        location = arguments.get(getString(R.string.location)).toString();
 
         topAppBar_new_task_caretaker.setNavigationOnClickListener(v -> onBackPressed());
         add_executor_caretaker.setOnClickListener(v -> show_add_executor_dialog());
