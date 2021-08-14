@@ -64,6 +64,10 @@ public class TaskCaretakerActivity extends AppCompatActivity {
         collection = arguments.get((String) getString(R.string.collection)).toString();
         location = arguments.get((String) getText(R.string.location)).toString();
 
+        Log.d(TAG, "Id: " + id);
+        Log.d(TAG, "Collection: " + collection);
+        Log.d(TAG, "Location: " + location);
+
         topAppBar_tasks_caretaker.setNavigationOnClickListener(v -> onBackPressed());
 
         firebaseAuth = FirebaseAuth.getInstance();

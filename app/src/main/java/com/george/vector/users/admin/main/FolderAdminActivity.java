@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.george.vector.R;
+import com.george.vector.users.admin.main.fragments.bar_school.fragment_school_bar_archive_tasks;
+import com.george.vector.users.admin.main.fragments.bar_school.fragment_school_bar_new_tasks;
+import com.george.vector.users.admin.main.fragments.bar_school.fragment_school_bar_progress_tasks;
 import com.george.vector.users.admin.main.fragments.ost_school.fragment_school_ost_archive_tasks;
 import com.george.vector.users.admin.main.fragments.ost_school.fragment_school_ost_new_tasks;
 import com.george.vector.users.admin.main.fragments.ost_school.fragment_school_ost_progress_tasks;
@@ -48,15 +51,14 @@ public class FolderAdminActivity extends AppCompatActivity {
             currentFragment = new fragment_school_ost_archive_tasks();
 
 
-//        if(permission.contentEquals(getText(R.string.bar_school)) && folder.contentEquals(getText(R.string.new_tasks)))
-//            currentFragment = new fragment_school_bar_new_tasks();
-//
-//        if(permission.contentEquals(getText(R.string.bar_school)) && folder.contentEquals(getText(R.string.in_progress_tasks)))
-//            currentFragment = new fragment_school_bar_progress_tasks();
-//
-//
-//        if(permission.contentEquals(getText(R.string.bar_school)) && folder.contentEquals(getText(R.string.archive_tasks)))
-//            currentFragment = new fragment_school_bar_archive_tasks();
+        if(permission.contentEquals(getText(R.string.bar_school)) && folder.contentEquals(getText(R.string.new_tasks)))
+            currentFragment = new fragment_school_bar_new_tasks();
+
+        if(permission.contentEquals(getText(R.string.bar_school)) && folder.contentEquals(getText(R.string.in_progress_tasks)))
+            currentFragment = new fragment_school_bar_progress_tasks();
+
+        if(permission.contentEquals(getText(R.string.bar_school)) && folder.contentEquals(getText(R.string.archive_tasks)))
+            currentFragment = new fragment_school_bar_archive_tasks();
 
         Log.i(TAG, String.format("Запуск фрагмента %s папки %s", permission, folder));
 

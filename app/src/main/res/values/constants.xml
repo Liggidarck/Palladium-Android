@@ -20,6 +20,11 @@
     <string name="ost_school_progress">ost_school_progress</string>
     <string name="ost_school_archive">ost_school_archive</string>
 
+    <string name="bar_school_new">bar_school_new</string>
+    <string name="bar_school_progress">bar_school_progress</string>
+    <string name="bar_school_archive">bar_school_archive</string>
+
+
 
 
 </resources>
