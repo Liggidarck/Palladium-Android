@@ -31,7 +31,7 @@ public class fragment_ost_caretaker extends Fragment {
 
         ost_school_caretaker.setOnClickListener(v -> {
             Intent intent = new Intent(fragment_ost_caretaker.this.getContext(), FolderTaskCaretakerActivity.class);
-            intent.putExtra("location", "ost_school");
+            intent.putExtra((String) getText(R.string.location), getText(R.string.ost_school));
             startActivity(intent);
         });
 

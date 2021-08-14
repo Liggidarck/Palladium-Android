@@ -63,7 +63,7 @@ public class FolderAdminActivity extends AppCompatActivity {
         assert currentFragment != null;
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.frame_folder, currentFragment)
+                .replace(R.id.frame_admin_folder, currentFragment)
                 .commit();
 
     }

@@ -7,7 +7,7 @@
     tools:context=".users.admin.main.FolderAdminActivity" >
 
     <FrameLayout
-        android:id="@+id/frame_folder"
+        android:id="@+id/frame_admin_folder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar_folder_activity"/>

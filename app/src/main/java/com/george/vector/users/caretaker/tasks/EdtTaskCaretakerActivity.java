@@ -98,9 +98,9 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get("id_task").toString();
-        collection = arguments.get("collection").toString();
-        location = arguments.get("location").toString();
+        id = arguments.get((String) getText(R.string.id)).toString();
+        collection = arguments.get((String) getText(R.string.collection)).toString();
+        location = arguments.get((String) getText(R.string.location)).toString();
 
         Log.d(TAG, "id task: " + id);
         Log.d(TAG, "collection: " + collection);
@@ -114,7 +114,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         DocumentReference user_ref = firebaseFirestore.collection("users").document(userID);
         user_ref.addSnapshotListener(this, (value, error) -> {
             assert value != null;
-            permission = value.getString("permission");
+            permission = value.getString((String) getText(R.string.permission));
         });
 
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
@@ -157,9 +157,9 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         });
 
         done_task_caretaker.setOnClickListener(v -> {
-            if(validateFields()) {
+            if (validateFields()) {
 
-                if(!isOnline())
+                if (!isOnline())
                     show_dialog();
                 else
                     updateTask(collection);
@@ -180,14 +180,16 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_no_connection))
                 .setPositiveButton(getText(R.string.save), (dialog, id) -> updateTask(location))
-                .setNegativeButton(android.R.string.cancel, (dialog, id) -> {
-                    Intent intent = new Intent(this, MainCaretakerActivity.class);
-                    intent.putExtra("permission", permission);
-                    startActivity(intent);
-                });
+                .setNegativeButton(android.R.string.cancel, (dialog, id) -> goHome());
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    void goHome() {
+        Intent intent = new Intent(this, MainCaretakerActivity.class);
+        intent.putExtra((String) getText(R.string.permission), permission);
+        startActivity(intent);
     }
 
     void updateTask(String collection) {
@@ -207,9 +209,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         task.save(new SaveTask(), location, update_name, update_address, date_create, update_floor,
                 update_cabinet, update_comment, update_date_task, update_executor, update_status, time_create, email);
 
-        Intent intent = new Intent(this, MainCaretakerActivity.class);
-        intent.putExtra("permission", permission);
-        startActivity(intent);
+        goHome();
     }
 
     public void show_add_executor_dialog() {
@@ -259,7 +259,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
     }
 
     void initialize_fields(String location) {
-        if(location.equals("ost_school")) {
+        if (location.contentEquals(getText(R.string.ost_school))) {
             String[] items = getResources().getStringArray(R.array.addresses_ost_school);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     EdtTaskCaretakerActivity.this,
