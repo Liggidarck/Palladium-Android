@@ -314,14 +314,22 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         utils.clear_error(text_input_layout_executor_caretaker);
         utils.clear_error(text_input_layout_status_caretaker);
 
-        boolean check_address = utils.validate_field(address, text_input_layout_address_caretaker);
-        boolean check_floor = utils.validate_field(floor, text_input_layout_floor_caretaker);
-        boolean check_cabinet = utils.validate_field(cabinet, text_input_layout_cabinet_caretaker);
-        boolean check_name_task = utils.validate_field(name_task, text_input_layout_name_task_caretaker);
-        boolean check_date_task = utils.validate_field(date_done, text_input_layout_date_task_caretaker);
-        boolean check_executor = utils.validate_field(email_executor, text_input_layout_executor_caretaker);
-        boolean check_status = utils.validate_field(status, text_input_layout_status_caretaker);
+        String update_address = Objects.requireNonNull(text_input_layout_address_caretaker.getEditText()).getText().toString();
+        String update_floor = Objects.requireNonNull(text_input_layout_floor_caretaker.getEditText()).getText().toString();
+        String update_cabinet = Objects.requireNonNull(text_input_layout_cabinet_caretaker.getEditText()).getText().toString();
+        String update_name = Objects.requireNonNull(text_input_layout_name_task_caretaker.getEditText()).getText().toString();
+        String update_date_task = Objects.requireNonNull(text_input_layout_date_task_caretaker.getEditText()).getText().toString();
+        String update_executor = Objects.requireNonNull(text_input_layout_executor_caretaker.getEditText()).getText().toString();
+        String update_status = Objects.requireNonNull(text_input_layout_status_caretaker.getEditText()).getText().toString();
 
-        return check_address & check_floor & check_cabinet & check_name_task & check_date_task & check_executor & check_status;
+        boolean check_address = utils.validate_field(update_address, text_input_layout_address_caretaker);
+        boolean check_floor = utils.validate_field(update_floor, text_input_layout_floor_caretaker);
+        boolean check_cabinet = utils.validate_field(update_cabinet, text_input_layout_cabinet_caretaker);
+        boolean check_name_task = utils.validate_field(update_name, text_input_layout_name_task_caretaker);
+        boolean check_date_task = utils.validate_field(update_date_task, text_input_layout_date_task_caretaker);
+        boolean check_executor = utils.validate_field(update_executor, text_input_layout_executor_caretaker);
+        boolean check_status = utils.validate_field(update_status, text_input_layout_status_caretaker);
+
+        return check_address & check_floor & check_cabinet & check_date_task & check_name_task & check_executor & check_status;
     }
 }

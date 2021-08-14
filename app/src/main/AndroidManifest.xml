@@ -61,10 +61,10 @@
         <activity android:name=".users.executor.main.MainExecutorActivity" />
         <activity android:name=".users.admin.tasks.TaskAdminActivity" />
         <activity android:name=".users.admin.tasks.AddTaskAdminActivity" />
-        <activity android:name=".users.admin.tasks.sort_by_category.FolderActivity" />
+        <activity android:name=".users.admin.main.FolderAdminActivity" />
         <activity android:name=".users.user.main.MainUserActivity" />
         <activity android:name=".auth.ActivityRegisterUser" />
-        <activity android:name=".users.admin.MainAdminActivity" />
+        <activity android:name=".users.admin.main.MainAdminActivity" />
         <activity android:name=".auth.ActivityLogin" />
 
 

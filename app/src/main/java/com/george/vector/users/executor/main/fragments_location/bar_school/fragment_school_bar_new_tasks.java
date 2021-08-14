@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,29 +19,32 @@ import com.george.vector.R;
 import com.george.vector.common.tasks.ui.TaskUi;
 import com.george.vector.common.tasks.ui.TaskAdapter;
 import com.george.vector.users.executor.tasks.TaskExecutorActivity;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.Objects;
 
-public class fragment_bar_school_new extends Fragment {
+public class fragment_school_bar_new_tasks extends Fragment {
 
-    RecyclerView recycler_view_new_tasks_executor;
     private static final String TAG = "NewTaskBarSchoolExec";
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference taskRef = db.collection("bar_school_new");
 
-    TaskAdapter adapter;
+    TextInputLayout search_executor_bar_school_new_tasks;
+    RecyclerView recycler_view_new_tasks_executor;
+
+    private TaskAdapter adapter;
+    private Query query;
 
     FirebaseFirestore firebaseFirestore;
     FirebaseAuth firebaseAuth;
 
     @Nullable
-    @org.jetbrains.annotations.Nullable
     @Override
-    public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bar_school_new, container, false);
 
         Bundle args = getArguments();
@@ -48,11 +52,12 @@ public class fragment_bar_school_new extends Fragment {
         String email = args.getString("email");
 
         recycler_view_new_tasks_executor = view.findViewById(R.id.recycler_view_new_tasks_executor_bar);
+        search_executor_bar_school_new_tasks = view.findViewById(R.id.search_executor_bar_school_new_tasks);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        Query query = taskRef.whereEqualTo("executor", email);
+        query = taskRef.whereEqualTo("executor", email);
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
                 .build();
@@ -60,14 +65,14 @@ public class fragment_bar_school_new extends Fragment {
         adapter = new TaskAdapter(options);
 
         recycler_view_new_tasks_executor.setHasFixedSize(true);
-        recycler_view_new_tasks_executor.setLayoutManager(new LinearLayoutManager(fragment_bar_school_new.this.getContext()));
+        recycler_view_new_tasks_executor.setLayoutManager(new LinearLayoutManager(fragment_school_bar_new_tasks.this.getContext()));
         recycler_view_new_tasks_executor.setAdapter(adapter);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
-            Intent intent = new Intent(fragment_bar_school_new.this.getContext(), TaskExecutorActivity.class);
+            Intent intent = new Intent(fragment_school_bar_new_tasks.this.getContext(), TaskExecutorActivity.class);
             intent.putExtra("id_task", id);
             intent.putExtra("location", "bar_school");
             intent.putExtra("collection", "bar_school_new");
@@ -75,7 +80,41 @@ public class fragment_bar_school_new extends Fragment {
 
         });
 
+        Objects.requireNonNull(search_executor_bar_school_new_tasks.getEditText()).setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                String search_value = search_executor_bar_school_new_tasks.getEditText().getText().toString();
+
+                if(search_value.isEmpty())
+                    defaultQuery(email);
+                else
+                    search(search_value, email);
+
+                return true;
+            }
+            return false;
+        });
+
         return view;
+    }
+
+    private void search(String query_text, String email) {
+        query = taskRef.whereEqualTo("name_task", query_text).whereEqualTo("executor", email);
+
+        FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
+                .build();
+
+        adapter.updateOptions(search_options);
+    }
+
+    private void defaultQuery(String email) {
+        query = taskRef.whereEqualTo("executor", email);
+
+        FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
+                .build();
+
+        adapter.updateOptions(options);
     }
 
     @Override

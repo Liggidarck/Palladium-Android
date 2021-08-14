@@ -1,4 +1,4 @@
-package com.george.vector.users.admin;
+package com.george.vector.users.admin.main;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +16,6 @@ import android.view.MenuItem;
 
 import com.george.vector.R;
 import com.george.vector.users.admin.tasks.AddTaskAdminActivity;
-import com.george.vector.users.admin.tasks.sort_by_category.FolderActivity;
 import com.george.vector.common.bottom_sheets.ConsoleBottomSheet;
 import com.george.vector.common.bottom_sheets.ProfileBottomSheet;
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -45,8 +44,8 @@ public class MainAdminActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin_main);
 
         Bundle arguments = getIntent().getExtras();
-        permission = arguments.get("permission").toString();
-        Log.i(TAG, "permission: " + permission);
+        permission = arguments.get((String) getText(R.string.permission)).toString();
+        Log.d(TAG, "permission: " + permission);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -65,28 +64,28 @@ public class MainAdminActivity extends AppCompatActivity {
 
         add.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddTaskAdminActivity.class);
-            intent.putExtra("permission", permission);
+            intent.putExtra((String) getText(R.string.permission), permission);
             startActivity(intent);
         });
 
         new_tasks_card.setOnClickListener(v -> {
-            Intent intent = new Intent(this, FolderActivity.class);
-            intent.putExtra("section", "new tasks");
-            intent.putExtra("permission", permission);
+            Intent intent = new Intent(this, FolderAdminActivity.class);
+            intent.putExtra((String) getText(R.string.folder), getText(R.string.new_tasks));
+            intent.putExtra((String) getText(R.string.permission), permission);
             startActivity(intent);
         });
 
         in_progress_tasks_card.setOnClickListener(v -> {
-            Intent intent = new Intent(this, FolderActivity.class);
-            intent.putExtra("section", "in progress tasks");
-            intent.putExtra("permission", permission);
+            Intent intent = new Intent(this, FolderAdminActivity.class);
+            intent.putExtra((String) getText(R.string.folder), getText(R.string.in_progress_tasks));
+            intent.putExtra((String) getText(R.string.permission), permission);
             startActivity(intent);
         });
 
         archive_tasks_card.setOnClickListener(v -> {
-            Intent intent = new Intent(this, FolderActivity.class);
-            intent.putExtra("section", "archive tasks");
-            intent.putExtra("permission", permission);
+            Intent intent = new Intent(this, FolderAdminActivity.class);
+            intent.putExtra((String) getText(R.string.folder), getText(R.string.archive_tasks));
+            intent.putExtra((String) getText(R.string.permission), permission);
             startActivity(intent);
         });
 

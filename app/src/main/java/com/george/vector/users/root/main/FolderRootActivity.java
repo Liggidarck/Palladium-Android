@@ -39,8 +39,8 @@ public class FolderRootActivity extends AppCompatActivity {
 
         toolbar_folder_root_activity.setNavigationOnClickListener(v -> onBackPressed());
         toolbar_folder_root_activity.setTitle(folder);
-        Log.i(TAG, "location: " + location);
-        Log.i(TAG, "folder: " + folder);
+        Log.d(TAG, "location: " + location);
+        Log.d(TAG, "folder: " + folder);
 
         Fragment currentFragment = null;
 

@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
-import com.george.vector.users.admin.MainAdminActivity;
+import com.george.vector.users.admin.main.MainAdminActivity;
 import com.george.vector.common.edit_users.User;
 import com.george.vector.common.edit_users.UserAdapter;
 import com.george.vector.common.tasks.utils.DeleteTask;
@@ -60,7 +60,7 @@ public class EditTaskAdminActivity extends AppCompatActivity {
     Calendar datePickCalendar;
 
     private static final String TAG = "EditTaskAdmin";
-    String id, location, collection, permission, address, floor,
+    String id, permission, collection, address, floor,
             cabinet, name_task, comment, status, date_create,
             time_create, date_done, email;
     String name_executor;
@@ -100,16 +100,9 @@ public class EditTaskAdminActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get("id_task").toString();
-        collection = arguments.get("collection").toString();
-        location = arguments.get("location").toString(); //PERMISSION TO
-
-        String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference user_ref = firebaseFirestore.collection("users").document(userID);
-        user_ref.addSnapshotListener(this, (value, error) -> {
-            assert value != null;
-            permission = value.getString("permission");
-        });
+        id = arguments.get((String) getText(R.string.id)).toString();
+        collection = arguments.get((String) getText(R.string.collection)).toString();
+        permission = arguments.get((String) getText(R.string.permission)).toString();
 
         add_executor_admin.setOnClickListener(v -> show_add_executor_dialog());
 
@@ -147,7 +140,7 @@ public class EditTaskAdminActivity extends AppCompatActivity {
                 Log.e(TAG, "Error! " + e);
             }
 
-            initialize_fields(location);
+            initialize_fields(permission);
         });
 
         update_task.setOnClickListener(v -> {
@@ -155,7 +148,7 @@ public class EditTaskAdminActivity extends AppCompatActivity {
                 if(!isOnline())
                     show_dialog();
                  else
-                     updateTask(location);
+                     updateTask(permission);
             }
         });
 
@@ -180,8 +173,12 @@ public class EditTaskAdminActivity extends AppCompatActivity {
                 update_executor, update_status, time_create,
                 email);
 
+        go_home();
+    }
+
+    void go_home() {
         Intent intent = new Intent(this, MainAdminActivity.class);
-        intent.putExtra("permission", permission);
+        intent.putExtra((String) getText(R.string.permission), permission);
         startActivity(intent);
     }
 
@@ -191,11 +188,7 @@ public class EditTaskAdminActivity extends AppCompatActivity {
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_no_connection))
                 .setPositiveButton(getText(R.string.save), (dialog, id) -> updateTask(collection))
-                .setNegativeButton(android.R.string.cancel, (dialog, id) -> {
-                    Intent intent = new Intent(this, MainAdminActivity.class);
-                    intent.putExtra("permission", permission);
-                    startActivity(intent);
-                });
+                .setNegativeButton(android.R.string.cancel, (dialog, id) -> go_home());
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -247,8 +240,8 @@ public class EditTaskAdminActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    void initialize_fields(String location) {
-        if (location.equals("ost_school")) {
+    void initialize_fields(String permission) {
+        if (permission.contentEquals(getText(R.string.ost_school))) {
             String[] addresses = getResources().getStringArray(R.array.addresses_ost_school);
             ArrayAdapter<String> arrayAdapterAddresses = new ArrayAdapter<>(
                     EditTaskAdminActivity.this,

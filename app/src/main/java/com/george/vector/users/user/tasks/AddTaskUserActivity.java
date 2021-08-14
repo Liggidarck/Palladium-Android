@@ -46,8 +46,6 @@ public class AddTaskUserActivity extends AppCompatActivity {
     ExtendedFloatingActionButton crate_task;
     LinearProgressIndicator progress_bar_add_task_user;
 
-    public Uri imageUri;
-
     String address, floor, cabinet, name_task, comment, userID, email, status = "Новая заявка", permission;
     private static final String TAG = "AddTaskUserActivity";
 

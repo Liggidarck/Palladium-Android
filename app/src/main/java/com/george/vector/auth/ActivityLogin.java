@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
-import com.george.vector.users.admin.MainAdminActivity;
+import com.george.vector.users.admin.main.MainAdminActivity;
 import com.george.vector.R;
 import com.george.vector.common.utils.Utils;
 import com.george.vector.users.executor.main.MainExecutorActivity;

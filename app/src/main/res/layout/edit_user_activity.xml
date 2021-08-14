@@ -131,7 +131,7 @@
                 android:id="@+id/text_input_layout_edit_permission_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/permission"
+                android:hint="@string/permission_text"
                 app:endIconMode="dropdown_menu"
                 app:errorEnabled="true"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"

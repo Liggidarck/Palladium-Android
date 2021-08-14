@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,11 +19,14 @@ import com.george.vector.R;
 import com.george.vector.common.tasks.ui.TaskUi;
 import com.george.vector.common.tasks.ui.TaskAdapter;
 import com.george.vector.users.root.tasks.TaskRootActivity;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class fragment_school_bar_archive_tasks extends Fragment {
 
@@ -31,20 +35,23 @@ public class fragment_school_bar_archive_tasks extends Fragment {
     private final CollectionReference taskRef = db.collection("bar_school_archive");
 
     private TaskAdapter adapter;
+    private Query query;
+
+    TextInputLayout text_input_search_bar_school_archive_tasks;
 
     FirebaseFirestore firebaseFirestore;
 
     @Nullable
-    @org.jetbrains.annotations.Nullable
     @Override
-    public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_school_bar_archive_tasks, container, false);
 
         RecyclerView recyclerview_school_bar_new_tasks = view.findViewById(R.id.recyclerview_school_bar_archive_tasks);
+        text_input_search_bar_school_archive_tasks = view.findViewById(R.id.text_input_search_bar_school_archive_tasks);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        Query query = taskRef.whereEqualTo("status", "Архив");
+        query = taskRef.whereEqualTo("status", "Архив");
 
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
@@ -68,7 +75,41 @@ public class fragment_school_bar_archive_tasks extends Fragment {
 
         });
 
+        Objects.requireNonNull(text_input_search_bar_school_archive_tasks.getEditText()).setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                String search_value = text_input_search_bar_school_archive_tasks.getEditText().getText().toString();
+
+                if(search_value.isEmpty())
+                    defaultQuery();
+                else
+                    search(search_value);
+
+                return true;
+            }
+            return false;
+        });
+
         return view;
+    }
+
+    private void search(String query_text) {
+        query = taskRef.whereEqualTo("name_task", query_text);
+
+        FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
+                .build();
+
+        adapter.updateOptions(search_options);
+    }
+
+    private void defaultQuery() {
+        query = taskRef.whereEqualTo("status", "Архив");
+
+        FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
+                .build();
+
+        adapter.updateOptions(options);
     }
 
     @Override

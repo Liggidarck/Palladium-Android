@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.george.vector.auth.ui.theme.BluePrimary
 import com.george.vector.auth.ui.theme.PalladiumTheme
-import com.george.vector.users.admin.MainAdminActivity
+import com.george.vector.users.admin.main.MainAdminActivity
 import com.george.vector.users.caretaker.main.MainCaretakerActivity
 import com.george.vector.users.executor.main.MainExecutorActivity
 import com.george.vector.users.root.main.RootMainActivity

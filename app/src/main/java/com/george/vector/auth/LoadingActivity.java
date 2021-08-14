@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.george.vector.R;
-import com.george.vector.users.admin.MainAdminActivity;
+import com.george.vector.users.admin.main.MainAdminActivity;
 import com.george.vector.users.caretaker.main.MainCaretakerActivity;
 import com.george.vector.users.executor.main.MainExecutorActivity;
 import com.george.vector.users.root.main.RootMainActivity;

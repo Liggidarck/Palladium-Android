@@ -1,4 +1,4 @@
-package com.george.vector.users.root.main.location_fragments.ost_school;
+package com.george.vector.users.executor.main.fragments_location.bar_school;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,82 +16,90 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
-import com.george.vector.common.tasks.ui.TaskUi;
 import com.george.vector.common.tasks.ui.TaskAdapter;
-import com.george.vector.users.root.tasks.TaskRootActivity;
+import com.george.vector.common.tasks.ui.TaskUi;
+import com.george.vector.users.executor.tasks.TaskExecutorActivity;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.util.Objects;
 
-public class fragment_school_ost_progress_tasks extends Fragment {
+public class fragment_school_bar_progress_tasks extends Fragment {
 
-    private static final String TAG = "ProgressTaskOstSchool";
+    private static final String TAG = "ProgrTaskBarSchoolExec";
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference taskRef = db.collection("ost_school_progress");
+    private final CollectionReference taskRef = db.collection("bar_school_progress");
+
+    TextInputLayout search_executor_bar_school_progress_tasks;
+    RecyclerView recycler_view_progress_tasks_executor;
 
     private TaskAdapter adapter;
     private Query query;
 
     FirebaseFirestore firebaseFirestore;
-    TextInputLayout text_input_search_school_ost_progress_tasks;
+    FirebaseAuth firebaseAuth;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_school_ost_progress_tasks, container, false);
+        View view = inflater.inflate(R.layout.fragment_bar_school_progress, container, false);
 
-        RecyclerView recyclerview_school_ost_new_tasks = view.findViewById(R.id.recyclerview_school_ost_progress_tasks);
-        text_input_search_school_ost_progress_tasks = view.findViewById(R.id.text_input_search_school_ost_progress_tasks);
+        Bundle args = getArguments();
+        assert args != null;
+        String email = args.getString("email");
 
+        recycler_view_progress_tasks_executor = view.findViewById(R.id.recycler_view_new_tasks_progress_bar);
+        search_executor_bar_school_progress_tasks = view.findViewById(R.id.search_executor_bar_school_progress_tasks);
+
+        firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        query = taskRef.whereEqualTo("status", "В работе");
-
+        query = taskRef.whereEqualTo("executor", email);
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
                 .build();
 
         adapter = new TaskAdapter(options);
 
-        recyclerview_school_ost_new_tasks.setHasFixedSize(true);
-        recyclerview_school_ost_new_tasks.setLayoutManager(new LinearLayoutManager(fragment_school_ost_progress_tasks.this.getContext()));
-        recyclerview_school_ost_new_tasks.setAdapter(adapter);
+        recycler_view_progress_tasks_executor.setHasFixedSize(true);
+        recycler_view_progress_tasks_executor.setLayoutManager(new LinearLayoutManager(fragment_school_bar_progress_tasks.this.getContext()));
+        recycler_view_progress_tasks_executor.setAdapter(adapter);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
-
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
-            Intent intent = new Intent(fragment_school_ost_progress_tasks.this.getContext(), TaskRootActivity.class);
-            intent.putExtra("id_task_root", id);
-            intent.putExtra("zone", "ost_school");
-            intent.putExtra("collection", "ost_school_progress");
+            Intent intent = new Intent(fragment_school_bar_progress_tasks.this.getContext(), TaskExecutorActivity.class);
+            intent.putExtra("id_task", id);
+            intent.putExtra("location", "bar_school");
+            intent.putExtra("collection", "bar_school_progress");
             startActivity(intent);
 
         });
 
-        Objects.requireNonNull(text_input_search_school_ost_progress_tasks.getEditText()).setOnEditorActionListener((v, actionId, event) -> {
+        Objects.requireNonNull(search_executor_bar_school_progress_tasks.getEditText()).setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                String search_value = text_input_search_school_ost_progress_tasks.getEditText().getText().toString();
+                String search_value = search_executor_bar_school_progress_tasks.getEditText().getText().toString();
 
                 if(search_value.isEmpty())
-                    defaultQuery();
+                    defaultQuery(email);
                 else
-                    search(search_value);
+                    search(search_value, email);
 
                 return true;
             }
             return false;
         });
 
+
         return view;
     }
 
-    private void search(String query_text) {
-        query = taskRef.whereEqualTo("name_task", query_text);
+    private void search(String query_text, String email) {
+        query = taskRef.whereEqualTo("name_task", query_text).whereEqualTo("executor", email);
 
         FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
@@ -100,8 +108,8 @@ public class fragment_school_ost_progress_tasks extends Fragment {
         adapter.updateOptions(search_options);
     }
 
-    private void defaultQuery() {
-        query = taskRef.whereEqualTo("status", "В работе");
+    private void defaultQuery(String email) {
+        query = taskRef.whereEqualTo("executor", email);
 
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
@@ -121,4 +129,6 @@ public class fragment_school_ost_progress_tasks extends Fragment {
         super.onStop();
         adapter.stopListening();
     }
+
+
 }

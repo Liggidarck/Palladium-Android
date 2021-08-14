@@ -78,21 +78,6 @@ public class TaskUserActivity extends AppCompatActivity {
             date_create = value.getString("date_create");
             time_create = value.getString("time_create");
 
-//            String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image_key);
-//            Picasso.with(this)
-//                    .load(IMAGE_URL)
-//                    .into(image_view_task_user, new Callback() {
-//                        @Override
-//                        public void onSuccess() {
-//                            progress_bar_task_user.setVisibility(View.INVISIBLE);
-//                        }
-//
-//                        @Override
-//                        public void onError() {
-//                            Log.e(TAG, "Error!");
-//                        }
-//                    });
-
             text_view_address_task_user.setText(address);
             text_view_floor_task_user.setText(floor);
             text_view_cabinet_task_user.setText(cabinet);

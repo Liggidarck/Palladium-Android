@@ -70,9 +70,6 @@ public class ProfileBottomSheet extends BottomSheetDialogFragment {
             text_view_email.setText(email);
             text_view_role.setText(role);
         });
-
-        circle_ava.setOnClickListener(v -> Toast.makeText(ProfileBottomSheet.this.getContext(), "Аджамир, когда релиз винспире?", Toast.LENGTH_SHORT).show());
-
         return view;
     }
 }

@@ -52,7 +52,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/new_tasks"
+                android:text="@string/new_tasks_text"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:layout_toEndOf="@+id/ava_folder_1"
                 android:layout_centerVertical="true"
@@ -144,7 +144,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/archive_tasks"
+                android:text="@string/archive_tasks_text"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:layout_toEndOf="@+id/ava_folder_3"
                 android:layout_centerVertical="true"

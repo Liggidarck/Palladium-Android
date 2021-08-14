@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="id">id</string>
+    <string name="folder">folder</string>
+    <string name="permission">permission</string>
+
+    <string name="ost_school">ost_school</string>
+    <string name="bar_school">bar_school</string>
+
+    <string name="new_tasks">new tasks</string>
+    <string name="in_progress_tasks">in progress tasks</string>
+    <string name="archive_tasks">archive tasks</string>
+
+    <string name="collection">collection</string>
+    <string name="ost_school_new">ost_school_new</string>
+
+</resources>

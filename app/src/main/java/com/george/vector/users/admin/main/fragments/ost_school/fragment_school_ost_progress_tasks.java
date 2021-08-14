@@ -1,4 +1,4 @@
-package com.george.vector.users.root.main.location_fragments.ost_school;
+package com.george.vector.users.admin.main.fragments.ost_school;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,8 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
-import com.george.vector.common.tasks.ui.TaskUi;
 import com.george.vector.common.tasks.ui.TaskAdapter;
+import com.george.vector.common.tasks.ui.TaskUi;
+import com.george.vector.users.admin.tasks.TaskAdminActivity;
 import com.george.vector.users.root.tasks.TaskRootActivity;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.CollectionReference;
@@ -65,10 +66,11 @@ public class fragment_school_ost_progress_tasks extends Fragment {
 
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
-            Intent intent = new Intent(fragment_school_ost_progress_tasks.this.getContext(), TaskRootActivity.class);
-            intent.putExtra("id_task_root", id);
-            intent.putExtra("zone", "ost_school");
+            Intent intent = new Intent(fragment_school_ost_progress_tasks.this.getContext(), TaskAdminActivity.class);
+            intent.putExtra("id_task_admin", id);
             intent.putExtra("collection", "ost_school_progress");
+            intent.putExtra("location", "ost_school");
+
             startActivity(intent);
 
         });
