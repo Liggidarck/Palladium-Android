@@ -48,7 +48,7 @@ public class LocationFolderActivity extends AppCompatActivity {
 
         archive_tasks_card_root.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);
-            intent.putExtra(getString(R.string.folder), location);
+            intent.putExtra(getString(R.string.location), location);
             intent.putExtra(getString(R.string.folder), getString(R.string.archive_tasks));
             startActivity(intent);
         });

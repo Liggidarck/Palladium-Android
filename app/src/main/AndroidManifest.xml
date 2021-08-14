@@ -13,6 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Palladium">
+        <activity
+            android:name=".users.root.main.SettingsRootActivity"
+            android:exported="true"
+            android:label="@string/title_activity_settings_root" />
 
         <service
             android:name=".develop.notifications.FirebaseService"
@@ -30,7 +34,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".develop.notifications.NotificationActivity" />
         <activity android:name=".develop.DevelopActivity" />
         <activity android:name=".users.executor.tasks.TaskExecutorActivity" />
@@ -62,9 +65,6 @@
         <activity android:name=".auth.ActivityRegisterUser" />
         <activity android:name=".users.admin.main.MainAdminActivity" />
         <activity android:name=".auth.ActivityLogin" />
-
-
-
     </application>
 
 </manifest>

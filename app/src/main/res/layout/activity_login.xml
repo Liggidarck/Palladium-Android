@@ -16,10 +16,10 @@
         android:id="@+id/topAppBar_login"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="@string/authorization"
-        app:titleTextColor="@android:color/white"
+        android:background="@color/blue_primary"
         app:layout_collapseMode="pin"
-        android:background="@color/blue_primary" />
+        app:title="@string/authorization"
+        app:titleTextColor="@android:color/white" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progress_bar_auth"

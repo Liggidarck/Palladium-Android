@@ -3,6 +3,7 @@ package com.george.vector.users.root.main;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -28,7 +29,7 @@ public class RootMainActivity extends AppCompatActivity {
     FloatingActionButton fab_add_root;
     BottomAppBar bottomAppBar_root;
 
-    String zone = "ost";
+    String zone;
     private static final String TAG = "RootMainActivity";
 
     @Override
@@ -42,10 +43,16 @@ public class RootMainActivity extends AppCompatActivity {
         fab_add_root = findViewById(R.id.fab_add_root);
         bottomAppBar_root = findViewById(R.id.bottomAppBar_root);
 
-        setSupportActionBar(bottomAppBar_root);
+        zone = PreferenceManager.getDefaultSharedPreferences(this).getString("default_root_location", getString(R.string.ost));
 
+        setSupportActionBar(bottomAppBar_root);
         bottomAppBar_root.setNavigationOnClickListener(v -> {
             ConsoleBottomSheet bottomSheet = new ConsoleBottomSheet();
+            Bundle bundle = new Bundle();
+
+            bundle.putString(getString(R.string.permission), "all");
+            bottomSheet.setArguments(bundle);
+
             bottomSheet.show(getSupportFragmentManager(), "ConsoleBottomSheet");
         });
 
@@ -53,6 +60,12 @@ public class RootMainActivity extends AppCompatActivity {
             BottomSheetAddTask bottomSheet = new BottomSheetAddTask();
             bottomSheet.show(getSupportFragmentManager(), "BottomSheetAddTask");
         });
+
+        if(zone.equals("ost"))
+            chip_root_ost.setChecked(true);
+
+        if(zone.equals("bar"))
+            chip_root_bar.setChecked(true);
 
         chip_root_ost.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
@@ -71,7 +84,7 @@ public class RootMainActivity extends AppCompatActivity {
             }
         });
 
-        updateZones("ost");
+        updateZones(zone);
     }
 
     void updateZones(@NotNull String zone_update) {

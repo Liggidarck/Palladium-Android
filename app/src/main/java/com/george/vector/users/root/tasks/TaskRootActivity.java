@@ -1,6 +1,7 @@
 package com.george.vector.users.root.tasks;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -35,6 +36,7 @@ public class TaskRootActivity extends AppCompatActivity {
     private static final String TAG = "TaskActivityRoot";
 
     String id, collection, address, floor, cabinet, name_task, comment, status, date_create, time_create, location;
+    boolean confirm_delete;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -63,6 +65,7 @@ public class TaskRootActivity extends AppCompatActivity {
         id = arguments.get(getString(R.string.id)).toString();
         collection = arguments.get(getString(R.string.collection)).toString();
         location = arguments.get(getString(R.string.location)).toString();
+        confirm_delete = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("confirm_before_deleting_root", true);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -77,6 +80,13 @@ public class TaskRootActivity extends AppCompatActivity {
             intent.putExtra("collection", collection);
             intent.putExtra("zone", location);
             startActivity(intent);
+        });
+
+        delete_task_btn.setOnClickListener(v -> {
+            if(confirm_delete)
+                show_dialog_delete();
+            else
+                delete_task();
         });
 
         load_data(collection, id);
@@ -96,21 +106,6 @@ public class TaskRootActivity extends AppCompatActivity {
             status = value.getString("status");
             date_create = value.getString("date_create");
             time_create = value.getString("time_create");
-
-//            String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image_key);
-//            Picasso.with(this)
-//                    .load(IMAGE_URL)
-//                    .into(image_view_task_root, new Callback() {
-//                        @Override
-//                        public void onSuccess() {
-//                            progress_bar_task_root.setVisibility(View.INVISIBLE);
-//                        }
-//
-//                        @Override
-//                        public void onError() {
-//                            Log.i(TAG, "Error on download");
-//                        }
-//                    });
 
             text_view_address_task_root.setText(address);
             text_view_floor_task_root.setText(floor);
@@ -138,8 +133,6 @@ public class TaskRootActivity extends AppCompatActivity {
         });
 
         documentReference.get().addOnCompleteListener(task -> progress_bar_task_root.setVisibility(View.INVISIBLE));
-
-        delete_task_btn.setOnClickListener(v -> show_dialog_delete());
     }
 
     void show_dialog_delete() {

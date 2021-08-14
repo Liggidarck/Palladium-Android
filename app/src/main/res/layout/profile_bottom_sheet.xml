@@ -55,12 +55,12 @@
                  android:layout_height="55dp"
                  android:src="@color/blue" />
 
-            <TextView
-                android:id="@+id/text_view_name_ava"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:layout_centerInParent="true" />
+             <TextView
+                 android:id="@+id/text_view_name_ava"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_centerInParent="true"
+                 android:textColor="@color/white" />
 
         </RelativeLayout>
 

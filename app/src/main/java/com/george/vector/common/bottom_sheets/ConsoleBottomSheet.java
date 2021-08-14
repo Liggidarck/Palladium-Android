@@ -2,6 +2,7 @@ package com.george.vector.common.bottom_sheets;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,7 @@ import com.george.vector.R;
 import com.george.vector.auth.ActivityLogin;
 import com.george.vector.auth.ActivityRegisterUser;
 import com.george.vector.common.edit_users.ListUsersActivity;
-import com.george.vector.develop.DevelopActivity;
+import com.george.vector.users.root.main.SettingsRootActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -25,7 +26,7 @@ public class ConsoleBottomSheet extends BottomSheetDialogFragment {
 
     ImageView close_btn;
     RelativeLayout layout_new_person, layout_edit_person;
-    Button btn_logout;
+    Button btn_logout, btn_settings;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -39,6 +40,11 @@ public class ConsoleBottomSheet extends BottomSheetDialogFragment {
         layout_new_person = view.findViewById(R.id.layout_new_person);
         btn_logout = view.findViewById(R.id.btn_logout);
         layout_edit_person = view.findViewById(R.id.layout_edit_person);
+        btn_settings = view.findViewById(R.id.btn_settings);
+
+        assert this.getArguments() != null;
+        String permission = this.getArguments().getString(getString(R.string.permission));
+        Log.d("ConsoleBottomSheet", String.format("permission: %s", permission));
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -47,6 +53,12 @@ public class ConsoleBottomSheet extends BottomSheetDialogFragment {
 
         layout_new_person.setOnClickListener(v -> startActivity(new Intent(ConsoleBottomSheet.this.getActivity(), ActivityRegisterUser.class)));
         layout_edit_person.setOnClickListener(v -> startActivity(new Intent(ConsoleBottomSheet.this.getContext(), ListUsersActivity.class)));
+
+        btn_settings.setOnClickListener(v -> {
+            if (permission.equals("all"))
+                startActivity(new Intent(ConsoleBottomSheet.this.getContext(), SettingsRootActivity.class));
+
+        });
 
         btn_logout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();

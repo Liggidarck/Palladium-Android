@@ -57,6 +57,7 @@ dependencies {
 
 
     implementation 'androidx.annotation:annotation:1.2.0'
+    implementation 'androidx.preference:preference:1.1.1'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.junit.jupiter:junit-jupiter'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.0.1"
