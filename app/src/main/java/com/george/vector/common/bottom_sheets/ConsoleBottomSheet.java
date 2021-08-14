@@ -25,7 +25,7 @@ public class ConsoleBottomSheet extends BottomSheetDialogFragment {
 
     ImageView close_btn;
     RelativeLayout layout_new_person, layout_edit_person;
-    Button btn_logout, btn_develop;
+    Button btn_logout;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -39,7 +39,6 @@ public class ConsoleBottomSheet extends BottomSheetDialogFragment {
         layout_new_person = view.findViewById(R.id.layout_new_person);
         btn_logout = view.findViewById(R.id.btn_logout);
         layout_edit_person = view.findViewById(R.id.layout_edit_person);
-        btn_develop = view.findViewById(R.id.btn_develop);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -48,8 +47,6 @@ public class ConsoleBottomSheet extends BottomSheetDialogFragment {
 
         layout_new_person.setOnClickListener(v -> startActivity(new Intent(ConsoleBottomSheet.this.getActivity(), ActivityRegisterUser.class)));
         layout_edit_person.setOnClickListener(v -> startActivity(new Intent(ConsoleBottomSheet.this.getContext(), ListUsersActivity.class)));
-
-        btn_develop.setOnClickListener(v -> startActivity(new Intent(ConsoleBottomSheet.this.getContext(), DevelopActivity.class)));
 
         btn_logout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();

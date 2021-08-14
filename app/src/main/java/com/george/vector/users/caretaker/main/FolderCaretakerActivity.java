@@ -8,11 +8,11 @@ import android.util.Log;
 
 import com.george.vector.R;
 import com.george.vector.users.admin.main.fragments.ost_school.fragment_school_ost_archive_tasks;
-import com.george.vector.users.caretaker.main.fragments.bar_school.fragment_school_bar_archive_tasks;
-import com.george.vector.users.caretaker.main.fragments.bar_school.fragment_school_bar_new_tasks;
-import com.george.vector.users.caretaker.main.fragments.bar_school.fragment_school_bar_progress_tasks;
-import com.george.vector.users.caretaker.main.fragments.ost_school.fragment_school_ost_new_tasks;
-import com.george.vector.users.caretaker.main.fragments.ost_school.fragment_school_ost_progress_tasks;
+import com.george.vector.users.caretaker.main.fragments_location.bar_school.fragment_school_bar_archive_tasks;
+import com.george.vector.users.caretaker.main.fragments_location.bar_school.fragment_school_bar_new_tasks;
+import com.george.vector.users.caretaker.main.fragments_location.bar_school.fragment_school_bar_progress_tasks;
+import com.george.vector.users.caretaker.main.fragments_location.ost_school.fragment_school_ost_new_tasks;
+import com.george.vector.users.caretaker.main.fragments_location.ost_school.fragment_school_ost_progress_tasks;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class FolderCaretakerActivity extends AppCompatActivity {

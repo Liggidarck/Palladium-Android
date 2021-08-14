@@ -62,9 +62,9 @@ public class TaskExecutorActivity extends AppCompatActivity {
         circle_status_executor = findViewById(R.id.circle_status_executor);
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get("id_task").toString();
-        collection = arguments.get("collection").toString();
-        location = arguments.get("location").toString();
+        id = arguments.get((String) getText(R.string.id)).toString();
+        collection = arguments.get((String) getText(R.string.collection)).toString();
+        location = arguments.get((String) getText(R.string.collection)).toString();
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -137,48 +137,48 @@ public class TaskExecutorActivity extends AppCompatActivity {
         done_btn_executor.setOnClickListener(v -> {
             delete_task(collection, id);
 
-            if(location.equals("ost_school")) {
+            if(location.contentEquals(getText(R.string.ost_school))) {
                 if (radio_button_new_task.isChecked()) {
                     status = "Новая заявка";
-                    load_data("ost_school_new", name_task, address, date_done,
+                    load_data((String) getText(R.string.ost_school_new), name_task, address, date_done,
                             floor, cabinet, comment, date_create, email_executor,
                             status, time_create, email_creator);
                 }
 
                 if (radio_button_progress.isChecked()) {
                     status = "В работе";
-                    load_data("ost_school_progress", name_task, address, date_done,
+                    load_data((String) getText(R.string.ost_school_progress), name_task, address, date_done,
                             floor, cabinet, comment, date_create, email_executor,
                             status, time_create, email_creator);
                 }
 
                 if (radio_button_archive.isChecked()) {
                     status = "Архив";
-                    load_data("ost_school_archive", name_task, address, date_done,
+                    load_data((String) getText(R.string.ost_school_archive), name_task, address, date_done,
                             floor, cabinet, comment, date_create, email_executor,
                             status, time_create, email_creator);
                 }
             }
 
 
-            if(location.equals("bar_school")) {
+            if(location.contentEquals(getText(R.string.bar_school))) {
                 if (radio_button_new_task.isChecked()) {
                     status = "Новая заявка";
-                    load_data("bar_school_new", name_task, address, date_done,
+                    load_data((String) getText(R.string.bar_school_new), name_task, address, date_done,
                             floor, cabinet, comment, date_create, email_executor,
                             status, time_create, email_creator);
                 }
 
                 if (radio_button_progress.isChecked()) {
                     status = "В работе";
-                    load_data("bar_school_progress", name_task, address, date_done,
+                    load_data((String) getText(R.string.bar_school_progress), name_task, address, date_done,
                             floor, cabinet, comment, date_create, email_executor,
                             status, time_create, email_creator);
                 }
 
                 if (radio_button_archive.isChecked()) {
                     status = "Архив";
-                    load_data("bar_school_archive", name_task, address, date_done,
+                    load_data((String) getText(R.string.bar_school_progress), name_task, address, date_done,
                             floor, cabinet, comment, date_create, email_executor,
                             status, time_create, email_creator);
                 }

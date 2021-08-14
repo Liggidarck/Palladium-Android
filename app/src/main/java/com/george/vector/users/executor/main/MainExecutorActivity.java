@@ -36,7 +36,7 @@ public class MainExecutorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_worker);
 
         Bundle arguments = getIntent().getExtras();
-        email = arguments.get("email").toString();
+        email = arguments.get((String) getText(R.string.email)).toString();
 
         bottomAppBarWorker = findViewById(R.id.bottomAppBarWorker);
         chip_executor_ost = findViewById(R.id.chip_executor_ost);
@@ -75,7 +75,7 @@ public class MainExecutorActivity extends AppCompatActivity {
                 currentFragment = new fragment_ost();
 
                 Bundle email = new Bundle();
-                email.putString("email", this.email);
+                email.putString((String) getText(R.string.email), this.email);
                 currentFragment.setArguments(email);
 
                 break;
@@ -84,7 +84,7 @@ public class MainExecutorActivity extends AppCompatActivity {
                 currentFragment = new fragment_bar();
 
                 Bundle email_bar = new Bundle();
-                email_bar.putString("email", this.email);
+                email_bar.putString((String) getText(R.string.email), this.email);
                 currentFragment.setArguments(email_bar);
 
                 break;

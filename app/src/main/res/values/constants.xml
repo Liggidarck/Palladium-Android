@@ -4,6 +4,8 @@
     <string name="id">id</string>
     <string name="folder">folder</string>
     <string name="permission">permission</string>
+    <string name="email">email</string>
+    <string name="role">role</string>
 
     <string name="location">location</string>
     <string name="ost">ost</string>
@@ -19,6 +21,7 @@
     <string name="ost_school_new">ost_school_new</string>
     <string name="ost_school_progress">ost_school_progress</string>
     <string name="ost_school_archive">ost_school_archive</string>
+    <string name="users">users</string>
 
     <string name="bar_school_new">bar_school_new</string>
     <string name="bar_school_progress">bar_school_progress</string>

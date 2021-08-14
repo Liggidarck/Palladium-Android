@@ -32,7 +32,7 @@ public class fragment_school_ost_new_tasks extends Fragment {
     RecyclerView recycler_view_new_tasks_executor;
     private static final String TAG = "NewTaskOstSchoolExec";
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference taskRef = db.collection("ost_school_new");
+    private final CollectionReference taskRef = db.collection((String) getText(R.string.ost_school_new));
 
     TextInputLayout search_executor_ost_school_new_tasks;
 
@@ -50,7 +50,7 @@ public class fragment_school_ost_new_tasks extends Fragment {
 
         Bundle args = getArguments();
         assert args != null;
-        String email = args.getString("email");
+        String email = args.getString((String) getString(R.string.email));
 
         recycler_view_new_tasks_executor = view.findViewById(R.id.recycler_view_new_tasks_executor);
         search_executor_ost_school_new_tasks = view.findViewById(R.id.search_executor_ost_school_new_tasks);
@@ -74,9 +74,9 @@ public class fragment_school_ost_new_tasks extends Fragment {
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
             Intent intent = new Intent(fragment_school_ost_new_tasks.this.getContext(), TaskExecutorActivity.class);
-            intent.putExtra("id_task", id);
-            intent.putExtra("location", "ost_school");
-            intent.putExtra("collection", "ost_school_new");
+            intent.putExtra((String) getText(R.string.id), id);
+            intent.putExtra((String) getText(R.string.location), getText(R.string.ost_school));
+            intent.putExtra((String) getText(R.string.collection), getText(R.string.ost_school_new));
             startActivity(intent);
 
         });

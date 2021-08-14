@@ -73,9 +73,9 @@ public class fragment_school_bar_progress_tasks extends Fragment {
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
             Intent intent = new Intent(fragment_school_bar_progress_tasks.this.getContext(), TaskExecutorActivity.class);
-            intent.putExtra("id_task", id);
-            intent.putExtra("location", "bar_school");
-            intent.putExtra("collection", "bar_school_progress");
+            intent.putExtra((String) getText(R.string.id), id);
+            intent.putExtra((String) getText(R.string.location), getText(R.string.bar_school));
+            intent.putExtra((String) getText(R.string.collection), getText(R.string.bar_school_progress));
             startActivity(intent);
 
         });

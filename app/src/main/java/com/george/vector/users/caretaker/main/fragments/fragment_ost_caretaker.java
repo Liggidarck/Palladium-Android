@@ -14,8 +14,6 @@ import com.george.vector.R;
 import com.george.vector.users.caretaker.main.FolderTaskCaretakerActivity;
 import com.google.android.material.card.MaterialCardView;
 
-import org.jetbrains.annotations.NotNull;
-
 public class fragment_ost_caretaker extends Fragment {
 
     MaterialCardView ost_school_caretaker, ost_kids_one_caretaker, ost_kids_two_caretaker;

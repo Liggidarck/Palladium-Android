@@ -23,7 +23,7 @@
     <string name="done">Готово</string>
 
     <string name="authorization">Авторизация</string>
-    <string name="email">Электронный адрес</string>
+    <string name="email_text">Электронный адрес</string>
     <string name="password">Пароль</string>
     <string name="login">Войти</string>
 
@@ -31,7 +31,7 @@
     <string name="name">Имя</string>
     <string name="last_name">Фамилия</string>
     <string name="patronymic">Отчество</string>
-    <string name="role">Роль</string>
+    <string name="role_text">Роль</string>
     <string name="permission_text">Разрешения</string>
     <string name="add_user">добавить пользователя</string>
 
@@ -46,7 +46,7 @@
 
     <string name="bar_school_address">Улица Местечко Барыши дом 25</string>
 
-    <string name="users">Пользователи</string>
+    <string name="users_text">Пользователи</string>
     <string name="add_new_user">Добавить нового пользователя</string>
     <string name="edit_data_user">Отредактировать данные</string>
     <string name="logout">выйти из аккаунта</string>
