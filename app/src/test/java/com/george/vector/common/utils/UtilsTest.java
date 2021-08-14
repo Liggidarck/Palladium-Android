@@ -2,7 +2,6 @@ package com.george.vector.common.utils;
 
 import static org.junit.Assert.*;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 public class UtilsTest {
