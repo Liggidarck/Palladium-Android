@@ -30,7 +30,7 @@ public class fragment_bar_caretaker extends Fragment {
 
         bar_school_caretaker.setOnClickListener(v -> {
             Intent intent = new Intent(fragment_bar_caretaker.this.getContext(), FolderTaskCaretakerActivity.class);
-            intent.putExtra("location", "bar_school");
+            intent.putExtra(getString(R.string.location), getString(R.string.bar_school));
             startActivity(intent);
         });
 

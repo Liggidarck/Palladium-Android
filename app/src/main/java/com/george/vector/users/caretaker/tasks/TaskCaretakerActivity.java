@@ -60,9 +60,9 @@ public class TaskCaretakerActivity extends AppCompatActivity {
         delete_task_btn = findViewById(R.id.delete_task_btn_caretaker);
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get((String) getString(R.string.id)).toString();
-        collection = arguments.get((String) getString(R.string.collection)).toString();
-        location = arguments.get((String) getText(R.string.location)).toString();
+        id = arguments.get(getString(R.string.id)).toString();
+        collection = arguments.get(getString(R.string.collection)).toString();
+        location = arguments.get(getString(R.string.location)).toString();
 
         Log.d(TAG, "Id: " + id);
         Log.d(TAG, "Collection: " + collection);
@@ -77,9 +77,9 @@ public class TaskCaretakerActivity extends AppCompatActivity {
 
         edit_task_btn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EdtTaskCaretakerActivity.class);
-            intent.putExtra((String) getText(R.string.id), id);
-            intent.putExtra((String) getText(R.string.collection), collection);
-            intent.putExtra((String) getText(R.string.location), location);
+            intent.putExtra(getString(R.string.id), id);
+            intent.putExtra(getString(R.string.collection), collection);
+            intent.putExtra(getString(R.string.location), location);
             startActivity(intent);
         });
         delete_task_btn.setOnClickListener(v -> show_dialog_delete());

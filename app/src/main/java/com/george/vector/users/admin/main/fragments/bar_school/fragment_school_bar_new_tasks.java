@@ -63,9 +63,9 @@ public class fragment_school_bar_new_tasks extends Fragment {
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
             Intent intent = new Intent(fragment_school_bar_new_tasks.this.getContext(), TaskAdminActivity.class);
-            intent.putExtra((String) getText(R.string.id), id);
-            intent.putExtra((String) getText(R.string.collection), getText(R.string.bar_school_new));
-            intent.putExtra((String) getText(R.string.permission), getText(R.string.bar_school));
+            intent.putExtra(getString(R.string.id), id);
+            intent.putExtra(getString(R.string.collection), getString(R.string.bar_school_new));
+            intent.putExtra(getString(R.string.permission), getString(R.string.bar_school));
             startActivity(intent);
 
         });

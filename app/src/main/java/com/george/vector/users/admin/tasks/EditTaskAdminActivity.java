@@ -69,7 +69,7 @@ public class EditTaskAdminActivity extends AppCompatActivity {
     String email_executor;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference usersRef = db.collection("users");
+    private final CollectionReference usersRef = db.collection(getString(R.string.users));
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 

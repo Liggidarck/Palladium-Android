@@ -31,7 +31,7 @@ public class fragment_school_bar_new_tasks extends Fragment {
 
     private static final String TAG = "NewTaskBarSchoolExec";
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference taskRef = db.collection((String) getText(R.string.bar_school_new));
+    private final CollectionReference taskRef = db.collection(getString(R.string.bar_school_new));
 
     TextInputLayout search_executor_bar_school_new_tasks;
     RecyclerView recycler_view_new_tasks_executor;
@@ -49,7 +49,7 @@ public class fragment_school_bar_new_tasks extends Fragment {
 
         Bundle args = getArguments();
         assert args != null;
-        String email = args.getString((String) getText(R.string.email));
+        String email = args.getString(getString(R.string.email));
 
         recycler_view_new_tasks_executor = view.findViewById(R.id.recycler_view_new_tasks_executor_bar);
         search_executor_bar_school_new_tasks = view.findViewById(R.id.search_executor_bar_school_new_tasks);
@@ -73,9 +73,9 @@ public class fragment_school_bar_new_tasks extends Fragment {
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
             Intent intent = new Intent(fragment_school_bar_new_tasks.this.getContext(), TaskExecutorActivity.class);
-            intent.putExtra((String) getText(R.string.id), id);
-            intent.putExtra((String) getText(R.string.location), getText(R.string.bar_school));
-            intent.putExtra((String) getText(R.string.collection), getText(R.string.bar_school_new));
+            intent.putExtra(getString(R.string.id), id);
+            intent.putExtra(getString(R.string.location), getString(R.string.bar_school));
+            intent.putExtra(getString(R.string.collection), getString(R.string.bar_school_new));
             startActivity(intent);
 
         });

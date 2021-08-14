@@ -27,8 +27,8 @@ public class FolderExecutorActivity extends AppCompatActivity {
         in_progress_tasks_card_executor = findViewById(R.id.in_progress_tasks_card_executor);
 
         Bundle arguments = getIntent().getExtras();
-        location = arguments.get((String) getText(R.string.location)).toString();
-        email = arguments.get((String) getText(R.string.email)).toString();
+        location = arguments.get(getString(R.string.location)).toString();
+        email = arguments.get(getString(R.string.email)).toString();
 
         String text_toolbar = null;
         switch (location) {
@@ -59,17 +59,17 @@ public class FolderExecutorActivity extends AppCompatActivity {
 
         new_tasks_card_executor.setOnClickListener(v -> {
             Intent intent = new Intent(this, ExecutorTasksActivity.class);
-            intent.putExtra((String) getText(R.string.location), location);
-            intent.putExtra((String) getText(R.string.folder), getText(R.string.new_tasks));
-            intent.putExtra((String) getText(R.string.email), email);
+            intent.putExtra(getString(R.string.location), location);
+            intent.putExtra(getString(R.string.folder), getString(R.string.new_tasks));
+            intent.putExtra(getString(R.string.email), email);
             startActivity(intent);
         });
 
         in_progress_tasks_card_executor.setOnClickListener(v -> {
             Intent intent = new Intent(this, ExecutorTasksActivity.class);
-            intent.putExtra((String) getText(R.string.location), location);
-            intent.putExtra((String) getText(R.string.folder), getText(R.string.in_progress_tasks));
-            intent.putExtra((String) getText(R.string.email), email);
+            intent.putExtra(getString(R.string.location), location);
+            intent.putExtra(getString(R.string.folder), getString(R.string.in_progress_tasks));
+            intent.putExtra(getString(R.string.email), email);
             startActivity(intent);
         });
 

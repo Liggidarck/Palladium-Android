@@ -33,8 +33,8 @@ public class fragment_ost extends Fragment {
 
         ost_school_executor.setOnClickListener(v -> {
             Intent intent = new Intent(fragment_ost.this.getContext(), FolderExecutorActivity.class);
-            intent.putExtra((String) getText(R.string.location), getText(R.string.ost_school));
-            intent.putExtra((String) getText(R.string.email), email);
+            intent.putExtra(getString(R.string.location), getString(R.string.ost_school));
+            intent.putExtra(getString(R.string.email), email);
             startActivity(intent);
         });
 

@@ -66,9 +66,9 @@ public class fragment_school_ost_archive_tasks extends Fragment {
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
             Intent intent = new Intent(fragment_school_ost_archive_tasks.this.getContext(), TaskAdminActivity.class);
-            intent.putExtra("id_task_admin", id);
-            intent.putExtra("collection", "ost_school_archive");
-            intent.putExtra("location", "ost_school");
+            intent.putExtra(getString(R.string.id), id);
+            intent.putExtra(getString(R.string.collection), getString(R.string.ost_school_archive));
+            intent.putExtra(getString(R.string.location), getString(R.string.ost_school));
 
             startActivity(intent);
 

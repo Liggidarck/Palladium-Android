@@ -30,7 +30,7 @@ public class fragment_school_bar_archive_tasks extends Fragment {
 
     private static final String TAG = "ArchiveTaskBarSchool";
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference taskRef = db.collection("bar_school_archive");
+    private final CollectionReference taskRef = db.collection(getString(R.string.bar_school_archive));
 
     private TaskAdapter adapter;
     private Query query;
@@ -66,9 +66,9 @@ public class fragment_school_bar_archive_tasks extends Fragment {
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
             Intent intent = new Intent(fragment_school_bar_archive_tasks.this.getContext(), TaskCaretakerActivity.class);
-            intent.putExtra((String) getText(R.string.id), id);
-            intent.putExtra((String) getText(R.string.collection), getText(R.string.bar_school_archive));
-            intent.putExtra((String) getText(R.string.location), getText(R.string.bar_school));
+            intent.putExtra(getString(R.string.id), id);
+            intent.putExtra(getString(R.string.collection), getString(R.string.bar_school_archive));
+            intent.putExtra(getString(R.string.location), getString(R.string.bar_school));
             startActivity(intent);
 
         });

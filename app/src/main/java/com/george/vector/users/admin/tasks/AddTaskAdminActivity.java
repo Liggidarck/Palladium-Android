@@ -105,11 +105,11 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         storageReference = firebaseStorage.getReference();
 
         Bundle arguments = getIntent().getExtras();
-        permission = arguments.get("permission").toString();
+        permission = arguments.get(getString(R.string.permission)).toString();
         Log.i(TAG, "Permission: " + permission);
 
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReferenceUser = firebaseFirestore.collection("users").document(userID);
+        DocumentReference documentReferenceUser = firebaseFirestore.collection(getString(R.string.users)).document(userID);
         documentReferenceUser.addSnapshotListener(this, (value, error) -> {
             assert value != null;
             email = value.getString("email");

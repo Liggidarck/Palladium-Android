@@ -32,7 +32,7 @@ public class fragment_bar extends Fragment {
 
         bar_school_root.setOnClickListener(v -> {
             Intent intent = new Intent(fragment_bar.this.getContext(), LocationFolderActivity.class);
-            intent.putExtra("location", "bar_school");
+            intent.putExtra(getString(R.string.location), getString(R.string.bar_school));
             startActivity(intent);
         });
 

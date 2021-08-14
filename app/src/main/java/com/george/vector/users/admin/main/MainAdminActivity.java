@@ -44,7 +44,7 @@ public class MainAdminActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin_main);
 
         Bundle arguments = getIntent().getExtras();
-        permission = arguments.get((String) getText(R.string.permission)).toString();
+        permission = arguments.get( getString(R.string.permission)).toString();
         Log.d(TAG, "permission: " + permission);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -64,28 +64,28 @@ public class MainAdminActivity extends AppCompatActivity {
 
         add.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddTaskAdminActivity.class);
-            intent.putExtra((String) getText(R.string.permission), permission);
+            intent.putExtra(getString(R.string.permission), permission);
             startActivity(intent);
         });
 
         new_tasks_card.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderAdminActivity.class);
-            intent.putExtra((String) getText(R.string.folder), getText(R.string.new_tasks));
-            intent.putExtra((String) getText(R.string.permission), permission);
+            intent.putExtra(getString(R.string.folder), getString(R.string.new_tasks));
+            intent.putExtra(getString(R.string.permission), permission);
             startActivity(intent);
         });
 
         in_progress_tasks_card.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderAdminActivity.class);
-            intent.putExtra((String) getText(R.string.folder), getText(R.string.in_progress_tasks));
-            intent.putExtra((String) getText(R.string.permission), permission);
+            intent.putExtra(getString(R.string.folder), getString(R.string.in_progress_tasks));
+            intent.putExtra(getString(R.string.permission), permission);
             startActivity(intent);
         });
 
         archive_tasks_card.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderAdminActivity.class);
-            intent.putExtra((String) getText(R.string.folder), getText(R.string.archive_tasks));
-            intent.putExtra((String) getText(R.string.permission), permission);
+            intent.putExtra(getString(R.string.folder), getString(R.string.archive_tasks));
+            intent.putExtra(getString(R.string.permission), permission);
             startActivity(intent);
         });
 

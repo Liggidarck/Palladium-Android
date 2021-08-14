@@ -27,9 +27,9 @@ public class ExecutorTasksActivity extends AppCompatActivity {
         toolbar_tasks_executor_activity = findViewById(R.id.toolbar_tasks_executor_activity);
 
         Bundle arguments = getIntent().getExtras();
-        location = arguments.get((String) getText(R.string.location)).toString();
-        folder = arguments.get((String) getText(R.string.folder)).toString();
-        email = arguments.get((String) getText(R.string.email)).toString();
+        location = arguments.get(getString(R.string.location)).toString();
+        folder = arguments.get(getString(R.string.folder)).toString();
+        email = arguments.get(getString(R.string.email)).toString();
 
         String text_toolbar = null;
         switch (location) {
@@ -59,40 +59,40 @@ public class ExecutorTasksActivity extends AppCompatActivity {
         toolbar_tasks_executor_activity.setTitle(text_toolbar);
 
         Fragment currentFragment = null;
-        if(location.contentEquals(getText(R.string.ost_school)) && folder.contentEquals(getText(R.string.new_tasks))){
+        if(location.contentEquals(getString(R.string.ost_school)) && folder.contentEquals(getString(R.string.new_tasks))){
             Log.i(TAG, "Запуск фрагмента Школа новые заявки");
             currentFragment = new fragment_school_ost_new_tasks();
 
             Bundle email = new Bundle();
-            email.putString((String) getText(R.string.email), this.email);
+            email.putString( getString(R.string.email), this.email);
             currentFragment.setArguments(email);
         }
 
-        if(location.contentEquals(getText(R.string.ost_school)) && folder.contentEquals(getText(R.string.in_progress_tasks))) {
+        if(location.contentEquals(getString(R.string.ost_school)) && folder.contentEquals(getString(R.string.in_progress_tasks))) {
             Log.i(TAG, "Запуск фрагмента Школа заявки в работе");
             currentFragment = new fragment_school_ost_progress_tasks();
 
             Bundle email = new Bundle();
-            email.putString((String) getText(R.string.email), this.email);
+            email.putString(getString(R.string.email), this.email);
             currentFragment.setArguments(email);
         }
 
 
-        if(location.contentEquals(getText(R.string.bar_school)) && folder.contentEquals(getText(R.string.new_tasks))){
+        if(location.contentEquals(getString(R.string.bar_school)) && folder.contentEquals(getString(R.string.new_tasks))){
             Log.i(TAG, "Запуск фрагмента Школа bar новые заявки");
             currentFragment = new fragment_school_bar_new_tasks();
 
             Bundle email = new Bundle();
-            email.putString((String) getText(R.string.email), this.email);
+            email.putString(getString(R.string.email), this.email);
             currentFragment.setArguments(email);
         }
 
-        if(location.contentEquals(getText(R.string.bar_school)) && folder.contentEquals(getText(R.string.in_progress_tasks))) {
+        if(location.contentEquals(getString(R.string.bar_school)) && folder.contentEquals(getString(R.string.in_progress_tasks))) {
             Log.i(TAG, "Запуск фрагмента Школа bar заявки в работе");
             currentFragment = new fragment_school_bar_progress_tasks();
 
             Bundle email = new Bundle();
-            email.putString((String) getText(R.string.email), this.email);
+            email.putString(getString(R.string.email), this.email);
             currentFragment.setArguments(email);
         }
 

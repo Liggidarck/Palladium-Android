@@ -25,34 +25,31 @@ public class LocationFolderActivity extends AppCompatActivity {
         archive_tasks_card_root = findViewById(R.id.archive_tasks_card_root);
 
         Bundle arguments = getIntent().getExtras();
-        String location = arguments.get("location").toString();
+        String location = arguments.get((String) getText(R.string.location)).toString();
 
-        if(location.equals("ost_school") || location.equals("bar_school"))
-            toolbar_location_folder_root.setTitle("Школа");
+        if(location.contentEquals(getText(R.string.ost_school)) || location.contentEquals(getText(R.string.bar_school)))
+            toolbar_location_folder_root.setTitle(getText(R.string.school));
 
         toolbar_location_folder_root.setNavigationOnClickListener(v -> onBackPressed());
 
         new_tasks_card_root.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);
-            String folder = "Новые заявки";
-            intent.putExtra("data_location_folder", location);
-            intent.putExtra("folder", folder);
+            intent.putExtra(getString(R.string.location), location);
+            intent.putExtra(getString(R.string.folder), getString(R.string.new_tasks));
             startActivity(intent);
         });
 
         in_progress_tasks_card_root.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);
-            String folder = "В работе";
-            intent.putExtra("data_location_folder", location);
-            intent.putExtra("folder", folder);
+            intent.putExtra(getString(R.string.location), location);
+            intent.putExtra(getString(R.string.folder), getString(R.string.in_progress_tasks));
             startActivity(intent);
         });
 
         archive_tasks_card_root.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);
-            String folder = "Архив";
-            intent.putExtra("data_location_folder", location);
-            intent.putExtra("folder", folder);
+            intent.putExtra(getString(R.string.folder), location);
+            intent.putExtra(getString(R.string.folder), getString(R.string.archive_tasks));
             startActivity(intent);
         });
 

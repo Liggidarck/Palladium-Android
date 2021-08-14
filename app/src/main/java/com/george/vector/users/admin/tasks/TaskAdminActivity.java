@@ -116,9 +116,9 @@ public class TaskAdminActivity extends AppCompatActivity {
 
         edit_task_btn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskAdminActivity.class);
-            intent.putExtra((String) getText(R.string.id), id);
-            intent.putExtra((String) getText(R.string.collection), collection);
-            intent.putExtra((String) getText(R.string.permission), permission);
+            intent.putExtra(getString(R.string.id), id);
+            intent.putExtra(getString(R.string.collection), collection);
+            intent.putExtra(getString(R.string.permission), permission);
             startActivity(intent);
         });
 

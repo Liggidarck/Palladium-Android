@@ -55,8 +55,8 @@ public class MainUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_user);
 
         Bundle arguments = getIntent().getExtras();
-        String email = arguments.get("email").toString();
-        permission = arguments.getString("permission");
+        String email = arguments.get(getString(R.string.email)).toString();
+        permission = arguments.getString(getString(R.string.permission));
         String collection = null;
 
         bottomAppBar = findViewById(R.id.bottomAppBarUser);
@@ -75,15 +75,15 @@ public class MainUserActivity extends AppCompatActivity {
 
         fab_add_user.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddTaskUserActivity.class);
-            intent.putExtra("permission", permission);
+            intent.putExtra(getString(R.string.permission), permission);
             startActivity(intent);
         });
 
-        if (permission.equals("ost_school"))
-            collection = "ost_school_new";
+        if (permission.equals(getString(R.string.ost_school)))
+            collection = getString(R.string.ost_school_new);
 
-        if (permission.equals("bar_school"))
-            collection = "bar_school_new";
+        if (permission.equals(getString(R.string.bar_school)))
+            collection = getString(R.string.bar_school_new);
 
         setUpRecyclerView(email, collection);
 
@@ -144,8 +144,8 @@ public class MainUserActivity extends AppCompatActivity {
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
             Intent intent = new Intent(this, TaskUserActivity.class);
-            intent.putExtra("id_task", id);
-            intent.putExtra("permission", permission);
+            intent.putExtra(getString(R.string.id), id);
+            intent.putExtra(getString(R.string.permission), permission);
             startActivity(intent);
 
         });

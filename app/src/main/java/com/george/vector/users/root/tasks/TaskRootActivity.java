@@ -60,9 +60,9 @@ public class TaskRootActivity extends AppCompatActivity {
         delete_task_btn = findViewById(R.id.delete_task_btn_root);
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get("id_task_root").toString();
-        collection = arguments.get("collection").toString();
-        location = arguments.get("zone").toString();
+        id = arguments.get(getString(R.string.id)).toString();
+        collection = arguments.get(getString(R.string.collection)).toString();
+        location = arguments.get(getString(R.string.location)).toString();
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();

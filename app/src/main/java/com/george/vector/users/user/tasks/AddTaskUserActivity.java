@@ -75,7 +75,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
         storageReference = firebaseStorage.getReference();
 
         Bundle arguments = getIntent().getExtras();
-        permission = arguments.get("permission").toString();
+        permission = arguments.get(getString(R.string.permission)).toString();
         Log.i(TAG, "Permission: " + permission);
 
         topAppBar_new_task_user.setNavigationOnClickListener(v -> onBackPressed());
@@ -123,7 +123,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
     }
 
     void initialize_field(String permission) {
-        if(permission.equals("ost_school")) {
+        if(permission.equals(getString(R.string.ost_school))) {
             String[] items = getResources().getStringArray(R.array.addresses_ost_school);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     AddTaskUserActivity.this,
@@ -133,7 +133,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
             address_autoComplete.setAdapter(adapter);
         }
 
-        if(permission.equals("bar_school"))
+        if(permission.equals(getString(R.string.bar_school)))
             Objects.requireNonNull(text_input_layout_address.getEditText()).setText(getText(R.string.bar_school_address));
 
     }

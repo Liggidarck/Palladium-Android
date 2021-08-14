@@ -30,8 +30,8 @@ public class FolderAdminActivity extends AppCompatActivity {
         toolbar_folder_activity = findViewById(R.id.toolbar_folder_activity);
 
         Bundle arguments = getIntent().getExtras();
-        folder = arguments.get((String) getText(R.string.folder)).toString();
-        permission = arguments.get((String) getText(R.string.permission)).toString();
+        folder = arguments.get(getString(R.string.folder)).toString();
+        permission = arguments.get(getString(R.string.permission)).toString();
         Log.d(TAG, String.format("Folder: %s", folder));
         Log.d(TAG, String.format("Permission: %s", permission));
 
@@ -39,25 +39,25 @@ public class FolderAdminActivity extends AppCompatActivity {
 
         Fragment currentFragment = null;
 
-        if(permission.contentEquals(getText(R.string.ost_school)) && folder.contentEquals(getText(R.string.new_tasks)))
+        if(permission.equals(getString(R.string.ost_school)) && folder.equals(getString(R.string.new_tasks)))
             currentFragment = new fragment_school_ost_new_tasks();
 
 
-        if(permission.contentEquals(getText(R.string.ost_school)) && folder.contentEquals(getText(R.string.in_progress_tasks)))
+        if(permission.equals(getString(R.string.ost_school)) && folder.equals(getString(R.string.in_progress_tasks)))
             currentFragment = new fragment_school_ost_progress_tasks();
 
 
-        if(permission.contentEquals(getText(R.string.ost_school)) && folder.contentEquals(getText(R.string.archive_tasks)))
+        if(permission.equals(getString(R.string.ost_school)) && folder.equals(getString(R.string.archive_tasks)))
             currentFragment = new fragment_school_ost_archive_tasks();
 
 
-        if(permission.contentEquals(getText(R.string.bar_school)) && folder.contentEquals(getText(R.string.new_tasks)))
+        if(permission.equals(getString(R.string.bar_school)) && folder.equals(getString(R.string.new_tasks)))
             currentFragment = new fragment_school_bar_new_tasks();
 
-        if(permission.contentEquals(getText(R.string.bar_school)) && folder.contentEquals(getText(R.string.in_progress_tasks)))
+        if(permission.equals(getString(R.string.bar_school)) && folder.equals(getString(R.string.in_progress_tasks)))
             currentFragment = new fragment_school_bar_progress_tasks();
 
-        if(permission.contentEquals(getText(R.string.bar_school)) && folder.contentEquals(getText(R.string.archive_tasks)))
+        if(permission.equals(getString(R.string.bar_school)) && folder.equals(getString(R.string.archive_tasks)))
             currentFragment = new fragment_school_bar_archive_tasks();
 
         Log.i(TAG, String.format("Запуск фрагмента %s папки %s", permission, folder));

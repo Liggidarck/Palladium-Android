@@ -24,7 +24,6 @@ public class FolderRootActivity extends AppCompatActivity {
     MaterialToolbar toolbar_folder_root_activity;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference taskRef = db.collection("ost_school_new");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +33,8 @@ public class FolderRootActivity extends AppCompatActivity {
         toolbar_folder_root_activity = findViewById(R.id.toolbar_folder_root_activity);
 
         Bundle arguments = getIntent().getExtras();
-        String location = arguments.get("data_location_folder").toString();
-        String folder = arguments.get("folder").toString();
+        String location = arguments.get(getString(R.string.location)).toString();
+        String folder = arguments.get(getString(R.string.folder)).toString();
 
         toolbar_folder_root_activity.setNavigationOnClickListener(v -> onBackPressed());
         toolbar_folder_root_activity.setTitle(folder);
@@ -44,36 +43,24 @@ public class FolderRootActivity extends AppCompatActivity {
 
         Fragment currentFragment = null;
 
-        if(location.equals("ost_school") && folder.equals("Новые заявки")){
-            Log.i(TAG, "Запуск фрагмента Школа новые заявки");
+        if(location.equals(getString(R.string.ost_school)) && folder.equals(getString(R.string.new_tasks)))
             currentFragment = new fragment_school_ost_new_tasks();
-        }
 
-        if(location.equals("ost_school") && folder.equals("В работе")) {
-            Log.i(TAG, "Запуск фрагмента Школа заявки в работе");
+        if(location.equals(getString(R.string.ost_school)) && folder.equals(getString(R.string.in_progress_tasks)))
             currentFragment = new fragment_school_ost_progress_tasks();
-        }
 
-        if(location.equals("ost_school") && folder.equals("Архив")) {
-            Log.i(TAG, "Запуск фрагмента Школа заявки Архив");
+        if(location.equals(getString(R.string.ost_school)) && folder.equals(getString(R.string.archive_tasks)))
             currentFragment = new fragment_school_ost_archive_tasks();
-        }
 
 
-        if(location.equals("bar_school") && folder.equals("Новые заявки")){
-            Log.i(TAG, "Запуск фрагмента Школа bar новые заявки");
+        if(location.equals(getString(R.string.bar_school)) && folder.equals(getString(R.string.new_tasks)))
             currentFragment = new fragment_school_bar_new_tasks();
-        }
 
-        if(location.equals("bar_school") && folder.equals("В работе")) {
-            Log.i(TAG, "Запуск фрагмента Школа bar заявки в работе");
+        if(location.equals(getString(R.string.bar_school)) && folder.equals(getString(R.string.in_progress_tasks)))
             currentFragment = new fragment_school_bar_progress_tasks();
-        }
 
-        if(location.equals("bar_school") && folder.equals("Архив")) {
-            Log.i(TAG, "Запуск фрагмента Школа bar заявки Архив");
+        if(location.equals(getString(R.string.bar_school)) && folder.equals(getString(R.string.archive_tasks)))
             currentFragment = new fragment_school_bar_archive_tasks();
-        }
 
         assert currentFragment != null;
         getSupportFragmentManager()

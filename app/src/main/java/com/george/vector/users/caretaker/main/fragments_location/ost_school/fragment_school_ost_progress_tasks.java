@@ -66,11 +66,10 @@ public class fragment_school_ost_progress_tasks extends Fragment {
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
             Intent intent = new Intent(fragment_school_ost_progress_tasks.this.getContext(), TaskCaretakerActivity.class);
-            intent.putExtra((String) getText(R.string.id), id);
-            intent.putExtra((String) getText(R.string.collection), getText(R.string.ost_school_progress));
-            intent.putExtra((String) getText(R.string.location), getText(R.string.ost_school));
+            intent.putExtra(getString(R.string.id), id);
+            intent.putExtra(getString(R.string.collection), getString(R.string.ost_school_progress));
+            intent.putExtra(getString(R.string.location), getString(R.string.ost_school));
             startActivity(intent);
-
         });
 
         Objects.requireNonNull(text_input_search_school_ost_progress_tasks.getEditText()).setOnEditorActionListener((v, actionId, event) -> {

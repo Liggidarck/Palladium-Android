@@ -71,7 +71,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
     String email_executor;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference usersRef = db.collection("users");
+    private final CollectionReference usersRef = db.collection(getString(R.string.users));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,9 +98,9 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get((String) getText(R.string.id)).toString();
-        collection = arguments.get((String) getText(R.string.collection)).toString();
-        location = arguments.get((String) getText(R.string.location)).toString();
+        id = arguments.get(getString(R.string.id)).toString();
+        collection = arguments.get(getString(R.string.collection)).toString();
+        location = arguments.get(getString(R.string.location)).toString();
 
         Log.d(TAG, "id task: " + id);
         Log.d(TAG, "collection: " + collection);
@@ -111,10 +111,10 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         add_executor_caretaker.setOnClickListener(v -> show_add_executor_dialog());
 
         String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference user_ref = firebaseFirestore.collection("users").document(userID);
+        DocumentReference user_ref = firebaseFirestore.collection(getString(R.string.users)).document(userID);
         user_ref.addSnapshotListener(this, (value, error) -> {
             assert value != null;
-            permission = value.getString((String) getText(R.string.permission));
+            permission = value.getString(getString(R.string.permission));
         });
 
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);

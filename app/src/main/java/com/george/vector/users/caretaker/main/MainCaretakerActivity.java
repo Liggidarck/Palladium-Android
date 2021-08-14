@@ -45,13 +45,13 @@ public class MainCaretakerActivity extends AppCompatActivity {
         });
 
         Bundle arguments = getIntent().getExtras();
-        String permission = arguments.get((String) getText(R.string.permission)).toString();
+        String permission = arguments.get(getString(R.string.permission)).toString();
 
-        if(permission.contentEquals(getText(R.string.ost)))
-            setUp((String) getText(R.string.ost));
+        if(permission.equals(getString(R.string.ost)))
+            setUp(getString(R.string.ost));
 
-        if(permission.contentEquals(getText(R.string.bar)))
-            setUp((String) getText(R.string.bar));
+        if(permission.equals(getString(R.string.bar)))
+            setUp(getString(R.string.bar));
 
         fab_add_caretaker.setOnClickListener(v -> {
             switch (permission) {
