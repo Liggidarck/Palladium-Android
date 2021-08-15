@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -43,7 +44,7 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
 
-public class EditTaskActivity extends AppCompatActivity {
+public class EditTaskRootActivity extends AppCompatActivity {
 
     private static final String TAG = "EditTaskRoot";
 
@@ -69,7 +70,7 @@ public class EditTaskActivity extends AppCompatActivity {
     FirebaseFirestore firebaseFirestore;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference usersRef = db.collection(getString(R.string.users));
+    private final CollectionReference usersRef = db.collection("users");
 
     String name_executor;
     String last_name_executor;
@@ -111,6 +112,8 @@ public class EditTaskActivity extends AppCompatActivity {
 
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
+            progress_bar_add_task_root.setVisibility(View.VISIBLE);
+
             assert value != null;
             address = value.getString("address");
             floor = value.getString("floor");
@@ -146,6 +149,8 @@ public class EditTaskActivity extends AppCompatActivity {
 
             initialize_fields(location);
         });
+
+        documentReference.get().addOnCompleteListener(v -> progress_bar_add_task_root.setVisibility(View.INVISIBLE));
 
         done_task_root.setOnClickListener(v -> {
 
@@ -279,7 +284,7 @@ public class EditTaskActivity extends AppCompatActivity {
         if (location.equals(getString(R.string.ost_school))) {
             String[] items = getResources().getStringArray(R.array.addresses_ost_school);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                    EditTaskActivity.this,
+                    EditTaskRootActivity.this,
                     R.layout.dropdown_menu_categories,
                     items
             );
@@ -288,7 +293,7 @@ public class EditTaskActivity extends AppCompatActivity {
 
         String[] items_status = getResources().getStringArray(R.array.status);
         ArrayAdapter<String> adapter_status = new ArrayAdapter<>(
-                EditTaskActivity.this,
+                EditTaskRootActivity.this,
                 R.layout.dropdown_menu_categories,
                 items_status
         );
@@ -303,7 +308,7 @@ public class EditTaskActivity extends AppCompatActivity {
             updateLabel();
         };
 
-        edit_text_date_task_root.setOnClickListener(v -> new DatePickerDialog(EditTaskActivity.this, date, datePickCalendar
+        edit_text_date_task_root.setOnClickListener(v -> new DatePickerDialog(EditTaskRootActivity.this, date, datePickCalendar
                 .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
 
     }

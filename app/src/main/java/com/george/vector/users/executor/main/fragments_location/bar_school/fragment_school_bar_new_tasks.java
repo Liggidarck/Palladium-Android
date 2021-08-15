@@ -31,7 +31,7 @@ public class fragment_school_bar_new_tasks extends Fragment {
 
     private static final String TAG = "NewTaskBarSchoolExec";
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference taskRef = db.collection(getString(R.string.bar_school_new));
+    private final CollectionReference taskRef = db.collection("bar_school_new");
 
     TextInputLayout search_executor_bar_school_new_tasks;
     RecyclerView recycler_view_new_tasks_executor;

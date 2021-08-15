@@ -29,7 +29,7 @@ public class fragment_school_bar_new_tasks extends Fragment {
 
     private static final String TAG = "NewTaskBarSchool";
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference taskRef = db.collection(getString(R.string.bar_school_new));
+    private final CollectionReference taskRef = db.collection("bar_school_new");
 
     private TaskAdapter adapter;
     private Query query;

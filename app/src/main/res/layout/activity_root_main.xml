@@ -33,8 +33,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:singleSelection="true"
-                        app:singleLine="true"
-                        app:checkedChip="@id/chip_root_ost">
+                        app:singleLine="true">
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chip_root_ost"
@@ -121,5 +120,10 @@
             tools:ignore="ContentDescription" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator_main_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

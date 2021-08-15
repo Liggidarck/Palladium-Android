@@ -3,6 +3,9 @@ package com.george.vector.users.root.main;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -14,6 +17,7 @@ import com.george.vector.users.root.main.location_fragments.ost_school.fragment_
 import com.george.vector.users.root.main.location_fragments.ost_school.fragment_school_ost_new_tasks;
 import com.george.vector.users.root.main.location_fragments.ost_school.fragment_school_ost_progress_tasks;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -22,8 +26,7 @@ public class FolderRootActivity extends AppCompatActivity {
     private static final String TAG = "FolderRootActivity";
 
     MaterialToolbar toolbar_folder_root_activity;
-
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    String text_toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +39,17 @@ public class FolderRootActivity extends AppCompatActivity {
         String location = arguments.get(getString(R.string.location)).toString();
         String folder = arguments.get(getString(R.string.folder)).toString();
 
+        if(folder.equals(getString(R.string.new_tasks)))
+            text_toolbar = getString(R.string.new_tasks_text);
+
+        if(folder.equals(getString(R.string.in_progress_tasks)))
+            text_toolbar = getString(R.string.progress_tasks);
+
+        if(folder.equals(getString(R.string.archive_tasks)))
+            text_toolbar = getString(R.string.archive_tasks_text);
+
         toolbar_folder_root_activity.setNavigationOnClickListener(v -> onBackPressed());
-        toolbar_folder_root_activity.setTitle(folder);
+        toolbar_folder_root_activity.setTitle(text_toolbar);
         Log.d(TAG, "location: " + location);
         Log.d(TAG, "folder: " + folder);
 
@@ -69,4 +81,23 @@ public class FolderRootActivity extends AppCompatActivity {
                 .commit();
 
     }
+
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(!isOnline())
+            Snackbar.make(findViewById(R.id.folder_root_coordinator), getString(R.string.error_no_connection), Snackbar.LENGTH_LONG)
+                    .setAction("Повторить", v ->  {
+                        Log.i(TAG, "Update status: " + isOnline());
+                        onStart();
+                    }).show();
+    }
+
 }

@@ -22,51 +22,54 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar_list_users"
-        android:layout_margin="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
         android:scrollbars="none">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chip_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:singleSelection="true"
+            app:checkedChip="@id/chip_root"
             app:singleLine="true"
-            app:checkedChip="@id/chip_root">
+            app:singleSelection="true">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_root"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/super_users"
-                style="@style/Widget.MaterialComponents.Chip.Filter" />
+                android:text="@string/super_users" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_zav"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/caretakers"
-                style="@style/Widget.MaterialComponents.Chip.Filter" />
+                android:text="@string/caretakers" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_admin"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/admins"
-                style="@style/Widget.MaterialComponents.Chip.Filter" />
+                android:text="@string/admins" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_user"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/users_text"
-                style="@style/Widget.MaterialComponents.Chip.Filter" />
+                android:text="@string/users_text" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_worker"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/executors"
-                style="@style/Widget.MaterialComponents.Chip.Filter" />
+                android:text="@string/executors" />
 
         </com.google.android.material.chip.ChipGroup>
 

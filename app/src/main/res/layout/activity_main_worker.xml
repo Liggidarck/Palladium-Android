@@ -107,5 +107,9 @@
         app:menu="@menu/bottom_app_bar"
         app:navigationIcon="@drawable/ic_baseline_menu_24"/>
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator_main_executor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

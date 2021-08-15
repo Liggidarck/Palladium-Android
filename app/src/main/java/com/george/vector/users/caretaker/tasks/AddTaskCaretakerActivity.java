@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
@@ -64,14 +63,13 @@ public class AddTaskCaretakerActivity extends AppCompatActivity {
     MaterialAutoCompleteTextView address_autoComplete_caretaker, status_autoComplete_caretaker;
 
     private static final String TAG = "AddTaskCaretaker";
-    String location, userID, email, address, floor, cabinet, name_task, date_task, status, comment, permission, randomKey;
+    String location, userID, email, address, floor, cabinet, name_task, date_task, status, comment, permission;
     String name_executor;
     String last_name_executor;
     String patronymic_executor;
     String email_executor;
 
     Calendar datePickCalendar;
-    public Uri imageUri;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -114,7 +112,7 @@ public class AddTaskCaretakerActivity extends AppCompatActivity {
         add_executor_caretaker.setOnClickListener(v -> show_add_executor_dialog());
 
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReferenceUser = firebaseFirestore.collection("users").document(userID);
+        DocumentReference documentReferenceUser = firebaseFirestore.collection(getString(R.string.users)).document(userID);
         documentReferenceUser.addSnapshotListener(this, (value, error) -> {
             assert value != null;
             email = value.getString("email");
@@ -166,7 +164,7 @@ public class AddTaskCaretakerActivity extends AppCompatActivity {
                 .setNegativeButton(android.R.string.cancel,
                         (dialog, id) -> {
                             Intent intent = new Intent(this, MainCaretakerActivity.class);
-                            intent.putExtra("permission", permission);
+                            intent.putExtra(getString(R.string.permission), permission);
                             startActivity(intent);
                         });
 

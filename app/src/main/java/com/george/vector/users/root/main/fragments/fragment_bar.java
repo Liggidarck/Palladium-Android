@@ -21,9 +21,8 @@ public class fragment_bar extends Fragment {
     MaterialCardView bar_school_root, bar_kids_one_root, bar_kids_two_root;
 
     @Nullable
-    @org.jetbrains.annotations.Nullable
     @Override
-    public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bar_root, container, false);
 
         bar_school_root = view.findViewById(R.id.bar_school_root);

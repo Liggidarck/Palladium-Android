@@ -40,11 +40,11 @@ public class LoadingActivity extends AppCompatActivity {
             userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
             Log.i(TAG, "user id: " + userID);
 
-            DocumentReference documentReference = firebaseFirestore.collection((String) getText(R.string.users)).document(userID);
+            DocumentReference documentReference = firebaseFirestore.collection(getString(R.string.users)).document(userID);
             documentReference.addSnapshotListener(this, (value, error) -> {
                 assert value != null;
 
-                String check_role = value.getString((String) getText(R.string.role));
+                String check_role = value.getString(getString(R.string.role));
                 String check_email = value.getString(getString(R.string.email));
                 String permission = value.getString(getString(R.string.permission));
                 Log.d(TAG, "permission - " + permission);
@@ -61,28 +61,29 @@ public class LoadingActivity extends AppCompatActivity {
         if (role.equals("Root"))
             startActivity(new Intent(this, RootMainActivity.class));
 
+
         if(role.equals("Завхоз")) {
             Intent intent = new Intent(this, MainCaretakerActivity.class);
-            intent.putExtra((String) getText(R.string.permission), permission);
+            intent.putExtra(getString(R.string.permission), permission);
             startActivity(intent);
         }
 
         if(role.equals("Администратор")) {
             Intent intent = new Intent(this, MainAdminActivity.class);
-            intent.putExtra((String) getText(R.string.permission), permission);
+            intent.putExtra(getString(R.string.permission), permission);
             startActivity(intent);
         }
 
         if (role.equals("Пользователь")) {
             Intent intent = new Intent(this, MainUserActivity.class);
-            intent.putExtra((String) getText(R.string.email), email);
-            intent.putExtra((String) getText(R.string.permission), permission);
+            intent.putExtra(getString(R.string.email), email);
+            intent.putExtra(getString(R.string.permission), permission);
             startActivity(intent);
         }
 
         if (role.equals("Исполнитель")) {
             Intent intent = new Intent(this, MainExecutorActivity.class);
-            intent.putExtra((String) getText(R.string.email), email);
+            intent.putExtra(getString(R.string.email), email);
             startActivity(intent);
         }
     }

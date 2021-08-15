@@ -1,22 +1,16 @@
 package com.george.vector.common.utils;
 
-import android.content.Context;
-import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 
 import androidx.annotation.NonNull;
 
-import com.george.vector.R;
-import com.george.vector.users.admin.main.MainAdminActivity;
-import com.george.vector.users.caretaker.main.MainCaretakerActivity;
-import com.george.vector.users.executor.main.MainExecutorActivity;
-import com.george.vector.users.root.main.RootMainActivity;
-import com.george.vector.users.user.main.MainUserActivity;
 import com.google.android.material.textfield.TextInputLayout;
 
-import org.jetbrains.annotations.NotNull;
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class Utils {
@@ -46,6 +40,13 @@ public class Utils {
 
             }
         });
+    }
+
+
+    public String getDate() {
+        Date currentDate = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        return dateFormat.format(currentDate);
     }
 
 }

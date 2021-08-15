@@ -2,13 +2,18 @@ package com.george.vector.users.user.tasks;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.george.vector.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -17,6 +22,7 @@ import com.google.firebase.storage.StorageReference;
 
 public class TaskUserActivity extends AppCompatActivity {
 
+    private static final String TAG = "TaskUserActivity";
     MaterialToolbar toolbar;
     TextView text_view_address_task_user, text_view_floor_task_user, text_view_cabinet_task_user,
             text_view_name_task_user, text_view_comment_task_user, text_view_status_task_user,
@@ -89,5 +95,23 @@ public class TaskUserActivity extends AppCompatActivity {
 
         documentReference.get().addOnCompleteListener(task -> progress_bar_task_user.setVisibility(View.INVISIBLE));
 
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(!isOnline())
+            Snackbar.make(findViewById(R.id.coordinator_task_user), getString(R.string.error_no_connection), Snackbar.LENGTH_LONG)
+                    .setAction("Повторить", v ->  {
+                        Log.i(TAG, "Update status: " + isOnline());
+                        onStart();
+                    }).show();
     }
 }

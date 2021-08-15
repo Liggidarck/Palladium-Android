@@ -1,0 +1,22 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <PreferenceCategory android:title="Основные">
+
+        <ListPreference
+            android:entries="@array/default_root_location_text"
+            android:entryValues="@array/default_root_location"
+            android:key="default_root_location"
+            android:title="Место по умолчанию"
+            app:defaultValue="ost" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/tasks">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="confirm_before_deleting_root"
+            android:title="Подтверждать перед удалением" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

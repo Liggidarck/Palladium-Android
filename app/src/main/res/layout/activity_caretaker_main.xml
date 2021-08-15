@@ -91,5 +91,9 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator_main_caretaker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

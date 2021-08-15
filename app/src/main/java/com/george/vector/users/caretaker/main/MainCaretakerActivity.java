@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -19,6 +22,7 @@ import com.george.vector.common.bottom_sheets.ProfileBottomSheet;
 import com.george.vector.common.bottom_sheets.ConsoleBottomSheet;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -39,13 +43,18 @@ public class MainCaretakerActivity extends AppCompatActivity {
 
         setSupportActionBar(bottomAppBar_caretaker);
 
+        Bundle arguments = getIntent().getExtras();
+        String permission = arguments.get(getString(R.string.permission)).toString();
+
         bottomAppBar_caretaker.setNavigationOnClickListener(v -> {
             ConsoleBottomSheet bottomSheet = new ConsoleBottomSheet();
+            Bundle bundle = new Bundle();
+
+            bundle.putString(getString(R.string.permission), permission);
+            bottomSheet.setArguments(bundle);
             bottomSheet.show(getSupportFragmentManager(), "ConsoleBottomSheet");
         });
 
-        Bundle arguments = getIntent().getExtras();
-        String permission = arguments.get(getString(R.string.permission)).toString();
 
         if(permission.equals(getString(R.string.ost)))
             setUp(getString(R.string.ost));
@@ -103,8 +112,26 @@ public class MainCaretakerActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(!isOnline())
+            Snackbar.make(findViewById(R.id.coordinator_main_caretaker), getString(R.string.error_no_connection), Snackbar.LENGTH_LONG)
+                    .setAction("Повторить", v ->  {
+                        Log.i(TAG, "Update status: " + isOnline());
+                        onStart();
+                    }).show();
+    }
+
     @Override
     public void onBackPressed() {
-
+        Log.d(TAG, "nope!");
     }
 }

@@ -3,7 +3,11 @@ package com.george.vector.users.root.main;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -19,6 +23,7 @@ import com.george.vector.users.root.tasks.BottomSheetAddTask;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +33,7 @@ public class RootMainActivity extends AppCompatActivity {
     FloatingActionButton fab_add_root;
     BottomAppBar bottomAppBar_root;
 
-    String zone = "ost";
+    String zone;
     private static final String TAG = "RootMainActivity";
 
     @Override
@@ -42,10 +47,16 @@ public class RootMainActivity extends AppCompatActivity {
         fab_add_root = findViewById(R.id.fab_add_root);
         bottomAppBar_root = findViewById(R.id.bottomAppBar_root);
 
-        setSupportActionBar(bottomAppBar_root);
+        zone = PreferenceManager.getDefaultSharedPreferences(this).getString("default_root_location", getString(R.string.ost));
 
+        setSupportActionBar(bottomAppBar_root);
         bottomAppBar_root.setNavigationOnClickListener(v -> {
             ConsoleBottomSheet bottomSheet = new ConsoleBottomSheet();
+            Bundle bundle = new Bundle();
+
+            bundle.putString(getString(R.string.permission), "all");
+            bottomSheet.setArguments(bundle);
+
             bottomSheet.show(getSupportFragmentManager(), "ConsoleBottomSheet");
         });
 
@@ -53,6 +64,12 @@ public class RootMainActivity extends AppCompatActivity {
             BottomSheetAddTask bottomSheet = new BottomSheetAddTask();
             bottomSheet.show(getSupportFragmentManager(), "BottomSheetAddTask");
         });
+
+        if(zone.equals("ost"))
+            chip_root_ost.setChecked(true);
+
+        if(zone.equals("bar"))
+            chip_root_bar.setChecked(true);
 
         chip_root_ost.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
@@ -71,7 +88,7 @@ public class RootMainActivity extends AppCompatActivity {
             }
         });
 
-        updateZones("ost");
+        updateZones(zone);
     }
 
     void updateZones(@NotNull String zone_update) {
@@ -91,6 +108,24 @@ public class RootMainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.main_frame_root, currentFragment)
                 .commit();
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(!isOnline())
+            Snackbar.make(findViewById(R.id.coordinator_main_root), getString(R.string.error_no_connection), Snackbar.LENGTH_LONG)
+                    .setAction("Повторить", v ->  {
+                            Log.i(TAG, "Update status: " + isOnline());
+                            onStart();
+                    }).show();
     }
 
     @Override

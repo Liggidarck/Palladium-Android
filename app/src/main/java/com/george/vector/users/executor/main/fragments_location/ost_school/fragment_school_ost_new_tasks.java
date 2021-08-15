@@ -32,7 +32,7 @@ public class fragment_school_ost_new_tasks extends Fragment {
     RecyclerView recycler_view_new_tasks_executor;
     private static final String TAG = "NewTaskOstSchoolExec";
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference taskRef = db.collection(getString(R.string.ost_school_new));
+    private final CollectionReference taskRef = db.collection("ost_school_new");
 
     TextInputLayout search_executor_ost_school_new_tasks;
 
