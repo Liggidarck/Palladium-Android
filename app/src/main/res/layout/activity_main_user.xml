@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".users.user.main.MainUserActivity">
@@ -10,60 +11,75 @@
         android:id="@+id/toolbar_main_user"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:titleTextColor="@android:color/white"
+        android:background="@color/blue_primary"
         app:layout_collapseMode="pin"
+        app:navigationIcon="@drawable/ic_baseline_menu_24"
+        app:navigationIconTint="@color/white"
         app:title="@string/tasks"
-        android:background="@color/blue_primary" />
+        app:titleTextColor="@android:color/white" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_input_search_user"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:startIconDrawable="@drawable/ic_baseline_search_24"
+        android:layout_below="@+id/toolbar_main_user"
         android:hint="Поиск заявок"
-        android:layout_below="@+id/toolbar_main_user" >
+        android:padding="10dp"
+        app:startIconDrawable="@drawable/ic_baseline_search_24">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionSearch"
-            android:inputType="text"/>
+            android:inputType="text" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <FrameLayout
+        android:id="@+id/main_user_frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_input_search_user" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/group_chip_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_user_frame"
+        app:singleLine="true"
+        app:singleSelection="true"
+        android:layout_marginStart="10dp">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_today_user"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Сегодня созданы" />
+
+    </com.google.android.material.chip.ChipGroup>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_view_user"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="100dp"
+        android:layout_below="@+id/group_chip_user"
         android:clipToPadding="false"
-        android:layout_below="@+id/text_input_search_user"/>
+        android:paddingBottom="100dp" />
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/bottomAppBarUser"
-            style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:menu="@menu/bottom_app_bar"
-            app:navigationIcon="@drawable/ic_baseline_menu_24" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_add_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_anchor="@id/bottomAppBarUser"
-            app:srcCompat="@drawable/ic_baseline_add_24"
-            app:tint="#FFFFFF"
-            tools:ignore="ContentDescription" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/create_task_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="25dp"
+        android:text="Создать"
+        android:textColor="@color/white"
+        app:icon="@drawable/ic_baseline_add_24"
+        app:iconTint="@color/white" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator_main_user"

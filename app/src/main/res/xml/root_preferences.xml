@@ -8,8 +8,8 @@
             android:entries="@array/default_root_location_text"
             android:entryValues="@array/default_root_location"
             android:key="default_root_location"
-            app:defaultValue="ost"
-            android:title="Место по умолчанию" />
+            android:title="Место по умолчанию"
+            app:defaultValue="ost" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/tasks">
 

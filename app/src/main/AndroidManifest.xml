@@ -16,8 +16,8 @@
         <activity
             android:name=".users.root.main.SettingsRootActivity"
             android:exported="true" />
-
-        <activity android:name=".auth.LoadingActivity">
+        <activity android:name=".auth.LoadingActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

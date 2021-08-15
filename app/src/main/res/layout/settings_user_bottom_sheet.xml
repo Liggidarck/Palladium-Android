@@ -10,16 +10,17 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/settings"
+            android:text="@string/app_name"
             android:textColor="@color/black"
             android:textSize="22sp"
             tools:ignore="RelativeOverlap" />
 
         <ImageView
-            android:id="@+id/close_btn"
+            android:id="@+id/close_btn_user"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:src="@drawable/ic_baseline_close_24"
@@ -35,21 +36,79 @@
         android:layout_marginTop="12dp"
         tools:ignore="ContentDescription" />
 
+    <RelativeLayout
+        android:id="@+id/layout_edit_person_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        tools:targetApi="m"
+        tools:ignore="UnusedAttribute">
+
+        <ImageView
+            android:id="@+id/edit_data_image_user"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:src="@drawable/ic_baseline_edit_24"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/edit_data_image_user"
+            android:text="@string/edit_data_user"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_shortcut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        tools:targetApi="m"
+        tools:ignore="UnusedAttribute">
+
+        <ImageView
+            android:id="@+id/following_image_sheet"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:src="@drawable/ic_baseline_label_24"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/following_image_sheet"
+            android:text="Шорткаты"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+    </RelativeLayout>
+
     <Button
         android:id="@+id/btn_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/logout"
+        android:textColor="#E73C3C"
         android:layout_marginTop="10dp"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
-    <Button
-        android:id="@+id/edit_data_user"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/edit_data_user"
-        android:layout_marginTop="10dp"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
     <View
         android:layout_width="match_parent"
