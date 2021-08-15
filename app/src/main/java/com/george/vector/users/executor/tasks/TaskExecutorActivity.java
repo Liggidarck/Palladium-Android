@@ -126,7 +126,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
                 if (status.equals("Архив"))
                     circle_status_executor.setImageResource(R.color.green);
             } catch (Exception e){
-                Log.i(TAG, "Error! " + e);
+                Log.e(TAG, "Error! " + e);
             }
 
         });

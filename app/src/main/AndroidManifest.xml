@@ -33,7 +33,7 @@
         <activity android:name=".users.caretaker.tasks.TaskCaretakerActivity" />
         <activity android:name=".users.caretaker.main.FolderCaretakerActivity" />
         <activity android:name=".users.caretaker.main.FolderTaskCaretakerActivity" />
-        <activity android:name=".users.root.tasks.EditTaskActivity" />
+        <activity android:name=".users.root.tasks.EditTaskRootActivity" />
         <activity android:name=".users.root.tasks.TaskRootActivity" />
         <activity android:name=".users.root.tasks.AddTaskRootActivity" />
         <activity android:name=".users.root.main.FolderRootActivity" />

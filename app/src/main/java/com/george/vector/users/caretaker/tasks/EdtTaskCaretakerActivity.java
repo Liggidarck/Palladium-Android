@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -119,6 +120,8 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
 
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
+            progress_bar_add_task_caretaker.setVisibility(View.VISIBLE);
+
             assert value != null;
             address = value.getString("address");
             floor = value.getString("floor");
@@ -155,6 +158,8 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
             initialize_fields(location);
 
         });
+
+        documentReference.get().addOnCompleteListener(v -> progress_bar_add_task_caretaker.setVisibility(View.INVISIBLE));
 
         done_task_caretaker.setOnClickListener(v -> {
             if (validateFields()) {

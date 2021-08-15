@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -142,6 +143,8 @@ public class EditTaskAdminActivity extends AppCompatActivity {
 
             initialize_fields(permission);
         });
+
+        documentReference.get().addOnCompleteListener(v -> progress_bar_add_task_admin.setVisibility(View.INVISIBLE));
 
         update_task.setOnClickListener(v -> {
             if(validateFields()) {

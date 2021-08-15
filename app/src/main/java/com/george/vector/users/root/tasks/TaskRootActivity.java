@@ -79,7 +79,7 @@ public class TaskRootActivity extends AppCompatActivity {
         topAppBar_tasks_root.setNavigationOnClickListener(v -> onBackPressed());
 
         edit_task_btn.setOnClickListener(v -> {
-            Intent intent = new Intent(this, EditTaskActivity.class);
+            Intent intent = new Intent(this, EditTaskRootActivity.class);
             intent.putExtra(getString(R.string.id), id);
             intent.putExtra(getString(R.string.collection), collection);
             intent.putExtra(getString(R.string.location), location);
