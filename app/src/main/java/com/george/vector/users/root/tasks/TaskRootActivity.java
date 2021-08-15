@@ -80,9 +80,9 @@ public class TaskRootActivity extends AppCompatActivity {
 
         edit_task_btn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskActivity.class);
-            intent.putExtra("id_task", id);
-            intent.putExtra("collection", collection);
-            intent.putExtra("zone", location);
+            intent.putExtra(getString(R.string.id), id);
+            intent.putExtra(getString(R.string.collection), collection);
+            intent.putExtra(getString(R.string.location), location);
             startActivity(intent);
         });
 

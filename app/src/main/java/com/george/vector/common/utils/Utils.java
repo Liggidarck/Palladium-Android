@@ -7,6 +7,10 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class Utils {
@@ -36,6 +40,13 @@ public class Utils {
 
             }
         });
+    }
+
+
+    public String getDate() {
+        Date currentDate = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        return dateFormat.format(currentDate);
     }
 
 }
