@@ -82,8 +82,8 @@ public class TaskExecutorActivity extends AppCompatActivity {
             progress_bar_task_executor.setVisibility(View.VISIBLE);
             assert value != null;
             address = value.getString("address");
-            floor = String.format("Этаж: %s", value.getString("floor"));
-            cabinet = String.format("Кабинет: %s", value.getString("cabinet"));
+            floor = value.getString("floor");
+            cabinet = value.getString("cabinet");
             name_task = value.getString("name_task");
             comment = value.getString("comment");
             status = value.getString("status");
@@ -107,8 +107,8 @@ public class TaskExecutorActivity extends AppCompatActivity {
             Log.d(TAG, "date_done: " + date_done);
 
             text_view_address_task_executor.setText(address);
-            text_view_floor_task_executor.setText(floor);
-            text_view_cabinet_task_executor.setText(cabinet);
+            text_view_floor_task_executor.setText(String.format("%s %s", getText(R.string.floor), floor));
+            text_view_cabinet_task_executor.setText(String.format("%s %s", getText(R.string.cabinet), cabinet));
             text_view_name_task_executor.setText(name_task);
             text_view_comment_task_executor.setText(comment);
             text_view_status_task_executor.setText(status);
