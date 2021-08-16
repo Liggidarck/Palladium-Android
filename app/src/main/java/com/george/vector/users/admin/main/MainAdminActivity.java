@@ -45,7 +45,7 @@ public class MainAdminActivity extends AppCompatActivity {
 
         Bundle arguments = getIntent().getExtras();
         permission = arguments.get( getString(R.string.permission)).toString();
-        Log.d(TAG, "permission: " + permission);
+        Log.d(TAG, String.format("permission: %s", permission));
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -61,7 +61,7 @@ public class MainAdminActivity extends AppCompatActivity {
             ConsoleBottomSheet bottomSheet = new ConsoleBottomSheet();
             Bundle bundle = new Bundle();
 
-            bundle.putString(getString(R.string.permission), permission);
+            bundle.putString(getString(R.string.permission), "admin");
             bottomSheet.setArguments(bundle);
             bottomSheet.show(getSupportFragmentManager(), "ConsoleBottomSheet");
         });

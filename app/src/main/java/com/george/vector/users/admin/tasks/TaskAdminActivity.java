@@ -1,6 +1,7 @@
 package com.george.vector.users.admin.tasks;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -39,6 +40,7 @@ public class TaskAdminActivity extends AppCompatActivity {
     private static final String TAG = "TaskAdminActivity";
 
     String id, permission, collection, address, floor, cabinet, name_task, comment, status, date_create, time_create;
+    boolean confirm_delete;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -67,6 +69,8 @@ public class TaskAdminActivity extends AppCompatActivity {
         id = arguments.get(getString(R.string.id)).toString();
         collection = arguments.get(getString(R.string.collection)).toString();
         permission = arguments.get(getString(R.string.permission)).toString();
+        confirm_delete = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("confirm_before_deleting", true);
+
         Log.d(TAG, "Location: " + permission);
         Log.d(TAG, "Permission: " + collection);
 
@@ -126,7 +130,12 @@ public class TaskAdminActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        delete_task_btn.setOnClickListener(v -> show_dialog_delete());
+        delete_task_btn.setOnClickListener(v -> {
+            if(confirm_delete)
+                show_dialog_delete();
+            else
+                delete_task();
+        });
     }
 
     void show_dialog_delete() {

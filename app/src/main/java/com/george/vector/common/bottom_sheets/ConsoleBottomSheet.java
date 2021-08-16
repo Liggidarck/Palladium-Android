@@ -55,9 +55,23 @@ public class ConsoleBottomSheet extends BottomSheetDialogFragment {
         layout_edit_person.setOnClickListener(v -> startActivity(new Intent(ConsoleBottomSheet.this.getContext(), ListUsersActivity.class)));
 
         btn_settings.setOnClickListener(v -> {
+            Intent intent = new Intent(ConsoleBottomSheet.this.getContext(), SettingsActivity.class);
+
             if (permission.equals("root")) {
-                Intent intent = new Intent(ConsoleBottomSheet.this.getContext(), SettingsActivity.class);
                 intent.putExtra(getString(R.string.permission), "root");
+                intent.putExtra(getString(R.string.email), "null");
+                startActivity(intent);
+            }
+
+            if (permission.equals("admin")) {
+                intent.putExtra(getString(R.string.permission), "admin");
+                intent.putExtra(getString(R.string.email), "null");
+                startActivity(intent);
+            }
+
+            if (permission.equals("caretaker")) {
+                intent.putExtra(getString(R.string.permission), "caretaker");
+                intent.putExtra(getString(R.string.email), "null");
                 startActivity(intent);
             }
 
