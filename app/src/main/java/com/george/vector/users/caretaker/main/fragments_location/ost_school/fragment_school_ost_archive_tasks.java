@@ -18,7 +18,9 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.george.vector.common.tasks.ui.TaskAdapter;
 import com.george.vector.common.tasks.ui.TaskUi;
+import com.george.vector.common.utils.Utils;
 import com.george.vector.users.caretaker.tasks.TaskCaretakerActivity;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,14 +39,21 @@ public class fragment_school_ost_archive_tasks extends Fragment {
 
     FirebaseFirestore firebaseFirestore;
     TextInputLayout text_input_search_archive_tasks;
+    Chip chip_today_school_ost_archive, chip_old_school_ost_archive, chip_new_school_ost_archive, chip_all_archive_tasks_ost_school;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_school_ost_archive_tasks, container, false);
 
+        Utils utils = new Utils();
+
         RecyclerView recyclerview_school_ost_new_tasks = view.findViewById(R.id.recyclerview_school_ost_archive_tasks);
         text_input_search_archive_tasks = view.findViewById(R.id.text_input_search_archive_tasks);
+        chip_today_school_ost_archive = view.findViewById(R.id.chip_today_school_ost_archive);
+        chip_old_school_ost_archive = view.findViewById(R.id.chip_old_school_ost_archive);
+        chip_new_school_ost_archive = view.findViewById(R.id.chip_new_school_ost_archive);
+        chip_all_archive_tasks_ost_school = view.findViewById(R.id.chip_all_archive_tasks_ost_school);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -86,7 +95,63 @@ public class fragment_school_ost_archive_tasks extends Fragment {
             return false;
         });
 
+        chip_all_archive_tasks_ost_school.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if(isChecked){
+                Log.i(TAG, "default checked");
+                defaultQuery();
+            }
+        });
+
+        chip_today_school_ost_archive.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+            if(isChecked){
+                Log.i(TAG, "today checked");
+                String today = utils.getDate();
+                todayTasks(today);
+            }
+
+        });
+
+        chip_old_school_ost_archive.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+            if(isChecked){
+                Log.i(TAG, "old checked");
+                currentAddressTasks("Улица Авиаторов дом 9. Старое здание");
+            }
+
+        });
+
+        chip_new_school_ost_archive.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+            if(isChecked){
+                Log.i(TAG, "new checked");
+                currentAddressTasks("Улица Авиаторов дом 9. Новое здание");
+            }
+
+        });
+
+
         return view;
+    }
+
+    private void currentAddressTasks(String address) {
+        query = taskRef.whereEqualTo("address", address);
+
+        FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
+                .build();
+
+        adapter.updateOptions(search_options);
+    }
+
+    private void todayTasks(String date) {
+        query = taskRef.whereEqualTo("date_create", date);
+
+        FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
+                .build();
+
+        adapter.updateOptions(search_options);
     }
 
     private void search(String query_text) {

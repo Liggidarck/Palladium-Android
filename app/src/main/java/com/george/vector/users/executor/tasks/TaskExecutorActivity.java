@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.george.vector.R;
 import com.george.vector.common.tasks.ui.TaskUi;
+import com.george.vector.common.tasks.utils.SaveTask;
+import com.george.vector.common.tasks.utils.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
@@ -151,21 +153,6 @@ public class TaskExecutorActivity extends AppCompatActivity {
         if (status.equals("В работе"))
             radio_button_progress.setChecked(true);
 
-
-        Log.d(TAG, "Address: " + address);
-        Log.d(TAG, "floor: " + floor);
-        Log.d(TAG, "cabinet: " + cabinet);
-        Log.d(TAG, "name_task: " + name_task);
-        Log.d(TAG, "comment: " + comment);
-        Log.d(TAG, "status: " + status);
-        Log.d(TAG, "comment: " + comment);
-        Log.d(TAG, "date_create: " + date_create);
-        Log.d(TAG, "time_create: " + time_create);
-        Log.d(TAG, "email_executor: " + email_executor);
-        Log.d(TAG, "email_creator: " + email_creator);
-        Log.d(TAG, "date_done: " + date_done);
-
-
         done_btn_executor.setOnClickListener(v -> {
             delete_task(collection, id);
 
@@ -227,19 +214,11 @@ public class TaskExecutorActivity extends AppCompatActivity {
                    String update_floor, String update_cabinet, String update_comment, String date_create,
                    String update_executor, String update_status, String time_create, String email) {
 
-        CollectionReference taskRef = FirebaseFirestore.getInstance().collection(collection);
-        taskRef.add(new TaskUi(update_name, update_address, update_date_task, update_floor, update_cabinet, update_comment,
-                date_create, update_executor, update_status, time_create, email));
-
-        taskRef.get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                Log.i(TAG, "add completed!");
-
-            } else {
-                Log.i(TAG, "Error: " + task.getException());
-            }
-
-        });
+        Task task = new Task();
+        task.save(new SaveTask(), collection, update_name, update_address, date_create, update_floor,
+                update_cabinet, update_comment, update_date_task,
+                update_executor, update_status, time_create,
+                email);
     }
 
 
