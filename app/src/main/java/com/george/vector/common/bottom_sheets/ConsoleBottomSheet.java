@@ -17,7 +17,7 @@ import com.george.vector.R;
 import com.george.vector.auth.ActivityLogin;
 import com.george.vector.auth.ActivityRegisterUser;
 import com.george.vector.common.edit_users.ListUsersActivity;
-import com.george.vector.users.root.main.SettingsRootActivity;
+import com.george.vector.common.settings.SettingsActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -55,8 +55,11 @@ public class ConsoleBottomSheet extends BottomSheetDialogFragment {
         layout_edit_person.setOnClickListener(v -> startActivity(new Intent(ConsoleBottomSheet.this.getContext(), ListUsersActivity.class)));
 
         btn_settings.setOnClickListener(v -> {
-            if (permission.equals("all"))
-                startActivity(new Intent(ConsoleBottomSheet.this.getContext(), SettingsRootActivity.class));
+            if (permission.equals("root")) {
+                Intent intent = new Intent(ConsoleBottomSheet.this.getContext(), SettingsActivity.class);
+                intent.putExtra(getString(R.string.permission), "root");
+                startActivity(intent);
+            }
 
         });
 

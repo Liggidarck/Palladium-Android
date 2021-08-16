@@ -1,4 +1,4 @@
-package com.george.vector.common.bottom_sheets;
+package com.george.vector.users.user.main;
 
 import android.content.Intent;
 import android.os.Bundle;

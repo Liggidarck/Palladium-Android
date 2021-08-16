@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Palladium">
         <activity
-            android:name=".users.root.main.SettingsRootActivity"
+            android:name=".common.settings.SettingsActivity"
             android:exported="true" />
         <activity android:name=".auth.LoadingActivity"
             android:exported="true">
