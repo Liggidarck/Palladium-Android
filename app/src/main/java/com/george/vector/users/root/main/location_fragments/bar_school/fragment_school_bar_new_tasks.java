@@ -14,11 +14,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.util.Util;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.george.vector.common.tasks.ui.TaskUi;
 import com.george.vector.common.tasks.ui.TaskAdapter;
+import com.george.vector.common.utils.Utils;
 import com.george.vector.users.root.tasks.TaskRootActivity;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,7 +40,9 @@ public class fragment_school_bar_new_tasks extends Fragment {
     private TaskAdapter adapter;
     private Query query;
 
+    RecyclerView recyclerview_school_bar_new_tasks;
     TextInputLayout text_input_search_bar_school_new_tasks;
+    Chip chip_today_bar_school_today_new;
 
     FirebaseFirestore firebaseFirestore;
 
@@ -45,10 +50,12 @@ public class fragment_school_bar_new_tasks extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_school_bar_new_tasks, container, false);
 
-        RecyclerView recyclerview_school_bar_new_tasks = view.findViewById(R.id.recyclerview_school_bar_new_tasks);
+        recyclerview_school_bar_new_tasks = view.findViewById(R.id.recyclerview_school_bar_new_tasks);
         text_input_search_bar_school_new_tasks = view.findViewById(R.id.text_input_search_bar_school_new_tasks);
+        chip_today_bar_school_today_new = view.findViewById(R.id.chip_today_bar_school_today_new);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
+        Utils utils = new Utils();
 
         query = taskRef.whereEqualTo("status", "Новая заявка");
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
@@ -87,11 +94,34 @@ public class fragment_school_bar_new_tasks extends Fragment {
             return false;
         });
 
+        chip_today_bar_school_today_new.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+            if(isChecked){
+                Log.i(TAG, "today checked");
+                String today = utils.getDate();
+                todayTasks(today);
+            } else {
+                Log.i(TAG, "today not-checked");
+                defaultQuery();
+            }
+
+        });
+
         return view;
     }
 
     private void search(String query_text) {
         query = taskRef.whereEqualTo("name_task", query_text);
+
+        FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
+                .build();
+
+        adapter.updateOptions(search_options);
+    }
+
+    private void todayTasks(String date) {
+        query = taskRef.whereEqualTo("date_create", date);
 
         FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)

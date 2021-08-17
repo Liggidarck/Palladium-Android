@@ -18,7 +18,9 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.george.vector.common.tasks.ui.TaskUi;
 import com.george.vector.common.tasks.ui.TaskAdapter;
+import com.george.vector.common.utils.Utils;
 import com.george.vector.users.executor.tasks.TaskExecutorActivity;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -35,6 +37,7 @@ public class fragment_school_bar_new_tasks extends Fragment {
 
     TextInputLayout search_executor_bar_school_new_tasks;
     RecyclerView recycler_view_new_tasks_executor;
+    Chip chip_today_bar_school_today_new;
 
     private TaskAdapter adapter;
     private Query query;
@@ -45,17 +48,20 @@ public class fragment_school_bar_new_tasks extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_bar_school_new, container, false);
+        View view = inflater.inflate(R.layout.fragment_school_bar_new_tasks, container, false);
 
         Bundle args = getArguments();
         assert args != null;
         String email = args.getString(getString(R.string.email));
 
-        recycler_view_new_tasks_executor = view.findViewById(R.id.recycler_view_new_tasks_executor_bar);
-        search_executor_bar_school_new_tasks = view.findViewById(R.id.search_executor_bar_school_new_tasks);
+        recycler_view_new_tasks_executor = view.findViewById(R.id.recyclerview_school_bar_new_tasks);
+        search_executor_bar_school_new_tasks = view.findViewById(R.id.text_input_search_bar_school_new_tasks);
+        chip_today_bar_school_today_new = view.findViewById(R.id.chip_today_bar_school_today_new);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
+
+        Utils utils = new Utils();
 
         query = taskRef.whereEqualTo("executor", email);
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
@@ -94,7 +100,30 @@ public class fragment_school_bar_new_tasks extends Fragment {
             return false;
         });
 
+        chip_today_bar_school_today_new.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+            if(isChecked) {
+                Log.i(TAG, "today checked");
+                String today = utils.getDate();
+                todayTasks(today, email);
+            } else {
+                Log.i(TAG, "today not-checked");
+                defaultQuery(email);
+            }
+
+        });
+
         return view;
+    }
+
+    private void todayTasks(String date, String email) {
+        query = taskRef.whereEqualTo("date_create", date).whereEqualTo("executor", email);
+
+        FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
+                .build();
+
+        adapter.updateOptions(search_options);
     }
 
     private void search(String query_text, String email) {

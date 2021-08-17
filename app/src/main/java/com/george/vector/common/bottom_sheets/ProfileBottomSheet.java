@@ -49,7 +49,6 @@ public class ProfileBottomSheet extends BottomSheetDialogFragment {
 
         close_btn.setOnClickListener(v -> dismiss());
 
-        // TODO: Если вызвать ProfileBottomSheet, а затем выйти из аккаунта приложение крашнеться.
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
         documentReference.addSnapshotListener((value, error) -> {

@@ -18,7 +18,9 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.george.vector.common.tasks.ui.TaskAdapter;
 import com.george.vector.common.tasks.ui.TaskUi;
+import com.george.vector.common.utils.Utils;
 import com.george.vector.users.executor.tasks.TaskExecutorActivity;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -35,6 +37,7 @@ public class fragment_school_bar_progress_tasks extends Fragment {
 
     TextInputLayout search_executor_bar_school_progress_tasks;
     RecyclerView recycler_view_progress_tasks_executor;
+    Chip chip_bar_school_today_progress;
 
     private TaskAdapter adapter;
     private Query query;
@@ -45,14 +48,17 @@ public class fragment_school_bar_progress_tasks extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_bar_school_progress, container, false);
+        View view = inflater.inflate(R.layout.fragment_school_bar_progress_tasks, container, false);
 
         Bundle args = getArguments();
         assert args != null;
         String email = args.getString("email");
 
-        recycler_view_progress_tasks_executor = view.findViewById(R.id.recycler_view_new_tasks_progress_bar);
-        search_executor_bar_school_progress_tasks = view.findViewById(R.id.search_executor_bar_school_progress_tasks);
+        Utils utils = new Utils();
+
+        recycler_view_progress_tasks_executor = view.findViewById(R.id.recyclerview_school_bar_progress_tasks);
+        search_executor_bar_school_progress_tasks = view.findViewById(R.id.text_input_search_bar_school_progress_tasks);
+        chip_bar_school_today_progress = view.findViewById(R.id.chip_bar_school_today_progress);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -95,12 +101,35 @@ public class fragment_school_bar_progress_tasks extends Fragment {
             return false;
         });
 
+        chip_bar_school_today_progress.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+            if(isChecked) {
+                Log.i(TAG, "today checked");
+                String today = utils.getDate();
+                todayTasks(today, email);
+            } else {
+                Log.i(TAG, "today not-checked");
+                defaultQuery(email);
+            }
+
+        });
+
 
         return view;
     }
 
     private void search(String query_text, String email) {
         query = taskRef.whereEqualTo("name_task", query_text).whereEqualTo("executor", email);
+
+        FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
+                .build();
+
+        adapter.updateOptions(search_options);
+    }
+
+    private void todayTasks(String date, String email) {
+        query = taskRef.whereEqualTo("date_create", date).whereEqualTo("executor", email);
 
         FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
