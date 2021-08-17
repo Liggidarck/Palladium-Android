@@ -23,6 +23,24 @@
         </com.google.android.material.textfield.TextInputEditText>
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/group_chip_bar_school_today_archive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:singleLine="true"
+        app:singleSelection="true"
+        android:layout_marginStart="10dp">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_bar_school_today_archive"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Сегодня созданы" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_school_bar_archive_tasks"
         android:layout_width="match_parent"

@@ -1,32 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".users.caretaker.tasks.AddTaskCaretakerActivity" >
+    tools:context=".users.executor.tasks.EditTaskExecutorActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/topAppBar_new_task_caretaker"
+        android:id="@+id/topAppBar_new_task_executor"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="@string/task"
-        app:titleTextColor="@android:color/white"
-        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        android:background="@color/blue_primary"
         app:layout_collapseMode="pin"
-        android:background="@color/blue_primary" />
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        app:title="@string/task"
+        app:titleTextColor="@android:color/white" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/progress_bar_add_task_caretaker"
+        android:id="@+id/progress_bar_add_task_executor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:visibility="invisible"
-        android:layout_below="@+id/topAppBar_new_task_caretaker"/>
+        android:layout_below="@+id/topAppBar_new_task_executor"/>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/done_task_caretaker"
+        android:id="@+id/edit_task_executor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/done"
@@ -41,15 +40,15 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/topAppBar_new_task_caretaker" >
+        android:layout_below="@+id/progress_bar_add_task_executor">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_address_caretaker"
+                android:id="@+id/text_input_layout_address_executor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/address"
@@ -58,10 +57,11 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp" >
+                android:layout_marginTop="20dp"
+                android:enabled="false">
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/address_autoComplete_caretaker"
+                    android:id="@+id/address_autoComplete_executor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -70,7 +70,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_floor_caretaker"
+                android:id="@+id/text_input_layout_floor_executor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/floor"
@@ -79,7 +79,8 @@
                 android:layout_marginTop="20dp"
                 app:endIconMode="clear_text"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+                android:enabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -95,7 +96,7 @@
                 tools:ignore="DisableBaselineAlignment">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/text_input_layout_cabinet_caretaker"
+                    android:id="@+id/text_input_layout_cabinet_executor"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -105,7 +106,8 @@
                     android:layout_marginEnd="20dp"
                     android:hint="@string/cabinet"
                     app:endIconMode="clear_text"
-                    app:errorEnabled="true">
+                    app:errorEnabled="true"
+                    android:enabled="false">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -115,7 +117,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/text_input_layout_cabinet_liter_caretaker"
+                    android:id="@+id/text_input_layout_cabinet_liter_executor"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     app:endIconMode="dropdown_menu"
                     android:layout_width="fill_parent"
@@ -125,10 +127,11 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     android:hint="Литера"
-                    app:helperText="Опционально">
+                    app:helperText="Опционально"
+                    android:enabled="false">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:id="@+id/liter_autoComplete_caretaker"
+                        android:id="@+id/liter_autoComplete_executor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
@@ -139,9 +142,8 @@
 
             </LinearLayout>
 
-
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_name_task_caretaker"
+                android:id="@+id/text_input_layout_name_task_executor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/name_task"
@@ -152,7 +154,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:errorEnabled="true"
                 app:helperTextEnabled="true"
-                app:helperText="Например: Сломаная дверь" >
+                android:enabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -162,7 +164,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_comment_caretaker"
+                android:id="@+id/text_input_layout_comment_executor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/comment"
@@ -173,7 +175,8 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:errorEnabled="true"
                 app:helperTextEnabled="true"
-                app:helperText="Опционально" >
+                app:helperText="@string/optional"
+                android:enabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -183,84 +186,80 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_date_task_caretaker"
+                android:id="@+id/text_input_layout_date_task_executor"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/date_complete"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
-                app:endIconMode="custom"
+                android:layout_marginEnd="20dp"
+                android:hint="@string/date_complete"
                 app:endIconDrawable="@drawable/ic_baseline_today_24"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:endIconMode="custom"
                 app:errorEnabled="true"
-                app:helperTextEnabled="true" >
+                app:helperTextEnabled="true"
+                android:enabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_text_date_task_caretaker"
+                    android:id="@+id/edit_text_date_task_executor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:inputType="none"/>
+                    android:inputType="none"
+                    android:longClickable="false" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_status_caretaker"
+                android:id="@+id/text_input_layout_executor_executor"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/status"
-                app:endIconMode="dropdown_menu"
-                app:errorEnabled="true"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp" >
-
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/status_autoComplete_caretaker"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:inputType="none" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_executor_caretaker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:hint="@string/executor"
                 app:errorEnabled="true"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp" >
+                android:enabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:longClickable="false" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_layout_status_executor"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="@string/status"
+                app:endIconMode="dropdown_menu"
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/status_autoComplete_executor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
                     android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:id="@+id/add_executor_caretaker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/set_executor"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="100dp" />
 
+
         </LinearLayout>
 
     </ScrollView>
-
 
 </RelativeLayout>

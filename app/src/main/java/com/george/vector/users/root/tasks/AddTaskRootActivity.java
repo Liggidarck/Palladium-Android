@@ -56,11 +56,12 @@ public class AddTaskRootActivity extends AppCompatActivity {
     TextInputLayout text_input_layout_address_root, text_input_layout_floor_root,
                     text_input_layout_cabinet_root, text_input_layout_name_task_root,
                     text_input_layout_comment_root, text_input_layout_date_task_root,
-                    text_input_layout_executor_root, text_input_layout_status_root;
+                    text_input_layout_executor_root, text_input_layout_status_root,
+                    text_input_layout_cabinet_liter_root;
     TextInputEditText edit_text_date_task_root;
-    MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root;
+    MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root, liter_autoComplete_root;
 
-    String location, userID, email, address, floor, cabinet, name_task, date_complete, status, comment;
+    String location, userID, email, address, floor, cabinet, litera, name_task, date_complete, status, comment;
     private static final String TAG = "AddTaskRoot";
 
     Calendar datePickCalendar;
@@ -98,6 +99,8 @@ public class AddTaskRootActivity extends AppCompatActivity {
         address_autoComplete_root = findViewById(R.id.address_autoComplete_root);
         status_autoComplete_root = findViewById(R.id.status_autoComplete_root);
         add_executor_root = findViewById(R.id.add_executor_root);
+        text_input_layout_cabinet_liter_root = findViewById(R.id.text_input_layout_cabinet_liter_root);
+        liter_autoComplete_root = findViewById(R.id.liter_autoComplete_root);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -128,6 +131,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
             address = Objects.requireNonNull(text_input_layout_address_root.getEditText()).getText().toString();
             floor = Objects.requireNonNull(text_input_layout_floor_root.getEditText()).getText().toString();
             cabinet = Objects.requireNonNull(text_input_layout_cabinet_root.getEditText()).getText().toString();
+            litera = Objects.requireNonNull(text_input_layout_cabinet_liter_root.getEditText()).getText().toString();
             name_task = Objects.requireNonNull(text_input_layout_name_task_root.getEditText()).getText().toString();
             comment = Objects.requireNonNull(text_input_layout_comment_root.getEditText()).getText().toString();
             date_complete = Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).getText().toString();
@@ -154,7 +158,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String time_create = timeFormat.format(currentDate);
 
-        task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, comment,
+        task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, litera, comment,
                 date_complete, email_executor, status, time_create, email);
 
         onBackPressed();
@@ -243,6 +247,15 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
         status_autoComplete_root.setAdapter(adapter_status);
 
+        String[] itemsLitera = getResources().getStringArray(R.array.litera);
+        ArrayAdapter<String> adapter_litera = new ArrayAdapter<>(
+                AddTaskRootActivity.this,
+                R.layout.dropdown_menu_categories,
+                itemsLitera
+        );
+
+        liter_autoComplete_root.setAdapter(adapter_litera);
+
         datePickCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
             datePickCalendar.set(Calendar.YEAR, year);
@@ -256,7 +269,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
     }
 
     void updateLabel() {
-        String date_text = "MM.dd.yyyy";
+        String date_text = "dd.MM.yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(date_text, Locale.US);
 
         Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).setText(sdf.format(datePickCalendar.getTime()));

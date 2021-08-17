@@ -27,6 +27,7 @@ import com.george.vector.common.tasks.utils.DeleteTask;
 import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.Utils;
+import com.george.vector.users.root.tasks.EditTaskRootActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -52,14 +53,17 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
     ExtendedFloatingActionButton done_task_caretaker;
 
     TextInputEditText edit_text_date_task_caretaker;
-    TextInputLayout text_input_layout_address_caretaker, text_input_layout_floor_caretaker, text_input_layout_cabinet_caretaker,
-            text_input_layout_name_task_caretaker, text_input_layout_comment_caretaker,
-            text_input_layout_executor_caretaker, text_input_layout_status_caretaker, text_input_layout_date_task_caretaker;
+    TextInputLayout text_input_layout_address_caretaker, text_input_layout_floor_caretaker,
+            text_input_layout_cabinet_caretaker, text_input_layout_name_task_caretaker,
+            text_input_layout_comment_caretaker, text_input_layout_executor_caretaker,
+            text_input_layout_status_caretaker, text_input_layout_date_task_caretaker,
+            text_input_layout_cabinet_liter_caretaker;
 
-    MaterialAutoCompleteTextView address_autoComplete_caretaker, status_autoComplete_caretaker;
+    MaterialAutoCompleteTextView address_autoComplete_caretaker, status_autoComplete_caretaker,
+            liter_autoComplete_caretaker;
     Button add_executor_caretaker;
 
-    String id, collection, address, floor, cabinet, name_task, comment, status, date_create, time_create,
+    String id, collection, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create,
             date_done, email, permission, location;
     Calendar datePickCalendar;
 
@@ -94,6 +98,8 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         text_input_layout_date_task_caretaker = findViewById(R.id.text_input_layout_date_task_caretaker);
         status_autoComplete_caretaker = findViewById(R.id.status_autoComplete_caretaker);
         add_executor_caretaker = findViewById(R.id.add_executor_caretaker);
+        text_input_layout_cabinet_liter_caretaker = findViewById(R.id.text_input_layout_cabinet_liter_caretaker);
+        liter_autoComplete_caretaker = findViewById(R.id.liter_autoComplete_caretaker);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -126,6 +132,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
             address = value.getString("address");
             floor = value.getString("floor");
             cabinet = value.getString("cabinet");
+            litera = value.getString("litera");
             name_task = value.getString("name_task");
             comment = value.getString("comment");
             status = value.getString("status");
@@ -141,6 +148,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
                 Objects.requireNonNull(text_input_layout_address_caretaker.getEditText()).setText(address);
                 Objects.requireNonNull(text_input_layout_floor_caretaker.getEditText()).setText(floor);
                 Objects.requireNonNull(text_input_layout_cabinet_caretaker.getEditText()).setText(cabinet);
+                Objects.requireNonNull(text_input_layout_cabinet_liter_caretaker.getEditText()).setText(litera);
                 Objects.requireNonNull(text_input_layout_name_task_caretaker.getEditText()).setText(name_task);
                 Objects.requireNonNull(text_input_layout_date_task_caretaker.getEditText()).setText(date_done);
                 Objects.requireNonNull(text_input_layout_executor_caretaker.getEditText()).setText(email_executor);
@@ -205,6 +213,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         String update_address = Objects.requireNonNull(text_input_layout_address_caretaker.getEditText()).getText().toString();
         String update_floor = Objects.requireNonNull(text_input_layout_floor_caretaker.getEditText()).getText().toString();
         String update_cabinet = Objects.requireNonNull(text_input_layout_cabinet_caretaker.getEditText()).getText().toString();
+        String update_litera = Objects.requireNonNull(text_input_layout_cabinet_liter_caretaker.getEditText()).getText().toString();
         String update_name = Objects.requireNonNull(text_input_layout_name_task_caretaker.getEditText()).getText().toString();
         String update_comment = Objects.requireNonNull(text_input_layout_comment_caretaker.getEditText()).getText().toString();
         String update_date_task = Objects.requireNonNull(text_input_layout_date_task_caretaker.getEditText()).getText().toString();
@@ -212,7 +221,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
         String update_status = Objects.requireNonNull(text_input_layout_status_caretaker.getEditText()).getText().toString();
 
         task.save(new SaveTask(), location, update_name, update_address, date_create, update_floor,
-                update_cabinet, update_comment, update_date_task, update_executor, update_status, time_create, email);
+                update_cabinet, update_litera, update_comment, update_date_task, update_executor, update_status, time_create, email);
 
         goHome();
     }
@@ -283,6 +292,15 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
 
         status_autoComplete_caretaker.setAdapter(adapter_status);
 
+        String[] itemsLitera = getResources().getStringArray(R.array.litera);
+        ArrayAdapter<String> adapter_litera = new ArrayAdapter<>(
+                EdtTaskCaretakerActivity.this,
+                R.layout.dropdown_menu_categories,
+                itemsLitera
+        );
+
+        liter_autoComplete_caretaker.setAdapter(adapter_litera);
+
         datePickCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
             datePickCalendar.set(Calendar.YEAR, year);
@@ -302,7 +320,7 @@ public class EdtTaskCaretakerActivity extends AppCompatActivity {
     }
 
     void updateLabel() {
-        String date_text = "MM.dd.yyyy";
+        String date_text = "dd.MM.yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(date_text, Locale.US);
 
         Objects.requireNonNull(text_input_layout_date_task_caretaker.getEditText()).setText(sdf.format(datePickCalendar.getTime()));

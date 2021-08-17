@@ -101,7 +101,7 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
                     if (task.isSuccessful()) {
                         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-                        DocumentReference documentReference = firebaseFirestore.collection(getString(R.string.users)).document(userID);
+                        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
                         Map<String, Object> user = new HashMap<>();
                         user.put("name", name_user);
                         user.put("last_name", last_name_user);
@@ -109,14 +109,16 @@ public class ActivityRegisterUser extends AppCompatActivity {
                         user.put("email", email_user);
                         user.put("role", role_user);
                         user.put("permission", permission_user);
+                        user.put("password", password_user);
+
                         documentReference.set(user)
                                 .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user - " + userID))
-                                .addOnFailureListener(e -> Log.d("TAG", "Failure - " + e.toString()));
+                                .addOnFailureListener(e -> Log.e("TAG", "Failure - " + e.toString()));
 
                         onBackPressed();
 
                     } else
-                        Toast.makeText(ActivityRegisterUser.this, "Error" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(ActivityRegisterUser.this, "Error" + Objects.requireNonNull(task.getException()).getLocalizedMessage(), Toast.LENGTH_LONG).show();
 
                     progress_bar_register.setVisibility(View.INVISIBLE);
 

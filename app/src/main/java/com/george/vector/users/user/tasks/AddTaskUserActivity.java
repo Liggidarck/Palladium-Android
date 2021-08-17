@@ -14,6 +14,7 @@ import com.george.vector.R;
 import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.Utils;
+import com.george.vector.users.root.tasks.AddTaskRootActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -39,13 +40,13 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
     TextInputLayout text_input_layout_address, text_input_layout_floor,
                     text_input_layout_cabinet, text_input_layout_name_task,
-                    text_input_layout_comment;
-    MaterialAutoCompleteTextView address_autoComplete;
+                    text_input_layout_comment, text_input_layout_cabinet_liter_user;
+    MaterialAutoCompleteTextView address_autoComplete, liter_autoComplete_user;
 
     ExtendedFloatingActionButton crate_task;
     LinearProgressIndicator progress_bar_add_task_user;
 
-    String address, floor, cabinet, name_task, comment, userID, email, status = "Новая заявка", permission;
+    String address, floor, cabinet, litera, name_task, comment, userID, email, status = "Новая заявка", permission;
     private static final String TAG = "AddTaskUserActivity";
 
     FirebaseAuth firebaseAuth;
@@ -67,6 +68,8 @@ public class AddTaskUserActivity extends AppCompatActivity {
         address_autoComplete = findViewById(R.id.address_autoComplete);
         crate_task = findViewById(R.id.crate_task);
         progress_bar_add_task_user = findViewById(R.id.progress_bar_add_task_user);
+        text_input_layout_cabinet_liter_user = findViewById(R.id.text_input_layout_cabinet_liter_user);
+        liter_autoComplete_user = findViewById(R.id.liter_autoComplete_user);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -90,6 +93,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
             address = Objects.requireNonNull(text_input_layout_address.getEditText()).getText().toString();
             floor = Objects.requireNonNull(text_input_layout_floor.getEditText()).getText().toString();
             cabinet = Objects.requireNonNull(text_input_layout_cabinet.getEditText()).getText().toString();
+            litera = Objects.requireNonNull(text_input_layout_cabinet_liter_user.getEditText()).getText().toString();
             name_task = Objects.requireNonNull(text_input_layout_name_task.getEditText()).getText().toString();
             comment = Objects.requireNonNull(text_input_layout_comment.getEditText()).getText().toString();
 
@@ -115,7 +119,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
         DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String time_create = timeFormat.format(currentDate);
 
-        task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, comment,
+        task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, litera, comment,
                 null, null, status, time_create, email);
 
         onBackPressed();
@@ -131,6 +135,16 @@ public class AddTaskUserActivity extends AppCompatActivity {
             );
             address_autoComplete.setAdapter(adapter);
         }
+
+        String[] itemsLitera = getResources().getStringArray(R.array.litera);
+        ArrayAdapter<String> adapter_litera = new ArrayAdapter<>(
+                AddTaskUserActivity.this,
+                R.layout.dropdown_menu_categories,
+                itemsLitera
+        );
+
+        liter_autoComplete_user.setAdapter(adapter_litera);
+
 
         if(permission.equals(getString(R.string.bar_school)))
             Objects.requireNonNull(text_input_layout_address.getEditText()).setText(getText(R.string.bar_school_address));

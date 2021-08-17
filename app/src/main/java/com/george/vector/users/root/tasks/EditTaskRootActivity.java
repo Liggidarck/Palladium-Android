@@ -56,13 +56,14 @@ public class EditTaskRootActivity extends AppCompatActivity {
     TextInputLayout text_input_layout_address_root, text_input_layout_floor_root,
             text_input_layout_cabinet_root, text_input_layout_name_task_root,
             text_input_layout_comment_root, text_input_layout_date_task_root,
-            text_input_layout_executor_root, text_input_layout_status_root;
+            text_input_layout_executor_root, text_input_layout_status_root,
+            text_input_layout_cabinet_liter_root;
 
     TextInputEditText edit_text_date_task_root;
 
-    MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root;
+    MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root, liter_autoComplete_root;
 
-    String id, collection, address, floor, cabinet, name_task, comment, status, date_create, time_create,
+    String id, collection, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create,
             date_done, email, location;
     Calendar datePickCalendar;
 
@@ -97,6 +98,8 @@ public class EditTaskRootActivity extends AppCompatActivity {
         address_autoComplete_root = findViewById(R.id.address_autoComplete_root);
         status_autoComplete_root = findViewById(R.id.status_autoComplete_root);
         add_executor_root = findViewById(R.id.add_executor_root);
+        text_input_layout_cabinet_liter_root = findViewById(R.id.text_input_layout_cabinet_liter_root);
+        liter_autoComplete_root = findViewById(R.id.liter_autoComplete_root);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -118,6 +121,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
             address = value.getString("address");
             floor = value.getString("floor");
             cabinet = value.getString("cabinet");
+            litera = value.getString("litera");
             name_task = value.getString("name_task");
             comment = value.getString("comment");
             status = value.getString("status");
@@ -133,6 +137,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 Objects.requireNonNull(text_input_layout_address_root.getEditText()).setText(address);
                 Objects.requireNonNull(text_input_layout_floor_root.getEditText()).setText(floor);
                 Objects.requireNonNull(text_input_layout_cabinet_root.getEditText()).setText(cabinet);
+                Objects.requireNonNull(text_input_layout_cabinet_liter_root.getEditText()).setText(litera);
                 Objects.requireNonNull(text_input_layout_name_task_root.getEditText()).setText(name_task);
                 Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).setText(date_done);
                 Objects.requireNonNull(text_input_layout_executor_root.getEditText()).setText(email_executor);
@@ -218,6 +223,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
         String update_address = Objects.requireNonNull(text_input_layout_address_root.getEditText()).getText().toString();
         String update_floor = Objects.requireNonNull(text_input_layout_floor_root.getEditText()).getText().toString();
         String update_cabinet = Objects.requireNonNull(text_input_layout_cabinet_root.getEditText()).getText().toString();
+        String update_litera = Objects.requireNonNull(text_input_layout_cabinet_liter_root.getEditText()).getText().toString();
         String update_name = Objects.requireNonNull(text_input_layout_name_task_root.getEditText()).getText().toString();
         String update_comment = Objects.requireNonNull(text_input_layout_comment_root.getEditText()).getText().toString();
         String update_date_task = Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).getText().toString();
@@ -225,7 +231,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
         String update_status = Objects.requireNonNull(text_input_layout_status_root.getEditText()).getText().toString();
 
         task.save(new SaveTask(), location, update_name, update_address, date_create, update_floor,
-                update_cabinet, update_comment, update_date_task,
+                update_cabinet, update_litera, update_comment, update_date_task,
                 update_executor, update_status, time_create,
                 email);
 
@@ -299,6 +305,15 @@ public class EditTaskRootActivity extends AppCompatActivity {
         );
 
         status_autoComplete_root.setAdapter(adapter_status);
+
+        String[] itemsLitera = getResources().getStringArray(R.array.litera);
+        ArrayAdapter<String> adapter_litera = new ArrayAdapter<>(
+                EditTaskRootActivity.this,
+                R.layout.dropdown_menu_categories,
+                itemsLitera
+        );
+
+        liter_autoComplete_root.setAdapter(adapter_litera);
 
         datePickCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {

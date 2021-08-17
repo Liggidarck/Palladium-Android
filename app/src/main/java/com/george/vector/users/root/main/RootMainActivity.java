@@ -54,7 +54,7 @@ public class RootMainActivity extends AppCompatActivity {
             ConsoleBottomSheet bottomSheet = new ConsoleBottomSheet();
             Bundle bundle = new Bundle();
 
-            bundle.putString(getString(R.string.permission), "all");
+            bundle.putString(getString(R.string.permission), "root");
             bottomSheet.setArguments(bundle);
 
             bottomSheet.show(getSupportFragmentManager(), "ConsoleBottomSheet");

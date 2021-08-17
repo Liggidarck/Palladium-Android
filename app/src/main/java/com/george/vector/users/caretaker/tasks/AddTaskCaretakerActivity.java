@@ -25,6 +25,7 @@ import com.george.vector.common.edit_users.UserAdapter;
 import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.Utils;
+import com.george.vector.users.root.tasks.AddTaskRootActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -59,11 +60,11 @@ public class AddTaskCaretakerActivity extends AppCompatActivity {
     TextInputLayout text_input_layout_address_caretaker, text_input_layout_floor_caretaker,
                     text_input_layout_cabinet_caretaker, text_input_layout_name_task_caretaker,
                     text_input_layout_comment_caretaker, text_input_layout_executor_caretaker,
-                    text_input_layout_status_caretaker, text_input_layout_date_task_caretaker;
-    MaterialAutoCompleteTextView address_autoComplete_caretaker, status_autoComplete_caretaker;
+                    text_input_layout_status_caretaker, text_input_layout_date_task_caretaker, text_input_layout_cabinet_liter_caretaker;
+    MaterialAutoCompleteTextView address_autoComplete_caretaker, status_autoComplete_caretaker, liter_autoComplete_caretaker;
 
     private static final String TAG = "AddTaskCaretaker";
-    String location, userID, email, address, floor, cabinet, name_task, date_task, status, comment, permission;
+    String location, userID, email, address, floor, cabinet, litera, name_task, date_task, status, comment, permission;
     String name_executor;
     String last_name_executor;
     String patronymic_executor;
@@ -99,6 +100,8 @@ public class AddTaskCaretakerActivity extends AppCompatActivity {
         text_input_layout_date_task_caretaker = findViewById(R.id.text_input_layout_date_task_caretaker);
         status_autoComplete_caretaker = findViewById(R.id.status_autoComplete_caretaker);
         add_executor_caretaker = findViewById(R.id.add_executor_caretaker);
+        text_input_layout_cabinet_liter_caretaker = findViewById(R.id.text_input_layout_cabinet_liter_caretaker);
+        liter_autoComplete_caretaker = findViewById(R.id.liter_autoComplete_caretaker);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -123,6 +126,7 @@ public class AddTaskCaretakerActivity extends AppCompatActivity {
             address = Objects.requireNonNull(text_input_layout_address_caretaker.getEditText()).getText().toString();
             floor = Objects.requireNonNull(text_input_layout_floor_caretaker.getEditText()).getText().toString();
             cabinet = Objects.requireNonNull(text_input_layout_cabinet_caretaker.getEditText()).getText().toString();
+            litera = Objects.requireNonNull(text_input_layout_cabinet_liter_caretaker.getEditText()).getText().toString();
             name_task = Objects.requireNonNull(text_input_layout_name_task_caretaker.getEditText()).getText().toString();
             comment = Objects.requireNonNull(text_input_layout_comment_caretaker.getEditText()).getText().toString();
             date_task = Objects.requireNonNull(text_input_layout_date_task_caretaker.getEditText()).getText().toString();
@@ -150,7 +154,7 @@ public class AddTaskCaretakerActivity extends AppCompatActivity {
         DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String timeText = timeFormat.format(currentDate);
 
-        task.save(new SaveTask(), location, name_task, address, dateText, floor, cabinet, comment,
+        task.save(new SaveTask(), location, name_task, address, dateText, floor, cabinet, litera, comment,
                 date_task, email_executor, status, timeText, email);
 
         onBackPressed();
@@ -242,6 +246,15 @@ public class AddTaskCaretakerActivity extends AppCompatActivity {
         );
 
         status_autoComplete_caretaker.setAdapter(adapter_status);
+
+        String[] itemsLitera = getResources().getStringArray(R.array.litera);
+        ArrayAdapter<String> adapter_litera = new ArrayAdapter<>(
+                AddTaskCaretakerActivity.this,
+                R.layout.dropdown_menu_categories,
+                itemsLitera
+        );
+
+        liter_autoComplete_caretaker.setAdapter(adapter_litera);
 
         datePickCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {

@@ -25,6 +25,11 @@
 
     </string-array>
 
+    <string-array name="litera" >
+        <item>а</item>
+        <item>-</item>
+    </string-array>
+
     <string-array name="permissions" >
         <item>all</item>
 

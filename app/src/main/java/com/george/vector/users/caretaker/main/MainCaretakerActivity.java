@@ -50,7 +50,7 @@ public class MainCaretakerActivity extends AppCompatActivity {
             ConsoleBottomSheet bottomSheet = new ConsoleBottomSheet();
             Bundle bundle = new Bundle();
 
-            bundle.putString(getString(R.string.permission), permission);
+            bundle.putString(getString(R.string.permission), "caretaker");
             bottomSheet.setArguments(bundle);
             bottomSheet.show(getSupportFragmentManager(), "ConsoleBottomSheet");
         });

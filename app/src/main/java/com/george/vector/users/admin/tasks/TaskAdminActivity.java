@@ -1,6 +1,7 @@
 package com.george.vector.users.admin.tasks;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -38,7 +39,8 @@ public class TaskAdminActivity extends AppCompatActivity {
 
     private static final String TAG = "TaskAdminActivity";
 
-    String id, permission, collection, address, floor, cabinet, name_task, comment, status, date_create, time_create;
+    String id, permission, collection, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create;
+    boolean confirm_delete;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -67,6 +69,8 @@ public class TaskAdminActivity extends AppCompatActivity {
         id = arguments.get(getString(R.string.id)).toString();
         collection = arguments.get(getString(R.string.collection)).toString();
         permission = arguments.get(getString(R.string.permission)).toString();
+        confirm_delete = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("confirm_before_deleting", true);
+
         Log.d(TAG, "Location: " + permission);
         Log.d(TAG, "Permission: " + collection);
 
@@ -85,21 +89,12 @@ public class TaskAdminActivity extends AppCompatActivity {
             address = value.getString("address");
             floor = String.format("Этаж: %s", value.getString("floor"));
             cabinet = String.format("Кабинет: %s", value.getString("cabinet"));
+            litera = value.getString("litera");
             name_task = value.getString("name_task");
             comment = value.getString("comment");
             status = value.getString("status");
             date_create = value.getString("date_create");
             time_create = value.getString("time_create");
-
-            text_view_address_task_admin.setText(address);
-            text_view_floor_task_admin.setText(floor);
-            text_view_cabinet_task_admin.setText(cabinet);
-            text_view_name_task_admin.setText(name_task);
-            text_view_comment_task_admin.setText(comment);
-            text_view_status_task_admin.setText(status);
-
-            String date_create_text = "Созданно: " + date_create + " " + time_create;
-            text_view_date_create_task_admin.setText(date_create_text);
 
             try {
                 if (status.equals("Новая заявка"))
@@ -110,10 +105,22 @@ public class TaskAdminActivity extends AppCompatActivity {
 
                 if (status.equals("Архив"))
                     circle_status.setImageResource(R.color.green);
+
+                if (!litera.equals("-") && !litera.isEmpty())
+                    cabinet = String.format("%s%s", cabinet, litera);
             } catch (Exception e){
                 Log.e(TAG, "Error! " + e);
             }
 
+            text_view_address_task_admin.setText(address);
+            text_view_floor_task_admin.setText(floor);
+            text_view_cabinet_task_admin.setText(cabinet);
+            text_view_name_task_admin.setText(name_task);
+            text_view_comment_task_admin.setText(comment);
+            text_view_status_task_admin.setText(status);
+
+            String date_create_text = "Созданно: " + date_create + " " + time_create;
+            text_view_date_create_task_admin.setText(date_create_text);
         });
 
         documentReference.get().addOnCompleteListener(task -> progress_bar_task_admin.setVisibility(View.INVISIBLE));
@@ -126,7 +133,12 @@ public class TaskAdminActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        delete_task_btn.setOnClickListener(v -> show_dialog_delete());
+        delete_task_btn.setOnClickListener(v -> {
+            if(confirm_delete)
+                show_dialog_delete();
+            else
+                delete_task();
+        });
     }
 
     void show_dialog_delete() {

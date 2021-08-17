@@ -3,6 +3,7 @@ package com.george.vector.users.executor.main;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -14,8 +15,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.george.vector.R;
+import com.george.vector.common.bottom_sheets.ConsoleBottomSheet;
 import com.george.vector.common.bottom_sheets.ProfileBottomSheet;
-import com.george.vector.common.bottom_sheets.SettingsUserBottomSheet;
+import com.george.vector.users.user.main.SettingsUserBottomSheet;
 import com.george.vector.users.executor.main.fragments.fragment_bar;
 import com.george.vector.users.executor.main.fragments.fragment_ost;
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -30,7 +32,7 @@ public class MainExecutorActivity extends AppCompatActivity {
     BottomAppBar bottomAppBarWorker;
 
     Chip chip_executor_ost, chip_executor_bar;
-    String zone = "ost";
+    String zone;
     String email;
 
     @Override
@@ -41,7 +43,7 @@ public class MainExecutorActivity extends AppCompatActivity {
 
         Bundle arguments = getIntent().getExtras();
         email = arguments.get(getString(R.string.email)).toString();
-        email = arguments.get(getString(R.string.email)).toString();
+        zone = PreferenceManager.getDefaultSharedPreferences(this).getString("default_executor_location", getString(R.string.ost));
 
         bottomAppBarWorker = findViewById(R.id.bottomAppBarWorker);
         chip_executor_ost = findViewById(R.id.chip_executor_ost);
@@ -49,16 +51,29 @@ public class MainExecutorActivity extends AppCompatActivity {
 
         setSupportActionBar(bottomAppBarWorker);
         bottomAppBarWorker.setNavigationOnClickListener(v -> {
-            SettingsUserBottomSheet bottomSheet = new SettingsUserBottomSheet();
-            bottomSheet.show(getSupportFragmentManager(), "SettingsUserBottomSheet");
+            SettingsExecutorBottomSheet bottomSheet = new SettingsExecutorBottomSheet();
+            Bundle bundle = new Bundle();
+
+            bundle.putString(getString(R.string.email), email);
+            bottomSheet.setArguments(bundle);
+
+            bottomSheet.show(getSupportFragmentManager(), "SettingsExecutorBottomSheet");
         });
 
+        if(zone.equals("ost"))
+            chip_executor_ost.setChecked(true);
+
+        if(zone.equals("bar"))
+            chip_executor_bar.setChecked(true);
+
         chip_executor_ost.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
             if(isChecked){
                 Log.i(TAG, "Остафьево checked");
                 zone = "ost";
                 updateZones(zone);
             }
+
         });
 
         chip_executor_bar.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -69,7 +84,8 @@ public class MainExecutorActivity extends AppCompatActivity {
             }
         });
 
-        updateZones("ost");
+        updateZones(zone);
+
     }
 
     void updateZones(@NotNull String zone_update) {
@@ -81,7 +97,6 @@ public class MainExecutorActivity extends AppCompatActivity {
 
                 Bundle email = new Bundle();
                 email.putString(getString(R.string.email), this.email);
-                email.putString(getString(R.string.email), this.email);
                 currentFragment.setArguments(email);
 
                 break;
@@ -90,7 +105,6 @@ public class MainExecutorActivity extends AppCompatActivity {
                 currentFragment = new fragment_bar();
 
                 Bundle email_bar = new Bundle();
-                email_bar.putString(getString(R.string.email), this.email);
                 email_bar.putString(getString(R.string.email), this.email);
                 currentFragment.setArguments(email_bar);
 

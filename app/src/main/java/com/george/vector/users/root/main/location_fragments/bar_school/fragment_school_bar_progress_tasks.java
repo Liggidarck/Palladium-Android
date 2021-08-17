@@ -18,7 +18,9 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.george.vector.common.tasks.ui.TaskUi;
 import com.george.vector.common.tasks.ui.TaskAdapter;
+import com.george.vector.common.utils.Utils;
 import com.george.vector.users.root.tasks.TaskRootActivity;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,7 +39,9 @@ public class fragment_school_bar_progress_tasks extends Fragment {
     private TaskAdapter adapter;
     private Query query;
 
+    RecyclerView recyclerview_school_bar_new_tasks;
     TextInputLayout text_input_search_bar_school_progress_tasks;
+    Chip chip_bar_school_today_progress;
 
     FirebaseFirestore firebaseFirestore;
 
@@ -46,13 +50,14 @@ public class fragment_school_bar_progress_tasks extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_school_bar_progress_tasks, container, false);
 
-        RecyclerView recyclerview_school_bar_new_tasks = view.findViewById(R.id.recyclerview_school_bar_progress_tasks);
+        recyclerview_school_bar_new_tasks = view.findViewById(R.id.recyclerview_school_bar_progress_tasks);
         text_input_search_bar_school_progress_tasks = view.findViewById(R.id.text_input_search_bar_school_progress_tasks);
+        chip_bar_school_today_progress = view.findViewById(R.id.chip_bar_school_today_progress);
 
+        Utils utils = new Utils();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         query = taskRef.whereEqualTo("status", "В работе");
-
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
                 .build();
@@ -89,8 +94,30 @@ public class fragment_school_bar_progress_tasks extends Fragment {
             return false;
         });
 
+        chip_bar_school_today_progress.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+            if(isChecked){
+                Log.i(TAG, "today checked");
+                String today = utils.getDate();
+                todayTasks(today);
+            } else {
+                Log.i(TAG, "today not-checked");
+                defaultQuery();
+            }
+
+        });
 
         return view;
+    }
+
+    private void todayTasks(String date) {
+        query = taskRef.whereEqualTo("date_create", date);
+
+        FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
+                .build();
+
+        adapter.updateOptions(search_options);
     }
 
     private void search(String query_text) {

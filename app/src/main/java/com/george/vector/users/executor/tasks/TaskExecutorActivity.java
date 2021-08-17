@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import android.widget.TextView;
 
 import com.george.vector.R;
 import com.george.vector.common.tasks.ui.TaskUi;
+import com.george.vector.common.tasks.utils.SaveTask;
+import com.george.vector.common.tasks.utils.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
@@ -40,13 +43,15 @@ public class TaskExecutorActivity extends AppCompatActivity {
     Button edit_btn_executor;
     CircleImageView circle_status_executor;
 
-    String id, collection, location, address, floor, cabinet, name_task, comment, status, date_create, time_create,
+    String id, collection, location, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create,
             email_executor, email_creator, date_done;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
+
+    String email_mail_activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,16 +71,26 @@ public class TaskExecutorActivity extends AppCompatActivity {
         circle_status_executor = findViewById(R.id.circle_status_executor);
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get((String) getString(R.string.id)).toString();
-        collection = arguments.get((String) getString(R.string.collection)).toString();
-        location = arguments.get((String) getString(R.string.location)).toString();
+        id = arguments.get(getString(R.string.id)).toString();
+        collection = arguments.get(getString(R.string.collection)).toString();
+        location = arguments.get(getString(R.string.location)).toString();
+        email_mail_activity = arguments.getString(getString(R.string.email));
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
 
-        edit_btn_executor.setOnClickListener(v -> show_dialog());
+        topAppBar_task_executor.setNavigationOnClickListener(v -> onBackPressed());
+
+        edit_btn_executor.setOnClickListener(v -> {
+            Intent intent = new Intent(this, EditTaskExecutorActivity.class);
+            intent.putExtra(getString(R.string.id), id);
+            intent.putExtra(getString(R.string.collection), collection);
+            intent.putExtra(getString(R.string.location), location);
+            intent.putExtra(getString(R.string.email), email_mail_activity);
+            startActivity(intent);
+        });
 
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
@@ -84,6 +99,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
             address = value.getString("address");
             floor = value.getString("floor");
             cabinet = value.getString("cabinet");
+            litera = value.getString("litera");
             name_task = value.getString("name_task");
             comment = value.getString("comment");
             status = value.getString("status");
@@ -93,28 +109,16 @@ public class TaskExecutorActivity extends AppCompatActivity {
             email_creator =value.getString("email_creator");
             date_done = value.getString("date_done");
 
-            Log.d(TAG, "Address: " + address);
+            Log.d(TAG, "address: " + address);
             Log.d(TAG, "floor: " + floor);
-            Log.d(TAG, "cabinet: " + cabinet);
-            Log.d(TAG, "name_task: " + name_task);
+            Log.d(TAG, "litera: " + litera);
             Log.d(TAG, "comment: " + comment);
             Log.d(TAG, "status: " + status);
-            Log.d(TAG, "comment: " + comment);
             Log.d(TAG, "date_create: " + date_create);
             Log.d(TAG, "time_create: " + time_create);
             Log.d(TAG, "email_executor: " + email_executor);
             Log.d(TAG, "email_creator: " + email_creator);
             Log.d(TAG, "date_done: " + date_done);
-
-            text_view_address_task_executor.setText(address);
-            text_view_floor_task_executor.setText(String.format("%s %s", getText(R.string.floor), floor));
-            text_view_cabinet_task_executor.setText(String.format("%s %s", getText(R.string.cabinet), cabinet));
-            text_view_name_task_executor.setText(name_task);
-            text_view_comment_task_executor.setText(comment);
-            text_view_status_task_executor.setText(status);
-
-            String date_create_text = "Созданно: " + date_create + " " + time_create;
-            text_view_date_create_task_executor.setText(date_create_text);
 
             try {
                 if (status.equals("Новая заявка"))
@@ -125,127 +129,26 @@ public class TaskExecutorActivity extends AppCompatActivity {
 
                 if (status.equals("Архив"))
                     circle_status_executor.setImageResource(R.color.green);
+
+                if (!litera.equals("-") && !litera.isEmpty())
+                    cabinet = String.format("%s%s", cabinet, litera);
             } catch (Exception e){
                 Log.e(TAG, "Error! " + e);
             }
 
+            text_view_address_task_executor.setText(address);
+            text_view_floor_task_executor.setText(String.format("%s %s", getText(R.string.floor), floor));
+            text_view_cabinet_task_executor.setText(String.format("%s %s", getText(R.string.cabinet), cabinet));
+            text_view_name_task_executor.setText(name_task);
+            text_view_comment_task_executor.setText(comment);
+            text_view_status_task_executor.setText(status);
+
+            String date_create_text = String.format("Созданно: %s %s", date_create, time_create);
+            text_view_date_create_task_executor.setText(date_create_text);
         });
 
         documentReference.get().addOnCompleteListener(task -> progress_bar_task_executor.setVisibility(View.INVISIBLE));
 
-    }
-
-    void show_dialog() {
-        Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_executor);
-
-        RadioButton radio_button_new_task = dialog.findViewById(R.id.radio_button_new_task);
-        RadioButton radio_button_progress = dialog.findViewById(R.id.radio_button_progress);
-        RadioButton radio_button_archive = dialog.findViewById(R.id.radio_button_archive);
-        Button done_btn_executor = dialog.findViewById(R.id.done_btn_executor);
-
-        if (status.equals("Новая заявка"))
-            radio_button_new_task.setChecked(true);
-
-        if (status.equals("В работе"))
-            radio_button_progress.setChecked(true);
-
-
-        Log.d(TAG, "Address: " + address);
-        Log.d(TAG, "floor: " + floor);
-        Log.d(TAG, "cabinet: " + cabinet);
-        Log.d(TAG, "name_task: " + name_task);
-        Log.d(TAG, "comment: " + comment);
-        Log.d(TAG, "status: " + status);
-        Log.d(TAG, "comment: " + comment);
-        Log.d(TAG, "date_create: " + date_create);
-        Log.d(TAG, "time_create: " + time_create);
-        Log.d(TAG, "email_executor: " + email_executor);
-        Log.d(TAG, "email_creator: " + email_creator);
-        Log.d(TAG, "date_done: " + date_done);
-
-
-        done_btn_executor.setOnClickListener(v -> {
-            delete_task(collection, id);
-
-            if(location.equals("ost_school")) {
-                if (radio_button_new_task.isChecked()) {
-                    status = "Новая заявка";
-                    load_data(getString(R.string.ost_school_new), name_task, address, date_done,
-                            floor, cabinet, comment, date_create, email_executor,
-                            status, time_create, email_creator);
-                }
-
-                if (radio_button_progress.isChecked()) {
-                    status = "В работе";
-                    load_data(getString(R.string.ost_school_progress), name_task, address, date_done,
-                            floor, cabinet, comment, date_create, email_executor,
-                            status, time_create, email_creator);
-                }
-
-                if (radio_button_archive.isChecked()) {
-                    status = "Архив";
-                    load_data(getString(R.string.ost_school_archive), name_task, address, date_done,
-                            floor, cabinet, comment, date_create, email_executor,
-                            status, time_create, email_creator);
-                }
-            }
-
-
-            if(location.equals(getString(R.string.bar_school))) {
-                if (radio_button_new_task.isChecked()) {
-                    status = "Новая заявка";
-                    load_data(getString(R.string.bar_school_new), name_task, address, date_done,
-                            floor, cabinet, comment, date_create, email_executor,
-                            status, time_create, email_creator);
-                }
-
-                if (radio_button_progress.isChecked()) {
-                    status = "В работе";
-                    load_data(getString(R.string.bar_school_progress), name_task, address, date_done,
-                            floor, cabinet, comment, date_create, email_executor,
-                            status, time_create, email_creator);
-                }
-
-                if (radio_button_archive.isChecked()) {
-                    status = "Архив";
-                    load_data(getString(R.string.bar_school_progress), name_task, address, date_done,
-                            floor, cabinet, comment, date_create, email_executor,
-                            status, time_create, email_creator);
-                }
-            }
-
-            dialog.dismiss();
-            onBackPressed();
-        });
-
-        dialog.show();
-    }
-
-    void load_data(String collection, String update_name, String  update_address, String update_date_task,
-                   String update_floor, String update_cabinet, String update_comment, String date_create,
-                   String update_executor, String update_status, String time_create, String email) {
-
-        CollectionReference taskRef = FirebaseFirestore.getInstance().collection(collection);
-        taskRef.add(new TaskUi(update_name, update_address, update_date_task, update_floor, update_cabinet, update_comment,
-                date_create, update_executor, update_status, time_create, email));
-
-        taskRef.get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                Log.i(TAG, "add completed!");
-
-            } else {
-                Log.i(TAG, "Error: " + task.getException());
-            }
-
-        });
-    }
-
-
-    void delete_task(String collection, String id) {
-        DocumentReference documentReferenceTask = firebaseFirestore.collection(collection).document(id);
-        documentReferenceTask.delete();
     }
 
     public boolean isOnline() {

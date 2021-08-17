@@ -39,7 +39,7 @@ public class fragment_school_ost_new_tasks extends Fragment {
     FirebaseFirestore firebaseFirestore;
 
     TextInputLayout text_input_search_new_tasks;
-    Chip chip_today_school_ost_new, chip_old_school_ost_new, chip_new_school_ost_new;
+    Chip chip_today_school_ost_new, chip_old_school_ost_new, chip_new_school_ost_new, chip_all;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,6 +52,7 @@ public class fragment_school_ost_new_tasks extends Fragment {
         chip_today_school_ost_new = view.findViewById(R.id.chip_today_school_ost_new);
         chip_old_school_ost_new = view.findViewById(R.id.chip_old_school_ost_new);
         chip_new_school_ost_new = view.findViewById(R.id.chip_new_school_ost_new);
+        chip_all = view.findViewById(R.id.chip_all_new_tasks_ost_school);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -92,15 +93,19 @@ public class fragment_school_ost_new_tasks extends Fragment {
             return false;
         });
 
+        chip_all.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if(isChecked){
+                Log.i(TAG, "default checked");
+                defaultQuery();
+            }
+        });
+
         chip_today_school_ost_new.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             if(isChecked){
                 Log.i(TAG, "today checked");
                 String today = utils.getDate();
                 todayTasks(today);
-            } else {
-                Log.i(TAG, "today not-checked");
-                defaultQuery();
             }
 
         });
@@ -110,9 +115,6 @@ public class fragment_school_ost_new_tasks extends Fragment {
             if(isChecked){
                 Log.i(TAG, "old checked");
                 currentAddressTasks("Улица Авиаторов дом 9. Старое здание");
-            } else {
-                Log.i(TAG, "old not-checked");
-                defaultQuery();
             }
 
         });
@@ -122,9 +124,6 @@ public class fragment_school_ost_new_tasks extends Fragment {
             if(isChecked){
                 Log.i(TAG, "new checked");
                 currentAddressTasks("Улица Авиаторов дом 9. Новое здание");
-            } else {
-                Log.i(TAG, "new not-checked");
-                defaultQuery();
             }
 
         });

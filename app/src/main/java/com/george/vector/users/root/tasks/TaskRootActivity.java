@@ -39,7 +39,7 @@ public class TaskRootActivity extends AppCompatActivity {
 
     private static final String TAG = "TaskActivityRoot";
 
-    String id, collection, address, floor, cabinet, name_task, comment, status, date_create, time_create, location;
+    String id, collection, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create, location;
     boolean confirm_delete;
 
     FirebaseAuth firebaseAuth;
@@ -105,21 +105,12 @@ public class TaskRootActivity extends AppCompatActivity {
             address = value.getString("address");
             floor = String.format("Этаж: %s", value.getString("floor"));
             cabinet = String.format("Кабинет: %s", value.getString("cabinet"));
+            litera = value.getString("litera");
             name_task = value.getString("name_task");
             comment = value.getString("comment");
             status = value.getString("status");
             date_create = value.getString("date_create");
             time_create = value.getString("time_create");
-
-            text_view_address_task_root.setText(address);
-            text_view_floor_task_root.setText(floor);
-            text_view_cabinet_task_root.setText(cabinet);
-            text_view_name_task_root.setText(name_task);
-            text_view_comment_task_root.setText(comment);
-            text_view_status_task_root.setText(status);
-
-            String date_create_text = "Созданно: " + date_create + " " + time_create;
-            text_view_date_create_task_root.setText(date_create_text);
 
             try {
                 if (status.equals("Новая заявка"))
@@ -130,10 +121,22 @@ public class TaskRootActivity extends AppCompatActivity {
 
                 if (status.equals("Архив"))
                     circle_status_root.setImageResource(R.color.green);
+
+                if (!litera.equals("-") && !litera.isEmpty())
+                    cabinet = String.format("%s%s", cabinet, litera);
             } catch (Exception e){
                 Log.e(TAG, "Error! " + e);
             }
 
+            text_view_address_task_root.setText(address);
+            text_view_floor_task_root.setText(floor);
+            text_view_cabinet_task_root.setText(cabinet);
+            text_view_name_task_root.setText(name_task);
+            text_view_comment_task_root.setText(comment);
+            text_view_status_task_root.setText(status);
+
+            String date_create_text = "Созданно: " + date_create + " " + time_create;
+            text_view_date_create_task_root.setText(date_create_text);
         });
 
         documentReference.get().addOnCompleteListener(task -> progress_bar_task_root.setVisibility(View.INVISIBLE));
