@@ -25,6 +25,7 @@ import com.george.vector.common.edit_users.UserAdapter;
 import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.Utils;
+import com.george.vector.users.root.tasks.AddTaskRootActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -55,14 +56,14 @@ public class AddTaskAdminActivity extends AppCompatActivity {
     ExtendedFloatingActionButton crate_task_fab;
     Button add_executor_admin;
 
-    MaterialAutoCompleteTextView address_autoComplete, status_autoComplete;
+    MaterialAutoCompleteTextView address_autoComplete, status_autoComplete, liter_autoComplete_admin;
     TextInputLayout text_input_layout_address, text_input_layout_floor, text_input_layout_cabinet,
                     text_input_layout_name_task, text_input_layout_comment, text_input_layout_date_task,
-                    text_input_layout_status, text_input_layout_executor_admin;
+                    text_input_layout_status, text_input_layout_executor_admin, text_input_layout_cabinet_liter_admin;
     TextInputEditText edit_text_date_task;
 
     private static final String TAG = "AddTaskAdmin";
-    String permission, address, floor, cabinet, name_task, comment, date_task, status, userID, email;
+    String permission, address, floor, cabinet, litera, name_task, comment, date_task, status, email;
     String name_executor;
     String last_name_executor;
     String patronymic_executor;
@@ -88,8 +89,8 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         status_autoComplete = findViewById(R.id.status_autoComplete);
         text_input_layout_address = findViewById(R.id.text_input_layout_address);
         text_input_layout_floor = findViewById(R.id.text_input_layout_floor);
-        text_input_layout_cabinet = findViewById(R.id.text_input_layout_cabinet);
         text_input_layout_name_task = findViewById(R.id.text_input_layout_name_task);
+        text_input_layout_cabinet = findViewById(R.id.text_input_layout_cabinet_admin);;
         text_input_layout_comment = findViewById(R.id.text_input_layout_comment);
         text_input_layout_date_task = findViewById(R.id.text_input_layout_date_task);
         text_input_layout_status = findViewById(R.id.text_input_layout_status);
@@ -98,6 +99,8 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         edit_text_date_task = findViewById(R.id.edit_text_date_task);
         progress_bar_add_task_admin = findViewById(R.id.progress_bar_add_task_admin);
         add_executor_admin = findViewById(R.id.add_executor_admin);
+        text_input_layout_cabinet_liter_admin = findViewById(R.id.text_input_layout_cabinet_liter_admin);
+        liter_autoComplete_admin = findViewById(R.id.liter_autoComplete_admin);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -108,8 +111,8 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         permission = arguments.get(getString(R.string.permission)).toString();
         Log.i(TAG, "Permission: " + permission);
 
-        userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReferenceUser = firebaseFirestore.collection(getString(R.string.users)).document(userID);
+        String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        DocumentReference documentReferenceUser = firebaseFirestore.collection("users").document(userID);
         documentReferenceUser.addSnapshotListener(this, (value, error) -> {
             assert value != null;
             email = value.getString("email");
@@ -122,6 +125,7 @@ public class AddTaskAdminActivity extends AppCompatActivity {
             address = Objects.requireNonNull(text_input_layout_address.getEditText()).getText().toString();
             floor = Objects.requireNonNull(text_input_layout_floor.getEditText()).getText().toString();
             cabinet = Objects.requireNonNull(text_input_layout_cabinet.getEditText()).getText().toString();
+            litera = Objects.requireNonNull(text_input_layout_cabinet_liter_admin.getEditText()).getText().toString();
             name_task = Objects.requireNonNull(text_input_layout_name_task.getEditText()).getText().toString();
             comment = Objects.requireNonNull(text_input_layout_comment.getEditText()).getText().toString();
             date_task = Objects.requireNonNull(text_input_layout_date_task.getEditText()).getText().toString();
@@ -145,12 +149,12 @@ public class AddTaskAdminActivity extends AppCompatActivity {
 
         Date currentDate = new Date();
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        String dateText = dateFormat.format(currentDate);
+        String date_create = dateFormat.format(currentDate);
         DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        String timeText = timeFormat.format(currentDate);
+        String time_create = timeFormat.format(currentDate);
 
-        task.save(new SaveTask(), location, name_task, address, dateText, floor, cabinet, comment,
-                date_task, email_executor, status, timeText, email);
+        task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, litera, comment,
+                date_task, email_executor, status, time_create, email);
 
         onBackPressed();
     }
@@ -160,12 +164,9 @@ public class AddTaskAdminActivity extends AppCompatActivity {
 
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_no_connection))
-
                 .setPositiveButton(getText(R.string.save), (dialog, id) -> save_task(permission))
-
                 .setNegativeButton(android.R.string.cancel,
                         (dialog, id) -> startActivity(new Intent(this, MainAdminActivity.class)));
-
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -201,10 +202,10 @@ public class AddTaskAdminActivity extends AppCompatActivity {
                 patronymic_executor = value.getString("patronymic");
                 email_executor = value.getString("email");
 
-                Log.i(TAG, "name: " + name_executor);
-                Log.i(TAG, "last_name: " + last_name_executor);
-                Log.i(TAG, "patronymic: " + patronymic_executor);
-                Log.i(TAG, "email: " + email_executor);
+                Log.i(TAG, String.format("name: %s", name_executor));
+                Log.i(TAG, String.format("last_name: %s", last_name_executor));
+                Log.i(TAG, String.format("patronymic: %s", patronymic_executor));
+                Log.i(TAG, String.format("email: %s", email_executor));
 
                 Objects.requireNonNull(text_input_layout_executor_admin.getEditText()).setText(email_executor);
                 dialog.dismiss();
@@ -240,6 +241,15 @@ public class AddTaskAdminActivity extends AppCompatActivity {
         );
 
         status_autoComplete.setAdapter(adapter_status);
+
+        String[] itemsLitera = getResources().getStringArray(R.array.litera);
+        ArrayAdapter<String> adapter_litera = new ArrayAdapter<>(
+                AddTaskAdminActivity.this,
+                R.layout.dropdown_menu_categories,
+                itemsLitera
+        );
+
+        liter_autoComplete_admin.setAdapter(adapter_litera);
 
         datePickCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {

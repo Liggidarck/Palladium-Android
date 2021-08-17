@@ -76,8 +76,8 @@ public class fragment_school_bar_new_tasks extends Fragment {
             intent.putExtra(getString(R.string.id), id);
             intent.putExtra(getString(R.string.location), getString(R.string.bar_school));
             intent.putExtra(getString(R.string.collection), getString(R.string.bar_school_new));
+            intent.putExtra(getString(R.string.email), email);
             startActivity(intent);
-
         });
 
         Objects.requireNonNull(search_executor_bar_school_new_tasks.getEditText()).setOnEditorActionListener((v, actionId, event) -> {

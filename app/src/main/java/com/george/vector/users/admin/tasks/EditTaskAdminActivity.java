@@ -27,6 +27,7 @@ import com.george.vector.common.tasks.utils.DeleteTask;
 import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.Utils;
+import com.george.vector.users.root.tasks.EditTaskRootActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -51,9 +52,9 @@ public class EditTaskAdminActivity extends AppCompatActivity {
 
     TextInputLayout text_input_layout_address, text_input_layout_floor, text_input_layout_cabinet,
                     text_input_layout_name_task, text_input_layout_comment, text_input_layout_date_task,
-                    text_input_layout_status, text_input_layout_executor_admin;
+                    text_input_layout_status, text_input_layout_executor_admin, text_input_layout_cabinet_liter_admin;
     TextInputEditText edit_text_date_task;
-    MaterialAutoCompleteTextView status_autoComplete, address_autoComplete;
+    MaterialAutoCompleteTextView status_autoComplete, address_autoComplete, liter_autoComplete_admin;
 
     ExtendedFloatingActionButton update_task;
     Button add_executor_admin;
@@ -62,7 +63,7 @@ public class EditTaskAdminActivity extends AppCompatActivity {
 
     private static final String TAG = "EditTaskAdmin";
     String id, permission, collection, address, floor,
-            cabinet, name_task, comment, status, date_create,
+            cabinet, litera, name_task, comment, status, date_create,
             time_create, date_done, email;
     String name_executor;
     String last_name_executor;
@@ -82,7 +83,8 @@ public class EditTaskAdminActivity extends AppCompatActivity {
         topAppBar_new_task = findViewById(R.id.topAppBar_new_task);
         text_input_layout_address = findViewById(R.id.text_input_layout_address);
         text_input_layout_floor = findViewById(R.id.text_input_layout_floor);
-        text_input_layout_cabinet = findViewById(R.id.text_input_layout_cabinet);
+        text_input_layout_cabinet = findViewById(R.id.text_input_layout_cabinet_admin);
+        text_input_layout_cabinet_liter_admin = findViewById(R.id.text_input_layout_cabinet_liter_admin);
         text_input_layout_name_task = findViewById(R.id.text_input_layout_name_task);
         text_input_layout_comment = findViewById(R.id.text_input_layout_comment);
         text_input_layout_date_task = findViewById(R.id.text_input_layout_date_task);
@@ -94,6 +96,7 @@ public class EditTaskAdminActivity extends AppCompatActivity {
         edit_text_date_task = findViewById(R.id.edit_text_date_task);
         progress_bar_add_task_admin = findViewById(R.id.progress_bar_add_task_admin);
         add_executor_admin = findViewById(R.id.add_executor_admin);
+        liter_autoComplete_admin = findViewById(R.id.liter_autoComplete_admin);
 
         topAppBar_new_task.setNavigationOnClickListener(v -> onBackPressed());
 
@@ -101,9 +104,9 @@ public class EditTaskAdminActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get((String) getText(R.string.id)).toString();
-        collection = arguments.get((String) getText(R.string.collection)).toString();
-        permission = arguments.get((String) getText(R.string.permission)).toString();
+        id = arguments.get(getString(R.string.id)).toString();
+        collection = arguments.get(getString(R.string.collection)).toString();
+        permission = arguments.get(getString(R.string.permission)).toString();
 
         add_executor_admin.setOnClickListener(v -> show_add_executor_dialog());
 
@@ -113,6 +116,7 @@ public class EditTaskAdminActivity extends AppCompatActivity {
             address = value.getString("address");
             floor = value.getString("floor");
             cabinet = value.getString("cabinet");
+            litera = value.getString("litera");
             name_task = value.getString("name_task");
             comment = value.getString("comment");
             status = value.getString("status");
@@ -128,6 +132,7 @@ public class EditTaskAdminActivity extends AppCompatActivity {
                 Objects.requireNonNull(text_input_layout_address.getEditText()).setText(address);
                 Objects.requireNonNull(text_input_layout_floor.getEditText()).setText(floor);
                 Objects.requireNonNull(text_input_layout_cabinet.getEditText()).setText(cabinet);
+                Objects.requireNonNull(text_input_layout_cabinet_liter_admin.getEditText()).setText(litera);
                 Objects.requireNonNull(text_input_layout_name_task.getEditText()).setText(name_task);
                 Objects.requireNonNull(text_input_layout_date_task.getEditText()).setText(date_done);
                 Objects.requireNonNull(text_input_layout_executor_admin.getEditText()).setText(email_executor);
@@ -165,6 +170,7 @@ public class EditTaskAdminActivity extends AppCompatActivity {
         String update_address = Objects.requireNonNull(text_input_layout_address.getEditText()).getText().toString();
         String update_floor = Objects.requireNonNull(text_input_layout_floor.getEditText()).getText().toString();
         String update_cabinet = Objects.requireNonNull(text_input_layout_cabinet.getEditText()).getText().toString();
+        String update_litera = Objects.requireNonNull(text_input_layout_cabinet_liter_admin.getEditText()).getText().toString();
         String update_name = Objects.requireNonNull(text_input_layout_name_task.getEditText()).getText().toString();
         String update_comment = Objects.requireNonNull(text_input_layout_comment.getEditText()).getText().toString();
         String update_date_task = Objects.requireNonNull(text_input_layout_date_task.getEditText()).getText().toString();
@@ -172,7 +178,7 @@ public class EditTaskAdminActivity extends AppCompatActivity {
         String update_status = Objects.requireNonNull(text_input_layout_status.getEditText()).getText().toString();
 
         task.save(new SaveTask(), location, update_name, update_address, date_create, update_floor,
-                update_cabinet, update_comment, update_date_task,
+                update_cabinet, update_litera, update_comment, update_date_task,
                 update_executor, update_status, time_create,
                 email);
 
@@ -263,6 +269,15 @@ public class EditTaskAdminActivity extends AppCompatActivity {
 
         status_autoComplete.setAdapter(adapter_status);
 
+        String[] itemsLitera = getResources().getStringArray(R.array.litera);
+        ArrayAdapter<String> adapter_litera = new ArrayAdapter<>(
+                EditTaskAdminActivity.this,
+                R.layout.dropdown_menu_categories,
+                itemsLitera
+        );
+
+        liter_autoComplete_admin.setAdapter(adapter_litera);
+
         datePickCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
             datePickCalendar.set(Calendar.YEAR, year);
@@ -276,7 +291,7 @@ public class EditTaskAdminActivity extends AppCompatActivity {
     }
 
     void updateLabel() {
-        String date_text = "MM.dd.yyyy";
+        String date_text = "dd.MM.yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(date_text, Locale.US);
 
         Objects.requireNonNull(text_input_layout_date_task.getEditText()).setText(sdf.format(datePickCalendar.getTime()));

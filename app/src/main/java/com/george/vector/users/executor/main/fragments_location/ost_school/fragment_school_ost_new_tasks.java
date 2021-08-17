@@ -85,6 +85,7 @@ public class fragment_school_ost_new_tasks extends Fragment {
             intent.putExtra(getString(R.string.id), id);
             intent.putExtra(getString(R.string.location), getString(R.string.ost_school));
             intent.putExtra(getString(R.string.collection), getString(R.string.ost_school_new));
+            intent.putExtra(getString(R.string.email), email);
             startActivity(intent);
 
         });

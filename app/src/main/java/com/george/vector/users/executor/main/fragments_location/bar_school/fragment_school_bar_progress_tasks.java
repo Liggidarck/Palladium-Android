@@ -76,6 +76,7 @@ public class fragment_school_bar_progress_tasks extends Fragment {
             intent.putExtra(getString(R.string.id), id);
             intent.putExtra(getString(R.string.location), getString(R.string.bar_school));
             intent.putExtra(getString(R.string.collection), getString(R.string.bar_school_progress));
+            intent.putExtra(getString(R.string.email), email);
             startActivity(intent);
 
         });
