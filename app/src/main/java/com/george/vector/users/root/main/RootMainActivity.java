@@ -41,6 +41,7 @@ public class RootMainActivity extends AppCompatActivity {
         setTheme(R.style.MainActivity);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_root_main);
+        Log.d(TAG, "onCreate");
 
         chip_root_ost = findViewById(R.id.chip_root_ost);
         chip_root_bar = findViewById(R.id.chip_root_bar);
@@ -91,6 +92,19 @@ public class RootMainActivity extends AppCompatActivity {
         updateZones(zone);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart()");
+
+        if(!isOnline())
+            Snackbar.make(findViewById(R.id.coordinator_main_root), getString(R.string.error_no_connection), Snackbar.LENGTH_LONG)
+                    .setAction("Повторить", v ->  {
+                        Log.i(TAG, "Update status: " + isOnline());
+                        onStart();
+                    }).show();
+    }
+
     void updateZones(@NotNull String zone_update) {
         Fragment currentFragment = null;
         switch (zone_update) {
@@ -114,18 +128,6 @@ public class RootMainActivity extends AppCompatActivity {
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        if(!isOnline())
-            Snackbar.make(findViewById(R.id.coordinator_main_root), getString(R.string.error_no_connection), Snackbar.LENGTH_LONG)
-                    .setAction("Повторить", v ->  {
-                            Log.i(TAG, "Update status: " + isOnline());
-                            onStart();
-                    }).show();
     }
 
     @Override

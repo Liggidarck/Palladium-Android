@@ -82,8 +82,8 @@ public class MainUserActivity extends AppCompatActivity {
         DocumentReference documentReference = firebaseFirestore.collection("news").document("news_fragment");
         documentReference.addSnapshotListener((value, error) -> {
             assert value != null;
-            show_news_fragment = value.getBoolean("show");
-            Log.d(TAG, "show_news_fragment: " + show_news_fragment);
+            show_news_fragment = Objects.requireNonNull(value.getBoolean("show"));
+            Log.d(TAG, String.format("show_news_fragment: %s", show_news_fragment));
 
             if(show_news_fragment)
                 show_news_fragment();

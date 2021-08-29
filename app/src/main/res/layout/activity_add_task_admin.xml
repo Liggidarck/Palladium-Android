@@ -79,7 +79,9 @@
                 android:layout_marginEnd="20dp"
                 android:hint="@string/floor"
                 app:endIconMode="clear_text"
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+                app:counterEnabled="true"
+                app:counterMaxLength="1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -105,7 +107,9 @@
                     android:layout_marginEnd="20dp"
                     android:hint="@string/cabinet"
                     app:endIconMode="clear_text"
-                    app:errorEnabled="true">
+                    app:errorEnabled="true"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="3">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -150,13 +154,12 @@
                 android:hint="@string/name_task"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true"
-                app:helperText="Например: Сломаная дверь"
                 app:helperTextEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
+                    android:inputType="textMultiLine" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -177,7 +180,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
+                    android:inputType="textMultiLine" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
