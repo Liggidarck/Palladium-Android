@@ -1,57 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_news"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        app:cardElevation="3dp"
         android:checkable="true"
         android:clickable="true"
         android:focusable="true"
-        android:padding="15dp"
-        app:cardCornerRadius="10dp">
+        android:padding="15dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/news_image"
+                android:id="@+id/urgent_image"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:src="@drawable/ic_warning" />
+                android:src="@drawable/ic_warning_urgent" />
 
             <TextView
-                android:id="@+id/title_news_text_view"
+                android:id="@+id/title_urgent_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_toEndOf="@id/news_image"
+                android:text="Срочная заявка"
+                android:textStyle="bold"
+                android:layout_toEndOf="@id/urgent_image"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/subtitle_news_text_view"
+                android:id="@+id/subtitle_urgent_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/title_news_text_view"
+                android:layout_below="@id/title_urgent_text_view"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="3dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_toEndOf="@id/news_image"
+                android:layout_toEndOf="@id/urgent_image"
                 android:ellipsize="end"
                 android:maxLines="3"
+                android:text="Обратите внимание на эту заявку и выполните всё в срок"
                 android:textColor="#8E8E8E" />
 
         </RelativeLayout>

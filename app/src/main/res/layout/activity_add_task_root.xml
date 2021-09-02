@@ -76,11 +76,12 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
+                android:layout_weight="1"
                 android:hint="@string/floor"
-                app:endIconMode="clear_text"
-                app:errorEnabled="true"
                 app:counterEnabled="true"
-                app:counterMaxLength="1">
+                app:counterMaxLength="1"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -100,15 +101,15 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
+                    android:layout_weight="1"
                     android:hint="@string/cabinet"
-                    app:endIconMode="clear_text"
-                    app:errorEnabled="true"
                     app:counterEnabled="true"
-                    app:counterMaxLength="3">
+                    app:counterMaxLength="3"
+                    app:endIconMode="clear_text"
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -120,14 +121,14 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/text_input_layout_cabinet_liter_root"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    app:endIconMode="dropdown_menu"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.5"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
+                    android:layout_weight="1.5"
                     android:hint="Литера"
+                    app:endIconMode="dropdown_menu"
                     app:helperText="Опционально">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -135,12 +136,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
-                        android:longClickable="false"
-                        android:inputType="none" />
+                        android:inputType="none"
+                        android:longClickable="false" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_name_task_root"
@@ -227,6 +229,14 @@
                     android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <CheckBox
+                android:id="@+id/urgent_request_check_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Срочная заявка"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="20dp"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_executor_root"

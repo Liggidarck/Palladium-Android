@@ -8,21 +8,15 @@
 
 
     <string-array name="status" >
-
         <item>Новая заявка</item>
         <item>В работе</item>
         <item>Архив</item>
-
     </string-array>
 
     <string-array name="roles" >
-
         <item>Root</item>
-        <item>Завхоз</item>
-        <item>Администратор</item>
         <item>Пользователь</item>
         <item>Исполнитель</item>
-
     </string-array>
 
     <string-array name="litera" >
@@ -32,9 +26,6 @@
 
     <string-array name="permissions" >
         <item>all</item>
-
-        <item>ost</item>
-        <item>bar</item>
 
         <item>ost_school</item>
         <item>ost_aist</item>

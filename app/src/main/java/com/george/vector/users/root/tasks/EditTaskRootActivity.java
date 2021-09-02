@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -52,20 +53,20 @@ public class EditTaskRootActivity extends AppCompatActivity {
     LinearProgressIndicator progress_bar_add_task_root;
     ExtendedFloatingActionButton done_task_root;
     Button add_executor_root;
-
+    CheckBox urgent_request_check_box;
     TextInputLayout text_input_layout_address_root, text_input_layout_floor_root,
             text_input_layout_cabinet_root, text_input_layout_name_task_root,
             text_input_layout_comment_root, text_input_layout_date_task_root,
             text_input_layout_executor_root, text_input_layout_status_root,
             text_input_layout_cabinet_liter_root;
-
     TextInputEditText edit_text_date_task_root;
-
     MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root, liter_autoComplete_root;
+
+    Calendar datePickCalendar;
 
     String id, collection, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create,
             date_done, email, location;
-    Calendar datePickCalendar;
+    boolean urgent;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -100,6 +101,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
         add_executor_root = findViewById(R.id.add_executor_root);
         text_input_layout_cabinet_liter_root = findViewById(R.id.text_input_layout_cabinet_liter_root);
         liter_autoComplete_root = findViewById(R.id.liter_autoComplete_root);
+        urgent_request_check_box = findViewById(R.id.urgent_request_check_box);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -134,6 +136,8 @@ public class EditTaskRootActivity extends AppCompatActivity {
             email = value.getString("email_creator");
 
             try {
+                urgent = value.getBoolean("urgent");
+
                 Objects.requireNonNull(text_input_layout_address_root.getEditText()).setText(address);
                 Objects.requireNonNull(text_input_layout_floor_root.getEditText()).setText(floor);
                 Objects.requireNonNull(text_input_layout_cabinet_root.getEditText()).setText(cabinet);
@@ -147,6 +151,8 @@ public class EditTaskRootActivity extends AppCompatActivity {
                     Objects.requireNonNull(text_input_layout_comment_root.getEditText()).setText("");
                 else
                     Objects.requireNonNull(text_input_layout_comment_root.getEditText()).setText(comment);
+
+                urgent_request_check_box.setChecked(urgent);
 
             } catch (Exception e) {
                 Log.i(TAG, "Error! " + e);
@@ -229,11 +235,11 @@ public class EditTaskRootActivity extends AppCompatActivity {
         String update_date_task = Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).getText().toString();
         String update_executor = Objects.requireNonNull(text_input_layout_executor_root.getEditText()).getText().toString();
         String update_status = Objects.requireNonNull(text_input_layout_status_root.getEditText()).getText().toString();
+        boolean update_urgent = urgent_request_check_box.isChecked();
 
         task.save(new SaveTask(), location, update_name, update_address, date_create, update_floor,
                 update_cabinet, update_litera, update_comment, update_date_task,
-                update_executor, update_status, time_create,
-                email);
+                update_executor, update_status, time_create, email, update_urgent);
 
         startActivity(new Intent(this, RootMainActivity.class));
     }

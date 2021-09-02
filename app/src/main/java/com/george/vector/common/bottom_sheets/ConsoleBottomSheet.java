@@ -78,8 +78,8 @@ public class ConsoleBottomSheet extends BottomSheetDialogFragment {
         });
 
         btn_logout.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(ConsoleBottomSheet.this.getContext(), ActivityLogin.class));
+//            FirebaseAuth.getInstance().signOut();
+//            startActivity(new Intent(ConsoleBottomSheet.this.getContext(), ActivityLogin.class));
         });
         return view;
     }

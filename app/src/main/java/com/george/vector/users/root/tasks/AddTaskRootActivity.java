@@ -16,6 +16,8 @@ import android.util.Log;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
@@ -52,7 +54,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
     LinearProgressIndicator progress_bar_add_task_root;
     ExtendedFloatingActionButton done_task_root;
     Button add_executor_root;
-
+    CheckBox urgent_request_check_box;
     TextInputLayout text_input_layout_address_root, text_input_layout_floor_root,
                     text_input_layout_cabinet_root, text_input_layout_name_task_root,
                     text_input_layout_comment_root, text_input_layout_date_task_root,
@@ -62,6 +64,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
     MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root, liter_autoComplete_root;
 
     String location, userID, email, address, floor, cabinet, litera, name_task, date_complete, status, comment;
+    boolean urgent;
     private static final String TAG = "AddTaskRoot";
 
     Calendar datePickCalendar;
@@ -101,6 +104,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         add_executor_root = findViewById(R.id.add_executor_root);
         text_input_layout_cabinet_liter_root = findViewById(R.id.text_input_layout_cabinet_liter_root);
         liter_autoComplete_root = findViewById(R.id.liter_autoComplete_root);
+        urgent_request_check_box = findViewById(R.id.urgent_request_check_box);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -116,13 +120,13 @@ public class AddTaskRootActivity extends AppCompatActivity {
         //При выходе из аккаунта крашится тут
         try {
             userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-            DocumentReference documentReferenceUser = firebaseFirestore.collection(getString(R.string.users)).document(userID);
+            DocumentReference documentReferenceUser = firebaseFirestore.collection("users").document(userID);
             documentReferenceUser.addSnapshotListener(this, (value, error) -> {
                 assert value != null;
                 email = value.getString("email");
             });
         } catch (Exception e) {
-            Log.e(TAG, "Error! " + e);
+            Log.e(TAG, String.format("Error! %s", e));
         }
 
         add_executor_root.setOnClickListener(v -> show_add_executor_dialog());
@@ -137,6 +141,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
             date_complete = Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).getText().toString();
             email_executor = Objects.requireNonNull(text_input_layout_executor_root.getEditText()).getText().toString();
             status = Objects.requireNonNull(text_input_layout_status_root.getEditText()).getText().toString();
+            urgent = urgent_request_check_box.isChecked();
 
             if(validateFields()){
                 if(!isOnline())
@@ -159,7 +164,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         String time_create = timeFormat.format(currentDate);
 
         task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, litera, comment,
-                date_complete, email_executor, status, time_create, email);
+                date_complete, email_executor, status, time_create, email, urgent);
 
         onBackPressed();
     }
@@ -172,11 +177,9 @@ public class AddTaskRootActivity extends AppCompatActivity {
         RecyclerView recycler_view_list_executors = dialog.findViewById(R.id.recycler_view_list_executors);
 
         Query query = usersRef.whereEqualTo("role", "Исполнитель");
-
         FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
                 .setQuery(query, User.class)
                 .build();
-
         UserAdapter adapter = new UserAdapter(options);
 
         recycler_view_list_executors.setHasFixedSize(true);
@@ -194,10 +197,10 @@ public class AddTaskRootActivity extends AppCompatActivity {
                 patronymic_executor = value.getString("patronymic");
                 email_executor = value.getString("email");
 
-                Log.i(TAG, "name: " + name_executor);
-                Log.i(TAG, "last_name: " + last_name_executor);
-                Log.i(TAG, "patronymic: " + patronymic_executor);
-                Log.i(TAG, "email: " + email_executor);
+                Log.i(TAG, String.format("name: %s", name_executor));
+                Log.i(TAG, String.format("last_name: %s", last_name_executor));
+                Log.i(TAG, String.format("patronymic: %s", patronymic_executor));
+                Log.i(TAG, String.format("email: %s", email_executor));
 
                 Objects.requireNonNull(text_input_layout_executor_root.getEditText()).setText(email_executor);
                 dialog.dismiss();

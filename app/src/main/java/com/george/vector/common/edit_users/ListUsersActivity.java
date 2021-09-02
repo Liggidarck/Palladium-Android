@@ -21,7 +21,7 @@ public class ListUsersActivity extends AppCompatActivity {
     private static final String TAG = "ListUserActivity";
 
     RecyclerView recycler_view_list_users;
-    Chip chip_root, chip_zav, chip_admin, chip_user, chip_worker;
+    Chip chip_root, chip_user, chip_worker;
     MaterialToolbar toolbar_list_users;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -36,8 +36,6 @@ public class ListUsersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_users);
 
         chip_root = findViewById(R.id.chip_root);
-        chip_zav = findViewById(R.id.chip_zav);
-        chip_admin = findViewById(R.id.chip_admin);
         chip_user = findViewById(R.id.chip_user);
         chip_worker = findViewById(R.id.chip_worker);
 
@@ -54,38 +52,6 @@ public class ListUsersActivity extends AppCompatActivity {
                 Log.i(TAG, "Root checked");
 
                 query = usersRef.whereEqualTo("role", "Root");
-
-                FirestoreRecyclerOptions<User> AdminOptions = new FirestoreRecyclerOptions.Builder<User>()
-                        .setQuery(query, User.class)
-                        .build();
-
-                adapter.updateOptions(AdminOptions);
-            }
-
-        });
-
-        chip_zav.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-            if(isChecked){
-                Log.i(TAG, "Root checked");
-
-                query = usersRef.whereEqualTo("role", "Завхоз");
-
-                FirestoreRecyclerOptions<User> AdminOptions = new FirestoreRecyclerOptions.Builder<User>()
-                        .setQuery(query, User.class)
-                        .build();
-
-                adapter.updateOptions(AdminOptions);
-            }
-
-        });
-
-        chip_admin.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-            if(isChecked){
-                Log.i(TAG, "Admin checked");
-
-                query = usersRef.whereEqualTo("role", "Администратор");
 
                 FirestoreRecyclerOptions<User> AdminOptions = new FirestoreRecyclerOptions.Builder<User>()
                         .setQuery(query, User.class)

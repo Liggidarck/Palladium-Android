@@ -74,7 +74,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="13dp"
-                android:text="Филатов Георгий Андреевич"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textColor="@color/black"
                 android:textSize="17sp" />
 
@@ -82,7 +83,6 @@
                 android:id="@+id/text_view_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="api@2122.pro"
                 android:layout_below="@+id/text_view_full_name" />
 
 
@@ -95,7 +95,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:text="Администратор"
         android:textSize="18sp"
         android:layout_marginTop="5dp"/>
 

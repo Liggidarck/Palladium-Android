@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -39,7 +40,7 @@ public class fragment_school_ost_new_tasks extends Fragment {
     FirebaseFirestore firebaseFirestore;
 
     TextInputLayout text_input_search_new_tasks;
-    Chip chip_today_school_ost_new, chip_old_school_ost_new, chip_new_school_ost_new, chip_all;
+    Chip chip_today_school_ost_new, chip_old_school_ost_new, chip_new_school_ost_new, chip_all, chip_urgent_new_tasks_ost_school;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,6 +53,7 @@ public class fragment_school_ost_new_tasks extends Fragment {
         chip_today_school_ost_new = view.findViewById(R.id.chip_today_school_ost_new);
         chip_old_school_ost_new = view.findViewById(R.id.chip_old_school_ost_new);
         chip_new_school_ost_new = view.findViewById(R.id.chip_new_school_ost_new);
+        chip_urgent_new_tasks_ost_school = view.findViewById(R.id.chip_urgent_new_tasks_ost_school);
         chip_all = view.findViewById(R.id.chip_all_new_tasks_ost_school);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -128,6 +130,13 @@ public class fragment_school_ost_new_tasks extends Fragment {
 
         });
 
+        chip_urgent_new_tasks_ost_school.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if(isChecked){
+                Log.i(TAG, "urgent checked");
+                UrgentTasks(true);
+            }
+        });
+
         return view;
     }
 
@@ -143,6 +152,16 @@ public class fragment_school_ost_new_tasks extends Fragment {
 
     private void todayTasks(String date) {
         query = taskRef.whereEqualTo("date_create", date);
+
+        FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
+                .build();
+
+        adapter.updateOptions(search_options);
+    }
+
+    private void UrgentTasks(boolean urgent) {
+        query = taskRef.whereEqualTo("urgent", urgent);
 
         FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)

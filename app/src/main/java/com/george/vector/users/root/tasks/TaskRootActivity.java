@@ -1,6 +1,7 @@
 package com.george.vector.users.root.tasks;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import android.app.AlertDialog;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.george.vector.R;
+import com.george.vector.common.announcements.fragmentUrgentRequest;
 import com.george.vector.common.tasks.utils.DeleteTask;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -40,7 +42,7 @@ public class TaskRootActivity extends AppCompatActivity {
     private static final String TAG = "TaskActivityRoot";
 
     String id, collection, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create, location;
-    boolean confirm_delete;
+    boolean confirm_delete, urgent;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -113,6 +115,8 @@ public class TaskRootActivity extends AppCompatActivity {
             time_create = value.getString("time_create");
 
             try {
+                urgent = value.getBoolean("urgent");
+
                 if (status.equals("Новая заявка"))
                     circle_status_root.setImageResource(R.color.red);
 
@@ -124,8 +128,20 @@ public class TaskRootActivity extends AppCompatActivity {
 
                 if (!litera.equals("-") && !litera.isEmpty())
                     cabinet = String.format("%s%s", cabinet, litera);
-            } catch (Exception e){
-                Log.e(TAG, "Error! " + e);
+
+                if(urgent) {
+                    Log.d(TAG, "Срочная заявка");
+
+                    Fragment urgent_fragment = new fragmentUrgentRequest();
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.frame_urgent_task, urgent_fragment)
+                            .commit();
+
+                }
+
+            } catch (Exception e) {
+                Log.e(TAG, String.format("Error! %s", e));
             }
 
             text_view_address_task_root.setText(address);

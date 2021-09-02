@@ -44,8 +44,8 @@ public class SettingsUserBottomSheet extends BottomSheetDialogFragment {
 
         close_btn.setOnClickListener(v -> dismiss());
         btn_logout.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(SettingsUserBottomSheet.this.getContext(), ActivityLogin.class));
+//            FirebaseAuth.getInstance().signOut();
+//            startActivity(new Intent(SettingsUserBottomSheet.this.getContext(), ActivityLogin.class));
         });
 
 

@@ -3,7 +3,6 @@ package com.george.vector.auth;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -11,16 +10,13 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 
-import com.george.vector.users.admin.main.MainAdminActivity;
 import com.george.vector.R;
 import com.george.vector.common.utils.Utils;
 import com.george.vector.users.executor.main.MainExecutorActivity;
 import com.george.vector.users.root.main.RootMainActivity;
 import com.george.vector.users.user.main.MainUserActivity;
-import com.george.vector.users.caretaker.main.MainCaretakerActivity;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
@@ -82,7 +78,7 @@ public class ActivityLogin extends AppCompatActivity {
                                 String check_role = value.getString((String) getText(R.string.role));
                                 String check_email = value.getString(getString(R.string.email));
                                 String permission = value.getString(getString(R.string.permission));
-                                Log.d(TAG, "permission - " + permission);
+                                Log.d(TAG, String.format("permission - %s", permission));
 
                                 assert check_role != null;
                                 startApp(check_role, check_email, permission);
@@ -102,58 +98,14 @@ public class ActivityLogin extends AppCompatActivity {
                 onStart();
 
         });
-        btn_forgot_password.setOnClickListener(v -> show_forgot_password_dialog());
-    }
 
-    private void show_forgot_password_dialog() {
-        Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.forgot_password_dialog);
+        btn_forgot_password.setOnClickListener(v -> startActivity(new Intent(this, ForgotPasswordActivity.class)));
 
-        TextInputLayout ti_forgot_password = dialog.findViewById(R.id.ti_forgot_password);
-        Button btn_ok_forgot_password = dialog.findViewById(R.id.btn_ok_forgot_password);
-        Button cancel_dialog_password = dialog.findViewById(R.id.cancel_dialog_password);
-
-        btn_ok_forgot_password.setOnClickListener(v -> {
-
-            if(isOnline()) {
-
-                String email = Objects.requireNonNull(ti_forgot_password.getEditText()).getText().toString();
-
-                if (email.isEmpty())
-                    ti_forgot_password.setError("Это поле не может быть пустым");
-                else {
-                    firebaseAuth.sendPasswordResetEmail(email)
-                            .addOnSuccessListener(unused -> {
-                                Log.i(TAG, "Ссылка для восстановления пароля отправлена");
-                                dialog.dismiss();
-                            })
-                            .addOnFailureListener(e -> Log.e(TAG, "Error! " + e));
-                }
-            } else
-                onStart();
-
-        });
-        cancel_dialog_password.setOnClickListener(v -> dialog.dismiss());
-
-        dialog.show();
     }
 
     void startApp(@NotNull String role, String email, String permission) {
         if (role.equals("Root"))
             startActivity(new Intent(this, RootMainActivity.class));
-
-        if(role.equals("Завхоз")) {
-            Intent intent = new Intent(this, MainCaretakerActivity.class);
-            intent.putExtra((String) getText(R.string.permission), permission);
-            startActivity(intent);
-        }
-
-        if(role.equals("Администратор")) {
-            Intent intent = new Intent(this, MainAdminActivity.class);
-            intent.putExtra((String) getText(R.string.permission), permission);
-            startActivity(intent);
-        }
 
         if (role.equals("Пользователь")) {
             Intent intent = new Intent(this, MainUserActivity.class);

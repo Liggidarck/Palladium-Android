@@ -16,6 +16,8 @@
         app:navigationIcon="@drawable/ic_baseline_menu_24"
         app:navigationIconTint="@color/white"
         app:title="@string/tasks"
+        style="@style/Widget.MaterialComponents.Toolbar.Primary"
+        app:menu="@menu/bottom_app_bar"
         app:titleTextColor="@android:color/white" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -68,6 +70,11 @@
         android:clipToPadding="false"
         android:paddingBottom="100dp" />
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator_main_user"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/create_task_user"
         android:layout_width="wrap_content"
@@ -80,10 +87,5 @@
         android:textColor="@color/white"
         app:icon="@drawable/ic_baseline_add_24"
         app:iconTint="@color/white" />
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinator_main_user"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 </RelativeLayout>

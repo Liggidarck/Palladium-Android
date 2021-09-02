@@ -157,8 +157,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
 
         task.save(new SaveTask(), location, update_name, update_address, date_create, update_floor,
                 update_cabinet, update_litera, update_comment, update_date_task,
-                update_executor, update_status, time_create,
-                email);
+                update_executor, update_status, time_create, email, false);
 
         Intent intent = new Intent(this, MainExecutorActivity.class);
         intent.putExtra(getString(R.string.email), email_mail_activity);

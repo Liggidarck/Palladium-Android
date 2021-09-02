@@ -120,7 +120,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
         String time_create = timeFormat.format(currentDate);
 
         task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, litera, comment,
-                null, null, status, time_create, email);
+                null, null, status, time_create, email, false);
 
         onBackPressed();
     }
