@@ -28,6 +28,7 @@ import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.Utils;
 import com.george.vector.users.root.main.RootMainActivity;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
@@ -56,10 +57,10 @@ public class AddTaskRootActivity extends AppCompatActivity {
     Button add_executor_root;
     CheckBox urgent_request_check_box;
     TextInputLayout text_input_layout_address_root, text_input_layout_floor_root,
-                    text_input_layout_cabinet_root, text_input_layout_name_task_root,
-                    text_input_layout_comment_root, text_input_layout_date_task_root,
-                    text_input_layout_executor_root, text_input_layout_status_root,
-                    text_input_layout_cabinet_liter_root;
+            text_input_layout_cabinet_root, text_input_layout_name_task_root,
+            text_input_layout_comment_root, text_input_layout_date_task_root,
+            text_input_layout_executor_root, text_input_layout_status_root,
+            text_input_layout_cabinet_liter_root;
     TextInputEditText edit_text_date_task_root;
     MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root, liter_autoComplete_root;
 
@@ -81,6 +82,8 @@ public class AddTaskRootActivity extends AppCompatActivity {
     String last_name_executor;
     String patronymic_executor;
     String email_executor;
+
+    Query query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,17 +120,16 @@ public class AddTaskRootActivity extends AppCompatActivity {
         location = arguments.get(getString(R.string.location)).toString();
         Log.d(TAG, location);
 
-        //При выходе из аккаунта крашится тут
-        try {
-            userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-            DocumentReference documentReferenceUser = firebaseFirestore.collection("users").document(userID);
-            documentReferenceUser.addSnapshotListener(this, (value, error) -> {
-                assert value != null;
+        userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        DocumentReference documentReferenceUser = firebaseFirestore.collection("users").document(userID);
+        documentReferenceUser.addSnapshotListener(this, (value, error) -> {
+            assert value != null;
+            try {
                 email = value.getString("email");
-            });
-        } catch (Exception e) {
-            Log.e(TAG, String.format("Error! %s", e));
-        }
+            } catch (Exception e) {
+                Log.e(TAG, String.format("Error! %s", e));
+            }
+        });
 
         add_executor_root.setOnClickListener(v -> show_add_executor_dialog());
 
@@ -143,10 +145,10 @@ public class AddTaskRootActivity extends AppCompatActivity {
             status = Objects.requireNonNull(text_input_layout_status_root.getEditText()).getText().toString();
             urgent = urgent_request_check_box.isChecked();
 
-            if(validateFields()){
-                if(!isOnline())
+            if (validateFields()) {
+                if (!isOnline())
                     show_dialog();
-                 else
+                else
                     save_task(location);
             }
         });
@@ -175,8 +177,10 @@ public class AddTaskRootActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.dialog_choose_executor);
 
         RecyclerView recycler_view_list_executors = dialog.findViewById(R.id.recycler_view_list_executors);
+        Chip chip_root_dialog = dialog.findViewById(R.id.chip_root_dialog);
+        Chip chip_executors_dialog = dialog.findViewById(R.id.chip_executors_dialog);
 
-        Query query = usersRef.whereEqualTo("role", "Исполнитель");
+        query = usersRef.whereEqualTo("role", "Root");
         FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
                 .setQuery(query, User.class)
                 .build();
@@ -185,6 +189,34 @@ public class AddTaskRootActivity extends AppCompatActivity {
         recycler_view_list_executors.setHasFixedSize(true);
         recycler_view_list_executors.setLayoutManager(new LinearLayoutManager(this));
         recycler_view_list_executors.setAdapter(adapter);
+
+        chip_root_dialog.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if(isChecked){
+                Log.i(TAG, "root checked");
+
+                query = usersRef.whereEqualTo("role", "Root");
+
+                FirestoreRecyclerOptions<User> UserOptions = new FirestoreRecyclerOptions.Builder<User>()
+                        .setQuery(query, User.class)
+                        .build();
+
+                adapter.updateOptions(UserOptions);
+            }
+        });
+
+        chip_executors_dialog.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if(isChecked){
+                Log.i(TAG, "Executor checked");
+
+                query = usersRef.whereEqualTo("role", "Исполнитель");
+
+                FirestoreRecyclerOptions<User> UserOptions = new FirestoreRecyclerOptions.Builder<User>()
+                        .setQuery(query, User.class)
+                        .build();
+
+                adapter.updateOptions(UserOptions);
+            }
+        });
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
@@ -218,7 +250,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_no_connection))
                 .setPositiveButton(getText(R.string.save), (dialog, id) ->
-                    save_task(location))
+                        save_task(location))
                 .setNegativeButton(android.R.string.cancel,
                         (dialog, id) -> startActivity(new Intent(this, RootMainActivity.class)));
 
@@ -227,7 +259,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
     }
 
     void initialize_fields(String location) {
-        if(location.equals(getString(R.string.ost_school))) {
+        if (location.equals(getString(R.string.ost_school))) {
             String[] items = getResources().getStringArray(R.array.addresses_ost_school);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     AddTaskRootActivity.this,
@@ -297,7 +329,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         boolean check_executor = utils.validate_field(email_executor, text_input_layout_executor_root);
         boolean check_status = utils.validate_field(status, text_input_layout_status_root);
 
-        return  check_address & check_floor & check_cabinet & check_name_task & check_date_task & check_executor & check_status;
+        return check_address & check_floor & check_cabinet & check_name_task & check_date_task & check_executor & check_status;
     }
 
     public boolean isOnline() {

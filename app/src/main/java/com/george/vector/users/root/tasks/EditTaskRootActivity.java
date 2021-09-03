@@ -29,6 +29,7 @@ import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.Utils;
 import com.george.vector.users.root.main.RootMainActivity;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
@@ -78,6 +79,8 @@ public class EditTaskRootActivity extends AppCompatActivity {
     String last_name_executor;
     String patronymic_executor;
     String email_executor;
+
+    Query query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,18 +184,46 @@ public class EditTaskRootActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.dialog_choose_executor);
 
         RecyclerView recycler_view_list_executors = dialog.findViewById(R.id.recycler_view_list_executors);
+        Chip chip_root_dialog = dialog.findViewById(R.id.chip_root_dialog);
+        Chip chip_executors_dialog = dialog.findViewById(R.id.chip_executors_dialog);
 
-        Query query = usersRef.whereEqualTo("role", "Исполнитель");
-
+        query = usersRef.whereEqualTo("role", "Root");
         FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
                 .setQuery(query, User.class)
                 .build();
-
         UserAdapter adapter = new UserAdapter(options);
 
         recycler_view_list_executors.setHasFixedSize(true);
         recycler_view_list_executors.setLayoutManager(new LinearLayoutManager(this));
         recycler_view_list_executors.setAdapter(adapter);
+
+        chip_root_dialog.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if(isChecked){
+                Log.i(TAG, "root checked");
+
+                query = usersRef.whereEqualTo("role", "Root");
+
+                FirestoreRecyclerOptions<User> UserOptions = new FirestoreRecyclerOptions.Builder<User>()
+                        .setQuery(query, User.class)
+                        .build();
+
+                adapter.updateOptions(UserOptions);
+            }
+        });
+
+        chip_executors_dialog.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if(isChecked){
+                Log.i(TAG, "Executor checked");
+
+                query = usersRef.whereEqualTo("role", "Исполнитель");
+
+                FirestoreRecyclerOptions<User> UserOptions = new FirestoreRecyclerOptions.Builder<User>()
+                        .setQuery(query, User.class)
+                        .build();
+
+                adapter.updateOptions(UserOptions);
+            }
+        });
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
@@ -205,10 +236,10 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 patronymic_executor = value.getString("patronymic");
                 email_executor = value.getString("email");
 
-                Log.i(TAG, "name: " + name_executor);
-                Log.i(TAG, "last_name: " + last_name_executor);
-                Log.i(TAG, "patronymic: " + patronymic_executor);
-                Log.i(TAG, "email: " + email_executor);
+                Log.i(TAG, String.format("name: %s", name_executor));
+                Log.i(TAG, String.format("last_name: %s", last_name_executor));
+                Log.i(TAG, String.format("patronymic: %s", patronymic_executor));
+                Log.i(TAG, String.format("email: %s", email_executor));
 
                 Objects.requireNonNull(text_input_layout_executor_root.getEditText()).setText(email_executor);
                 dialog.dismiss();

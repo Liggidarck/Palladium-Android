@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -133,7 +132,7 @@ public class fragment_school_ost_new_tasks extends Fragment {
         chip_urgent_new_tasks_ost_school.setOnCheckedChangeListener((compoundButton, isChecked) -> {
             if(isChecked){
                 Log.i(TAG, "urgent checked");
-                UrgentTasks(true);
+                UrgentTasks();
             }
         });
 
@@ -160,8 +159,8 @@ public class fragment_school_ost_new_tasks extends Fragment {
         adapter.updateOptions(search_options);
     }
 
-    private void UrgentTasks(boolean urgent) {
-        query = taskRef.whereEqualTo("urgent", urgent);
+    private void UrgentTasks() {
+        query = taskRef.whereEqualTo("urgent", true);
 
         FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)

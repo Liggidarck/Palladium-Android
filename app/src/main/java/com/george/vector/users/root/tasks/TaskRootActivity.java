@@ -102,19 +102,17 @@ public class TaskRootActivity extends AppCompatActivity {
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
             progress_bar_task_root.setVisibility(View.VISIBLE);
-
             assert value != null;
-            address = value.getString("address");
-            floor = String.format("Этаж: %s", value.getString("floor"));
-            cabinet = String.format("Кабинет: %s", value.getString("cabinet"));
-            litera = value.getString("litera");
-            name_task = value.getString("name_task");
-            comment = value.getString("comment");
-            status = value.getString("status");
-            date_create = value.getString("date_create");
-            time_create = value.getString("time_create");
-
             try {
+                address = value.getString("address");
+                floor = String.format("Этаж: %s", value.getString("floor"));
+                cabinet = String.format("Кабинет: %s", value.getString("cabinet"));
+                litera = value.getString("litera");
+                name_task = value.getString("name_task");
+                comment = value.getString("comment");
+                status = value.getString("status");
+                date_create = value.getString("date_create");
+                time_create = value.getString("time_create");
                 urgent = value.getBoolean("urgent");
 
                 if (status.equals("Новая заявка"))
