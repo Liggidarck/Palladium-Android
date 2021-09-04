@@ -1,4 +1,4 @@
-package com.george.vector.users.user.main;
+package com.george.vector.common.announcements;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

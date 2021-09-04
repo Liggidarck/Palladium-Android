@@ -12,6 +12,7 @@ public class TaskUi {
     private String date_done;
     private String executor;
     private String status;
+    private boolean urgent;
 
     private String time_create;
     private String email_creator;
@@ -20,7 +21,7 @@ public class TaskUi {
 
     public TaskUi(String name_task, String address, String date_create, String floor,
                   String cabinet, String litera, String comment, String date_done, String executor, String status,
-                  String time_create, String email_creator) {
+                  String time_create, String email_creator, boolean urgent) {
         this.name_task = name_task;
         this.address = address;
         this.date_create = date_create;
@@ -31,6 +32,7 @@ public class TaskUi {
         this.date_done = date_done;
         this.executor = executor;
         this.status = status;
+        this.urgent = urgent;
 
         this.time_create = time_create;
         this.email_creator = email_creator;
@@ -82,5 +84,9 @@ public class TaskUi {
 
     public String getLitera() {
         return litera;
+    }
+
+    public boolean getUrgent() {
+        return urgent;
     }
 }

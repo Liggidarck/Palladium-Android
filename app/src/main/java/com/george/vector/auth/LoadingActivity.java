@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.george.vector.R;
-import com.george.vector.users.admin.main.MainAdminActivity;
-import com.george.vector.users.caretaker.main.MainCaretakerActivity;
 import com.george.vector.users.executor.main.MainExecutorActivity;
 import com.george.vector.users.root.main.RootMainActivity;
 import com.george.vector.users.user.main.MainUserActivity;
@@ -60,19 +58,6 @@ public class LoadingActivity extends AppCompatActivity {
     void startApp(@NotNull String role, String email, String permission) {
         if (role.equals("Root"))
             startActivity(new Intent(this, RootMainActivity.class));
-
-
-        if(role.equals("Завхоз")) {
-            Intent intent = new Intent(this, MainCaretakerActivity.class);
-            intent.putExtra(getString(R.string.permission), permission);
-            startActivity(intent);
-        }
-
-        if(role.equals("Администратор")) {
-            Intent intent = new Intent(this, MainAdminActivity.class);
-            intent.putExtra(getString(R.string.permission), permission);
-            startActivity(intent);
-        }
 
         if (role.equals("Пользователь")) {
             Intent intent = new Intent(this, MainUserActivity.class);

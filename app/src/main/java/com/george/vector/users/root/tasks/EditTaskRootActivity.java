@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,6 +29,7 @@ import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.Utils;
 import com.george.vector.users.root.main.RootMainActivity;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
@@ -52,20 +54,20 @@ public class EditTaskRootActivity extends AppCompatActivity {
     LinearProgressIndicator progress_bar_add_task_root;
     ExtendedFloatingActionButton done_task_root;
     Button add_executor_root;
-
+    CheckBox urgent_request_check_box;
     TextInputLayout text_input_layout_address_root, text_input_layout_floor_root,
             text_input_layout_cabinet_root, text_input_layout_name_task_root,
             text_input_layout_comment_root, text_input_layout_date_task_root,
             text_input_layout_executor_root, text_input_layout_status_root,
             text_input_layout_cabinet_liter_root;
-
     TextInputEditText edit_text_date_task_root;
-
     MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root, liter_autoComplete_root;
+
+    Calendar datePickCalendar;
 
     String id, collection, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create,
             date_done, email, location;
-    Calendar datePickCalendar;
+    boolean urgent;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -77,6 +79,8 @@ public class EditTaskRootActivity extends AppCompatActivity {
     String last_name_executor;
     String patronymic_executor;
     String email_executor;
+
+    Query query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +104,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
         add_executor_root = findViewById(R.id.add_executor_root);
         text_input_layout_cabinet_liter_root = findViewById(R.id.text_input_layout_cabinet_liter_root);
         liter_autoComplete_root = findViewById(R.id.liter_autoComplete_root);
+        urgent_request_check_box = findViewById(R.id.urgent_request_check_box);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -134,6 +139,8 @@ public class EditTaskRootActivity extends AppCompatActivity {
             email = value.getString("email_creator");
 
             try {
+                urgent = value.getBoolean("urgent");
+
                 Objects.requireNonNull(text_input_layout_address_root.getEditText()).setText(address);
                 Objects.requireNonNull(text_input_layout_floor_root.getEditText()).setText(floor);
                 Objects.requireNonNull(text_input_layout_cabinet_root.getEditText()).setText(cabinet);
@@ -147,6 +154,8 @@ public class EditTaskRootActivity extends AppCompatActivity {
                     Objects.requireNonNull(text_input_layout_comment_root.getEditText()).setText("");
                 else
                     Objects.requireNonNull(text_input_layout_comment_root.getEditText()).setText(comment);
+
+                urgent_request_check_box.setChecked(urgent);
 
             } catch (Exception e) {
                 Log.i(TAG, "Error! " + e);
@@ -175,18 +184,46 @@ public class EditTaskRootActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.dialog_choose_executor);
 
         RecyclerView recycler_view_list_executors = dialog.findViewById(R.id.recycler_view_list_executors);
+        Chip chip_root_dialog = dialog.findViewById(R.id.chip_root_dialog);
+        Chip chip_executors_dialog = dialog.findViewById(R.id.chip_executors_dialog);
 
-        Query query = usersRef.whereEqualTo("role", "Исполнитель");
-
+        query = usersRef.whereEqualTo("role", "Root");
         FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
                 .setQuery(query, User.class)
                 .build();
-
         UserAdapter adapter = new UserAdapter(options);
 
         recycler_view_list_executors.setHasFixedSize(true);
         recycler_view_list_executors.setLayoutManager(new LinearLayoutManager(this));
         recycler_view_list_executors.setAdapter(adapter);
+
+        chip_root_dialog.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if(isChecked){
+                Log.i(TAG, "root checked");
+
+                query = usersRef.whereEqualTo("role", "Root");
+
+                FirestoreRecyclerOptions<User> UserOptions = new FirestoreRecyclerOptions.Builder<User>()
+                        .setQuery(query, User.class)
+                        .build();
+
+                adapter.updateOptions(UserOptions);
+            }
+        });
+
+        chip_executors_dialog.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if(isChecked){
+                Log.i(TAG, "Executor checked");
+
+                query = usersRef.whereEqualTo("role", "Исполнитель");
+
+                FirestoreRecyclerOptions<User> UserOptions = new FirestoreRecyclerOptions.Builder<User>()
+                        .setQuery(query, User.class)
+                        .build();
+
+                adapter.updateOptions(UserOptions);
+            }
+        });
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
@@ -199,10 +236,10 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 patronymic_executor = value.getString("patronymic");
                 email_executor = value.getString("email");
 
-                Log.i(TAG, "name: " + name_executor);
-                Log.i(TAG, "last_name: " + last_name_executor);
-                Log.i(TAG, "patronymic: " + patronymic_executor);
-                Log.i(TAG, "email: " + email_executor);
+                Log.i(TAG, String.format("name: %s", name_executor));
+                Log.i(TAG, String.format("last_name: %s", last_name_executor));
+                Log.i(TAG, String.format("patronymic: %s", patronymic_executor));
+                Log.i(TAG, String.format("email: %s", email_executor));
 
                 Objects.requireNonNull(text_input_layout_executor_root.getEditText()).setText(email_executor);
                 dialog.dismiss();
@@ -229,11 +266,11 @@ public class EditTaskRootActivity extends AppCompatActivity {
         String update_date_task = Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).getText().toString();
         String update_executor = Objects.requireNonNull(text_input_layout_executor_root.getEditText()).getText().toString();
         String update_status = Objects.requireNonNull(text_input_layout_status_root.getEditText()).getText().toString();
+        boolean update_urgent = urgent_request_check_box.isChecked();
 
         task.save(new SaveTask(), location, update_name, update_address, date_create, update_floor,
                 update_cabinet, update_litera, update_comment, update_date_task,
-                update_executor, update_status, time_create,
-                email);
+                update_executor, update_status, time_create, email, update_urgent);
 
         startActivity(new Intent(this, RootMainActivity.class));
     }

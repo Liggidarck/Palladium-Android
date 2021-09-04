@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Palladium">
         <activity
+            android:name=".auth.ForgotPasswordActivity"
+            android:exported="true" />
+        <activity
             android:name=".users.executor.tasks.EditTaskExecutorActivity"
             android:exported="true" />
         <activity
