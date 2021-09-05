@@ -1,4 +1,4 @@
-package com.george.vector.users.root.main.location_fragments.bar_school;
+package com.george.vector.users.root.folders.location_fragments.bar_school;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,12 +9,10 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.util.Util;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.george.vector.common.tasks.ui.TaskUi;
@@ -26,8 +24,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 

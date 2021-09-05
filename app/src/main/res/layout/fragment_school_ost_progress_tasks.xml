@@ -45,11 +45,11 @@
                 android:text="Все заявки" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip_today_school_ost_progress"
+                android:id="@+id/chip_urgent_progress_tasks_ost_school"
                 style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Сегодня созданы" />
+                android:text="Срочные заявки" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_old_school_ost_progress"

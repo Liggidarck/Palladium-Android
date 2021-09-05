@@ -1,4 +1,4 @@
-package com.george.vector.users.executor.main.fragments_location.ost_school;
+package com.george.vector.users.root.folders.location_fragments.ost_school.executed;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,10 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
-import com.george.vector.common.tasks.ui.TaskUi;
 import com.george.vector.common.tasks.ui.TaskAdapter;
-import com.george.vector.common.utils.Utils;
-import com.george.vector.users.executor.tasks.TaskExecutorActivity;
+import com.george.vector.common.tasks.ui.TaskUi;
+import com.george.vector.users.root.tasks.TaskRootActivity;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,37 +28,40 @@ import com.google.firebase.firestore.Query;
 
 import java.util.Objects;
 
-public class fragment_school_ost_progress_tasks extends Fragment {
+public class fragment_school_ost_executed_new_tasks extends Fragment {
 
-    private static final String TAG = "progress_";
-    RecyclerView recycler_view_ost_school_progress_exec;
+    private static final String TAG = "NewExeTaskOstSchool";
+    String email;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference taskRef = db.collection("ost_school_progress");
-
-    TextInputLayout search_executor_ost_school_progress_tasks;
-    Chip chip_new_school_ost_progress, chip_old_school_ost_progress, chip_all;
+    private final CollectionReference taskRef = db.collection("ost_school_new");
 
     private TaskAdapter adapter;
     private Query query;
 
-    FirebaseFirestore firebaseFirestore;
     FirebaseAuth firebaseAuth;
+    FirebaseFirestore firebaseFirestore;
+
+    RecyclerView recyclerview_school_ost_new_tasks;
+    TextInputLayout text_input_search_new_tasks;
+    Chip chip_old_school_ost_new, chip_new_school_ost_new, chip_all, chip_urgent_new_tasks_ost_school;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_school_ost_progress_tasks, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_school_ost_executed_new_tasks, container, false);
+
+        recyclerview_school_ost_new_tasks = view.findViewById(R.id.recyclerview_school_ost_new_tasks_executed);
+        text_input_search_new_tasks = view.findViewById(R.id.text_input_search_new_tasks_executed);
+        chip_old_school_ost_new = view.findViewById(R.id.chip_old_school_ost_new_executed);
+        chip_new_school_ost_new = view.findViewById(R.id.chip_new_school_ost_new_executed);
+        chip_urgent_new_tasks_ost_school = view.findViewById(R.id.chip_urgent_new_tasks_ost_school_executed);
+        chip_all = view.findViewById(R.id.chip_all_new_tasks_ost_school_executed);
 
         Bundle args = getArguments();
         assert args != null;
-        String email = args.getString(getString(R.string.email));
-
-        recycler_view_ost_school_progress_exec = view.findViewById(R.id.recyclerview_school_ost_progress_tasks);
-        search_executor_ost_school_progress_tasks = view.findViewById(R.id.text_input_search_school_ost_progress_tasks);
-        chip_old_school_ost_progress = view.findViewById(R.id.chip_old_school_ost_progress);
-        chip_new_school_ost_progress = view.findViewById(R.id.chip_new_school_ost_progress);
-        chip_all = view.findViewById(R.id.chip_all_progress_tasks_ost_school);
+        email = args.getString(getString(R.string.email));
+        Log.d(TAG, "Email: " + email);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -71,24 +73,27 @@ public class fragment_school_ost_progress_tasks extends Fragment {
 
         adapter = new TaskAdapter(options);
 
-        recycler_view_ost_school_progress_exec.setHasFixedSize(true);
-        recycler_view_ost_school_progress_exec.setLayoutManager(new LinearLayoutManager(fragment_school_ost_progress_tasks.this.getContext()));
-        recycler_view_ost_school_progress_exec.setAdapter(adapter);
+        recyclerview_school_ost_new_tasks.setHasFixedSize(true);
+        recyclerview_school_ost_new_tasks.setLayoutManager(new LinearLayoutManager(fragment_school_ost_executed_new_tasks.this.getContext()));
+        recyclerview_school_ost_new_tasks.setAdapter(adapter);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
 
-            Intent intent = new Intent(fragment_school_ost_progress_tasks.this.getContext(), TaskExecutorActivity.class);
+            Log.d(TAG, "Position: " + position + " ID: " + id);
+
+            Intent intent = new Intent(fragment_school_ost_executed_new_tasks.this.getContext(), TaskRootActivity.class);
             intent.putExtra(getString(R.string.id), id);
+            intent.putExtra(getString(R.string.collection), getString(R.string.ost_school_new));
             intent.putExtra(getString(R.string.location), getString(R.string.ost_school));
-            intent.putExtra(getString(R.string.collection), getString(R.string.ost_school_progress));
             intent.putExtra(getString(R.string.email), email);
             startActivity(intent);
+
         });
 
-        Objects.requireNonNull(search_executor_ost_school_progress_tasks.getEditText()).setOnEditorActionListener((v, actionId, event) -> {
+        Objects.requireNonNull(text_input_search_new_tasks.getEditText()).setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                String search_value = search_executor_ost_school_progress_tasks.getEditText().getText().toString();
+                String search_value = text_input_search_new_tasks.getEditText().getText().toString();
 
                 if(search_value.isEmpty())
                     defaultQuery(email);
@@ -107,7 +112,7 @@ public class fragment_school_ost_progress_tasks extends Fragment {
             }
         });
 
-        chip_old_school_ost_progress.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        chip_old_school_ost_new.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             if(isChecked){
                 Log.i(TAG, "old checked");
@@ -116,7 +121,7 @@ public class fragment_school_ost_progress_tasks extends Fragment {
 
         });
 
-        chip_new_school_ost_progress.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        chip_new_school_ost_new.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             if(isChecked){
                 Log.i(TAG, "new checked");
@@ -125,11 +130,29 @@ public class fragment_school_ost_progress_tasks extends Fragment {
 
         });
 
+        chip_urgent_new_tasks_ost_school.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if(isChecked){
+                Log.i(TAG, "urgent checked");
+                UrgentTasks(email);
+            }
+        });
+
+
         return view;
     }
 
     private void currentAddressTasks(String address, String email) {
         query = taskRef.whereEqualTo("address", address).whereEqualTo("executor", email);
+
+        FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
+                .build();
+
+        adapter.updateOptions(search_options);
+    }
+
+    private void UrgentTasks(String email) {
+        query = taskRef.whereEqualTo("urgent", true).whereEqualTo("executor", email);
 
         FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)

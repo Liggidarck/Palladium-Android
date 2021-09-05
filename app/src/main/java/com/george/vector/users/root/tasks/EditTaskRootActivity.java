@@ -27,6 +27,7 @@ import com.george.vector.common.tasks.utils.DeleteTask;
 import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.Utils;
+import com.george.vector.users.root.main.RootFutureMainActivity;
 import com.george.vector.users.root.main.RootMainActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.chip.Chip;
@@ -66,7 +67,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
     Calendar datePickCalendar;
 
     String id, collection, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create,
-            date_done, email, location;
+            date_done, email, location, USER_EMAIL;
     boolean urgent;
 
     FirebaseAuth firebaseAuth;
@@ -115,6 +116,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
         id = arguments.get(getString(R.string.id)).toString();
         collection = arguments.get(getString(R.string.collection)).toString();
         location = arguments.get(getString(R.string.location)).toString();
+        USER_EMAIL = arguments.get(getString(R.string.email)).toString();
 
         add_executor_root.setOnClickListener(v -> show_add_executor_dialog());
 
@@ -272,7 +274,9 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 update_cabinet, update_litera, update_comment, update_date_task,
                 update_executor, update_status, time_create, email, update_urgent);
 
-        startActivity(new Intent(this, RootMainActivity.class));
+        Intent intent = new Intent(this, RootFutureMainActivity.class);
+        intent.putExtra(getString(R.string.email), USER_EMAIL);
+        startActivity(intent);
     }
 
     void show_dialog() {
@@ -281,7 +285,11 @@ public class EditTaskRootActivity extends AppCompatActivity {
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_no_connection))
                 .setPositiveButton(getText(R.string.save), (dialog, id) -> updateTask(collection))
-                .setNegativeButton(android.R.string.cancel, (dialog, id) -> startActivity(new Intent(this, RootMainActivity.class)));
+                .setNegativeButton(android.R.string.cancel, (dialog, id) -> {
+                    Intent intent = new Intent(this, RootFutureMainActivity.class);
+                    intent.putExtra(getString(R.string.email), USER_EMAIL);
+                    startActivity(intent);
+                });
 
         AlertDialog dialog = builder.create();
         dialog.show();

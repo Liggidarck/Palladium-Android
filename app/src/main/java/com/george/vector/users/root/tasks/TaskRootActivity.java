@@ -41,7 +41,7 @@ public class TaskRootActivity extends AppCompatActivity {
 
     private static final String TAG = "TaskActivityRoot";
 
-    String id, collection, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create, location;
+    String id, collection, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create, location, email;
     boolean confirm_delete, urgent;
 
     FirebaseAuth firebaseAuth;
@@ -71,6 +71,7 @@ public class TaskRootActivity extends AppCompatActivity {
         id = arguments.get(getString(R.string.id)).toString();
         collection = arguments.get(getString(R.string.collection)).toString();
         location = arguments.get(getString(R.string.location)).toString();
+        email = arguments.get(getString(R.string.email)).toString();
         confirm_delete = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("confirm_before_deleting_root", true);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -85,6 +86,7 @@ public class TaskRootActivity extends AppCompatActivity {
             intent.putExtra(getString(R.string.id), id);
             intent.putExtra(getString(R.string.collection), collection);
             intent.putExtra(getString(R.string.location), location);
+            intent.putExtra(getString(R.string.email), email);
             startActivity(intent);
         });
 

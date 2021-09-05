@@ -17,8 +17,8 @@ import android.view.MenuItem;
 import com.george.vector.R;
 import com.george.vector.common.bottom_sheets.ProfileBottomSheet;
 import com.george.vector.common.bottom_sheets.ConsoleBottomSheet;
-import com.george.vector.users.root.main.fragments.fragment_bar;
-import com.george.vector.users.root.main.fragments.fragment_ost;
+import com.george.vector.users.root.main.fragments.home.FragmentBar;
+import com.george.vector.users.root.main.fragments.home.FragmentOst;
 import com.george.vector.users.root.tasks.BottomSheetAddTask;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.chip.Chip;
@@ -110,11 +110,11 @@ public class RootMainActivity extends AppCompatActivity {
         switch (zone_update) {
             case "ost":
                 Log.i(TAG, "Запуск фрагмента Осафьево");
-                currentFragment = new fragment_ost();
+                currentFragment = new FragmentOst();
                 break;
             case "bar":
                 Log.i(TAG, "Запуск фрагмента Барыши");
-                currentFragment = new fragment_bar();
+                currentFragment = new FragmentBar();
                 break;
         }
         assert currentFragment != null;

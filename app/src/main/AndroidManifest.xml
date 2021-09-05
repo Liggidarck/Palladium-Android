@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Palladium">
         <activity
+            android:name=".users.root.main.RootFutureMainActivity"
+            android:exported="true" />
+        <activity
             android:name=".auth.ForgotPasswordActivity"
             android:exported="true" />
         <activity
@@ -43,8 +46,8 @@
         <activity android:name=".users.root.tasks.EditTaskRootActivity" />
         <activity android:name=".users.root.tasks.TaskRootActivity" />
         <activity android:name=".users.root.tasks.AddTaskRootActivity" />
-        <activity android:name=".users.root.main.FolderRootActivity" />
-        <activity android:name=".users.root.main.LocationFolderActivity" />
+        <activity android:name=".users.root.folders.FolderRootActivity" />
+        <activity android:name=".users.root.folders.LocationFolderActivity" />
         <activity android:name=".users.caretaker.main.MainCaretakerActivity" />
         <activity android:name=".users.root.main.RootMainActivity" />
         <activity android:name=".common.edit_users.EditDataUserActivity" />

@@ -20,6 +20,8 @@ public class BottomSheetAddTask extends BottomSheetDialogFragment {
             bar_school_new_task, bar_rucheek_new_task, bar_start_new_task;
     ImageView close_btn;
 
+    String email;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.bottom_sheet_add_task, container, false);
@@ -32,15 +34,21 @@ public class BottomSheetAddTask extends BottomSheetDialogFragment {
         bar_start_new_task = view.findViewById(R.id.bar_start_new_task);
         close_btn = view.findViewById(R.id.close_btn);
 
+        Bundle args = getArguments();
+        assert args != null;
+        email = args.getString(getString(R.string.email));
+
         ost_school_new_task.setOnClickListener(v-> {
             Intent intent = new Intent(BottomSheetAddTask.this.getContext(), AddTaskRootActivity.class);
             intent.putExtra("location", "ost_school");
+            intent.putExtra(getString(R.string.email), email);
             startActivity(intent);
         });
 
         bar_school_new_task.setOnClickListener(v -> {
             Intent intent = new Intent(BottomSheetAddTask.this.getContext(), AddTaskRootActivity.class);
             intent.putExtra("location", "bar_school");
+            intent.putExtra(getString(R.string.email), email);
             startActivity(intent);
         });
 

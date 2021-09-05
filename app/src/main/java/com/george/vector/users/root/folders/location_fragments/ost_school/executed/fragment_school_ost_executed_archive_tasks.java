@@ -1,4 +1,4 @@
-package com.george.vector.users.root.main.location_fragments.ost_school;
+package com.george.vector.users.root.folders.location_fragments.ost_school.executed;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,9 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
-import com.george.vector.common.tasks.ui.TaskUi;
 import com.george.vector.common.tasks.ui.TaskAdapter;
-import com.george.vector.common.utils.Utils;
+import com.george.vector.common.tasks.ui.TaskUi;
 import com.george.vector.users.root.tasks.TaskRootActivity;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputLayout;
@@ -29,36 +27,42 @@ import com.google.firebase.firestore.Query;
 
 import java.util.Objects;
 
-public class fragment_school_ost_archive_tasks extends Fragment {
+public class fragment_school_ost_executed_archive_tasks extends Fragment {
 
     private static final String TAG = "ArchiveTaskOstSchool";
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference taskRef = db.collection("ost_school_archive");
 
+    String email;
+
     private TaskAdapter adapter;
     private Query query;
 
     FirebaseFirestore firebaseFirestore;
+
+    RecyclerView recyclerview_school_ost_new_tasks;
     TextInputLayout text_input_search_archive_tasks;
-    Chip chip_today_school_ost_archive, chip_old_school_ost_archive, chip_new_school_ost_archive, chip_all_archive_tasks_ost_school;
+    Chip chip_old_school_ost_archive, chip_new_school_ost_archive, chip_all_archive_tasks_ost_school;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_school_ost_archive_tasks, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_school_ost_executed_archive_tasks, container, false);
 
-        RecyclerView recyclerview_school_ost_new_tasks = view.findViewById(R.id.recyclerview_school_ost_archive_tasks);
-        text_input_search_archive_tasks = view.findViewById(R.id.text_input_search_archive_tasks);
-        chip_today_school_ost_archive = view.findViewById(R.id.chip_today_school_ost_archive);
-        chip_old_school_ost_archive = view.findViewById(R.id.chip_old_school_ost_archive);
-        chip_new_school_ost_archive = view.findViewById(R.id.chip_new_school_ost_archive);
-        chip_all_archive_tasks_ost_school = view.findViewById(R.id.chip_all_archive_tasks_ost_school);
+        recyclerview_school_ost_new_tasks = view.findViewById(R.id.recyclerview_school_ost_archive_tasks_executed);
+        text_input_search_archive_tasks = view.findViewById(R.id.text_input_search_archive_tasks_executed);
+        chip_old_school_ost_archive = view.findViewById(R.id.chip_old_school_ost_archive_executed);
+        chip_new_school_ost_archive = view.findViewById(R.id.chip_new_school_ost_archive_executed);
+        chip_all_archive_tasks_ost_school = view.findViewById(R.id.chip_all_archive_tasks_ost_school_executed);
 
-        Utils utils = new Utils();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        query = taskRef.whereEqualTo("status", "Архив");
+        Bundle args = getArguments();
+        assert args != null;
+        email = args.getString(getString(R.string.email));
+        Log.d(TAG, "Email: " + email);
 
+        query = taskRef.whereEqualTo("executor", email);
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
                 .build();
@@ -66,17 +70,18 @@ public class fragment_school_ost_archive_tasks extends Fragment {
         adapter = new TaskAdapter(options);
 
         recyclerview_school_ost_new_tasks.setHasFixedSize(true);
-        recyclerview_school_ost_new_tasks.setLayoutManager(new LinearLayoutManager(fragment_school_ost_archive_tasks.this.getContext()));
+        recyclerview_school_ost_new_tasks.setLayoutManager(new LinearLayoutManager(fragment_school_ost_executed_archive_tasks.this.getContext()));
         recyclerview_school_ost_new_tasks.setAdapter(adapter);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
-            Intent intent = new Intent(fragment_school_ost_archive_tasks.this.getContext(), TaskRootActivity.class);
+            Intent intent = new Intent(fragment_school_ost_executed_archive_tasks.this.getContext(), TaskRootActivity.class);
             intent.putExtra(getString(R.string.id), id);
             intent.putExtra(getString(R.string.location), getString(R.string.ost_school));
             intent.putExtra(getString(R.string.collection), getString(R.string.ost_school_archive));
+            intent.putExtra(getString(R.string.email), email);
             startActivity(intent);
 
         });
@@ -86,9 +91,9 @@ public class fragment_school_ost_archive_tasks extends Fragment {
                 String search_value = text_input_search_archive_tasks.getEditText().getText().toString();
 
                 if(search_value.isEmpty())
-                    defaultQuery();
+                    defaultQuery(email);
                 else
-                    search(search_value);
+                    search(search_value, email);
 
                 return true;
             }
@@ -98,25 +103,15 @@ public class fragment_school_ost_archive_tasks extends Fragment {
         chip_all_archive_tasks_ost_school.setOnCheckedChangeListener((compoundButton, isChecked) -> {
             if(isChecked){
                 Log.i(TAG, "default checked");
-                defaultQuery();
+                defaultQuery(email);
             }
-        });
-
-        chip_today_school_ost_archive.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-            if(isChecked){
-                Log.i(TAG, "today checked");
-                String today = utils.getDate();
-                todayTasks(today);
-            }
-
         });
 
         chip_old_school_ost_archive.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             if(isChecked){
                 Log.i(TAG, "old checked");
-                currentAddressTasks("Улица Авиаторов дом 9. Старое здание");
+                currentAddressTasks("Улица Авиаторов дом 9. Старое здание", email);
             }
 
         });
@@ -125,16 +120,17 @@ public class fragment_school_ost_archive_tasks extends Fragment {
 
             if(isChecked){
                 Log.i(TAG, "new checked");
-                currentAddressTasks("Улица Авиаторов дом 9. Новое здание");
+                currentAddressTasks("Улица Авиаторов дом 9. Новое здание", email);
             }
 
         });
 
+
         return view;
     }
 
-    private void currentAddressTasks(String address) {
-        query = taskRef.whereEqualTo("address", address);
+    private void currentAddressTasks(String address, String email) {
+        query = taskRef.whereEqualTo("address", address).whereEqualTo("executor", email);
 
         FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
@@ -143,8 +139,8 @@ public class fragment_school_ost_archive_tasks extends Fragment {
         adapter.updateOptions(search_options);
     }
 
-    private void todayTasks(String date) {
-        query = taskRef.whereEqualTo("date_create", date);
+    private void UrgentTasks(String email) {
+        query = taskRef.whereEqualTo("urgent", true).whereEqualTo("executor", email);
 
         FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
@@ -153,9 +149,8 @@ public class fragment_school_ost_archive_tasks extends Fragment {
         adapter.updateOptions(search_options);
     }
 
-
-    private void search(String query_text) {
-        query = taskRef.whereEqualTo("name_task", query_text);
+    private void search(String query_text, String email) {
+        query = taskRef.whereEqualTo("name_task", query_text).whereEqualTo("executor", email);
 
         FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
@@ -164,8 +159,8 @@ public class fragment_school_ost_archive_tasks extends Fragment {
         adapter.updateOptions(search_options);
     }
 
-    private void defaultQuery() {
-        query = taskRef.whereEqualTo("status", "Архив");
+    private void defaultQuery(String email) {
+        query = taskRef.whereEqualTo("executor", email);
 
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
@@ -185,4 +180,6 @@ public class fragment_school_ost_archive_tasks extends Fragment {
         super.onStop();
         adapter.stopListening();
     }
+
+
 }

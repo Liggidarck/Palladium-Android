@@ -45,13 +45,6 @@
                 android:text="Все заявки" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip_today_school_ost_archive"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Сегодня созданы" />
-
-            <com.google.android.material.chip.Chip
                 android:id="@+id/chip_old_school_ost_archive"
                 style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"

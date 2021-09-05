@@ -17,7 +17,6 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
@@ -64,7 +63,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
     TextInputEditText edit_text_date_task_root;
     MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root, liter_autoComplete_root;
 
-    String location, userID, email, address, floor, cabinet, litera, name_task, date_complete, status, comment;
+    String location, userID, email, address, floor, cabinet, litera, name_task, date_complete, status, comment, USER_EMAIL;
     boolean urgent;
     private static final String TAG = "AddTaskRoot";
 
@@ -118,6 +117,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
         Bundle arguments = getIntent().getExtras();
         location = arguments.get(getString(R.string.location)).toString();
+        USER_EMAIL = arguments.get(getString(R.string.email)).toString();
         Log.d(TAG, location);
 
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
