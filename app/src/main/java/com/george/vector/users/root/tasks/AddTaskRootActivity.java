@@ -4,19 +4,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
@@ -41,12 +48,15 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.UUID;
 
 public class AddTaskRootActivity extends AppCompatActivity {
 
@@ -62,8 +72,9 @@ public class AddTaskRootActivity extends AppCompatActivity {
             text_input_layout_cabinet_liter_root;
     TextInputEditText edit_text_date_task_root;
     MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root, liter_autoComplete_root;
+    ImageView image_task;
 
-    String location, userID, email, address, floor, cabinet, litera, name_task, date_complete, status, comment, USER_EMAIL;
+    String location, userID, email, address, floor, cabinet, litera, name_task, date_complete, status, comment, USER_EMAIL, NAME_IMAGE;
     boolean urgent;
     private static final String TAG = "AddTaskRoot";
 
@@ -83,6 +94,9 @@ public class AddTaskRootActivity extends AppCompatActivity {
     String email_executor;
 
     Query query;
+
+    private final int PICK_IMAGE_REQUEST = 71;
+    private Uri filePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +121,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         text_input_layout_cabinet_liter_root = findViewById(R.id.text_input_layout_cabinet_liter_root);
         liter_autoComplete_root = findViewById(R.id.liter_autoComplete_root);
         urgent_request_check_box = findViewById(R.id.urgent_request_check_box);
+        image_task = findViewById(R.id.image_task);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -114,6 +129,8 @@ public class AddTaskRootActivity extends AppCompatActivity {
         storageReference = firebaseStorage.getReference();
 
         topAppBar_new_task_root.setNavigationOnClickListener(v -> onBackPressed());
+
+        image_task.setOnClickListener(v -> chooseImage());
 
         Bundle arguments = getIntent().getExtras();
         location = arguments.get(getString(R.string.location)).toString();
@@ -156,8 +173,73 @@ public class AddTaskRootActivity extends AppCompatActivity {
         initialize_fields(location);
     }
 
+
+    private void chooseImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            filePath = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                image_task.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    @SuppressLint("DefaultLocale")
+    private void uploadImage() {
+        if (filePath != null) {
+            Bitmap bmp = null;
+            try {
+                bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
+            byte[] data = baos.toByteArray();
+
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            NAME_IMAGE = UUID.randomUUID().toString();
+
+            StorageReference ref = storageReference.child("images/" + NAME_IMAGE);
+            ref.putBytes(data)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        progressDialog.dismiss();
+                        Toast.makeText(AddTaskRootActivity.this, "Изображение успешно загружено", Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    })
+                    .addOnFailureListener(e -> {
+                        progressDialog.dismiss();
+                        Toast.makeText(AddTaskRootActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnProgressListener(taskSnapshot -> {
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                                .getTotalByteCount());
+                        progressDialog.setMessage(String.format("Загрузка: %d%%", (int) progress));
+                    });
+        }
+    }
+
     void save_task(String location) {
         Task task = new Task();
+
+        uploadImage();
 
         Date currentDate = new Date();
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
@@ -166,9 +248,8 @@ public class AddTaskRootActivity extends AppCompatActivity {
         String time_create = timeFormat.format(currentDate);
 
         task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, litera, comment,
-                date_complete, email_executor, status, time_create, email, urgent);
+                date_complete, email_executor, status, time_create, email, urgent, NAME_IMAGE);
 
-        onBackPressed();
     }
 
     public void show_add_executor_dialog() {
@@ -191,7 +272,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         recycler_view_list_executors.setAdapter(adapter);
 
         chip_root_dialog.setOnCheckedChangeListener((compoundButton, isChecked) -> {
-            if(isChecked){
+            if (isChecked) {
                 Log.i(TAG, "root checked");
 
                 query = usersRef.whereEqualTo("role", "Root");
@@ -205,7 +286,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         });
 
         chip_executors_dialog.setOnCheckedChangeListener((compoundButton, isChecked) -> {
-            if(isChecked){
+            if (isChecked) {
                 Log.i(TAG, "Executor checked");
 
                 query = usersRef.whereEqualTo("role", "Исполнитель");
@@ -328,6 +409,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         boolean check_date_task = utils.validate_field(date_complete, text_input_layout_date_task_root);
         boolean check_executor = utils.validate_field(email_executor, text_input_layout_executor_root);
         boolean check_status = utils.validate_field(status, text_input_layout_status_root);
+
 
         return check_address & check_floor & check_cabinet & check_name_task & check_date_task & check_executor & check_status;
     }

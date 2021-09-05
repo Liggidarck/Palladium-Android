@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.george.vector.R;
@@ -19,6 +20,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 public class TaskUserActivity extends AppCompatActivity {
 
@@ -28,8 +31,9 @@ public class TaskUserActivity extends AppCompatActivity {
             text_view_name_task_user, text_view_comment_task_user, text_view_status_task_user,
             text_view_date_create_task_user;
     LinearProgressIndicator progress_bar_task_user;
+    ImageView image_user_task;
 
-    String id, permission, collection, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create;
+    String id, permission, collection, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create, image;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -54,6 +58,7 @@ public class TaskUserActivity extends AppCompatActivity {
         text_view_status_task_user = findViewById(R.id.text_view_status_task_user);
         text_view_date_create_task_user = findViewById(R.id.text_view_date_create_task_user);
         progress_bar_task_user = findViewById(R.id.progress_bar_task_user);
+        image_user_task = findViewById(R.id.image_user_task);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -82,6 +87,23 @@ public class TaskUserActivity extends AppCompatActivity {
             status = value.getString("status");
             date_create = value.getString("date_create");
             time_create = value.getString("time_create");
+
+            image = value.getString("image");
+
+            String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image);
+            Picasso.with(this)
+                    .load(IMAGE_URL)
+                    .into(image_user_task, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            progress_bar_task_user.setVisibility(View.INVISIBLE);
+                        }
+
+                        @Override
+                        public void onError() {
+                            Log.e(TAG, "Error on download");
+                        }
+                    });
 
             if (!litera.equals("-") && !litera.isEmpty())
                 cabinet = String.format("%s%s", cabinet, litera);

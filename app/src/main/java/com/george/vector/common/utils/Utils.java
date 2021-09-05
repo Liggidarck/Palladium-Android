@@ -26,6 +26,10 @@ public class Utils {
             return true;
     }
 
+    public boolean validate_image(String url) {
+        return !url.isEmpty();
+    }
+
     public void clear_error(@NonNull TextInputLayout textInputLayout) {
         Objects.requireNonNull(textInputLayout.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override

@@ -2,13 +2,21 @@ package com.george.vector.users.user.tasks;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.george.vector.R;
 import com.george.vector.common.tasks.utils.SaveTask;
@@ -28,11 +36,14 @@ import com.google.firebase.storage.StorageReference;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.UUID;
 
 public class AddTaskUserActivity extends AppCompatActivity {
 
@@ -42,17 +53,21 @@ public class AddTaskUserActivity extends AppCompatActivity {
                     text_input_layout_cabinet, text_input_layout_name_task,
                     text_input_layout_comment, text_input_layout_cabinet_liter_user;
     MaterialAutoCompleteTextView address_autoComplete, liter_autoComplete_user;
+    ImageView image_task_user;
 
     ExtendedFloatingActionButton crate_task;
     LinearProgressIndicator progress_bar_add_task_user;
 
-    String address, floor, cabinet, litera, name_task, comment, userID, email, status = "Новая заявка", permission;
+    String address, floor, cabinet, litera, name_task, comment, userID, email, status = "Новая заявка", permission, NAME_IMAGE;
     private static final String TAG = "AddTaskUserActivity";
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
+
+    private final int PICK_IMAGE_REQUEST = 71;
+    private Uri filePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +85,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
         progress_bar_add_task_user = findViewById(R.id.progress_bar_add_task_user);
         text_input_layout_cabinet_liter_user = findViewById(R.id.text_input_layout_cabinet_liter_user);
         liter_autoComplete_user = findViewById(R.id.liter_autoComplete_user);
+        image_task_user = findViewById(R.id.image_task_user);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -88,6 +104,8 @@ public class AddTaskUserActivity extends AppCompatActivity {
             assert value != null;
             email = value.getString("email");
         });
+
+        image_task_user.setOnClickListener(v -> chooseImage());
 
         crate_task.setOnClickListener(v -> {
             address = Objects.requireNonNull(text_input_layout_address.getEditText()).getText().toString();
@@ -113,6 +131,8 @@ public class AddTaskUserActivity extends AppCompatActivity {
     void save_task(@NotNull String location) {
         Task task = new Task();
 
+        uploadImage();
+
         Date currentDate = new Date();
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         String date_create = dateFormat.format(currentDate);
@@ -120,9 +140,71 @@ public class AddTaskUserActivity extends AppCompatActivity {
         String time_create = timeFormat.format(currentDate);
 
         task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, litera, comment,
-                null, null, status, time_create, email, false);
+                null, null, status, time_create, email, false, NAME_IMAGE);
 
         onBackPressed();
+    }
+
+    private void chooseImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            filePath = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                image_task_user.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    @SuppressLint("DefaultLocale")
+    private void uploadImage() {
+        if (filePath != null) {
+            Bitmap bmp = null;
+            try {
+                bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
+            byte[] data = baos.toByteArray();
+
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            NAME_IMAGE = UUID.randomUUID().toString();
+
+            StorageReference ref = storageReference.child("images/" + NAME_IMAGE);
+            ref.putBytes(data)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        progressDialog.dismiss();
+                        Toast.makeText(AddTaskUserActivity.this, "Изображение успешно загружено", Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    })
+                    .addOnFailureListener(e -> {
+                        progressDialog.dismiss();
+                        Toast.makeText(AddTaskUserActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnProgressListener(taskSnapshot -> {
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                                .getTotalByteCount());
+                        progressDialog.setMessage(String.format("Загрузка: %d%%", (int) progress));
+                    });
+        }
     }
 
     void initialize_field(String permission) {

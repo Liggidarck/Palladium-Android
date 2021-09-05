@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.george.vector.R;
@@ -26,6 +27,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -38,10 +41,11 @@ public class TaskRootActivity extends AppCompatActivity {
             text_view_date_create_task_root;
     CircleImageView circle_status_root;
     Button edit_task_btn, delete_task_btn;
+    ImageView image_root_task;
 
     private static final String TAG = "TaskActivityRoot";
 
-    String id, collection, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create, location, email;
+    String id, collection, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create, location, email, image;
     boolean confirm_delete, urgent;
 
     FirebaseAuth firebaseAuth;
@@ -66,6 +70,7 @@ public class TaskRootActivity extends AppCompatActivity {
         circle_status_root = findViewById(R.id.circle_status_root);
         edit_task_btn = findViewById(R.id.edit_task_btn);
         delete_task_btn = findViewById(R.id.delete_task_btn_root);
+        image_root_task = findViewById(R.id.image_root_task);
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.get(getString(R.string.id)).toString();
@@ -116,6 +121,23 @@ public class TaskRootActivity extends AppCompatActivity {
                 date_create = value.getString("date_create");
                 time_create = value.getString("time_create");
                 urgent = value.getBoolean("urgent");
+                image = value.getString("image");
+
+                String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image);
+                Picasso.with(this)
+                        .load(IMAGE_URL)
+                        .into(image_root_task, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                progress_bar_task_root.setVisibility(View.INVISIBLE);
+                            }
+
+                            @Override
+                            public void onError() {
+                                Log.e(TAG, "Error on download");
+                            }
+                        });
+
 
                 if (status.equals("Новая заявка"))
                     circle_status_root.setImageResource(R.color.red);
@@ -154,8 +176,6 @@ public class TaskRootActivity extends AppCompatActivity {
             String date_create_text = "Созданно: " + date_create + " " + time_create;
             text_view_date_create_task_root.setText(date_create_text);
         });
-
-        documentReference.get().addOnCompleteListener(task -> progress_bar_task_root.setVisibility(View.INVISIBLE));
     }
 
     void show_dialog_delete() {
@@ -173,6 +193,10 @@ public class TaskRootActivity extends AppCompatActivity {
     void delete_task() {
         DeleteTask deleteTask = new DeleteTask();
         deleteTask.delete_task(collection, id);
+
+        String storageUrl = "images/" + image;
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(storageUrl);
+        storageReference.delete();
 
         onBackPressed();
     }

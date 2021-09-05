@@ -14,6 +14,7 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,7 +29,6 @@ import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.Utils;
 import com.george.vector.users.root.main.RootFutureMainActivity;
-import com.george.vector.users.root.main.RootMainActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -41,6 +41,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -63,11 +65,12 @@ public class EditTaskRootActivity extends AppCompatActivity {
             text_input_layout_cabinet_liter_root;
     TextInputEditText edit_text_date_task_root;
     MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root, liter_autoComplete_root;
+    ImageView image_task;
 
     Calendar datePickCalendar;
 
     String id, collection, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create,
-            date_done, email, location, USER_EMAIL;
+            date_done, email, location, USER_EMAIL, image;
     boolean urgent;
 
     FirebaseAuth firebaseAuth;
@@ -106,6 +109,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
         text_input_layout_cabinet_liter_root = findViewById(R.id.text_input_layout_cabinet_liter_root);
         liter_autoComplete_root = findViewById(R.id.liter_autoComplete_root);
         urgent_request_check_box = findViewById(R.id.urgent_request_check_box);
+        image_task = findViewById(R.id.image_task);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -140,6 +144,24 @@ public class EditTaskRootActivity extends AppCompatActivity {
             time_create = value.getString("time_create");
             email = value.getString("email_creator");
 
+            image = value.getString("image");
+
+
+            String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image);
+            Picasso.with(this)
+                    .load(IMAGE_URL)
+                    .into(image_task, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            progress_bar_add_task_root.setVisibility(View.INVISIBLE);
+                        }
+
+                        @Override
+                        public void onError() {
+                            Log.e(TAG, "Error on download");
+                        }
+                    });
+
             try {
                 urgent = value.getBoolean("urgent");
 
@@ -165,8 +187,6 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
             initialize_fields(location);
         });
-
-        documentReference.get().addOnCompleteListener(v -> progress_bar_add_task_root.setVisibility(View.INVISIBLE));
 
         done_task_root.setOnClickListener(v -> {
 
@@ -255,6 +275,9 @@ public class EditTaskRootActivity extends AppCompatActivity {
     }
 
     void updateTask(String collection) {
+
+        String update_image = image;
+
         Task task = new Task();
         DeleteTask deleteTask = new DeleteTask();
         deleteTask.delete_task(collection, id);
@@ -272,7 +295,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
         task.save(new SaveTask(), location, update_name, update_address, date_create, update_floor,
                 update_cabinet, update_litera, update_comment, update_date_task,
-                update_executor, update_status, time_create, email, update_urgent);
+                update_executor, update_status, time_create, email, update_urgent, update_image);
 
         Intent intent = new Intent(this, RootFutureMainActivity.class);
         intent.putExtra(getString(R.string.email), USER_EMAIL);
