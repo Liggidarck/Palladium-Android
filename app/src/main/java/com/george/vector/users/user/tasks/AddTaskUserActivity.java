@@ -142,7 +142,6 @@ public class AddTaskUserActivity extends AppCompatActivity {
         task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, litera, comment,
                 null, null, status, time_create, email, false, NAME_IMAGE);
 
-        onBackPressed();
     }
 
     private void chooseImage() {
@@ -182,7 +181,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
             bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
             byte[] data = baos.toByteArray();
 
-            final ProgressDialog progressDialog = new ProgressDialog(this);
+            final ProgressDialog progressDialog = new ProgressDialog(AddTaskUserActivity.this);
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
 
