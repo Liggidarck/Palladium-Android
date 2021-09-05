@@ -1,4 +1,4 @@
-package com.george.vector.users.root.main.location_fragments.ost_school;
+package com.george.vector.users.root.folders.location_fragments.bar_school;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,60 +28,59 @@ import com.google.firebase.firestore.Query;
 
 import java.util.Objects;
 
-public class fragment_school_ost_progress_tasks extends Fragment {
+public class fragment_school_bar_archive_tasks extends Fragment {
 
-    private static final String TAG = "ProgressTaskOstSchool";
+    private static final String TAG = "ArchiveTaskBarSchool";
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference taskRef = db.collection("ost_school_progress");
+    private final CollectionReference taskRef = db.collection("bar_school_archive");
 
     private TaskAdapter adapter;
     private Query query;
 
+    RecyclerView recyclerview_school_bar_new_tasks;
+    TextInputLayout text_input_search_bar_school_archive_tasks;
+    Chip chip_bar_school_today_archive;
+
     FirebaseFirestore firebaseFirestore;
-    TextInputLayout text_input_search_school_ost_progress_tasks;
-    Chip chip_today_school_ost_progress, chip_old_school_ost_progress, chip_new_school_ost_progress, chip_all;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_school_ost_progress_tasks, container, false);
+        View view = inflater.inflate(R.layout.fragment_school_bar_archive_tasks, container, false);
 
-        RecyclerView recyclerview_school_ost_new_tasks = view.findViewById(R.id.recyclerview_school_ost_progress_tasks);
-        text_input_search_school_ost_progress_tasks = view.findViewById(R.id.text_input_search_school_ost_progress_tasks);
-        chip_today_school_ost_progress = view.findViewById(R.id.chip_today_school_ost_progress);
-        chip_old_school_ost_progress = view.findViewById(R.id.chip_old_school_ost_progress);
-        chip_new_school_ost_progress = view.findViewById(R.id.chip_new_school_ost_progress);
-        chip_all = view.findViewById(R.id.chip_all_progress_tasks_ost_school);
+        recyclerview_school_bar_new_tasks = view.findViewById(R.id.recyclerview_school_bar_archive_tasks);
+        text_input_search_bar_school_archive_tasks = view.findViewById(R.id.text_input_search_bar_school_archive_tasks);
+        chip_bar_school_today_archive = view.findViewById(R.id.chip_bar_school_today_archive);
 
-        Utils utils = new Utils();
         firebaseFirestore = FirebaseFirestore.getInstance();
+        Utils utils = new Utils();
 
-        query = taskRef.whereEqualTo("status", "В работе");
+        query = taskRef.whereEqualTo("status", "Архив");
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
                 .build();
+
         adapter = new TaskAdapter(options);
 
-        recyclerview_school_ost_new_tasks.setHasFixedSize(true);
-        recyclerview_school_ost_new_tasks.setLayoutManager(new LinearLayoutManager(fragment_school_ost_progress_tasks.this.getContext()));
-        recyclerview_school_ost_new_tasks.setAdapter(adapter);
+        recyclerview_school_bar_new_tasks.setHasFixedSize(true);
+        recyclerview_school_bar_new_tasks.setLayoutManager(new LinearLayoutManager(fragment_school_bar_archive_tasks.this.getContext()));
+        recyclerview_school_bar_new_tasks.setAdapter(adapter);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
-
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
-            Intent intent = new Intent(fragment_school_ost_progress_tasks.this.getContext(), TaskRootActivity.class);
+            Intent intent = new Intent(fragment_school_bar_archive_tasks.this.getContext(), TaskRootActivity.class);
             intent.putExtra(getString(R.string.id), id);
-            intent.putExtra(getString(R.string.location), getString(R.string.ost_school));
-            intent.putExtra(getString(R.string.collection), getString(R.string.ost_school_progress));
+            intent.putExtra(getString(R.string.collection), getString(R.string.bar_school_archive));
+            intent.putExtra(getString(R.string.location), getString(R.string.bar_school));
             startActivity(intent);
 
         });
 
-        Objects.requireNonNull(text_input_search_school_ost_progress_tasks.getEditText()).setOnEditorActionListener((v, actionId, event) -> {
+        Objects.requireNonNull(text_input_search_bar_school_archive_tasks.getEditText()).setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                String search_value = text_input_search_school_ost_progress_tasks.getEditText().getText().toString();
+                String search_value = text_input_search_bar_school_archive_tasks.getEditText().getText().toString();
 
                 if(search_value.isEmpty())
                     defaultQuery();
@@ -93,53 +92,20 @@ public class fragment_school_ost_progress_tasks extends Fragment {
             return false;
         });
 
-        chip_all.setOnCheckedChangeListener((compoundButton, isChecked) -> {
-            if(isChecked){
-                Log.i(TAG, "default checked");
-                defaultQuery();
-            }
-        });
-
-        chip_today_school_ost_progress.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        chip_bar_school_today_archive.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             if(isChecked){
                 Log.i(TAG, "today checked");
                 String today = utils.getDate();
                 todayTasks(today);
+            } else {
+                Log.i(TAG, "today not-checked");
+                defaultQuery();
             }
 
         });
-
-        chip_old_school_ost_progress.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-            if(isChecked){
-                Log.i(TAG, "old checked");
-                currentAddressTasks("Улица Авиаторов дом 9. Старое здание");
-            }
-
-        });
-
-        chip_new_school_ost_progress.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-            if(isChecked){
-                Log.i(TAG, "new checked");
-                currentAddressTasks("Улица Авиаторов дом 9. Новое здание");
-            }
-
-        });
-
 
         return view;
-    }
-
-    private void currentAddressTasks(String address) {
-        query = taskRef.whereEqualTo("address", address);
-
-        FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
-                .setQuery(query, TaskUi.class)
-                .build();
-
-        adapter.updateOptions(search_options);
     }
 
     private void todayTasks(String date) {
@@ -163,7 +129,7 @@ public class fragment_school_ost_progress_tasks extends Fragment {
     }
 
     private void defaultQuery() {
-        query = taskRef.whereEqualTo("status", "В работе");
+        query = taskRef.whereEqualTo("status", "Архив");
 
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)

@@ -1,4 +1,4 @@
-package com.george.vector.users.root.main.fragments;
+package com.george.vector.users.root.main.fragments.home;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,12 +11,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
-import com.george.vector.users.root.main.LocationFolderActivity;
+import com.george.vector.users.root.folders.LocationFolderActivity;
 import com.google.android.material.card.MaterialCardView;
 
-import org.jetbrains.annotations.NotNull;
-
-public class fragment_bar extends Fragment {
+public class FragmentBar extends Fragment {
 
     MaterialCardView bar_school_root, bar_kids_one_root, bar_kids_two_root;
 
@@ -30,7 +28,7 @@ public class fragment_bar extends Fragment {
         bar_kids_two_root = view.findViewById(R.id.bar_kids_two_root);
 
         bar_school_root.setOnClickListener(v -> {
-            Intent intent = new Intent(fragment_bar.this.getContext(), LocationFolderActivity.class);
+            Intent intent = new Intent(FragmentBar.this.getContext(), LocationFolderActivity.class);
             intent.putExtra(getString(R.string.location), getString(R.string.bar_school));
             startActivity(intent);
         });

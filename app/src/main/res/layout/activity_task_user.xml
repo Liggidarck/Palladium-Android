@@ -10,19 +10,19 @@
         android:id="@+id/topAppBar_task_user"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="@string/task"
-        app:titleTextColor="@android:color/white"
-        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        android:background="@color/blue_primary"
         app:layout_collapseMode="pin"
-        android:background="@color/blue_primary" />
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        app:title="@string/task"
+        app:titleTextColor="@android:color/white" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progress_bar_task_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/topAppBar_task_user"
         android:indeterminate="true"
-        android:visibility="invisible"
-        android:layout_below="@+id/topAppBar_task_user"/>
+        android:visibility="invisible" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -32,29 +32,29 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/address"
-                android:textSize="22sp"
-                android:textColor="@color/black"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginStart="20dp" />
+                android:text="@string/address"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/text_view_address_task_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
+                    android:textColor="@color/black"
                     android:textSize="15sp" />
 
 
@@ -64,82 +64,100 @@
                 android:id="@+id/text_view_floor_task_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="15sp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/text_view_cabinet_task_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="15sp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
-                android:src="@drawable/line_gray"
-                android:layout_marginTop="20dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
+                android:src="@drawable/line_gray"
                 tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/text_view_name_task_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="22sp"
-                android:textColor="@color/black"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginStart="20dp" />
+                android:textColor="@color/black"
+                android:textSize="22sp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                app:cardElevation="3dp">
+
+                <ImageView
+                    android:id="@+id/image_user_task"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp" />
+
+            </com.google.android.material.card.MaterialCardView>
+
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/comment"
                 android:textColor="@color/black"
-                android:textSize="18sp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"/>
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/text_view_comment_task_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/no_comment"
-                android:fontFamily="@font/product_sans_light"
-                android:textColor="#999999"
-                android:textSize="15sp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="5dp"/>
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/product_sans_light"
+                android:text="@string/no_comment"
+                android:textColor="#999999"
+                android:textSize="15sp" />
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
-                android:src="@drawable/line_gray"
-                android:layout_marginTop="20dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
+                android:src="@drawable/line_gray"
                 tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/status"
-                android:textSize="22sp"
-                android:textColor="@color/black"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginStart="20dp" />
+                android:text="@string/status"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
                 app:cardElevation="8dp">
 
                 <LinearLayout
@@ -179,9 +197,9 @@
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:src="#FF6B6B"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true" />
+                            android:layout_centerVertical="true"
+                            android:src="#FF6B6B" />
 
                     </RelativeLayout>
 

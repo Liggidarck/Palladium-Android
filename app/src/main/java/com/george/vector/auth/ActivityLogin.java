@@ -15,6 +15,7 @@ import android.widget.Button;
 import com.george.vector.R;
 import com.george.vector.common.utils.Utils;
 import com.george.vector.users.executor.main.MainExecutorActivity;
+import com.george.vector.users.root.main.RootFutureMainActivity;
 import com.george.vector.users.root.main.RootMainActivity;
 import com.george.vector.users.user.main.MainUserActivity;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -104,8 +105,11 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
     void startApp(@NotNull String role, String email, String permission) {
-        if (role.equals("Root"))
-            startActivity(new Intent(this, RootMainActivity.class));
+        if (role.equals("Root")) {
+            Intent intent = new Intent(this, RootFutureMainActivity.class);
+            intent.putExtra(getString(R.string.email), email);
+            startActivity(intent);
+        }
 
         if (role.equals("Пользователь")) {
             Intent intent = new Intent(this, MainUserActivity.class);

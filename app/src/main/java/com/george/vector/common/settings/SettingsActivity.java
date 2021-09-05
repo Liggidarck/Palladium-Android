@@ -8,6 +8,7 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.george.vector.R;
 import com.george.vector.users.executor.main.MainExecutorActivity;
+import com.george.vector.users.root.main.RootFutureMainActivity;
 import com.george.vector.users.root.main.RootMainActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,8 +37,10 @@ public class SettingsActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        if (permission.equals("root"))
-            intent = new Intent(this, RootMainActivity.class);
+        if (permission.equals("root")) {
+            intent = new Intent(this, RootFutureMainActivity.class);
+            intent.putExtra(getString(R.string.email), email);
+        }
 
         if (permission.equals("executor")) {
             intent = new Intent(this, MainExecutorActivity.class);

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -28,6 +29,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -42,9 +45,10 @@ public class TaskExecutorActivity extends AppCompatActivity {
             text_view_date_create_task_executor;
     Button edit_btn_executor;
     CircleImageView circle_status_executor;
+    ImageView image_executor_task;
 
     String id, collection, location, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create,
-            email_executor, email_creator, date_done;
+            email_executor, email_creator, date_done, image;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -69,6 +73,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
         text_view_date_create_task_executor = findViewById(R.id.text_view_date_create_task_executor);
         edit_btn_executor = findViewById(R.id.edit_btn_executor);
         circle_status_executor = findViewById(R.id.circle_status_executor);
+        image_executor_task = findViewById(R.id.image_executor_task);
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.get(getString(R.string.id)).toString();
@@ -106,8 +111,25 @@ public class TaskExecutorActivity extends AppCompatActivity {
             date_create = value.getString("date_create");
             time_create = value.getString("time_create");
             email_executor = value.getString("executor");
-            email_creator =value.getString("email_creator");
+            email_creator = value.getString("email_creator");
             date_done = value.getString("date_done");
+
+            image = value.getString("image");
+
+            String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image);
+            Picasso.with(this)
+                    .load(IMAGE_URL)
+                    .into(image_executor_task, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            image_executor_task.setVisibility(View.INVISIBLE);
+                        }
+
+                        @Override
+                        public void onError() {
+                            Log.e(TAG, "Error on download");
+                        }
+                    });
 
             Log.d(TAG, "address: " + address);
             Log.d(TAG, "floor: " + floor);
@@ -132,7 +154,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
 
                 if (!litera.equals("-") && !litera.isEmpty())
                     cabinet = String.format("%s%s", cabinet, litera);
-            } catch (Exception e){
+            } catch (Exception e) {
                 Log.e(TAG, "Error! " + e);
             }
 
@@ -161,9 +183,9 @@ public class TaskExecutorActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        if(!isOnline())
+        if (!isOnline())
             Snackbar.make(findViewById(R.id.coordinator_task_executor), getString(R.string.error_no_connection), Snackbar.LENGTH_LONG)
-                    .setAction("Повторить", v ->  {
+                    .setAction("Повторить", v -> {
                         Log.i(TAG, "Update status: " + isOnline());
                         onStart();
                     }).show();

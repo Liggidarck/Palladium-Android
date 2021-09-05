@@ -16,12 +16,13 @@ public class TaskUi {
 
     private String time_create;
     private String email_creator;
+    private String image;
 
     public TaskUi() {}
 
     public TaskUi(String name_task, String address, String date_create, String floor,
                   String cabinet, String litera, String comment, String date_done, String executor, String status,
-                  String time_create, String email_creator, boolean urgent) {
+                  String time_create, String email_creator, boolean urgent, String image) {
         this.name_task = name_task;
         this.address = address;
         this.date_create = date_create;
@@ -36,6 +37,8 @@ public class TaskUi {
 
         this.time_create = time_create;
         this.email_creator = email_creator;
+
+        this.image = image;
     }
 
     public String getName_task() {
@@ -89,4 +92,9 @@ public class TaskUi {
     public boolean getUrgent() {
         return urgent;
     }
+
+    public String getImage() {
+        return image;
+    }
+
 }

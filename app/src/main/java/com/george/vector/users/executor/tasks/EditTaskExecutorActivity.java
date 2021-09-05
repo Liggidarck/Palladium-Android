@@ -3,7 +3,6 @@ package com.george.vector.users.executor.tasks;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -19,7 +18,6 @@ import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.users.executor.main.MainExecutorActivity;
 import com.george.vector.users.root.main.RootMainActivity;
-import com.george.vector.users.root.tasks.EditTaskRootActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -29,7 +27,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Calendar;
 import java.util.Objects;
 
 public class EditTaskExecutorActivity extends AppCompatActivity {
@@ -54,7 +51,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
     String id, collection, location;
 
     String address, floor, cabinet, litera, name_task, comment, status, date_create, time_create,
-            date_done, email, email_executor;
+            date_done, email, email_executor, image;
 
     String email_mail_activity;
 
@@ -108,6 +105,8 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
             time_create = value.getString("time_create");
             email = value.getString("email_creator");
 
+            image = value.getString("image");
+
             try {
                 Objects.requireNonNull(text_input_layout_address_executor.getEditText()).setText(address);
                 Objects.requireNonNull(text_input_layout_floor_executor.getEditText()).setText(floor);
@@ -141,6 +140,9 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
     }
 
     void updateTask(String collection) {
+
+        String update_image = image;
+
         Task task = new Task();
         DeleteTask deleteTask = new DeleteTask();
         deleteTask.delete_task(collection, id);
@@ -157,7 +159,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
 
         task.save(new SaveTask(), location, update_name, update_address, date_create, update_floor,
                 update_cabinet, update_litera, update_comment, update_date_task,
-                update_executor, update_status, time_create, email, false);
+                update_executor, update_status, time_create, email, false, update_image);
 
         Intent intent = new Intent(this, MainExecutorActivity.class);
         intent.putExtra(getString(R.string.email), email_mail_activity);

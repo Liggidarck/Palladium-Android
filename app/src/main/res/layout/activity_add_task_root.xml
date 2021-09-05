@@ -268,11 +268,19 @@
                 android:layout_marginEnd="20dp"
                 android:text="@string/set_executor" />
 
+            <ImageView
+                android:id="@+id/image_task"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/base_image"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"/>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="100dp" />
 
         </LinearLayout>
-
     </ScrollView>
 </RelativeLayout>

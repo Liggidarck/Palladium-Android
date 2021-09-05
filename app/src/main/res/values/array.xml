@@ -6,7 +6,6 @@
         <item>Улица Авиаторов дом 9. Новое здание</item>
     </string-array>
 
-
     <string-array name="status" >
         <item>Новая заявка</item>
         <item>В работе</item>
@@ -21,6 +20,8 @@
 
     <string-array name="litera" >
         <item>а</item>
+        <item>б</item>
+        <item>в</item>
         <item>-</item>
     </string-array>
 
@@ -35,7 +36,6 @@
         <item>bar_rucheek</item>
         <item>bar_star</item>
     </string-array>
-
 
     <string-array name="default_root_location">
         <item>ost</item>

@@ -38,7 +38,7 @@ public class fragment_school_ost_progress_tasks extends Fragment {
     private final CollectionReference taskRef = db.collection("ost_school_progress");
 
     TextInputLayout search_executor_ost_school_progress_tasks;
-    Chip chip_new_school_ost_progress, chip_old_school_ost_progress, chip_today_school_ost_progress, chip_all;
+    Chip chip_new_school_ost_progress, chip_old_school_ost_progress, chip_all;
 
     private TaskAdapter adapter;
     private Query query;
@@ -55,11 +55,8 @@ public class fragment_school_ost_progress_tasks extends Fragment {
         assert args != null;
         String email = args.getString(getString(R.string.email));
 
-        Utils utils = new Utils();
-
         recycler_view_ost_school_progress_exec = view.findViewById(R.id.recyclerview_school_ost_progress_tasks);
         search_executor_ost_school_progress_tasks = view.findViewById(R.id.text_input_search_school_ost_progress_tasks);
-        chip_today_school_ost_progress = view.findViewById(R.id.chip_today_school_ost_progress);
         chip_old_school_ost_progress = view.findViewById(R.id.chip_old_school_ost_progress);
         chip_new_school_ost_progress = view.findViewById(R.id.chip_new_school_ost_progress);
         chip_all = view.findViewById(R.id.chip_all_progress_tasks_ost_school);
@@ -110,16 +107,6 @@ public class fragment_school_ost_progress_tasks extends Fragment {
             }
         });
 
-        chip_today_school_ost_progress.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-            if(isChecked){
-                Log.i(TAG, "today checked");
-                String today = utils.getDate();
-                todayTasks(today, email);
-            }
-
-        });
-
         chip_old_school_ost_progress.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             if(isChecked){
@@ -150,17 +137,6 @@ public class fragment_school_ost_progress_tasks extends Fragment {
 
         adapter.updateOptions(search_options);
     }
-
-    private void todayTasks(String date, String email) {
-        query = taskRef.whereEqualTo("date_create", date).whereEqualTo("executor", email);
-
-        FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
-                .setQuery(query, TaskUi.class)
-                .build();
-
-        adapter.updateOptions(search_options);
-    }
-
 
     private void search(String query_text, String email) {
         query = taskRef.whereEqualTo("name_task", query_text).whereEqualTo("executor", email);

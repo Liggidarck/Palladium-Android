@@ -37,7 +37,7 @@ public class fragment_school_ost_new_tasks extends Fragment {
     private final CollectionReference taskRef = db.collection("ost_school_new");
 
     TextInputLayout search_executor_ost_school_new_tasks;
-    Chip chip_today_school_ost_new, chip_old_school_ost_new, chip_new_school_ost_new, chip_all;
+    Chip chip_old_school_ost_new, chip_new_school_ost_new, chip_all;
 
     TaskAdapter adapter;
     private Query query;
@@ -58,7 +58,6 @@ public class fragment_school_ost_new_tasks extends Fragment {
 
         recycler_view_new_tasks_executor = view.findViewById(R.id.recyclerview_school_ost_new_tasks);
         search_executor_ost_school_new_tasks = view.findViewById(R.id.text_input_search_new_tasks);
-        chip_today_school_ost_new = view.findViewById(R.id.chip_today_school_ost_new);
         chip_old_school_ost_new = view.findViewById(R.id.chip_old_school_ost_new);
         chip_new_school_ost_new = view.findViewById(R.id.chip_new_school_ost_new);
         chip_all = view.findViewById(R.id.chip_all_new_tasks_ost_school);
@@ -109,16 +108,6 @@ public class fragment_school_ost_new_tasks extends Fragment {
                 Log.i(TAG, "default checked");
                 defaultQuery(email);
             }
-        });
-
-        chip_today_school_ost_new.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-            if(isChecked){
-                Log.i(TAG, "today checked");
-                String today = utils.getDate();
-                todayTasks(today, email);
-            }
-
         });
 
         chip_old_school_ost_new.setOnCheckedChangeListener((buttonView, isChecked) -> {

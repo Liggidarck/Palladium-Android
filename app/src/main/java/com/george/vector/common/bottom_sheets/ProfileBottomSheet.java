@@ -24,7 +24,6 @@ public class ProfileBottomSheet extends BottomSheetDialogFragment {
 
     ImageView close_btn;
     TextView text_view_full_name, text_view_email, text_view_role, text_view_name_ava;
-    CircleImageView circle_ava;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -41,7 +40,6 @@ public class ProfileBottomSheet extends BottomSheetDialogFragment {
         text_view_email = view.findViewById(R.id.text_view_email);
         text_view_role = view.findViewById(R.id.text_view_role);
         text_view_name_ava = view.findViewById(R.id.text_view_name_ava);
-        circle_ava = view.findViewById(R.id.circle_ava);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
