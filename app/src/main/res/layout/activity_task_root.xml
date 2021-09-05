@@ -95,12 +95,21 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="20dp" />
 
-            <ImageView
-                android:id="@+id/image_root_task"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp" />
+                android:layout_marginEnd="20dp"
+                app:cardElevation="3dp">
+
+                <ImageView
+                    android:id="@+id/image_root_task"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    tools:ignore="ContentDescription" />
+
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -198,7 +207,8 @@
             <FrameLayout
                 android:id="@+id/frame_urgent_task"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -210,7 +220,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/edit"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginStart="20dp"
                     app:icon="@drawable/ic_baseline_edit_24"
                     style="@style/Widget.MaterialComponents.Button.Icon"/>
@@ -220,7 +230,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/delete"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginStart="20dp"
                     style="@style/Widget.MaterialComponents.Button.Icon"
                     app:icon="@drawable/ic_baseline_delete_24" />
