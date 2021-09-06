@@ -20,6 +20,7 @@ import com.george.vector.R;
 import com.george.vector.common.announcements.fragmentUrgentRequest;
 import com.george.vector.common.tasks.utils.DeleteTask;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,6 +42,7 @@ public class TaskRootActivity extends AppCompatActivity {
             text_view_date_create_task_root;
     CircleImageView circle_status_root;
     Button edit_task_btn, delete_task_btn;
+    MaterialCardView image_root_card;
     ImageView image_root_task;
 
     private static final String TAG = "TaskActivityRoot";
@@ -71,6 +73,7 @@ public class TaskRootActivity extends AppCompatActivity {
         edit_task_btn = findViewById(R.id.edit_task_btn);
         delete_task_btn = findViewById(R.id.delete_task_btn_root);
         image_root_task = findViewById(R.id.image_root_task);
+        image_root_card = findViewById(R.id.image_root_card);
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.get(getString(R.string.id)).toString();
@@ -85,6 +88,15 @@ public class TaskRootActivity extends AppCompatActivity {
         storageReference = firebaseStorage.getReference();
 
         topAppBar_tasks_root.setNavigationOnClickListener(v -> onBackPressed());
+
+        image_root_card.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ImageTaskActivity.class);
+            intent.putExtra(getString(R.string.id), id);
+            intent.putExtra(getString(R.string.collection), collection);
+            intent.putExtra(getString(R.string.location), location);
+            intent.putExtra(getString(R.string.email), email);
+            startActivity(intent);
+        });
 
         edit_task_btn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskRootActivity.class);
