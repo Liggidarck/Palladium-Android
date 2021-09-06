@@ -125,9 +125,6 @@ public class TaskUserActivity extends AppCompatActivity {
             text_view_date_create_task_user.setText(date_create_text);
 
         });
-
-        documentReference.get().addOnCompleteListener(task -> progress_bar_task_user.setVisibility(View.INVISIBLE));
-
     }
 
     public boolean isOnline() {
