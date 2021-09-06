@@ -96,6 +96,7 @@
                 android:layout_marginStart="20dp" />
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/image_root_card"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginTop="10dp"
