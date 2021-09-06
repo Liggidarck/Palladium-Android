@@ -32,7 +32,6 @@ import com.george.vector.common.edit_users.UserAdapter;
 import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.Utils;
-import com.george.vector.users.root.main.RootMainActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -333,10 +332,8 @@ public class AddTaskRootActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_no_connection))
-                .setPositiveButton(getText(R.string.save), (dialog, id) ->
-                        save_task(location))
-                .setNegativeButton(android.R.string.cancel,
-                        (dialog, id) -> startActivity(new Intent(this, RootMainActivity.class)));
+                .setPositiveButton(getText(R.string.save), (dialog, id) -> save_task(location))
+                .setNegativeButton(android.R.string.cancel, (dialog, id) -> onBackPressed());
 
         AlertDialog dialog = builder.create();
         dialog.show();

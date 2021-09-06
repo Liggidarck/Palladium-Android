@@ -1,6 +1,7 @@
 package com.george.vector.common.bottom_sheets;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileBottomSheet extends BottomSheetDialogFragment {
 
+    private static final String TAG = "ProfileBottomSheet";
     ImageView close_btn;
     TextView text_view_full_name, text_view_email, text_view_role, text_view_name_ava;
 

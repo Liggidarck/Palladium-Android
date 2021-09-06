@@ -1,15 +1,11 @@
 package com.george.vector.common.settings;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.george.vector.R;
-import com.george.vector.users.executor.main.MainExecutorActivity;
-import com.george.vector.users.root.main.RootFutureMainActivity;
-import com.george.vector.users.root.main.RootMainActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -20,8 +16,6 @@ public class SettingsActivity extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
-
-    Intent intent = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,17 +31,7 @@ public class SettingsActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        if (permission.equals("root")) {
-            intent = new Intent(this, RootFutureMainActivity.class);
-            intent.putExtra(getString(R.string.email), email);
-        }
-
-        if (permission.equals("executor")) {
-            intent = new Intent(this, MainExecutorActivity.class);
-            intent.putExtra(getString(R.string.email), email);
-        }
-
-        toolbar_root_toolbar.setNavigationOnClickListener(v -> startActivity(intent));
+        toolbar_root_toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         if (savedInstanceState == null) {
 
@@ -66,10 +50,6 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
-        startActivity(intent);
-    }
 
     public static class SettingsRootFragment extends PreferenceFragmentCompat {
         @Override

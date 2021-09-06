@@ -44,8 +44,7 @@ public class SettingsExecutorBottomSheet extends BottomSheetDialogFragment {
         close_btn_executor.setOnClickListener(v -> dismiss());
         layout_edit_person_executor.setOnClickListener(v -> startActivity(new Intent(SettingsExecutorBottomSheet.this.getContext(), EditDataUserActivity.class)));
         btn_logout_executor.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(SettingsExecutorBottomSheet.this.getContext(), ActivityLogin.class));
+
         });
 
         layout_settings_executor.setOnClickListener(v -> {
