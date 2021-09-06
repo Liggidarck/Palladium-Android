@@ -96,7 +96,7 @@ public class TaskRootActivity extends AppCompatActivity {
         });
 
         delete_task_btn.setOnClickListener(v -> {
-            if(confirm_delete)
+            if (confirm_delete)
                 show_dialog_delete();
             else
                 delete_task();
@@ -123,20 +123,28 @@ public class TaskRootActivity extends AppCompatActivity {
                 urgent = value.getBoolean("urgent");
                 image = value.getString("image");
 
-                String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image);
-                Picasso.with(this)
-                        .load(IMAGE_URL)
-                        .into(image_root_task, new Callback() {
-                            @Override
-                            public void onSuccess() {
-                                progress_bar_task_root.setVisibility(View.INVISIBLE);
-                            }
+                if (image == null) {
+                    Log.d(TAG, "No image, stop loading");
+                    progress_bar_task_root.setVisibility(View.INVISIBLE);
+                    image_root_task.setImageResource(R.drawable.no_image);
+                } else {
 
-                            @Override
-                            public void onError() {
-                                Log.e(TAG, "Error on download");
-                            }
-                        });
+                    String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image);
+                    Picasso.with(this)
+                            .load(IMAGE_URL)
+                            .into(image_root_task, new Callback() {
+                                @Override
+                                public void onSuccess() {
+                                    progress_bar_task_root.setVisibility(View.INVISIBLE);
+                                }
+
+                                @Override
+                                public void onError() {
+                                    Log.e(TAG, "Error on download");
+                                    progress_bar_task_root.setVisibility(View.INVISIBLE);
+                                }
+                            });
+                }
 
 
                 if (status.equals("Новая заявка"))
@@ -151,7 +159,7 @@ public class TaskRootActivity extends AppCompatActivity {
                 if (!litera.equals("-") && !litera.isEmpty())
                     cabinet = String.format("%s%s", cabinet, litera);
 
-                if(urgent) {
+                if (urgent) {
                     Log.d(TAG, "Срочная заявка");
 
                     Fragment urgent_fragment = new fragmentUrgentRequest();
@@ -211,9 +219,9 @@ public class TaskRootActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        if(!isOnline())
+        if (!isOnline())
             Snackbar.make(findViewById(R.id.task_root_coordinator), getString(R.string.error_no_connection), Snackbar.LENGTH_LONG)
-                    .setAction("Повторить", v ->  {
+                    .setAction("Повторить", v -> {
                         Log.i(TAG, "Update status: " + isOnline());
                         onStart();
                     }).show();

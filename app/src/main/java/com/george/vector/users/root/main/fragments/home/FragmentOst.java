@@ -2,6 +2,7 @@ package com.george.vector.users.root.main.fragments.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.google.android.material.card.MaterialCardView;
 
 public class FragmentOst extends Fragment {
 
+    private static final String TAG = "FragmentOst";
     MaterialCardView ost_school_root, ost_kids_one_root, ost_kids_two_root;
 
     @Nullable
@@ -30,6 +32,8 @@ public class FragmentOst extends Fragment {
         Bundle args = getArguments();
         assert args != null;
         String email = args.getString(getString(R.string.email));
+
+        Log.d(TAG, "email: " + email);
 
         ost_school_root.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentOst.this.getContext(), LocationFolderActivity.class);

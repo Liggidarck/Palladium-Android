@@ -53,6 +53,7 @@ public class FragmentHome extends Fragment {
         zone = PreferenceManager
                 .getDefaultSharedPreferences(FragmentHome.this.getContext())
                 .getString("default_root_location", getString(R.string.ost));
+        Log.d(TAG, "Zone: " + zone);
 
         DocumentReference documentReference = firebaseFirestore.collection("news").document("news_fragment");
         documentReference.addSnapshotListener((value, error) -> {
@@ -99,6 +100,16 @@ public class FragmentHome extends Fragment {
 
         updateZones(zone);
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        zone = PreferenceManager
+                .getDefaultSharedPreferences(FragmentHome.this.getContext())
+                .getString("default_root_location", getString(R.string.ost));
+        Log.d(TAG, "Zone: " + zone);
     }
 
     void show_news_fragment() {

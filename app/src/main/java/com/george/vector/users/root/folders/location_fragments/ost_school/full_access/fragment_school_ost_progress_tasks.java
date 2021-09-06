@@ -1,5 +1,6 @@
 package com.george.vector.users.root.folders.location_fragments.ost_school.full_access;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,10 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -71,6 +74,27 @@ public class fragment_school_ost_progress_tasks extends Fragment {
         recyclerview_school_ost_new_tasks.setHasFixedSize(true);
         recyclerview_school_ost_new_tasks.setLayoutManager(new LinearLayoutManager(fragment_school_ost_progress_tasks.this.getContext()));
         recyclerview_school_ost_new_tasks.setAdapter(adapter);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(fragment_school_ost_progress_tasks.this.getContext());
+
+                builder.setTitle(getText(R.string.warning))
+                        .setMessage(getText(R.string.warning_delete_task))
+                        .setPositiveButton(getText(R.string.delete), (dialog, id) -> Toast.makeText(fragment_school_ost_progress_tasks.this.getContext(), "start demo deleteng...", Toast.LENGTH_SHORT).show())
+                        .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.dismiss());
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        }).attachToRecyclerView(recyclerview_school_ost_new_tasks);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();

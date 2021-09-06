@@ -45,7 +45,6 @@
         <activity android:name=".users.root.tasks.AddTaskRootActivity" />
         <activity android:name=".users.root.folders.FolderRootActivity" />
         <activity android:name=".users.root.folders.LocationFolderActivity" />
-        <activity android:name=".users.root.main.RootMainActivity" />
         <activity android:name=".common.edit_users.EditDataUserActivity" />
         <activity android:name=".common.edit_users.EditUserActivity" />
         <activity android:name=".common.edit_users.ListUsersActivity" />

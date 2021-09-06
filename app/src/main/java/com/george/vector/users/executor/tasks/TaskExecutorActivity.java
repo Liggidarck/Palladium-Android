@@ -2,7 +2,6 @@ package com.george.vector.users.executor.tasks;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -10,28 +9,21 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.george.vector.R;
-import com.george.vector.common.tasks.ui.TaskUi;
-import com.george.vector.common.tasks.utils.SaveTask;
-import com.george.vector.common.tasks.utils.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -101,48 +93,55 @@ public class TaskExecutorActivity extends AppCompatActivity {
         documentReference.addSnapshotListener(this, (value, error) -> {
             progress_bar_task_executor.setVisibility(View.VISIBLE);
             assert value != null;
-            address = value.getString("address");
-            floor = value.getString("floor");
-            cabinet = value.getString("cabinet");
-            litera = value.getString("litera");
-            name_task = value.getString("name_task");
-            comment = value.getString("comment");
-            status = value.getString("status");
-            date_create = value.getString("date_create");
-            time_create = value.getString("time_create");
-            email_executor = value.getString("executor");
-            email_creator = value.getString("email_creator");
-            date_done = value.getString("date_done");
-
-            image = value.getString("image");
-
-            String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image);
-            Picasso.with(this)
-                    .load(IMAGE_URL)
-                    .into(image_executor_task, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            image_executor_task.setVisibility(View.INVISIBLE);
-                        }
-
-                        @Override
-                        public void onError() {
-                            Log.e(TAG, "Error on download");
-                        }
-                    });
-
-            Log.d(TAG, "address: " + address);
-            Log.d(TAG, "floor: " + floor);
-            Log.d(TAG, "litera: " + litera);
-            Log.d(TAG, "comment: " + comment);
-            Log.d(TAG, "status: " + status);
-            Log.d(TAG, "date_create: " + date_create);
-            Log.d(TAG, "time_create: " + time_create);
-            Log.d(TAG, "email_executor: " + email_executor);
-            Log.d(TAG, "email_creator: " + email_creator);
-            Log.d(TAG, "date_done: " + date_done);
-
             try {
+                address = value.getString("address");
+                floor = value.getString("floor");
+                cabinet = value.getString("cabinet");
+                litera = value.getString("litera");
+                name_task = value.getString("name_task");
+                comment = value.getString("comment");
+                status = value.getString("status");
+                date_create = value.getString("date_create");
+                time_create = value.getString("time_create");
+                email_executor = value.getString("executor");
+                email_creator = value.getString("email_creator");
+                date_done = value.getString("date_done");
+                image = value.getString("image");
+
+                Log.d(TAG, "address: " + address);
+                Log.d(TAG, "floor: " + floor);
+                Log.d(TAG, "litera: " + litera);
+                Log.d(TAG, "comment: " + comment);
+                Log.d(TAG, "status: " + status);
+                Log.d(TAG, "date_create: " + date_create);
+                Log.d(TAG, "time_create: " + time_create);
+                Log.d(TAG, "email_executor: " + email_executor);
+                Log.d(TAG, "email_creator: " + email_creator);
+                Log.d(TAG, "date_done: " + date_done);
+                Log.d(TAG, "image: " + image);
+
+                if (image == null) {
+                    Log.d(TAG, "No image, stop loading");
+                    progress_bar_task_executor.setVisibility(View.INVISIBLE);
+                    image_executor_task.setImageResource(R.drawable.no_image);
+                } else {
+
+                    String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image);
+                    Picasso.with(this)
+                            .load(IMAGE_URL)
+                            .into(image_executor_task, new Callback() {
+                                @Override
+                                public void onSuccess() {
+                                    progress_bar_task_executor.setVisibility(View.INVISIBLE);
+                                }
+
+                                @Override
+                                public void onError() {
+                                    Log.e(TAG, "Error on download");
+                                }
+                            });
+                }
+
                 if (status.equals("Новая заявка"))
                     circle_status_executor.setImageResource(R.color.red);
 
@@ -168,8 +167,6 @@ public class TaskExecutorActivity extends AppCompatActivity {
             String date_create_text = String.format("Созданно: %s %s", date_create, time_create);
             text_view_date_create_task_executor.setText(date_create_text);
         });
-
-        documentReference.get().addOnCompleteListener(task -> progress_bar_task_executor.setVisibility(View.INVISIBLE));
 
     }
 

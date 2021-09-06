@@ -17,7 +17,6 @@ import com.george.vector.common.tasks.utils.DeleteTask;
 import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.users.executor.main.MainExecutorActivity;
-import com.george.vector.users.root.main.RootMainActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -58,7 +57,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_task_exrcutor);
+        setContentView(R.layout.activity_edit_task_executor);
 
         topAppBar_new_task_executor = findViewById(R.id.topAppBar_new_task_executor);
         progress_bar_add_task_executor = findViewById(R.id.progress_bar_add_task_executor);
@@ -88,26 +87,24 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
             progress_bar_add_task_executor.setVisibility(View.VISIBLE);
-
-            assert value != null;
-            address = value.getString("address");
-            floor = value.getString("floor");
-            cabinet = value.getString("cabinet");
-            litera = value.getString("litera");
-            name_task = value.getString("name_task");
-            comment = value.getString("comment");
-            status = value.getString("status");
-
-            date_done = value.getString("date_done");
-            email_executor = value.getString("executor");
-
-            date_create = value.getString("date_create");
-            time_create = value.getString("time_create");
-            email = value.getString("email_creator");
-
-            image = value.getString("image");
-
             try {
+                assert value != null;
+                address = value.getString("address");
+                floor = value.getString("floor");
+                cabinet = value.getString("cabinet");
+                litera = value.getString("litera");
+                name_task = value.getString("name_task");
+                comment = value.getString("comment");
+                status = value.getString("status");
+
+                date_done = value.getString("date_done");
+                email_executor = value.getString("executor");
+
+                date_create = value.getString("date_create");
+                time_create = value.getString("time_create");
+                email = value.getString("email_creator");
+
+                image = value.getString("image");
                 Objects.requireNonNull(text_input_layout_address_executor.getEditText()).setText(address);
                 Objects.requireNonNull(text_input_layout_floor_executor.getEditText()).setText(floor);
                 Objects.requireNonNull(text_input_layout_cabinet_executor.getEditText()).setText(cabinet);
@@ -132,7 +129,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         documentReference.get().addOnCompleteListener(v -> progress_bar_add_task_executor.setVisibility(View.INVISIBLE));
 
         edit_task_executor.setOnClickListener(v -> {
-            if(!isOnline())
+            if (!isOnline())
                 show_dialog();
             else
                 updateTask(collection);
@@ -172,7 +169,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_no_connection))
                 .setPositiveButton(getText(R.string.save), (dialog, id) -> updateTask(collection))
-                .setNegativeButton(android.R.string.cancel, (dialog, id) -> startActivity(new Intent(this, RootMainActivity.class)));
+                .setNegativeButton(android.R.string.cancel, (dialog, id) -> startActivity(new Intent(this, MainExecutorActivity.class)));
 
         AlertDialog dialog = builder.create();
         dialog.show();

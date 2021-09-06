@@ -9,7 +9,6 @@ import android.util.Log;
 import com.george.vector.R;
 import com.george.vector.users.executor.main.MainExecutorActivity;
 import com.george.vector.users.root.main.RootFutureMainActivity;
-import com.george.vector.users.root.main.RootMainActivity;
 import com.george.vector.users.user.main.MainUserActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;

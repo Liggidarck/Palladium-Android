@@ -15,9 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.george.vector.R;
-import com.george.vector.common.bottom_sheets.ConsoleBottomSheet;
 import com.george.vector.common.bottom_sheets.ProfileBottomSheet;
-import com.george.vector.users.user.main.SettingsUserBottomSheet;
 import com.george.vector.users.executor.main.fragments.fragment_bar;
 import com.george.vector.users.executor.main.fragments.fragment_ost;
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -39,7 +37,7 @@ public class MainExecutorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.MainActivity);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_worker);
+        setContentView(R.layout.activity_main_executor);
 
         Bundle arguments = getIntent().getExtras();
         email = arguments.get(getString(R.string.email)).toString();

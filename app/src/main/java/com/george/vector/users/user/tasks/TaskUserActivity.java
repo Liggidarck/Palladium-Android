@@ -87,23 +87,29 @@ public class TaskUserActivity extends AppCompatActivity {
             status = value.getString("status");
             date_create = value.getString("date_create");
             time_create = value.getString("time_create");
-
             image = value.getString("image");
 
-            String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image);
-            Picasso.with(this)
-                    .load(IMAGE_URL)
-                    .into(image_user_task, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            progress_bar_task_user.setVisibility(View.INVISIBLE);
-                        }
+            if (image == null) {
+                Log.d(TAG, "No image, stop loading");
+                progress_bar_task_user.setVisibility(View.INVISIBLE);
+                image_user_task.setImageResource(R.drawable.no_image);
+            } else {
 
-                        @Override
-                        public void onError() {
-                            Log.e(TAG, "Error on download");
-                        }
-                    });
+                String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image);
+                Picasso.with(this)
+                        .load(IMAGE_URL)
+                        .into(image_user_task, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                progress_bar_task_user.setVisibility(View.INVISIBLE);
+                            }
+
+                            @Override
+                            public void onError() {
+                                Log.e(TAG, "Error on download");
+                            }
+                        });
+            }
 
             if (!litera.equals("-") && !litera.isEmpty())
                 cabinet = String.format("%s%s", cabinet, litera);
@@ -119,9 +125,6 @@ public class TaskUserActivity extends AppCompatActivity {
             text_view_date_create_task_user.setText(date_create_text);
 
         });
-
-        documentReference.get().addOnCompleteListener(task -> progress_bar_task_user.setVisibility(View.INVISIBLE));
-
     }
 
     public boolean isOnline() {
