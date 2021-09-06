@@ -15,6 +15,8 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -39,7 +41,10 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
     String name_user, last_name_user, patronymic_user, email_user, password_user, role_user, permission_user, userID;
 
-    FirebaseAuth firebaseAuth;
+    FirebaseAuth mAuth1;
+    FirebaseAuth mAuth2;
+
+
     FirebaseFirestore firebaseFirestore;
 
     private static final String TAG = "RegisterActivity";
@@ -62,8 +67,19 @@ public class ActivityRegisterUser extends AppCompatActivity {
         text_layout_permission_user = findViewById(R.id.text_input_layout_permission_user);
         complete_text_permission_user = findViewById(R.id.auto_complete_text_view_permission_user);
 
-        firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
+
+        mAuth1 = FirebaseAuth.getInstance();
+
+        FirebaseOptions firebaseOptions = new FirebaseOptions.Builder()
+                .setDatabaseUrl("https://school-2122.firebaseio.com")
+                .setApiKey("AIzaSyAAaS5-aMMTMBa6BWNBbM_0FHnlO5Ql328")
+                .setApplicationId("school-2122").build();
+
+        FirebaseApp myApp = FirebaseApp.initializeApp(getApplicationContext(),firebaseOptions,
+                "school-2122");
+
+        mAuth2 = FirebaseAuth.getInstance(myApp);
 
         topAppBar_register.setNavigationOnClickListener(v -> onBackPressed());
 
@@ -97,10 +113,10 @@ public class ActivityRegisterUser extends AppCompatActivity {
             if(validateFields()) {
                 progress_bar_register.setVisibility(View.VISIBLE);
 
-                firebaseAuth.createUserWithEmailAndPassword(email_user, password_user).addOnCompleteListener(task -> {
+                mAuth2.createUserWithEmailAndPassword(email_user, password_user).addOnCompleteListener(task -> {
 
                     if (task.isSuccessful()) {
-                        userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+                        userID = Objects.requireNonNull(mAuth2.getCurrentUser()).getUid();
                         DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
                         Map<String, Object> user = new HashMap<>();
                         user.put("name", name_user);
@@ -128,6 +144,7 @@ public class ActivityRegisterUser extends AppCompatActivity {
         });
 
     }
+
     boolean validateFields() {
         Utils utils = new Utils();
 

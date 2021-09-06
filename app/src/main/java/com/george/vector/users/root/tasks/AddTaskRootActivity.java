@@ -233,6 +233,9 @@ public class AddTaskRootActivity extends AppCompatActivity {
                                 .getTotalByteCount());
                         progressDialog.setMessage(String.format("Загрузка: %d%%", (int) progress));
                     });
+        } else {
+            NAME_IMAGE = null;
+            onBackPressed();
         }
     }
 

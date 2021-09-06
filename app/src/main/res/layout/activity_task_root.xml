@@ -106,7 +106,7 @@
                 <ImageView
                     android:id="@+id/image_root_task"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="210dp"
                     tools:ignore="ContentDescription" />
 
             </com.google.android.material.card.MaterialCardView>

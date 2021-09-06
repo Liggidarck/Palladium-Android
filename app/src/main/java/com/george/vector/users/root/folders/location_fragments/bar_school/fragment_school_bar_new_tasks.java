@@ -42,6 +42,8 @@ public class fragment_school_bar_new_tasks extends Fragment {
 
     FirebaseFirestore firebaseFirestore;
 
+    String email;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_school_bar_new_tasks, container, false);
@@ -52,6 +54,11 @@ public class fragment_school_bar_new_tasks extends Fragment {
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         Utils utils = new Utils();
+
+        Bundle args = getArguments();
+        assert args != null;
+        email = args.getString(getString(R.string.email));
+        Log.d(TAG, "Email: " + email);
 
         query = taskRef.whereEqualTo("status", "Новая заявка");
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
@@ -72,6 +79,7 @@ public class fragment_school_bar_new_tasks extends Fragment {
             intent.putExtra(getString(R.string.id), id);
             intent.putExtra(getString(R.string.collection), getString(R.string.bar_school_new));
             intent.putExtra(getString(R.string.location), getString(R.string.bar_school));
+            intent.putExtra(getString(R.string.email), email);
             startActivity(intent);
 
         });
