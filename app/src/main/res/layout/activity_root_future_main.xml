@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".users.root.main.RootFutureMainActivity" >
+    tools:context=".users.root.main.RootMainActivity" >
 
     <FrameLayout
         android:id="@+id/frame_future_main_root"

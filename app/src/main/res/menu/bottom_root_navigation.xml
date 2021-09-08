@@ -10,7 +10,7 @@
     <item
         android:id="@+id/nav_tasks"
         android:icon="@drawable/ic_baseline_assignment_late_24"
-        android:title="Заявки">
+        android:title="Мои заявки">
     </item>
 
 

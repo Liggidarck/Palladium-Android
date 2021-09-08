@@ -32,7 +32,7 @@ public class LocationFolderActivity extends AppCompatActivity {
         String email = arguments.get(getString(R.string.email)).toString();
         Log.d(TAG , "email: " + email);
 
-        if(location.contentEquals(getText(R.string.ost_school)) || location.contentEquals(getText(R.string.bar_school)))
+        if(location.equals(getString(R.string.ost_school)) || location.equals(getString(R.string.bar_school)))
             toolbar_location_folder_root.setTitle(getText(R.string.school));
 
         toolbar_location_folder_root.setNavigationOnClickListener(v -> onBackPressed());

@@ -18,7 +18,7 @@
             android:name=".users.root.tasks.ImageTaskActivity"
             android:exported="true" />
         <activity
-            android:name=".users.root.main.RootFutureMainActivity"
+            android:name=".users.root.main.RootMainActivity"
             android:exported="true" />
         <activity
             android:name=".auth.ForgotPasswordActivity"
