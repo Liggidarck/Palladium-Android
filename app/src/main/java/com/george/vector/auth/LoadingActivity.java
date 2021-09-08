@@ -8,7 +8,7 @@ import android.util.Log;
 
 import com.george.vector.R;
 import com.george.vector.users.executor.main.MainExecutorActivity;
-import com.george.vector.users.root.main.RootFutureMainActivity;
+import com.george.vector.users.root.main.RootMainActivity;
 import com.george.vector.users.user.main.MainUserActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -57,7 +57,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     void startApp(@NotNull String role, String email, String permission) {
         if (role.equals("Root")) {
-            Intent intent = new Intent(this, RootFutureMainActivity.class);
+            Intent intent = new Intent(this, RootMainActivity.class);
             intent.putExtra(getString(R.string.email), email);
             startActivity(intent);
         }

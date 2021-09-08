@@ -28,7 +28,7 @@ import com.george.vector.common.tasks.utils.DeleteTask;
 import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.Utils;
-import com.george.vector.users.root.main.RootFutureMainActivity;
+import com.george.vector.users.root.main.RootMainActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -146,21 +146,26 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
             image = value.getString("image");
 
+            if (image == null) {
+                Log.d(TAG, "No image, stop loading");
+                progress_bar_add_task_root.setVisibility(View.INVISIBLE);
+                image_task.setImageResource(R.drawable.no_image);
+            } else {
+                String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image);
+                Picasso.with(this)
+                        .load(IMAGE_URL)
+                        .into(image_task, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                progress_bar_add_task_root.setVisibility(View.INVISIBLE);
+                            }
 
-            String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image);
-            Picasso.with(this)
-                    .load(IMAGE_URL)
-                    .into(image_task, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            progress_bar_add_task_root.setVisibility(View.INVISIBLE);
-                        }
-
-                        @Override
-                        public void onError() {
-                            Log.e(TAG, "Error on download");
-                        }
-                    });
+                            @Override
+                            public void onError() {
+                                Log.e(TAG, "Error on download");
+                            }
+                        });
+            }
 
             try {
                 urgent = value.getBoolean("urgent");
@@ -297,7 +302,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 update_cabinet, update_litera, update_comment, update_date_task,
                 update_executor, update_status, time_create, email, update_urgent, update_image);
 
-        Intent intent = new Intent(this, RootFutureMainActivity.class);
+        Intent intent = new Intent(this, RootMainActivity.class);
         intent.putExtra(getString(R.string.email), USER_EMAIL);
         startActivity(intent);
     }
@@ -309,7 +314,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 .setMessage(getText(R.string.warning_no_connection))
                 .setPositiveButton(getText(R.string.save), (dialog, id) -> updateTask(collection))
                 .setNegativeButton(android.R.string.cancel, (dialog, id) -> {
-                    Intent intent = new Intent(this, RootFutureMainActivity.class);
+                    Intent intent = new Intent(this, RootMainActivity.class);
                     intent.putExtra(getString(R.string.email), USER_EMAIL);
                     startActivity(intent);
                 });

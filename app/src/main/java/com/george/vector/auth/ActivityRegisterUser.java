@@ -2,6 +2,7 @@ package com.george.vector.auth;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -69,18 +70,6 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        mAuth1 = FirebaseAuth.getInstance();
-
-        FirebaseOptions firebaseOptions = new FirebaseOptions.Builder()
-                .setDatabaseUrl("https://school-2122.firebaseio.com")
-                .setApiKey("AIzaSyAAaS5-aMMTMBa6BWNBbM_0FHnlO5Ql328")
-                .setApplicationId("school-2122").build();
-
-        FirebaseApp myApp = FirebaseApp.initializeApp(getApplicationContext(),firebaseOptions,
-                "school-2122");
-
-        mAuth2 = FirebaseAuth.getInstance(myApp);
-
         topAppBar_register.setNavigationOnClickListener(v -> onBackPressed());
 
         String[] items = getResources().getStringArray(R.array.roles);
@@ -102,6 +91,19 @@ public class ActivityRegisterUser extends AppCompatActivity {
         complete_text_permission_user.setAdapter(arrayAdapterPermissions);
 
         register_user_btn.setOnClickListener(v -> {
+
+            mAuth1 = FirebaseAuth.getInstance();
+
+            FirebaseOptions firebaseOptions = new FirebaseOptions.Builder()
+                    .setDatabaseUrl("https://school-2122.firebaseio.com")
+                    .setApiKey("AIzaSyAAaS5-aMMTMBa6BWNBbM_0FHnlO5Ql328")
+                    .setApplicationId("school-2122").build();
+
+            FirebaseApp myApp = FirebaseApp.initializeApp(getApplicationContext(),firebaseOptions,
+                    "school-2122");
+
+            mAuth2 = FirebaseAuth.getInstance(myApp);
+
             name_user = Objects.requireNonNull(text_layout_name_user.getEditText()).getText().toString();
             last_name_user = Objects.requireNonNull(text_layout_last_name_user.getEditText()).getText().toString();
             patronymic_user = Objects.requireNonNull(text_layout_patronymic_user.getEditText()).getText().toString();

@@ -13,7 +13,7 @@ import com.george.vector.users.root.main.fragments.tasks.FragmentTasks;
 import com.george.vector.users.root.main.fragments.home.FragmentHome;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class RootFutureMainActivity extends AppCompatActivity {
+public class RootMainActivity extends AppCompatActivity {
 
     BottomNavigationView bottom_root_navigation;
 
@@ -77,6 +77,6 @@ public class RootFutureMainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+
     }
 }

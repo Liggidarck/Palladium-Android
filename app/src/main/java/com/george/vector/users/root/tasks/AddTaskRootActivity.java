@@ -211,7 +211,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
             byte[] data = baos.toByteArray();
 
             final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading...");
+            progressDialog.setTitle("Загрузка...");
             progressDialog.show();
 
             NAME_IMAGE = UUID.randomUUID().toString();
@@ -220,17 +220,14 @@ public class AddTaskRootActivity extends AppCompatActivity {
             ref.putBytes(data)
                     .addOnSuccessListener(taskSnapshot -> {
                         progressDialog.dismiss();
-                        Toast.makeText(AddTaskRootActivity.this, "Изображение успешно загружено", Toast.LENGTH_SHORT).show();
                         onBackPressed();
                     })
                     .addOnFailureListener(e -> {
                         progressDialog.dismiss();
-                        Toast.makeText(AddTaskRootActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     })
                     .addOnProgressListener(taskSnapshot -> {
-                        double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
-                                .getTotalByteCount());
-                        progressDialog.setMessage(String.format("Загрузка: %d%%", (int) progress));
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                        progressDialog.setMessage(String.format("Прогресс: %d%%", (int) progress));
                     });
         } else {
             NAME_IMAGE = null;
