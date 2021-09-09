@@ -24,22 +24,13 @@
         android:maxLines="1"
         android:layout_below="@id/text_view_name_user"/>
 
-    <TextView
-        android:id="@+id/text_view_role_user"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:layout_below="@id/text_view_email_user"
-        android:textSize="18sp"
-        android:textColor="@color/black"
-        android:layout_marginTop="10dp"/>
-
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="3dp"
+        android:layout_below="@+id/text_view_email_user"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
         android:src="@drawable/line_gray"
-        android:layout_below="@+id/text_view_role_user"
-        android:layout_marginTop="5dp"
         tools:ignore="ContentDescription" />
 
 </RelativeLayout>

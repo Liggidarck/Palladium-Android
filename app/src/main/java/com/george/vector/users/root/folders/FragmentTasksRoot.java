@@ -31,8 +31,6 @@ public class FragmentTasksRoot extends Fragment {
 
     TaskAdapter adapter;
 
-    FirebaseFirestore firebaseFirestore;
-
     RecyclerView recyclerview_tasks_root;
     TextInputLayout text_input_search_root_tasks;
     Chip chip_all_tasks_root, chip_urgent_tasks_root, chip_old_school_tasks_root, chip_new_school_tasks_root;
@@ -55,8 +53,6 @@ public class FragmentTasksRoot extends Fragment {
         folder = args.getString(getString(R.string.folder));
         executed = args.getString("executed");
         email = args.getString(getString(R.string.email));
-
-        firebaseFirestore = FirebaseFirestore.getInstance();
 
         if(location.equals(getString(R.string.ost_school)) && folder.equals(getString(R.string.new_tasks)))
             ostSchoolNewTasks();

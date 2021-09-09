@@ -22,7 +22,6 @@ import com.george.vector.R;
 import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.Utils;
-import com.george.vector.users.root.tasks.AddTaskRootActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -58,7 +57,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
     ExtendedFloatingActionButton crate_task;
     LinearProgressIndicator progress_bar_add_task_user;
 
-    String address, floor, cabinet, litera, name_task, comment, userID, email, status = "Новая заявка", permission, NAME_IMAGE;
+    String address, floor, cabinet, letter, name_task, comment, userID, email, status = "Новая заявка", permission, NAME_IMAGE;
     private static final String TAG = "AddTaskUserActivity";
 
     FirebaseAuth firebaseAuth;
@@ -111,7 +110,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
             address = Objects.requireNonNull(text_input_layout_address.getEditText()).getText().toString();
             floor = Objects.requireNonNull(text_input_layout_floor.getEditText()).getText().toString();
             cabinet = Objects.requireNonNull(text_input_layout_cabinet.getEditText()).getText().toString();
-            litera = Objects.requireNonNull(text_input_layout_cabinet_liter_user.getEditText()).getText().toString();
+            letter = Objects.requireNonNull(text_input_layout_cabinet_liter_user.getEditText()).getText().toString();
             name_task = Objects.requireNonNull(text_input_layout_name_task.getEditText()).getText().toString();
             comment = Objects.requireNonNull(text_input_layout_comment.getEditText()).getText().toString();
 
@@ -139,7 +138,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
         DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String time_create = timeFormat.format(currentDate);
 
-        task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, litera, comment,
+        task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, letter, comment,
                 null, null, status, time_create, email, false, NAME_IMAGE);
 
     }
@@ -177,9 +176,9 @@ public class AddTaskUserActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
-            byte[] data = baos.toByteArray();
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.JPEG, 25, byteArrayOutputStream);
+            byte[] data = byteArrayOutputStream.toByteArray();
 
             final ProgressDialog progressDialog = new ProgressDialog(AddTaskUserActivity.this);
             progressDialog.setTitle("Uploading...");
@@ -217,14 +216,14 @@ public class AddTaskUserActivity extends AppCompatActivity {
             address_autoComplete.setAdapter(adapter);
         }
 
-        String[] itemsLitera = getResources().getStringArray(R.array.litera);
-        ArrayAdapter<String> adapter_litera = new ArrayAdapter<>(
+        String[] itemsLetter = getResources().getStringArray(R.array.letter);
+        ArrayAdapter<String> adapter_letter = new ArrayAdapter<>(
                 AddTaskUserActivity.this,
                 R.layout.dropdown_menu_categories,
-                itemsLitera
+                itemsLetter
         );
 
-        liter_autoComplete_user.setAdapter(adapter_litera);
+        liter_autoComplete_user.setAdapter(adapter_letter);
 
 
         if(permission.equals(getString(R.string.bar_school)))

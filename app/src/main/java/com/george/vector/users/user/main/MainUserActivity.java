@@ -53,7 +53,6 @@ public class MainUserActivity extends AppCompatActivity {
     private TaskAdapter adapter;
     private Query query;
 
-    FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 
     String permission;
@@ -82,7 +81,6 @@ public class MainUserActivity extends AppCompatActivity {
         });
 
         db = FirebaseFirestore.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         DocumentReference documentReference = firebaseFirestore.collection("news").document("news_fragment");

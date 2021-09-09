@@ -14,12 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.george.vector.R;
-import com.george.vector.auth.ActivityLogin;
-import com.george.vector.common.bottom_sheets.ConsoleBottomSheet;
 import com.george.vector.common.edit_users.EditDataUserActivity;
 import com.george.vector.common.settings.SettingsActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingsExecutorBottomSheet extends BottomSheetDialogFragment {
 

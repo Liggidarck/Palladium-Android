@@ -14,8 +14,6 @@ import com.george.vector.R;
 import com.george.vector.users.executor.main.FolderExecutorActivity;
 import com.google.android.material.card.MaterialCardView;
 
-import org.jetbrains.annotations.NotNull;
-
 public class fragment_ost extends Fragment {
 
     MaterialCardView ost_school_executor;

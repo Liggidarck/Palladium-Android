@@ -47,13 +47,10 @@ public class TaskRootActivity extends AppCompatActivity {
 
     private static final String TAG = "TaskActivityRoot";
 
-    String id, collection, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create, location, email, image;
+    String id, collection, address, floor, cabinet, letter, name_task, comment, status, date_create, time_create, location, email, image;
     boolean confirm_delete, urgent;
 
-    FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
-    FirebaseStorage firebaseStorage;
-    StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,11 +79,7 @@ public class TaskRootActivity extends AppCompatActivity {
         email = arguments.get(getString(R.string.email)).toString();
         confirm_delete = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("confirm_before_deleting_root", true);
 
-        firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
-
         topAppBar_tasks_root.setNavigationOnClickListener(v -> onBackPressed());
 
         image_root_card.setOnClickListener(v -> {
@@ -122,42 +115,42 @@ public class TaskRootActivity extends AppCompatActivity {
         documentReference.addSnapshotListener(this, (value, error) -> {
             progress_bar_task_root.setVisibility(View.VISIBLE);
             assert value != null;
+            address = value.getString("address");
+            floor = String.format("Этаж: %s", value.getString("floor"));
+            cabinet = String.format("Кабинет: %s", value.getString("cabinet"));
+            letter = value.getString("litera");
+            name_task = value.getString("name_task");
+            comment = value.getString("comment");
+            status = value.getString("status");
+            date_create = value.getString("date_create");
+            time_create = value.getString("time_create");
+            image = value.getString("image");
+
+            if (image == null) {
+                Log.d(TAG, "No image, stop loading");
+                progress_bar_task_root.setVisibility(View.INVISIBLE);
+                image_root_task.setImageResource(R.drawable.no_image);
+            } else {
+
+                String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image);
+                Picasso.with(this)
+                        .load(IMAGE_URL)
+                        .into(image_root_task, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                progress_bar_task_root.setVisibility(View.INVISIBLE);
+                            }
+
+                            @Override
+                            public void onError() {
+                                Log.e(TAG, "Error on download");
+                                progress_bar_task_root.setVisibility(View.INVISIBLE);
+                            }
+                        });
+            }
+
             try {
-                address = value.getString("address");
-                floor = String.format("Этаж: %s", value.getString("floor"));
-                cabinet = String.format("Кабинет: %s", value.getString("cabinet"));
-                litera = value.getString("litera");
-                name_task = value.getString("name_task");
-                comment = value.getString("comment");
-                status = value.getString("status");
-                date_create = value.getString("date_create");
-                time_create = value.getString("time_create");
                 urgent = value.getBoolean("urgent");
-                image = value.getString("image");
-
-                if (image == null) {
-                    Log.d(TAG, "No image, stop loading");
-                    progress_bar_task_root.setVisibility(View.INVISIBLE);
-                    image_root_task.setImageResource(R.drawable.no_image);
-                } else {
-
-                    String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image);
-                    Picasso.with(this)
-                            .load(IMAGE_URL)
-                            .into(image_root_task, new Callback() {
-                                @Override
-                                public void onSuccess() {
-                                    progress_bar_task_root.setVisibility(View.INVISIBLE);
-                                }
-
-                                @Override
-                                public void onError() {
-                                    Log.e(TAG, "Error on download");
-                                    progress_bar_task_root.setVisibility(View.INVISIBLE);
-                                }
-                            });
-                }
-
 
                 if (status.equals("Новая заявка"))
                     circle_status_root.setImageResource(R.color.red);
@@ -168,8 +161,8 @@ public class TaskRootActivity extends AppCompatActivity {
                 if (status.equals("Архив"))
                     circle_status_root.setImageResource(R.color.green);
 
-                if (!litera.equals("-") && !litera.isEmpty())
-                    cabinet = String.format("%s%s", cabinet, litera);
+                if (!letter.equals("-") && !letter.isEmpty())
+                    cabinet = String.format("%s%s", cabinet, letter);
 
                 if (urgent) {
                     Log.d(TAG, "Срочная заявка");
@@ -214,9 +207,11 @@ public class TaskRootActivity extends AppCompatActivity {
         DeleteTask deleteTask = new DeleteTask();
         deleteTask.delete_task(collection, id);
 
-        String storageUrl = "images/" + image;
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(storageUrl);
-        storageReference.delete();
+        if(image != null) {
+            String storageUrl = "images/" + image;
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(storageUrl);
+            storageReference.delete();
+        }
 
         onBackPressed();
     }

@@ -2,9 +2,6 @@ package com.george.vector.common.utils;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.ActionMode;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 

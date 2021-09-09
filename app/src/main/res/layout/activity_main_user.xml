@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".users.user.main.MainUserActivity">
@@ -26,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar_main_user"
-        android:hint="Поиск заявок"
+        android:hint="@string/search_task"
         android:padding="10dp"
         app:startIconDrawable="@drawable/ic_baseline_search_24">
 
@@ -58,7 +57,7 @@
             style="@style/Widget.MaterialComponents.Chip.Filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Сегодня созданы" />
+            android:text="@string/today_create" />
 
     </com.google.android.material.chip.ChipGroup>
 
@@ -83,7 +82,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="25dp"
-        android:text="Создать"
+        android:text="@string/create"
         android:textColor="@color/white"
         app:icon="@drawable/ic_baseline_add_24"
         app:iconTint="@color/white" />

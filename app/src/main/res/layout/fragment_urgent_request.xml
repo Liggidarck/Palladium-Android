@@ -30,7 +30,8 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:src="@drawable/ic_warning_urgent" />
+                android:src="@drawable/ic_warning_urgent"
+                android:contentDescription="TODO" />
 
             <TextView
                 android:id="@+id/title_urgent_text_view"
@@ -39,13 +40,12 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
-                android:text="Срочная заявка"
+                android:text="@string/urgent_task"
                 android:layout_toEndOf="@id/urgent_image"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/subtitle_urgent_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/title_urgent_text_view"
@@ -56,7 +56,7 @@
                 android:layout_toEndOf="@id/urgent_image"
                 android:ellipsize="end"
                 android:maxLines="3"
-                android:text="Обратите внимание на эту заявку и выполните всё в срок"
+                android:text="@string/urgent_task_description"
                 android:textColor="#8E8E8E" />
 
         </RelativeLayout>

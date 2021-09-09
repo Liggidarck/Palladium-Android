@@ -22,7 +22,6 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -44,12 +43,11 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
     MaterialAutoCompleteTextView address_autoComplete_executor, liter_autoComplete_executor,
             status_autoComplete_executor;
 
-    FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 
     String id, collection, location;
 
-    String address, floor, cabinet, litera, name_task, comment, status, date_create, time_create,
+    String address, floor, cabinet, letter, name_task, comment, status, date_create, time_create,
             date_done, email, email_executor, image;
 
     String email_mail_activity;
@@ -81,7 +79,6 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         location = arguments.get(getString(R.string.location)).toString();
         email_mail_activity = arguments.getString(getString(R.string.email));
 
-        firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
@@ -92,7 +89,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
                 address = value.getString("address");
                 floor = value.getString("floor");
                 cabinet = value.getString("cabinet");
-                litera = value.getString("litera");
+                letter = value.getString("litera");
                 name_task = value.getString("name_task");
                 comment = value.getString("comment");
                 status = value.getString("status");
@@ -108,7 +105,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
                 Objects.requireNonNull(text_input_layout_address_executor.getEditText()).setText(address);
                 Objects.requireNonNull(text_input_layout_floor_executor.getEditText()).setText(floor);
                 Objects.requireNonNull(text_input_layout_cabinet_executor.getEditText()).setText(cabinet);
-                Objects.requireNonNull(text_input_layout_cabinet_liter_executor.getEditText()).setText(litera);
+                Objects.requireNonNull(text_input_layout_cabinet_liter_executor.getEditText()).setText(letter);
                 Objects.requireNonNull(text_input_layout_name_task_executor.getEditText()).setText(name_task);
                 Objects.requireNonNull(text_input_layout_status_executor.getEditText()).setText(status);
                 Objects.requireNonNull(text_input_layout_date_task_executor.getEditText()).setText(date_done);
@@ -147,7 +144,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         String update_address = Objects.requireNonNull(text_input_layout_address_executor.getEditText()).getText().toString();
         String update_floor = Objects.requireNonNull(text_input_layout_floor_executor.getEditText()).getText().toString();
         String update_cabinet = Objects.requireNonNull(text_input_layout_cabinet_executor.getEditText()).getText().toString();
-        String update_litera = Objects.requireNonNull(text_input_layout_cabinet_liter_executor.getEditText()).getText().toString();
+        String update_letter = Objects.requireNonNull(text_input_layout_cabinet_liter_executor.getEditText()).getText().toString();
         String update_name = Objects.requireNonNull(text_input_layout_name_task_executor.getEditText()).getText().toString();
         String update_comment = Objects.requireNonNull(text_input_layout_comment_executor.getEditText()).getText().toString();
         String update_date_task = Objects.requireNonNull(text_input_layout_date_task_executor.getEditText()).getText().toString();
@@ -155,7 +152,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         String update_status = Objects.requireNonNull(text_input_layout_status_executor.getEditText()).getText().toString();
 
         task.save(new SaveTask(), location, update_name, update_address, date_create, update_floor,
-                update_cabinet, update_litera, update_comment, update_date_task,
+                update_cabinet, update_letter, update_comment, update_date_task,
                 update_executor, update_status, time_create, email, false, update_image);
 
         Intent intent = new Intent(this, MainExecutorActivity.class);
@@ -195,14 +192,14 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
 
         status_autoComplete_executor.setAdapter(adapter_status);
 
-        String[] itemsLitera = getResources().getStringArray(R.array.litera);
-        ArrayAdapter<String> adapter_litera = new ArrayAdapter<>(
+        String[] items_letter = getResources().getStringArray(R.array.letter);
+        ArrayAdapter<String> adapter_letter = new ArrayAdapter<>(
                 EditTaskExecutorActivity.this,
                 R.layout.dropdown_menu_categories,
-                itemsLitera
+                items_letter
         );
 
-        liter_autoComplete_executor.setAdapter(adapter_litera);
+        liter_autoComplete_executor.setAdapter(adapter_letter);
 
     }
 

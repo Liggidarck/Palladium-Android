@@ -33,12 +33,10 @@ public class TaskUserActivity extends AppCompatActivity {
     LinearProgressIndicator progress_bar_task_user;
     ImageView image_user_task;
 
-    String id, permission, collection, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create, image;
+    String id, permission, collection, address, floor, cabinet, letter, name_task, comment, status, date_create, time_create, image;
 
-    FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
     FirebaseStorage firebaseStorage;
-    StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +57,9 @@ public class TaskUserActivity extends AppCompatActivity {
         text_view_date_create_task_user = findViewById(R.id.text_view_date_create_task_user);
         progress_bar_task_user = findViewById(R.id.progress_bar_task_user);
         image_user_task = findViewById(R.id.image_user_task);
-
-        firebaseAuth = FirebaseAuth.getInstance();
+        
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
 
          setSupportActionBar(toolbar);
          toolbar.setNavigationOnClickListener(v -> onBackPressed());
@@ -81,7 +77,7 @@ public class TaskUserActivity extends AppCompatActivity {
             address = value.getString("address");
             floor = String.format("Этаж: %s", value.getString("floor"));
             cabinet = String.format("Кабинет: %s", value.getString("cabinet"));
-            litera = value.getString("litera");
+            letter = value.getString("litera");
             name_task = value.getString("name_task");
             comment = value.getString("comment");
             status = value.getString("status");
@@ -111,8 +107,8 @@ public class TaskUserActivity extends AppCompatActivity {
                         });
             }
 
-            if (!litera.equals("-") && !litera.isEmpty())
-                cabinet = String.format("%s%s", cabinet, litera);
+            if (!letter.equals("-") && !letter.isEmpty())
+                cabinet = String.format("%s%s", cabinet, letter);
 
             text_view_address_task_user.setText(address);
             text_view_floor_task_user.setText(floor);

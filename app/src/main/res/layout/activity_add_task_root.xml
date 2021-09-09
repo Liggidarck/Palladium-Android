@@ -76,7 +76,6 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
-                android:layout_weight="1"
                 android:hint="@string/floor"
                 app:counterEnabled="true"
                 app:counterMaxLength="1"
@@ -127,7 +126,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     android:layout_weight="1.5"
-                    android:hint="Литера"
+                    android:hint="@string/letter"
                     app:endIconMode="dropdown_menu"
                     app:helperText="Опционально">
 
@@ -275,7 +274,8 @@
                 android:src="@drawable/no_image"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"/>
+                android:layout_marginEnd="20dp"
+                tools:ignore="ContentDescription" />
 
             <View
                 android:layout_width="match_parent"

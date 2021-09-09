@@ -9,13 +9,16 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Window;
@@ -23,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -48,6 +52,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -73,7 +78,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
     MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root, liter_autoComplete_root;
     ImageView image_task;
 
-    String location, userID, email, address, floor, cabinet, litera, name_task, date_complete, status, comment, USER_EMAIL, NAME_IMAGE;
+    String location, userID, email, address, floor, cabinet, letter, name_task, date_complete, status, comment, USER_EMAIL, NAME_IMAGE, full_name_executor;
     boolean urgent;
     private static final String TAG = "AddTaskRoot";
 
@@ -95,6 +100,8 @@ public class AddTaskRootActivity extends AppCompatActivity {
     Query query;
 
     private final int PICK_IMAGE_REQUEST = 71;
+    private static int TAKE_PICTURE_REQUEST = 1;
+
     private Uri filePath;
 
     @Override
@@ -129,8 +136,6 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
         topAppBar_new_task_root.setNavigationOnClickListener(v -> onBackPressed());
 
-        image_task.setOnClickListener(v -> chooseImage());
-
         Bundle arguments = getIntent().getExtras();
         location = arguments.get(getString(R.string.location)).toString();
         USER_EMAIL = arguments.get(getString(R.string.email)).toString();
@@ -149,11 +154,13 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
         add_executor_root.setOnClickListener(v -> show_add_executor_dialog());
 
+        image_task.setOnClickListener(v -> show_dialog_image());
+
         done_task_root.setOnClickListener(v -> {
             address = Objects.requireNonNull(text_input_layout_address_root.getEditText()).getText().toString();
             floor = Objects.requireNonNull(text_input_layout_floor_root.getEditText()).getText().toString();
             cabinet = Objects.requireNonNull(text_input_layout_cabinet_root.getEditText()).getText().toString();
-            litera = Objects.requireNonNull(text_input_layout_cabinet_liter_root.getEditText()).getText().toString();
+            letter = Objects.requireNonNull(text_input_layout_cabinet_liter_root.getEditText()).getText().toString();
             name_task = Objects.requireNonNull(text_input_layout_name_task_root.getEditText()).getText().toString();
             comment = Objects.requireNonNull(text_input_layout_comment_root.getEditText()).getText().toString();
             date_complete = Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).getText().toString();
@@ -172,6 +179,25 @@ public class AddTaskRootActivity extends AppCompatActivity {
         initialize_fields(location);
     }
 
+    private void show_dialog_image() {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_add_image);
+
+        RelativeLayout layout_new_photo = dialog.findViewById(R.id.layout_new_photo);
+        RelativeLayout layout_folder = dialog.findViewById(R.id.layout_folder);
+
+        layout_new_photo.setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        layout_folder.setOnClickListener(v -> {
+            chooseImage();
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
 
     private void chooseImage() {
         Intent intent = new Intent();
@@ -180,12 +206,25 @@ public class AddTaskRootActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
+    private void getThumbnailPicture() {
+        String  imageName = "image.jpg" ;
+
+        ContentValues values = new ContentValues();
+
+        values.put(MediaStore.Images.Media.TITLE, imageName);
+
+        filePath = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, filePath);
+
+        startActivityForResult(intent, TAKE_PICTURE_REQUEST);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null) {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             filePath = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
@@ -195,6 +234,23 @@ public class AddTaskRootActivity extends AppCompatActivity {
             }
 
         }
+
+        if (requestCode == TAKE_PICTURE_REQUEST  && resultCode == RESULT_OK) {
+            String[] projection = new String[] {MediaStore.Images.Media.DATA};
+
+            Cursor cursor = managedQuery(filePath, projection, null, null, null);
+            cursor.moveToFirst();
+
+            String filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
+        }
+    }
+
+    private void saveFullImage() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File file = new File(Environment.getExternalStorageDirectory(), "test.jpg");
+        filePath = Uri.fromFile(file);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, filePath);
+        startActivityForResult(intent, TAKE_PICTURE_REQUEST );
     }
 
     @SuppressLint("DefaultLocale")
@@ -206,9 +262,9 @@ public class AddTaskRootActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
-            byte[] data = baos.toByteArray();
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.JPEG, 25, byteArrayOutputStream);
+            byte[] data = byteArrayOutputStream.toByteArray();
 
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Загрузка...");
@@ -222,9 +278,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                         onBackPressed();
                     })
-                    .addOnFailureListener(e -> {
-                        progressDialog.dismiss();
-                    })
+                    .addOnFailureListener(e -> progressDialog.dismiss())
                     .addOnProgressListener(taskSnapshot -> {
                         double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
                         progressDialog.setMessage(String.format("Прогресс: %d%%", (int) progress));
@@ -246,7 +300,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String time_create = timeFormat.format(currentDate);
 
-        task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, litera, comment,
+        task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, letter, comment,
                 date_complete, email_executor, status, time_create, email, urgent, NAME_IMAGE);
 
     }
@@ -308,6 +362,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
                 last_name_executor = value.getString("last_name");
                 patronymic_executor = value.getString("patronymic");
                 email_executor = value.getString("email");
+                full_name_executor = String.format("%s %s %s", last_name_executor, name_executor, patronymic_executor);
 
                 Log.i(TAG, String.format("name: %s", name_executor));
                 Log.i(TAG, String.format("last_name: %s", last_name_executor));
@@ -360,11 +415,11 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
         status_autoComplete_root.setAdapter(adapter_status);
 
-        String[] itemsLitera = getResources().getStringArray(R.array.litera);
+        String[] itemsLetter = getResources().getStringArray(R.array.letter);
         ArrayAdapter<String> adapter_litera = new ArrayAdapter<>(
                 AddTaskRootActivity.this,
                 R.layout.dropdown_menu_categories,
-                itemsLitera
+                itemsLetter
         );
 
         liter_autoComplete_root.setAdapter(adapter_litera);

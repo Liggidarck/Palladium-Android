@@ -26,10 +26,10 @@
             android:id="@+id/camera_image"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:src="@drawable/ic_baseline_camera_alt_24"
             android:layout_centerVertical="true"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
+            android:src="@drawable/ic_baseline_camera_alt_24"
             tools:ignore="ContentDescription" />
 
         <TextView

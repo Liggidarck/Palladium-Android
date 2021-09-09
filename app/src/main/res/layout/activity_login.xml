@@ -90,7 +90,7 @@
         android:id="@+id/btn_forgot_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="восстановить пароль"
+        android:text="@string/restore_password"
         android:layout_below="@+id/btn_login"
         android:layout_marginTop="10dp"
         android:layout_marginStart="20dp"

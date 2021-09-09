@@ -39,13 +39,10 @@ public class TaskExecutorActivity extends AppCompatActivity {
     CircleImageView circle_status_executor;
     ImageView image_executor_task;
 
-    String id, collection, location, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create,
+    String id, collection, location, address, floor, cabinet, letter, name_task, comment, status, date_create, time_create,
             email_executor, email_creator, date_done, image;
 
-    FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
-    FirebaseStorage firebaseStorage;
-    StorageReference storageReference;
 
     String email_mail_activity;
 
@@ -73,11 +70,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
         location = arguments.get(getString(R.string.location)).toString();
         email_mail_activity = arguments.getString(getString(R.string.email));
 
-        firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
-
         topAppBar_task_executor.setNavigationOnClickListener(v -> onBackPressed());
 
         edit_btn_executor.setOnClickListener(v -> {
@@ -97,7 +90,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
                 address = value.getString("address");
                 floor = value.getString("floor");
                 cabinet = value.getString("cabinet");
-                litera = value.getString("litera");
+                letter = value.getString("litera");
                 name_task = value.getString("name_task");
                 comment = value.getString("comment");
                 status = value.getString("status");
@@ -110,7 +103,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
 
                 Log.d(TAG, "address: " + address);
                 Log.d(TAG, "floor: " + floor);
-                Log.d(TAG, "litera: " + litera);
+                Log.d(TAG, "litera: " + letter);
                 Log.d(TAG, "comment: " + comment);
                 Log.d(TAG, "status: " + status);
                 Log.d(TAG, "date_create: " + date_create);
@@ -151,8 +144,8 @@ public class TaskExecutorActivity extends AppCompatActivity {
                 if (status.equals("Архив"))
                     circle_status_executor.setImageResource(R.color.green);
 
-                if (!litera.equals("-") && !litera.isEmpty())
-                    cabinet = String.format("%s%s", cabinet, litera);
+                if (!letter.equals("-") && !letter.isEmpty())
+                    cabinet = String.format("%s%s", cabinet, letter);
             } catch (Exception e) {
                 Log.e(TAG, "Error! " + e);
             }

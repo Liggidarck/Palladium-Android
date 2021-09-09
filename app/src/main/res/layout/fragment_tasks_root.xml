@@ -10,7 +10,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Поиск заявок"
+        android:hint="@string/search_task"
         android:padding="10dp"
         app:startIconDrawable="@drawable/ic_baseline_search_24">
 
@@ -30,7 +30,6 @@
         android:layout_marginEnd="10dp" >
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/group_new_tasks_ost_school"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:singleLine="true"
@@ -42,28 +41,28 @@
                 style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Все заявки" />
+                android:text="@string/all_tasks" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_urgent_tasks_root"
                 style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Срочные заявки" />
+                android:text="@string/urgent_tasks" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_old_school_tasks_root"
                 style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Старое здание" />
+                android:text="@string/old_school" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_new_school_tasks_root"
                 style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Новое здание" />
+                android:text="@string/new_school" />
 
         </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>

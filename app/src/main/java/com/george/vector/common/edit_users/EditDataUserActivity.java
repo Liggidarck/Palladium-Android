@@ -66,7 +66,7 @@ public class EditDataUserActivity extends AppCompatActivity {
             patronymic_user = value.getString("patronymic");
             email_user = value.getString("email");
             role_user = value.getString("role");
-            Log.i(TAG, "name: " + name_user + " last_name: " + last_name_user + " patr: " + patronymic_user + " email: " + email_user);
+            Log.i(TAG, String.format("name: %s last_name: %s patronymic: %s email: %s", name_user, last_name_user, patronymic_user, email_user));
 
             Objects.requireNonNull(text_input_layout_name_user_edit.getEditText()).setText(name_user);
             Objects.requireNonNull(text_input_layout_last_name_user_edit.getEditText()).setText(last_name_user);
