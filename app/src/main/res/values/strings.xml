@@ -72,8 +72,13 @@
     <string name="my_tasks">Мои заявки</string>
     <string name="all_tasks">Все заявки</string>
     <string name="urgent_tasks">Срочные заявки</string>
-    <string name="old_school">Старое здание</string>
-    <string name="new_school">Новое здание</string>
+
+    <string name="new_school_full_text">Улица Авиаторов дом 9. Старшая школа</string>
+    <string name="old_school_full_text">Улица Авиаторов дом 9. Начальная школа</string>
+
+    <string name="old_school">Начальная школа</string>
+    <string name="new_school">Старшая школа</string>
+
     <string name="urgent_task">Срочная заявка</string>
     <string name="urgent_task_description">Обратите внимание на эту заявку и выполните всё в срок</string>
     <string name="user_label">Черновики</string>

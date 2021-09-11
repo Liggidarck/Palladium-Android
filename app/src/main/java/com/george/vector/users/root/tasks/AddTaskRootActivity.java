@@ -9,16 +9,13 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Window;
@@ -27,7 +24,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
@@ -52,7 +48,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -78,7 +73,8 @@ public class AddTaskRootActivity extends AppCompatActivity {
     MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root, liter_autoComplete_root;
     ImageView image_task;
 
-    String location, userID, email, address, floor, cabinet, letter, name_task, date_complete, status, comment, USER_EMAIL, NAME_IMAGE, full_name_executor;
+    String location, userID, email, address, floor, cabinet, letter, name_task, date_complete, status, comment,
+            USER_EMAIL, NAME_IMAGE, full_name_executor;
     boolean urgent;
     private static final String TAG = "AddTaskRoot";
 
@@ -100,7 +96,6 @@ public class AddTaskRootActivity extends AppCompatActivity {
     Query query;
 
     private final int PICK_IMAGE_REQUEST = 71;
-    private static int TAKE_PICTURE_REQUEST = 1;
 
     private Uri filePath;
 
@@ -206,21 +201,6 @@ public class AddTaskRootActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
-    private void getThumbnailPicture() {
-        String  imageName = "image.jpg" ;
-
-        ContentValues values = new ContentValues();
-
-        values.put(MediaStore.Images.Media.TITLE, imageName);
-
-        filePath = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, filePath);
-
-        startActivityForResult(intent, TAKE_PICTURE_REQUEST);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -234,23 +214,6 @@ public class AddTaskRootActivity extends AppCompatActivity {
             }
 
         }
-
-        if (requestCode == TAKE_PICTURE_REQUEST  && resultCode == RESULT_OK) {
-            String[] projection = new String[] {MediaStore.Images.Media.DATA};
-
-            Cursor cursor = managedQuery(filePath, projection, null, null, null);
-            cursor.moveToFirst();
-
-            String filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
-        }
-    }
-
-    private void saveFullImage() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File file = new File(Environment.getExternalStorageDirectory(), "test.jpg");
-        filePath = Uri.fromFile(file);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, filePath);
-        startActivityForResult(intent, TAKE_PICTURE_REQUEST );
     }
 
     @SuppressLint("DefaultLocale")

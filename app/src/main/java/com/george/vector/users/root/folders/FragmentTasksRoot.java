@@ -19,7 +19,6 @@ import com.george.vector.common.tasks.ui.TaskAdapter;
 import com.george.vector.common.tasks.ui.TaskUi;
 import com.george.vector.users.root.tasks.TaskRootActivity;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -32,7 +31,6 @@ public class FragmentTasksRoot extends Fragment {
     TaskAdapter adapter;
 
     RecyclerView recyclerview_tasks_root;
-    TextInputLayout text_input_search_root_tasks;
     Chip chip_all_tasks_root, chip_urgent_tasks_root, chip_old_school_tasks_root, chip_new_school_tasks_root;
 
     @Nullable
@@ -41,7 +39,6 @@ public class FragmentTasksRoot extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tasks_root, container, false);
 
         recyclerview_tasks_root = view.findViewById(R.id.recyclerview_school_ost_new_tasks);
-        text_input_search_root_tasks = view.findViewById(R.id.text_input_search_root_tasks);
         chip_all_tasks_root = view.findViewById(R.id.chip_all_tasks_root);
         chip_urgent_tasks_root = view.findViewById(R.id.chip_urgent_tasks_root);
         chip_old_school_tasks_root = view.findViewById(R.id.chip_old_school_tasks_root);
@@ -54,13 +51,13 @@ public class FragmentTasksRoot extends Fragment {
         executed = args.getString("executed");
         email = args.getString(getString(R.string.email));
 
-        if(location.equals(getString(R.string.ost_school)) && folder.equals(getString(R.string.new_tasks)))
+        if (location.equals(getString(R.string.ost_school)) && folder.equals(getString(R.string.new_tasks)))
             ostSchoolNewTasks();
 
-        if(location.equals(getString(R.string.ost_school)) && folder.equals(getString(R.string.in_progress_tasks)))
+        if (location.equals(getString(R.string.ost_school)) && folder.equals(getString(R.string.in_progress_tasks)))
             ostSchoolProgressTasks();
 
-        if(location.equals(getString(R.string.ost_school)) && folder.equals(getString(R.string.archive_tasks)))
+        if (location.equals(getString(R.string.ost_school)) && folder.equals(getString(R.string.archive_tasks)))
             ostSchoolArchiveTasks();
 
         return view;
@@ -70,6 +67,28 @@ public class FragmentTasksRoot extends Fragment {
         recyclerview_tasks_root.setHasFixedSize(true);
         recyclerview_tasks_root.setLayoutManager(new LinearLayoutManager(FragmentTasksRoot.this.getContext()));
         recyclerview_tasks_root.setAdapter(adapter);
+
+        //Удаление по свайпу
+//        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+//            @Override
+//            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+//                return false;
+//            }
+//
+//            @Override
+//            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+//
+//                AlertDialog.Builder builder = new AlertDialog.Builder(FragmentTasksRoot.this.getContext());
+//
+//                builder.setTitle(getText(R.string.warning))
+//                        .setMessage(getText(R.string.warning_delete_task))
+//                        .setPositiveButton(getText(R.string.delete), (dialog, id) -> Toast.makeText(FragmentTasksRoot.this.getContext(), "start demo deleting...", Toast.LENGTH_SHORT).show())
+//                        .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.dismiss());
+//
+//                AlertDialog dialog = builder.create();
+//                dialog.show();
+//            }
+//        }).attachToRecyclerView(recyclerview_tasks_root);
     }
 
     void ostSchoolNewTasks() {
@@ -102,12 +121,12 @@ public class FragmentTasksRoot extends Fragment {
                 .build();
         adapter = new TaskAdapter(options);
 
-        if(executed.equals("root")) {
+        if (executed.equals("root")) {
             Log.d(TAG, "All Tasks");
 
             chip_all_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if(isChecked) {
+                if (isChecked) {
                     Log.d(TAG, "Default Query");
 
                     Query query_all = taskRef.whereEqualTo("status", "Новая заявка");
@@ -122,7 +141,7 @@ public class FragmentTasksRoot extends Fragment {
 
             chip_urgent_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if(isChecked){
+                if (isChecked) {
                     Log.i(TAG, "urgent checked");
                     Query query_urgent = taskRef.whereEqualTo("urgent", true);
 
@@ -138,7 +157,7 @@ public class FragmentTasksRoot extends Fragment {
             chip_old_school_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
-                    Query query_address = taskRef.whereEqualTo("address", "Улица Авиаторов дом 9. Старое здание");
+                    Query query_address = taskRef.whereEqualTo("address", getText(R.string.old_school_full_text));
 
                     FirestoreRecyclerOptions<TaskUi> address_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_address, TaskUi.class)
@@ -151,7 +170,7 @@ public class FragmentTasksRoot extends Fragment {
 
             chip_new_school_tasks_root.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 if (isChecked) {
-                    Query query_address = taskRef.whereEqualTo("address", "Улица Авиаторов дом 9. Новое здание");
+                    Query query_address = taskRef.whereEqualTo("address", getText(R.string.new_school_full_text));
 
                     FirestoreRecyclerOptions<TaskUi> address_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_address, TaskUi.class)
@@ -163,7 +182,7 @@ public class FragmentTasksRoot extends Fragment {
 
         }
 
-        if(executed.equals("work")) {
+        if (executed.equals("work")) {
             Log.d(TAG, "All Executed Tasks");
 
             Query query_all_default = taskRef.whereEqualTo("executor", email);
@@ -175,7 +194,7 @@ public class FragmentTasksRoot extends Fragment {
 
             chip_all_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if(isChecked) {
+                if (isChecked) {
                     Query query_all = taskRef.whereEqualTo("executor", email);
                     FirestoreRecyclerOptions<TaskUi> executor_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_all, TaskUi.class)
@@ -188,7 +207,7 @@ public class FragmentTasksRoot extends Fragment {
 
             chip_urgent_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if(isChecked){
+                if (isChecked) {
                     Log.i(TAG, "urgent checked");
                     Query query_urgent = taskRef.whereEqualTo("urgent", true).whereEqualTo("executor", email);
 
@@ -204,7 +223,7 @@ public class FragmentTasksRoot extends Fragment {
             chip_old_school_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
-                    Query query_address = taskRef.whereEqualTo("address", "Улица Авиаторов дом 9. Старое здание").whereEqualTo("executor", email);
+                    Query query_address = taskRef.whereEqualTo("address", getText(R.string.old_school_full_text)).whereEqualTo("executor", email);
 
                     FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_address, TaskUi.class)
@@ -217,7 +236,7 @@ public class FragmentTasksRoot extends Fragment {
 
             chip_new_school_tasks_root.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 if (isChecked) {
-                    Query query_address = taskRef.whereEqualTo("address", "Улица Авиаторов дом 9. Новое здание").whereEqualTo("executor", email);
+                    Query query_address = taskRef.whereEqualTo("address", getText(R.string.new_school_full_text)).whereEqualTo("executor", email);
 
                     FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_address, TaskUi.class)
@@ -261,12 +280,12 @@ public class FragmentTasksRoot extends Fragment {
                 .build();
         adapter = new TaskAdapter(options);
 
-        if(executed.equals("root")) {
+        if (executed.equals("root")) {
             Log.d(TAG, "All Tasks");
 
             chip_all_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if(isChecked) {
+                if (isChecked) {
                     Query query_all = taskRef.whereEqualTo("status", "Новая заявка");
                     FirestoreRecyclerOptions<TaskUi> all_tasks = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_all, TaskUi.class)
@@ -279,7 +298,7 @@ public class FragmentTasksRoot extends Fragment {
 
             chip_urgent_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if(isChecked){
+                if (isChecked) {
                     Log.i(TAG, "urgent checked");
                     Query query_urgent = taskRef.whereEqualTo("urgent", true);
 
@@ -295,7 +314,7 @@ public class FragmentTasksRoot extends Fragment {
             chip_old_school_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
-                    Query query_address = taskRef.whereEqualTo("address", "Улица Авиаторов дом 9. Старое здание");
+                    Query query_address = taskRef.whereEqualTo("address", getText(R.string.old_school_full_text));
 
                     FirestoreRecyclerOptions<TaskUi> address_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_address, TaskUi.class)
@@ -308,7 +327,7 @@ public class FragmentTasksRoot extends Fragment {
 
             chip_new_school_tasks_root.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 if (isChecked) {
-                    Query query_address = taskRef.whereEqualTo("address", "Улица Авиаторов дом 9. Новое здание");
+                    Query query_address = taskRef.whereEqualTo("address", getText(R.string.new_school_full_text));
 
                     FirestoreRecyclerOptions<TaskUi> address_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_address, TaskUi.class)
@@ -320,12 +339,12 @@ public class FragmentTasksRoot extends Fragment {
 
         }
 
-        if(executed.equals("work")) {
+        if (executed.equals("work")) {
             Log.d(TAG, "All Executed Tasks");
 
             chip_all_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if(isChecked) {
+                if (isChecked) {
                     Query query_all = taskRef.whereEqualTo("executor", email);
                     FirestoreRecyclerOptions<TaskUi> executor_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_all, TaskUi.class)
@@ -338,7 +357,7 @@ public class FragmentTasksRoot extends Fragment {
 
             chip_urgent_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if(isChecked){
+                if (isChecked) {
                     Log.i(TAG, "urgent checked");
                     Query query_urgent = taskRef.whereEqualTo("urgent", true).whereEqualTo("executor", email);
 
@@ -354,7 +373,7 @@ public class FragmentTasksRoot extends Fragment {
             chip_old_school_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
-                    Query query_address = taskRef.whereEqualTo("address", "Улица Авиаторов дом 9. Старое здание").whereEqualTo("executor", email);
+                    Query query_address = taskRef.whereEqualTo("address", getText(R.string.old_school_full_text)).whereEqualTo("executor", email);
 
                     FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_address, TaskUi.class)
@@ -367,7 +386,7 @@ public class FragmentTasksRoot extends Fragment {
 
             chip_new_school_tasks_root.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 if (isChecked) {
-                    Query query_address = taskRef.whereEqualTo("address", "Улица Авиаторов дом 9. Новое здание").whereEqualTo("executor", email);
+                    Query query_address = taskRef.whereEqualTo("address", getText(R.string.new_school_full_text)).whereEqualTo("executor", email);
 
                     FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_address, TaskUi.class)
@@ -413,12 +432,12 @@ public class FragmentTasksRoot extends Fragment {
 
         adapter = new TaskAdapter(options);
 
-        if(executed.equals("root")) {
+        if (executed.equals("root")) {
             Log.d(TAG, "All Tasks");
 
             chip_all_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if(isChecked) {
+                if (isChecked) {
                     Query query_all = taskRef.whereEqualTo("status", "Новая заявка");
                     FirestoreRecyclerOptions<TaskUi> all_tasks = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_all, TaskUi.class)
@@ -431,7 +450,7 @@ public class FragmentTasksRoot extends Fragment {
 
             chip_urgent_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if(isChecked){
+                if (isChecked) {
                     Log.i(TAG, "urgent checked");
                     Query query_urgent = taskRef.whereEqualTo("urgent", true);
 
@@ -447,7 +466,7 @@ public class FragmentTasksRoot extends Fragment {
             chip_old_school_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
-                    Query query_address = taskRef.whereEqualTo("address", "Улица Авиаторов дом 9. Старое здание");
+                    Query query_address = taskRef.whereEqualTo("address", getText(R.string.old_school_full_text));
 
                     FirestoreRecyclerOptions<TaskUi> address_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_address, TaskUi.class)
@@ -460,7 +479,7 @@ public class FragmentTasksRoot extends Fragment {
 
             chip_new_school_tasks_root.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 if (isChecked) {
-                    Query query_address = taskRef.whereEqualTo("address", "Улица Авиаторов дом 9. Новое здание");
+                    Query query_address = taskRef.whereEqualTo("address", getText(R.string.new_school_full_text));
 
                     FirestoreRecyclerOptions<TaskUi> address_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_address, TaskUi.class)
@@ -472,12 +491,12 @@ public class FragmentTasksRoot extends Fragment {
 
         }
 
-        if(executed.equals("work")) {
+        if (executed.equals("work")) {
             Log.d(TAG, "All Executed Tasks");
 
             chip_all_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if(isChecked) {
+                if (isChecked) {
                     Query query_all = taskRef.whereEqualTo("executor", email);
                     FirestoreRecyclerOptions<TaskUi> executor_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_all, TaskUi.class)
@@ -490,7 +509,7 @@ public class FragmentTasksRoot extends Fragment {
 
             chip_urgent_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if(isChecked){
+                if (isChecked) {
                     Log.i(TAG, "urgent checked");
                     Query query_urgent = taskRef.whereEqualTo("urgent", true).whereEqualTo("executor", email);
 
@@ -506,7 +525,7 @@ public class FragmentTasksRoot extends Fragment {
             chip_old_school_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
-                    Query query_address = taskRef.whereEqualTo("address", "Улица Авиаторов дом 9. Старое здание").whereEqualTo("executor", email);
+                    Query query_address = taskRef.whereEqualTo("address", getText(R.string.old_school_full_text)).whereEqualTo("executor", email);
 
                     FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_address, TaskUi.class)
@@ -519,7 +538,7 @@ public class FragmentTasksRoot extends Fragment {
 
             chip_new_school_tasks_root.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 if (isChecked) {
-                    Query query_address = taskRef.whereEqualTo("address", "Улица Авиаторов дом 9. Новое здание").whereEqualTo("executor", email);
+                    Query query_address = taskRef.whereEqualTo("address", getText(R.string.new_school_full_text)).whereEqualTo("executor", email);
 
                     FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_address, TaskUi.class)

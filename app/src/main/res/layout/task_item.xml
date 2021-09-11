@@ -1,48 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="5dp"
-    android:layout_marginStart="10dp"
-    android:layout_marginEnd="10dp"
-    android:foreground="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:padding="8dp"
-    tools:targetApi="m"
+    android:foreground="?android:attr/selectableItemBackground"
     tools:ignore="UnusedAttribute">
 
-    <TextView
-        android:id="@+id/text_view_nate_task"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
-
-    <TextView
-        android:id="@+id/text_view_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_view_nate_task"
-        android:textColor="@color/black"
-        android:textSize="17sp"/>
-
-    <TextView
-        android:id="@+id/date_create"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_view_address"
-        android:layout_marginTop="5dp"/>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:src="@drawable/line_gray"
-        android:layout_below="@+id/date_create"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        tools:ignore="ContentDescription" />
+        android:layout_marginEnd="10dp">
+
+        <TextView
+            android:id="@+id/text_view_nate_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Сломаная дверь"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/text_view_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_view_nate_task"
+            android:text="Улица Авиаторов дом 9. Начальная школа"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/date_create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_view_address"
+            android:layout_marginTop="5dp"
+            android:text="11.09.2021" />
+
+        <TextView
+            android:id="@+id/text_view_time_create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="19:30"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/text_view_address"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_below="@+id/date_create"
+            android:layout_marginTop="6dp"
+            android:src="@drawable/line_gray"
+            tools:ignore="ContentDescription" />
+
+    </RelativeLayout>
+
 
 </RelativeLayout>

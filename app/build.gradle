@@ -11,8 +11,8 @@ android {
         applicationId "com.george.vector"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 114
-        versionName "1.1.4"
+        versionCode 115
+        versionName "1.1.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -47,19 +47,14 @@ dependencies {
     //Firebase Main
     implementation 'com.google.firebase:firebase-auth:21.0.1'
     implementation 'com.google.firebase:firebase-firestore:23.0.3'
-    implementation 'com.google.firebase:firebase-messaging:22.0.0'
 
     //Firebase ui
     implementation 'com.firebaseui:firebase-ui-database:7.1.1'
     implementation 'com.firebaseui:firebase-ui-storage:7.1.1'
     implementation 'com.firebaseui:firebase-ui-firestore:7.1.1'
-    implementation 'com.firebaseui:firebase-ui-auth:7.1.1'
-
 
     implementation 'androidx.annotation:annotation:1.2.0'
     implementation 'androidx.preference:preference:1.1.1'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.0.2"
-    debugImplementation "androidx.compose.ui:ui-tooling:1.0.2"
 }
