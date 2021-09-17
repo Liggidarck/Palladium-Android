@@ -9,7 +9,6 @@ import android.util.Log;
 import com.george.vector.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class LocationFolderActivity extends AppCompatActivity {
 
@@ -17,7 +16,6 @@ public class LocationFolderActivity extends AppCompatActivity {
 
     MaterialToolbar toolbar_location_folder_root;
     MaterialCardView new_tasks_card_root, in_progress_tasks_card_root, archive_tasks_card_root;
-    FloatingActionButton download_tasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +26,6 @@ public class LocationFolderActivity extends AppCompatActivity {
         new_tasks_card_root = findViewById(R.id.new_tasks_card_root);
         in_progress_tasks_card_root = findViewById(R.id.in_progress_tasks_card_root);
         archive_tasks_card_root = findViewById(R.id.archive_tasks_card_root);
-        download_tasks = findViewById(R.id.download_tasks);
 
         Bundle arguments = getIntent().getExtras();
         String location = arguments.get(getString(R.string.location)).toString();

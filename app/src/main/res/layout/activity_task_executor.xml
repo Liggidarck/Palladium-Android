@@ -96,6 +96,7 @@
                 android:textSize="22sp" />
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/image_executor_card"
                 android:layout_width="match_parent"
                 android:layout_height="210dp"
                 android:layout_marginStart="20dp"

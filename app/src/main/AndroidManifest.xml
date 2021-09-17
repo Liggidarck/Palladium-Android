@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Palladium">
         <activity
-            android:name=".users.root.tasks.ImageTaskActivity"
+            android:name=".common.tasks.ImageTaskActivity"
             android:exported="true" />
         <activity
             android:name=".users.root.main.RootMainActivity"

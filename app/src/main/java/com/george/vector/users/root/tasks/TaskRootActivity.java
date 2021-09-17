@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.george.vector.R;
 import com.george.vector.common.announcements.fragmentUrgentRequest;
+import com.george.vector.common.tasks.ImageTaskActivity;
 import com.george.vector.common.tasks.utils.DeleteTask;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.card.MaterialCardView;

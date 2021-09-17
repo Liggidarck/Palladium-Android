@@ -19,29 +19,11 @@
         app:menu="@menu/bottom_app_bar"
         app:titleTextColor="@android:color/white" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_input_search_user"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar_main_user"
-        android:hint="@string/search_task"
-        android:padding="10dp"
-        app:startIconDrawable="@drawable/ic_baseline_search_24">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionSearch"
-            android:inputType="text" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
     <FrameLayout
         android:id="@+id/main_user_frame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/text_input_search_user" />
+        android:layout_below="@+id/toolbar_main_user" />
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/group_chip_user"
