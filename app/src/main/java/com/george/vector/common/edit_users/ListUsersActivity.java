@@ -111,7 +111,6 @@ public class ListUsersActivity extends AppCompatActivity {
             Intent intent = new Intent(this, EditUserActivity.class);
             intent.putExtra("user_id", id);
             startActivity(intent);
-
         });
     }
 

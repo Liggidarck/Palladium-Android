@@ -7,13 +7,12 @@ public class TaskUi {
     private String date_create; // Дата создания заявки
     private String floor;
     private String cabinet;
-    private String litera;
+    private String letter;
     private String comment;
     private String date_done;
     private String executor;
     private String status;
     private boolean urgent;
-
     private String time_create;
     private String email_creator;
     private String image;
@@ -28,16 +27,14 @@ public class TaskUi {
         this.date_create = date_create;
         this.floor = floor;
         this.cabinet = cabinet;
-        this.litera = litera;
+        this.letter = litera;
         this.comment = comment;
         this.date_done = date_done;
         this.executor = executor;
         this.status = status;
         this.urgent = urgent;
-
         this.time_create = time_create;
         this.email_creator = email_creator;
-
         this.image = image;
     }
 
@@ -86,7 +83,7 @@ public class TaskUi {
     }
 
     public String getLitera() {
-        return litera;
+        return letter;
     }
 
     public boolean getUrgent() {
@@ -96,5 +93,4 @@ public class TaskUi {
     public String getImage() {
         return image;
     }
-
 }

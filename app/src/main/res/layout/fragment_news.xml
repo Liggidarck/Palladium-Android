@@ -30,7 +30,8 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:src="@drawable/ic_warning" />
+                android:src="@drawable/ic_warning"
+                android:contentDescription="TODO" />
 
             <TextView
                 android:id="@+id/title_news_text_view"

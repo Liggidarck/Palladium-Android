@@ -2,7 +2,6 @@ package com.george.vector.auth;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +22,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -42,14 +42,12 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
     String name_user, last_name_user, patronymic_user, email_user, password_user, role_user, permission_user, userID;
 
-    FirebaseAuth mAuth1;
-    FirebaseAuth mAuth2;
-
-
+    FirebaseAuth mAuth1, mAuth2;
     FirebaseFirestore firebaseFirestore;
 
     private static final String TAG = "RegisterActivity";
 
+    @SuppressWarnings("UnusedAssignment")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +67,30 @@ public class ActivityRegisterUser extends AppCompatActivity {
         complete_text_permission_user = findViewById(R.id.auto_complete_text_view_permission_user);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
+        mAuth1 = FirebaseAuth.getInstance();
+
+        FirebaseOptions firebaseOptions = new FirebaseOptions.Builder()
+                .setDatabaseUrl("https://school-2122.firebaseio.com")
+                .setApiKey("AIzaSyAAaS5-aMMTMBa6BWNBbM_0FHnlO5Ql328")
+                .setApplicationId("school-2122").build();
+
+        FirebaseApp firebaseApp;
+
+        boolean hasBeenInitialized = false;
+        List<FirebaseApp> firebaseApps = FirebaseApp.getApps(this);
+        for(FirebaseApp app : firebaseApps){
+
+            if(app.getName().equals(FirebaseApp.DEFAULT_APP_NAME)){
+                hasBeenInitialized = true;
+                firebaseApp = app;
+            }
+
+        }
+        if(!hasBeenInitialized) {
+            firebaseApp = FirebaseApp.initializeApp(this, firebaseOptions);
+
+            mAuth2 = FirebaseAuth.getInstance(firebaseApp);
+        }
 
         topAppBar_register.setNavigationOnClickListener(v -> onBackPressed());
 
@@ -91,18 +113,6 @@ public class ActivityRegisterUser extends AppCompatActivity {
         complete_text_permission_user.setAdapter(arrayAdapterPermissions);
 
         register_user_btn.setOnClickListener(v -> {
-
-            mAuth1 = FirebaseAuth.getInstance();
-
-            FirebaseOptions firebaseOptions = new FirebaseOptions.Builder()
-                    .setDatabaseUrl("https://school-2122.firebaseio.com")
-                    .setApiKey("AIzaSyAAaS5-aMMTMBa6BWNBbM_0FHnlO5Ql328")
-                    .setApplicationId("school-2122").build();
-
-            FirebaseApp myApp = FirebaseApp.initializeApp(getApplicationContext(),firebaseOptions,
-                    "school-2122");
-
-            mAuth2 = FirebaseAuth.getInstance(myApp);
 
             name_user = Objects.requireNonNull(text_layout_name_user.getEditText()).getText().toString();
             last_name_user = Objects.requireNonNull(text_layout_last_name_user.getEditText()).getText().toString();

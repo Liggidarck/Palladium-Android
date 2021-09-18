@@ -4,13 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import com.george.vector.R;
-import com.george.vector.users.executor.main.fragments_location.bar_school.fragment_school_bar_new_tasks;
-import com.george.vector.users.executor.main.fragments_location.bar_school.fragment_school_bar_progress_tasks;
-import com.george.vector.users.executor.main.fragments_location.ost_school.fragment_school_ost_new_tasks;
-import com.george.vector.users.executor.main.fragments_location.ost_school.fragment_school_ost_progress_tasks;
+import com.george.vector.users.executor.tasks.FragmentExecutorTasks;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class ExecutorTasksActivity extends AppCompatActivity {
@@ -58,45 +54,14 @@ public class ExecutorTasksActivity extends AppCompatActivity {
         toolbar_tasks_executor_activity.setNavigationOnClickListener(v -> onBackPressed());
         toolbar_tasks_executor_activity.setTitle(text_toolbar);
 
-        Fragment currentFragment = null;
-        if(location.contentEquals(getString(R.string.ost_school)) && folder.contentEquals(getString(R.string.new_tasks))){
-            Log.i(TAG, "Запуск фрагмента Школа новые заявки");
-            currentFragment = new fragment_school_ost_new_tasks();
+        Fragment currentFragment = new FragmentExecutorTasks();
 
-            Bundle email = new Bundle();
-            email.putString( getString(R.string.email), this.email);
-            currentFragment.setArguments(email);
-        }
+        Bundle bundle = new Bundle();
+        bundle.putString(getString(R.string.location), location);
+        bundle.putString(getString(R.string.folder), folder);
+        bundle.putString(getString(R.string.email), this.email);
+        currentFragment.setArguments(bundle);
 
-        if(location.contentEquals(getString(R.string.ost_school)) && folder.contentEquals(getString(R.string.in_progress_tasks))) {
-            Log.i(TAG, "Запуск фрагмента Школа заявки в работе");
-            currentFragment = new fragment_school_ost_progress_tasks();
-
-            Bundle email = new Bundle();
-            email.putString(getString(R.string.email), this.email);
-            currentFragment.setArguments(email);
-        }
-
-
-        if(location.contentEquals(getString(R.string.bar_school)) && folder.contentEquals(getString(R.string.new_tasks))){
-            Log.i(TAG, "Запуск фрагмента Школа bar новые заявки");
-            currentFragment = new fragment_school_bar_new_tasks();
-
-            Bundle email = new Bundle();
-            email.putString(getString(R.string.email), this.email);
-            currentFragment.setArguments(email);
-        }
-
-        if(location.contentEquals(getString(R.string.bar_school)) && folder.contentEquals(getString(R.string.in_progress_tasks))) {
-            Log.i(TAG, "Запуск фрагмента Школа bar заявки в работе");
-            currentFragment = new fragment_school_bar_progress_tasks();
-
-            Bundle email = new Bundle();
-            email.putString(getString(R.string.email), this.email);
-            currentFragment.setArguments(email);
-        }
-
-        assert currentFragment != null;
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.frame_folder_executor, currentFragment)

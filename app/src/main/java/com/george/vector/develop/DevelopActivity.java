@@ -1,6 +1,7 @@
 package com.george.vector.develop;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 
@@ -28,11 +29,12 @@ public class DevelopActivity extends AppCompatActivity {
 
         if (user != null) {
             user.reauthenticate(credential)
-                    .addOnCompleteListener(task -> user.delete().addOnCompleteListener(task1 -> {
-                        if (task1.isSuccessful()) {
-                            Log.d("TAG", "User account deleted.");
-                        }
-                    }));
+                    .addOnCompleteListener(task ->
+                            user.delete().addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()) {
+                                    Log.d("TAG", "User account deleted.");
+                                }
+                            }));
         }
     }
 

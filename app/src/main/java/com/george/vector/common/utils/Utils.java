@@ -2,13 +2,11 @@ package com.george.vector.common.utils;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.ActionMode;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.DocumentReference;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -24,10 +22,6 @@ public class Utils {
             return false;
         } else
             return true;
-    }
-
-    public boolean validate_image(String url) {
-        return !url.isEmpty();
     }
 
     public void clear_error(@NonNull TextInputLayout textInputLayout) {
@@ -55,6 +49,5 @@ public class Utils {
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         return dateFormat.format(currentDate);
     }
-
 
 }

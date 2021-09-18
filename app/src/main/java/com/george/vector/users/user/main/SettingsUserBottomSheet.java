@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.george.vector.R;
-import com.george.vector.auth.ActivityLogin;
 import com.george.vector.common.edit_users.EditDataUserActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,9 +25,6 @@ public class SettingsUserBottomSheet extends BottomSheetDialogFragment {
     RelativeLayout layout_edit_person_user,
             layout_shortcut;
 
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,13 +35,8 @@ public class SettingsUserBottomSheet extends BottomSheetDialogFragment {
         layout_edit_person_user = view.findViewById(R.id.layout_edit_person_user);
         layout_shortcut = view.findViewById(R.id.layout_shortcut);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-
         close_btn.setOnClickListener(v -> dismiss());
         btn_logout.setOnClickListener(v -> {
-//            FirebaseAuth.getInstance().signOut();
-//            startActivity(new Intent(SettingsUserBottomSheet.this.getContext(), ActivityLogin.class));
         });
 
 

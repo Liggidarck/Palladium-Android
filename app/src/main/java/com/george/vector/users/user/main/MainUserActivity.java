@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.inputmethod.EditorInfo;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
@@ -30,8 +29,6 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -42,7 +39,6 @@ import java.util.Objects;
 public class MainUserActivity extends AppCompatActivity {
 
     private static final String TAG = "MainUserActivity";
-    TextInputLayout text_input_search_user;
     ExtendedFloatingActionButton create_task_user;
     MaterialToolbar toolbar_main_user;
     Chip chip_today_user;
@@ -53,7 +49,6 @@ public class MainUserActivity extends AppCompatActivity {
     private TaskAdapter adapter;
     private Query query;
 
-    FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 
     String permission;
@@ -70,7 +65,6 @@ public class MainUserActivity extends AppCompatActivity {
         permission = arguments.getString(getString(R.string.permission));
         String collection = null;
 
-        text_input_search_user = findViewById(R.id.text_input_search_user);
         create_task_user = findViewById(R.id.create_task_user);
         toolbar_main_user = findViewById(R.id.toolbar_main_user);
         chip_today_user = findViewById(R.id.chip_today_user);
@@ -82,7 +76,6 @@ public class MainUserActivity extends AppCompatActivity {
         });
 
         db = FirebaseFirestore.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         DocumentReference documentReference = firebaseFirestore.collection("news").document("news_fragment");
@@ -109,20 +102,6 @@ public class MainUserActivity extends AppCompatActivity {
 
         setUpRecyclerView(email, collection);
 
-        Objects.requireNonNull(text_input_search_user.getEditText()).setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                String search_value = text_input_search_user.getEditText().getText().toString();
-
-                if(search_value.isEmpty())
-                    defaultQuery(email);
-                else
-                    search(search_value, email);
-
-                return true;
-            }
-            return false;
-        });
-
         chip_today_user.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             if(isChecked){
@@ -148,16 +127,6 @@ public class MainUserActivity extends AppCompatActivity {
 
     private void todayTasks(String date, String email) {
         query = taskRef.whereEqualTo("date_create", date).whereEqualTo("email_creator", email);
-
-        FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
-                .setQuery(query, TaskUi.class)
-                .build();
-
-        adapter.updateOptions(search_options);
-    }
-
-    private void search(String query_text, String email) {
-        query = taskRef.whereEqualTo("name_task", query_text).whereEqualTo("email_creator", email);
 
         FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)

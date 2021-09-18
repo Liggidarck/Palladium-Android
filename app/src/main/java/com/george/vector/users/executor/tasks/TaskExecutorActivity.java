@@ -1,6 +1,7 @@
 package com.george.vector.users.executor.tasks;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,14 +15,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.george.vector.R;
+import com.george.vector.common.tasks.ImageTaskActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -38,16 +37,14 @@ public class TaskExecutorActivity extends AppCompatActivity {
     Button edit_btn_executor;
     CircleImageView circle_status_executor;
     ImageView image_executor_task;
+    CardView image_executor_card;
 
-    String id, collection, location, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create,
+    String id, collection, location, address, floor, cabinet, letter, name_task, comment, status, date_create, time_create,
             email_executor, email_creator, date_done, image;
 
-    FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
-    FirebaseStorage firebaseStorage;
-    StorageReference storageReference;
 
-    String email_mail_activity;
+    String email_main_activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,26 +63,32 @@ public class TaskExecutorActivity extends AppCompatActivity {
         edit_btn_executor = findViewById(R.id.edit_btn_executor);
         circle_status_executor = findViewById(R.id.circle_status_executor);
         image_executor_task = findViewById(R.id.image_executor_task);
+        image_executor_card = findViewById(R.id.image_executor_card);
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.get(getString(R.string.id)).toString();
         collection = arguments.get(getString(R.string.collection)).toString();
         location = arguments.get(getString(R.string.location)).toString();
-        email_mail_activity = arguments.getString(getString(R.string.email));
+        email_main_activity = arguments.getString(getString(R.string.email));
 
-        firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
-
         topAppBar_task_executor.setNavigationOnClickListener(v -> onBackPressed());
+
+        image_executor_card.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ImageTaskActivity.class);
+            intent.putExtra(getString(R.string.id), id);
+            intent.putExtra(getString(R.string.collection), collection);
+            intent.putExtra(getString(R.string.location), location);
+            intent.putExtra(getString(R.string.email), email_main_activity);
+            startActivity(intent);
+        });
 
         edit_btn_executor.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskExecutorActivity.class);
             intent.putExtra(getString(R.string.id), id);
             intent.putExtra(getString(R.string.collection), collection);
             intent.putExtra(getString(R.string.location), location);
-            intent.putExtra(getString(R.string.email), email_mail_activity);
+            intent.putExtra(getString(R.string.email), email_main_activity);
             startActivity(intent);
         });
 
@@ -97,7 +100,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
                 address = value.getString("address");
                 floor = value.getString("floor");
                 cabinet = value.getString("cabinet");
-                litera = value.getString("litera");
+                letter = value.getString("litera");
                 name_task = value.getString("name_task");
                 comment = value.getString("comment");
                 status = value.getString("status");
@@ -110,7 +113,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
 
                 Log.d(TAG, "address: " + address);
                 Log.d(TAG, "floor: " + floor);
-                Log.d(TAG, "litera: " + litera);
+                Log.d(TAG, "litera: " + letter);
                 Log.d(TAG, "comment: " + comment);
                 Log.d(TAG, "status: " + status);
                 Log.d(TAG, "date_create: " + date_create);
@@ -151,8 +154,8 @@ public class TaskExecutorActivity extends AppCompatActivity {
                 if (status.equals("Архив"))
                     circle_status_executor.setImageResource(R.color.green);
 
-                if (!litera.equals("-") && !litera.isEmpty())
-                    cabinet = String.format("%s%s", cabinet, litera);
+                if (!letter.equals("-") && !letter.isEmpty())
+                    cabinet = String.format("%s%s", cabinet, letter);
             } catch (Exception e) {
                 Log.e(TAG, "Error! " + e);
             }

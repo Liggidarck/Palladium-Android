@@ -379,7 +379,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
         status_autoComplete_root.setAdapter(adapter_status);
 
-        String[] itemsLitera = getResources().getStringArray(R.array.litera);
+        String[] itemsLitera = getResources().getStringArray(R.array.letter);
         ArrayAdapter<String> adapter_litera = new ArrayAdapter<>(
                 EditTaskRootActivity.this,
                 R.layout.dropdown_menu_categories,

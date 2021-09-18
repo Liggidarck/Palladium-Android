@@ -33,10 +33,10 @@
             android:orientation="vertical" >
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_edit_name_user"
+                android:id="@+id/text_input_layout_edit_last_name_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/name"
+                android:hint="@string/last_name"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
@@ -51,10 +51,10 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_edit_last_name_user"
+                android:id="@+id/text_input_layout_edit_name_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/last_name"
+                android:hint="@string/name"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
@@ -157,17 +157,6 @@
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/save" />
-
-            <Button
-                android:id="@+id/delete_user_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="30dp"
-                android:text="Удалить пользователя"
-                android:textColor="@color/red"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
         </LinearLayout>
 

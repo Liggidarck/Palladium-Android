@@ -1,10 +1,9 @@
-package com.george.vector.users.root.tasks;
+package com.george.vector.common.tasks;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.george.vector.R;
@@ -17,7 +16,7 @@ public class ImageTaskActivity extends AppCompatActivity {
 
     private static final String TAG = "ImageTaskActivity";
     ImageView task_image_activity;
-    String id, collection, location, USER_EMAIL, image;
+    String id, collection, location, image;
 
     FirebaseFirestore firebaseFirestore;
 

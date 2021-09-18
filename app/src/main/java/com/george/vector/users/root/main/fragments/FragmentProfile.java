@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
 import com.george.vector.auth.ActivityRegisterUser;
-import com.george.vector.common.bottom_sheets.ConsoleBottomSheet;
 import com.george.vector.common.edit_users.ListUsersActivity;
 import com.george.vector.common.settings.SettingsActivity;
 import com.google.firebase.auth.FirebaseAuth;

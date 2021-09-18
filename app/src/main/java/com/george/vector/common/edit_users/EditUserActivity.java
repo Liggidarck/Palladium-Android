@@ -7,22 +7,15 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
-import com.george.vector.common.tasks.utils.DeleteTask;
 import com.george.vector.common.utils.Utils;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -37,12 +30,11 @@ public class EditUserActivity extends AppCompatActivity {
             text_input_layout_patronymic_user, text_input_layout_email_user,
             text_input_layout_role_user, text_input_layout_edit_permission_user;
     MaterialAutoCompleteTextView auto_complete_text_view_role_user, auto_complete_text_view_edit_permission_user;
-    Button update_user_btn, delete_user_btn;
+    Button update_user_btn;
     LinearProgressIndicator progress_bar_edit_user;
 
     String name_user, last_name_user, patronymic_user, email_user, role_user, permission_user, userID;
 
-    FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 
     private static final String TAG = "EditUserActivity";
@@ -64,9 +56,7 @@ public class EditUserActivity extends AppCompatActivity {
         progress_bar_edit_user = findViewById(R.id.progress_bar_edit_user);
         text_input_layout_edit_permission_user = findViewById(R.id.text_input_layout_edit_permission_user);
         auto_complete_text_view_edit_permission_user = findViewById(R.id.auto_complete_text_view_edit_permission_user);
-        delete_user_btn = findViewById(R.id.delete_user_btn);
 
-        firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         Bundle arguments = getIntent().getExtras();
@@ -153,11 +143,6 @@ public class EditUserActivity extends AppCompatActivity {
             }
 
         });
-
-        delete_user_btn.setOnClickListener(v -> {
-
-        });
-
     }
 
     boolean validateFields() {

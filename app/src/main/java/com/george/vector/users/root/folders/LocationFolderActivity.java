@@ -13,6 +13,7 @@ import com.google.android.material.card.MaterialCardView;
 public class LocationFolderActivity extends AppCompatActivity {
 
     private static final String TAG = "LocationFolderAct";
+
     MaterialToolbar toolbar_location_folder_root;
     MaterialCardView new_tasks_card_root, in_progress_tasks_card_root, archive_tasks_card_root;
 

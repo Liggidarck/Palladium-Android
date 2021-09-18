@@ -16,8 +16,6 @@ public class FragmentBarWork extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_bar_root, container, false);
-
-        return view;
+        return inflater.inflate(R.layout.fragment_bar_root, container, false);
     }
 }

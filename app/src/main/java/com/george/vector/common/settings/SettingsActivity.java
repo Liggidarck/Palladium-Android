@@ -14,9 +14,6 @@ public class SettingsActivity extends AppCompatActivity {
 
     MaterialToolbar toolbar_root_toolbar;
 
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,9 +24,6 @@ public class SettingsActivity extends AppCompatActivity {
         Bundle arguments = getIntent().getExtras();
         String permission = arguments.get(getString(R.string.permission)).toString();
         String email = arguments.get(getString(R.string.email)).toString();
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
 
         toolbar_root_toolbar.setNavigationOnClickListener(v -> onBackPressed());
 

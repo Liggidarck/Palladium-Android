@@ -9,10 +9,7 @@
 
     <string name="location">location</string>
     <string name="ost">ost</string>
-    <string name="bar">bar</string>
     <string name="ost_school">ost_school</string>
-    <string name="ost_aist">ost_aist</string>
-    <string name="ost_yagodka">ost_yagodka</string>
 
     <string name="bar_school">bar_school</string>
 
@@ -28,9 +25,6 @@
 
     <string name="bar_school_new">bar_school_new</string>
     <string name="bar_school_progress">bar_school_progress</string>
-    <string name="bar_school_archive">bar_school_archive</string>
-
-
 
 
 </resources>

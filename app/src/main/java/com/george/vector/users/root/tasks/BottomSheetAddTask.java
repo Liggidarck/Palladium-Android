@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import com.george.vector.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-
 public class BottomSheetAddTask extends BottomSheetDialogFragment {
 
     Button ost_school_new_task, ost_aist_new_task, ost_yagodka_new_task,

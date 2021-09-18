@@ -2,8 +2,8 @@
 <resources>
 
     <string-array name="addresses_ost_school" >
-        <item>Улица Авиаторов дом 9. Старое здание</item>
-        <item>Улица Авиаторов дом 9. Новое здание</item>
+        <item>Улица Авиаторов дом 9. Начальная школа</item>
+        <item>Улица Авиаторов дом 9. Старшая школа</item>
     </string-array>
 
     <string-array name="status" >
@@ -18,7 +18,7 @@
         <item>Исполнитель</item>
     </string-array>
 
-    <string-array name="litera" >
+    <string-array name="letter" >
         <item>а</item>
         <item>б</item>
         <item>в</item>

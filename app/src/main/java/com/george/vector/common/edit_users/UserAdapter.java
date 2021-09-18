@@ -30,7 +30,6 @@ public class UserAdapter extends FirestoreRecyclerAdapter<User, UserAdapter.User
 
         holder.textViewName.setText(full_name);
         holder.textViewEmail.setText(model.getEmail());
-        holder.textViewRole.setText(model.getRole());
     }
 
     @NonNull
@@ -40,21 +39,15 @@ public class UserAdapter extends FirestoreRecyclerAdapter<User, UserAdapter.User
         return new UserHolder(root);
     }
 
-    public void deleteUser(int position) {
-        getSnapshots().getSnapshot(position).getReference().delete();
-    }
-
     public class UserHolder extends RecyclerView.ViewHolder {
         final TextView textViewName;
         final TextView textViewEmail;
-        final TextView textViewRole;
 
         public UserHolder(@NonNull View itemView) {
             super(itemView);
 
             textViewName = itemView.findViewById(R.id.text_view_name_user);
             textViewEmail = itemView.findViewById(R.id.text_view_email_user);
-            textViewRole = itemView.findViewById(R.id.text_view_role_user);
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();

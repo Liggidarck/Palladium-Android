@@ -26,6 +26,7 @@ public class TaskAdapter extends FirestoreRecyclerAdapter<TaskUi, TaskAdapter.Ta
         holder.textViewTitle.setText(model.getName_task());
         holder.textViewDescription.setText(model.getAddress());
         holder.textViewPriority.setText(model.getDate_create());
+        holder.textViewTimeCreate.setText(model.getTime_create());
     }
 
     @NonNull
@@ -45,6 +46,7 @@ public class TaskAdapter extends FirestoreRecyclerAdapter<TaskUi, TaskAdapter.Ta
         final TextView textViewTitle;
         final TextView textViewDescription;
         final TextView textViewPriority;
+        final TextView textViewTimeCreate;
 
         public TaskHolder(@NonNull View itemView) {
             super(itemView);
@@ -52,6 +54,7 @@ public class TaskAdapter extends FirestoreRecyclerAdapter<TaskUi, TaskAdapter.Ta
             textViewTitle = itemView.findViewById(R.id.text_view_nate_task);
             textViewDescription = itemView.findViewById(R.id.text_view_address);
             textViewPriority = itemView.findViewById(R.id.date_create);
+            textViewTimeCreate = itemView.findViewById(R.id.text_view_time_create);
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();

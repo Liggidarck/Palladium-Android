@@ -47,7 +47,7 @@
                 android:id="@+id/chip_root_dialog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/super_users"
+                android:text="@string/superusers"
                 style="@style/Widget.MaterialComponents.Chip.Filter" />
 
             <com.google.android.material.chip.Chip
