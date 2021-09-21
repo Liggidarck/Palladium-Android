@@ -1,5 +1,11 @@
 package com.george.vector.users.executor.main;
 
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.FOLDER;
+import static com.george.vector.common.consts.Keys.IN_PROGRESS_TASKS;
+import static com.george.vector.common.consts.Keys.LOCATION;
+import static com.george.vector.common.consts.Keys.NEW_TASKS;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -27,8 +33,8 @@ public class FolderExecutorActivity extends AppCompatActivity {
         in_progress_tasks_card_executor = findViewById(R.id.in_progress_tasks_card_executor);
 
         Bundle arguments = getIntent().getExtras();
-        location = arguments.get(getString(R.string.location)).toString();
-        email = arguments.get(getString(R.string.email)).toString();
+        location = arguments.getString(LOCATION);
+        email = arguments.getString(EMAIL);
 
         String text_toolbar = null;
         switch (location) {
@@ -59,17 +65,17 @@ public class FolderExecutorActivity extends AppCompatActivity {
 
         new_tasks_card_executor.setOnClickListener(v -> {
             Intent intent = new Intent(this, ExecutorTasksActivity.class);
-            intent.putExtra(getString(R.string.location), location);
-            intent.putExtra(getString(R.string.folder), getString(R.string.new_tasks));
-            intent.putExtra(getString(R.string.email), email);
+            intent.putExtra(LOCATION, location);
+            intent.putExtra(FOLDER, NEW_TASKS);
+            intent.putExtra(EMAIL, email);
             startActivity(intent);
         });
 
         in_progress_tasks_card_executor.setOnClickListener(v -> {
             Intent intent = new Intent(this, ExecutorTasksActivity.class);
-            intent.putExtra(getString(R.string.location), location);
-            intent.putExtra(getString(R.string.folder), getString(R.string.in_progress_tasks));
-            intent.putExtra(getString(R.string.email), email);
+            intent.putExtra(LOCATION, location);
+            intent.putExtra(FOLDER, IN_PROGRESS_TASKS);
+            intent.putExtra(EMAIL, email);
             startActivity(intent);
         });
 

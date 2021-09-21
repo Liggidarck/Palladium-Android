@@ -1,5 +1,8 @@
 package com.george.vector.users.root.main.fragments.home;
 
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.OST;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,11 +51,11 @@ public class FragmentHome extends Fragment {
 
         Bundle args = getArguments();
         assert args != null;
-        email = args.getString(getString(R.string.email));
+        email = args.getString(EMAIL);
 
         zone = PreferenceManager
                 .getDefaultSharedPreferences(FragmentHome.this.getContext())
-                .getString("default_root_location", getString(R.string.ost));
+                .getString("default_root_location", OST);
         Log.d(TAG, "Zone: " + zone);
 
         DocumentReference documentReference = firebaseFirestore.collection("news").document("news_fragment");
@@ -69,7 +72,7 @@ public class FragmentHome extends Fragment {
             BottomSheetAddTask bottomSheet = new BottomSheetAddTask();
 
             Bundle email = new Bundle();
-            email.putString(getString(R.string.email), this.email);
+            email.putString(EMAIL, this.email);
             bottomSheet.setArguments(email);
 
             bottomSheet.show(getParentFragmentManager(), "BottomSheetAddTask");
@@ -108,7 +111,7 @@ public class FragmentHome extends Fragment {
 
         zone = PreferenceManager
                 .getDefaultSharedPreferences(FragmentHome.this.getContext())
-                .getString("default_root_location", getString(R.string.ost));
+                .getString("default_root_location", OST);
         Log.d(TAG, "Zone: " + zone);
     }
 
@@ -129,7 +132,7 @@ public class FragmentHome extends Fragment {
                 currentFragment = new FragmentOst();
 
                 Bundle email = new Bundle();
-                email.putString(getString(R.string.email), this.email);
+                email.putString(EMAIL, this.email);
                 currentFragment.setArguments(email);
 
                 break;
@@ -138,7 +141,7 @@ public class FragmentHome extends Fragment {
                 currentFragment = new FragmentBar();
 
                 Bundle bundle = new Bundle();
-                bundle.putString(getString(R.string.email), this.email);
+                bundle.putString(EMAIL, this.email);
                 currentFragment.setArguments(bundle);
 
                 break;

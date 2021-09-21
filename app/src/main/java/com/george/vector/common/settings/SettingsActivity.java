@@ -1,5 +1,8 @@
 package com.george.vector.common.settings;
 
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.PERMISSION;
+
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,8 +25,8 @@ public class SettingsActivity extends AppCompatActivity {
         toolbar_root_toolbar = findViewById(R.id.toolbar_root_toolbar);
 
         Bundle arguments = getIntent().getExtras();
-        String permission = arguments.get(getString(R.string.permission)).toString();
-        String email = arguments.get(getString(R.string.email)).toString();
+        String permission = arguments.getString(PERMISSION);
+        String email = arguments.getString(EMAIL);
 
         toolbar_root_toolbar.setNavigationOnClickListener(v -> onBackPressed());
 

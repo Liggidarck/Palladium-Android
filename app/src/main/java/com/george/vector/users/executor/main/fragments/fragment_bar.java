@@ -1,5 +1,7 @@
 package com.george.vector.users.executor.main.fragments;
 
+import static com.george.vector.common.consts.Keys.EMAIL;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -30,7 +32,7 @@ public class fragment_bar extends Fragment {
 
         Bundle args = getArguments();
         assert args != null;
-        String email = args.getString(getString(R.string.email));
+        String email = args.getString(EMAIL);
 
         bar_school_executor.setOnClickListener(v -> {
 //            Intent intent = new Intent(fragment_bar.this.getContext(), FolderExecutorActivity.class);

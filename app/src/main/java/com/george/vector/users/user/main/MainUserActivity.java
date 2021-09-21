@@ -1,5 +1,13 @@
 package com.george.vector.users.user.main;
 
+import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
+import static com.george.vector.common.consts.Keys.BAR_SCHOOL_NEW;
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.ID;
+import static com.george.vector.common.consts.Keys.OST_SCHOOL;
+import static com.george.vector.common.consts.Keys.OST_SCHOOL_NEW;
+import static com.george.vector.common.consts.Keys.PERMISSION;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -61,8 +69,8 @@ public class MainUserActivity extends AppCompatActivity {
 
         Utils utils = new Utils();
         Bundle arguments = getIntent().getExtras();
-        String email = arguments.get(getString(R.string.email)).toString();
-        permission = arguments.getString(getString(R.string.permission));
+        String email = arguments.get(EMAIL).toString();
+        permission = arguments.getString(PERMISSION);
         String collection = null;
 
         create_task_user = findViewById(R.id.create_task_user);
@@ -90,15 +98,15 @@ public class MainUserActivity extends AppCompatActivity {
 
         create_task_user.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddTaskUserActivity.class);
-            intent.putExtra(getString(R.string.permission), permission);
+            intent.putExtra(PERMISSION, permission);
             startActivity(intent);
         });
 
-        if (permission.equals(getString(R.string.ost_school)))
-            collection = getString(R.string.ost_school_new);
+        if (permission.equals(OST_SCHOOL))
+            collection = OST_SCHOOL_NEW;
 
-        if (permission.equals(getString(R.string.bar_school)))
-            collection = getString(R.string.bar_school_new);
+        if (permission.equals(BAR_SCHOOL))
+            collection = BAR_SCHOOL_NEW;
 
         setUpRecyclerView(email, collection);
 
@@ -165,8 +173,8 @@ public class MainUserActivity extends AppCompatActivity {
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
             Intent intent = new Intent(this, TaskUserActivity.class);
-            intent.putExtra(getString(R.string.id), id);
-            intent.putExtra(getString(R.string.permission), permission);
+            intent.putExtra(ID, id);
+            intent.putExtra(PERMISSION, permission);
             startActivity(intent);
 
         });

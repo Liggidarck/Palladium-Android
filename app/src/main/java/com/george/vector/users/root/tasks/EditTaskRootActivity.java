@@ -1,5 +1,11 @@
 package com.george.vector.users.root.tasks;
 
+import static com.george.vector.common.consts.Keys.COLLECTION;
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.ID;
+import static com.george.vector.common.consts.Keys.LOCATION;
+import static com.george.vector.common.consts.Keys.OST_SCHOOL;
+
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -117,10 +123,10 @@ public class EditTaskRootActivity extends AppCompatActivity {
         topAppBar_new_task_root.setNavigationOnClickListener(v -> onBackPressed());
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get(getString(R.string.id)).toString();
-        collection = arguments.get(getString(R.string.collection)).toString();
-        location = arguments.get(getString(R.string.location)).toString();
-        USER_EMAIL = arguments.get(getString(R.string.email)).toString();
+        id = arguments.get(ID).toString();
+        collection = arguments.get(COLLECTION).toString();
+        location = arguments.get(LOCATION).toString();
+        USER_EMAIL = arguments.get(EMAIL).toString();
 
         add_executor_root.setOnClickListener(v -> show_add_executor_dialog());
 
@@ -303,7 +309,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 update_executor, update_status, time_create, email, update_urgent, update_image);
 
         Intent intent = new Intent(this, RootMainActivity.class);
-        intent.putExtra(getString(R.string.email), USER_EMAIL);
+        intent.putExtra(EMAIL, USER_EMAIL);
         startActivity(intent);
     }
 
@@ -315,7 +321,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 .setPositiveButton(getText(R.string.save), (dialog, id) -> updateTask(collection))
                 .setNegativeButton(android.R.string.cancel, (dialog, id) -> {
                     Intent intent = new Intent(this, RootMainActivity.class);
-                    intent.putExtra(getString(R.string.email), USER_EMAIL);
+                    intent.putExtra(EMAIL, USER_EMAIL);
                     startActivity(intent);
                 });
 
@@ -360,7 +366,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
     }
 
     void initialize_fields(String location) {
-        if (location.equals(getString(R.string.ost_school))) {
+        if (location.equals(OST_SCHOOL)) {
             String[] items = getResources().getStringArray(R.array.addresses_ost_school);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     EditTaskRootActivity.this,

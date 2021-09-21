@@ -1,5 +1,9 @@
 package com.george.vector.users.root.main.fragments;
 
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.PERMISSION;
+import static com.george.vector.common.consts.Keys.USERS;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -50,7 +54,7 @@ public class FragmentProfile extends Fragment {
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+        DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userID);
         documentReference.addSnapshotListener((value, error) -> {
             assert value != null;
             name = value.getString("name");
@@ -74,8 +78,8 @@ public class FragmentProfile extends Fragment {
 
         btn_settings_profile_root.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentProfile.this.getContext(), SettingsActivity.class);
-            intent.putExtra(getString(R.string.permission), "root");
-            intent.putExtra(getString(R.string.email), "null");
+            intent.putExtra(PERMISSION, "root");
+            intent.putExtra(EMAIL, "null");
             startActivity(intent);
         });
 

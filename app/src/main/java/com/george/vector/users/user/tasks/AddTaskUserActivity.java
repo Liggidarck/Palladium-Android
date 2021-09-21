@@ -1,5 +1,10 @@
 package com.george.vector.users.user.tasks;
 
+import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
+import static com.george.vector.common.consts.Keys.OST_SCHOOL;
+import static com.george.vector.common.consts.Keys.PERMISSION;
+import static com.george.vector.common.consts.Keys.USERS;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -92,13 +97,13 @@ public class AddTaskUserActivity extends AppCompatActivity {
         storageReference = firebaseStorage.getReference();
 
         Bundle arguments = getIntent().getExtras();
-        permission = arguments.get(getString(R.string.permission)).toString();
+        permission = arguments.get(PERMISSION).toString();
         Log.i(TAG, "Permission: " + permission);
 
         topAppBar_new_task_user.setNavigationOnClickListener(v -> onBackPressed());
 
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReferenceUser = firebaseFirestore.collection("users").document(userID);
+        DocumentReference documentReferenceUser = firebaseFirestore.collection(USERS).document(userID);
         documentReferenceUser.addSnapshotListener(this, (value, error) -> {
             assert value != null;
             email = value.getString("email");
@@ -206,7 +211,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
     }
 
     void initialize_field(String permission) {
-        if(permission.equals(getString(R.string.ost_school))) {
+        if(permission.equals(OST_SCHOOL)) {
             String[] items = getResources().getStringArray(R.array.addresses_ost_school);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     AddTaskUserActivity.this,
@@ -226,7 +231,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
         liter_autoComplete_user.setAdapter(adapter_letter);
 
 
-        if(permission.equals(getString(R.string.bar_school)))
+        if(permission.equals(BAR_SCHOOL))
             Objects.requireNonNull(text_input_layout_address.getEditText()).setText(getText(R.string.bar_school_address));
 
     }

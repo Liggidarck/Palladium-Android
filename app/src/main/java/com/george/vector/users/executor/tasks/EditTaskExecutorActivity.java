@@ -1,5 +1,11 @@
 package com.george.vector.users.executor.tasks;
 
+import static com.george.vector.common.consts.Keys.COLLECTION;
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.ID;
+import static com.george.vector.common.consts.Keys.LOCATION;
+import static com.george.vector.common.consts.Keys.OST_SCHOOL;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -74,10 +80,10 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         text_input_layout_executor_executor = findViewById(R.id.text_input_layout_executor_executor);
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get(getString(R.string.id)).toString();
-        collection = arguments.get(getString(R.string.collection)).toString();
-        location = arguments.get(getString(R.string.location)).toString();
-        email_mail_activity = arguments.getString(getString(R.string.email));
+        id = arguments.getString(ID);
+        collection = arguments.getString(COLLECTION);
+        location = arguments.getString(LOCATION);
+        email_mail_activity = arguments.getString(EMAIL);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -156,7 +162,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
                 update_executor, update_status, time_create, email, false, update_image);
 
         Intent intent = new Intent(this, MainExecutorActivity.class);
-        intent.putExtra(getString(R.string.email), email_mail_activity);
+        intent.putExtra(EMAIL, email_mail_activity);
         startActivity(intent);
     }
 
@@ -173,7 +179,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
     }
 
     void initialize_fields(String location) {
-        if (location.equals(getString(R.string.ost_school))) {
+        if (location.equals(OST_SCHOOL)) {
             String[] items = getResources().getStringArray(R.array.addresses_ost_school);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     EditTaskExecutorActivity.this,

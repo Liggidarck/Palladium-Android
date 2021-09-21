@@ -1,5 +1,7 @@
 package com.george.vector.users.root.main;
 
+import static com.george.vector.common.consts.Keys.EMAIL;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -28,13 +30,13 @@ public class RootMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_root_future_main);
 
         Bundle arguments = getIntent().getExtras();
-        email = arguments.get(getString(R.string.email)).toString();
+        email = arguments.get(EMAIL).toString();
 
         // Дефолтный запущенный фрагмент home.
         if (savedInstanceState == null) {
             Fragment fragmentHome = new FragmentHome();
             Bundle email = new Bundle();
-            email.putString(getString(R.string.email), this.email);
+            email.putString(EMAIL, this.email);
             fragmentHome.setArguments(email);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_future_main_root, fragmentHome).commit();
         }
@@ -48,7 +50,7 @@ public class RootMainActivity extends AppCompatActivity {
                     selectedFragment = new FragmentHome();
 
                     Bundle email = new Bundle();
-                    email.putString(getString(R.string.email), this.email);
+                    email.putString(EMAIL, this.email);
                     selectedFragment.setArguments(email);
 
                     break;
@@ -58,7 +60,7 @@ public class RootMainActivity extends AppCompatActivity {
                     selectedFragment = new FragmentTasks();
 
                     Bundle bundle = new Bundle();
-                    bundle.putString(getString(R.string.email), this.email);
+                    bundle.putString(EMAIL, this.email);
                     selectedFragment.setArguments(bundle);
 
                     break;

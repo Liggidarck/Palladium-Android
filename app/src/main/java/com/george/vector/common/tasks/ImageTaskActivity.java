@@ -1,5 +1,9 @@
 package com.george.vector.common.tasks;
 
+import static com.george.vector.common.consts.Keys.COLLECTION;
+import static com.george.vector.common.consts.Keys.ID;
+import static com.george.vector.common.consts.Keys.LOCATION;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -25,15 +29,14 @@ public class ImageTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_task);
 
-
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         task_image_activity = findViewById(R.id.task_image_activity);
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get(getString(R.string.id)).toString();
-        collection = arguments.get(getString(R.string.collection)).toString();
-        location = arguments.get(getString(R.string.location)).toString();
+        id = arguments.getString(ID);
+        collection = arguments.getString(COLLECTION);
+        location = arguments.getString(LOCATION);
 
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {

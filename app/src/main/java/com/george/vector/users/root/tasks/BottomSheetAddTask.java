@@ -1,5 +1,9 @@
 package com.george.vector.users.root.tasks;
 
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.LOCATION;
+import static com.george.vector.common.consts.Keys.OST_SCHOOL;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -35,12 +39,12 @@ public class BottomSheetAddTask extends BottomSheetDialogFragment {
 
         Bundle args = getArguments();
         assert args != null;
-        email = args.getString(getString(R.string.email));
+        email = args.getString(EMAIL);
 
         ost_school_new_task.setOnClickListener(v-> {
             Intent intent = new Intent(BottomSheetAddTask.this.getContext(), AddTaskRootActivity.class);
-            intent.putExtra(getString(R.string.location), getString(R.string.ost_school));
-            intent.putExtra(getString(R.string.email), email);
+            intent.putExtra(LOCATION, OST_SCHOOL);
+            intent.putExtra(EMAIL, email);
             startActivity(intent);
         });
 

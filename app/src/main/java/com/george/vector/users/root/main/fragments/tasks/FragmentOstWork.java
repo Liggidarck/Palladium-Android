@@ -1,5 +1,10 @@
 package com.george.vector.users.root.main.fragments.tasks;
 
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.EXECUTED;
+import static com.george.vector.common.consts.Keys.LOCATION;
+import static com.george.vector.common.consts.Keys.OST_SCHOOL;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,7 +32,7 @@ public class FragmentOstWork extends Fragment {
 
         Bundle args = getArguments();
         assert args != null;
-        String email = args.getString(getString(R.string.email));
+        String email = args.getString(EMAIL);
         Log.d(TAG, "Email: " + email);
 
         ost_school_root = view.findViewById(R.id.ost_school_root);
@@ -36,9 +41,9 @@ public class FragmentOstWork extends Fragment {
 
         ost_school_root.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentOstWork.this.getContext(), LocationFolderActivity.class);
-            intent.putExtra(getString(R.string.location), getString(R.string.ost_school));
-            intent.putExtra(getString(R.string.email), email);
-            intent.putExtra("executed", "work");
+            intent.putExtra(LOCATION, OST_SCHOOL);
+            intent.putExtra(EMAIL, email);
+            intent.putExtra(EXECUTED, "work");
             startActivity(intent);
         });
 

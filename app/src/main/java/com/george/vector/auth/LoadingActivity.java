@@ -1,5 +1,10 @@
 package com.george.vector.auth;
 
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.PERMISSION;
+import static com.george.vector.common.consts.Keys.ROLE;
+import static com.george.vector.common.consts.Keys.USERS;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -38,13 +43,13 @@ public class LoadingActivity extends AppCompatActivity {
             userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
             Log.i(TAG, "user id: " + userID);
 
-            DocumentReference documentReference = firebaseFirestore.collection(getString(R.string.users)).document(userID);
+            DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userID);
             documentReference.addSnapshotListener(this, (value, error) -> {
                 assert value != null;
 
-                String check_role = value.getString(getString(R.string.role));
-                String check_email = value.getString(getString(R.string.email));
-                String permission = value.getString(getString(R.string.permission));
+                String check_role = value.getString(ROLE);
+                String check_email = value.getString(EMAIL);
+                String permission = value.getString(PERMISSION);
                 Log.d(TAG, "permission - " + permission);
 
                 assert check_role != null;
@@ -58,20 +63,20 @@ public class LoadingActivity extends AppCompatActivity {
     void startApp(@NotNull String role, String email, String permission) {
         if (role.equals("Root")) {
             Intent intent = new Intent(this, RootMainActivity.class);
-            intent.putExtra(getString(R.string.email), email);
+            intent.putExtra(EMAIL, email);
             startActivity(intent);
         }
 
         if (role.equals("Пользователь")) {
             Intent intent = new Intent(this, MainUserActivity.class);
-            intent.putExtra(getString(R.string.email), email);
-            intent.putExtra(getString(R.string.permission), permission);
+            intent.putExtra(EMAIL, email);
+            intent.putExtra(PERMISSION, permission);
             startActivity(intent);
         }
 
         if (role.equals("Исполнитель")) {
             Intent intent = new Intent(this, MainExecutorActivity.class);
-            intent.putExtra(getString(R.string.email), email);
+            intent.putExtra(EMAIL, email);
             startActivity(intent);
         }
     }

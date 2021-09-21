@@ -1,5 +1,11 @@
 package com.george.vector.users.root.tasks;
 
+import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.LOCATION;
+import static com.george.vector.common.consts.Keys.OST_SCHOOL;
+import static com.george.vector.common.consts.Keys.USERS;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -86,7 +92,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
     FirebaseStorage firebaseStorage;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference usersRef = db.collection("users");
+    private final CollectionReference usersRef = db.collection(USERS);
 
     String name_executor;
     String last_name_executor;
@@ -132,8 +138,8 @@ public class AddTaskRootActivity extends AppCompatActivity {
         topAppBar_new_task_root.setNavigationOnClickListener(v -> onBackPressed());
 
         Bundle arguments = getIntent().getExtras();
-        location = arguments.get(getString(R.string.location)).toString();
-        USER_EMAIL = arguments.get(getString(R.string.email)).toString();
+        location = arguments.get(LOCATION).toString();
+        USER_EMAIL = arguments.get(EMAIL).toString();
         Log.d(TAG, location);
 
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
@@ -355,7 +361,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
     }
 
     void initialize_fields(String location) {
-        if (location.equals(getString(R.string.ost_school))) {
+        if (location.equals(OST_SCHOOL)) {
             String[] items = getResources().getStringArray(R.array.addresses_ost_school);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     AddTaskRootActivity.this,
@@ -366,7 +372,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
             address_autoComplete_root.setAdapter(adapter);
         }
 
-        if (location.equals(getString(R.string.bar_school)))
+        if (location.equals(BAR_SCHOOL))
             Objects.requireNonNull(text_input_layout_address_root.getEditText()).setText(getText(R.string.bar_school_address));
 
         String[] items_status = getResources().getStringArray(R.array.status);

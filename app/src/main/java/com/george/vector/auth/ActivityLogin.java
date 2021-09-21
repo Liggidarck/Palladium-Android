@@ -1,5 +1,11 @@
 package com.george.vector.auth;
 
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.PERMISSION;
+import static com.george.vector.common.consts.Keys.ROLE;
+import static com.george.vector.common.consts.Keys.USERS;
+import static com.george.vector.common.utils.Utils.validateEmail;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
@@ -62,37 +68,42 @@ public class ActivityLogin extends AppCompatActivity {
 
             if(isOnline()) {
                 if (validateFields()) {
-                    progress_bar_auth.setVisibility(View.VISIBLE);
-                    firebaseAuth.signInWithEmailAndPassword(emailED, passwordED).addOnCompleteListener(task -> {
+                    if(!validateEmail(emailED)) {
+                        Log.d(TAG, "Email non-correct");
+                        email_login_text_layout.setError("Не корректный формат e-mail");
+                    } else {
+                        progress_bar_auth.setVisibility(View.VISIBLE);
+                        firebaseAuth.signInWithEmailAndPassword(emailED, passwordED).addOnCompleteListener(task -> {
 
-                        if (task.isSuccessful()) {
-                            progress_bar_auth.setVisibility(View.INVISIBLE);
-                            Log.d(TAG, "Login success");
+                            if (task.isSuccessful()) {
+                                progress_bar_auth.setVisibility(View.INVISIBLE);
+                                Log.d(TAG, "Login success");
 
-                            userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+                                userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
 
-                            DocumentReference documentReference = firebaseFirestore.collection((String) getText(R.string.users)).document(userID);
-                            documentReference.addSnapshotListener(this, (value, error) -> {
-                                assert value != null;
+                                DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userID);
+                                documentReference.addSnapshotListener(this, (value, error) -> {
+                                    assert value != null;
 
-                                String check_role = value.getString((String) getText(R.string.role));
-                                String check_email = value.getString(getString(R.string.email));
-                                String permission = value.getString(getString(R.string.permission));
-                                Log.d(TAG, String.format("permission - %s", permission));
+                                    String check_role = value.getString(ROLE);
+                                    String check_email = value.getString(EMAIL);
+                                    String permission = value.getString(PERMISSION);
+                                    Log.d(TAG, String.format("permission - %s", permission));
 
-                                assert check_role != null;
-                                startApp(check_role, check_email, permission);
+                                    assert check_role != null;
+                                    startApp(check_role, check_email, permission);
 
-                            });
+                                });
 
-                        } else {
-                            progress_bar_auth.setVisibility(View.INVISIBLE);
-                            String error = Objects.requireNonNull(task.getException()).getMessage();
-                            assert error != null;
-                            Snackbar.make(coordinator_login, error, Snackbar.LENGTH_LONG).show();
-                        }
+                            } else {
+                                progress_bar_auth.setVisibility(View.INVISIBLE);
+                                String error = Objects.requireNonNull(task.getException()).getMessage();
+                                assert error != null;
+                                Snackbar.make(coordinator_login, error, Snackbar.LENGTH_LONG).show();
+                            }
 
-                    });
+                        });
+                    }
                 }
             } else
                 onStart();
@@ -106,20 +117,20 @@ public class ActivityLogin extends AppCompatActivity {
     void startApp(@NotNull String role, String email, String permission) {
         if (role.equals("Root")) {
             Intent intent = new Intent(this, RootMainActivity.class);
-            intent.putExtra(getString(R.string.email), email);
+            intent.putExtra(EMAIL, email);
             startActivity(intent);
         }
 
         if (role.equals("Пользователь")) {
             Intent intent = new Intent(this, MainUserActivity.class);
-            intent.putExtra((String) getText(R.string.email), email);
-            intent.putExtra((String) getText(R.string.permission), permission);
+            intent.putExtra(EMAIL, email);
+            intent.putExtra(PERMISSION, permission);
             startActivity(intent);
         }
 
         if (role.equals("Исполнитель")) {
             Intent intent = new Intent(this, MainExecutorActivity.class);
-            intent.putExtra((String) getText(R.string.email), email);
+            intent.putExtra(EMAIL, email);
             startActivity(intent);
         }
     }

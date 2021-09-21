@@ -1,5 +1,7 @@
 package com.george.vector.users.root.main.fragments.home;
 
+import static com.george.vector.common.consts.Keys.EMAIL;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,7 +32,7 @@ public class FragmentBar extends Fragment {
 
         Bundle args = getArguments();
         assert args != null;
-        String email = args.getString(getString(R.string.email));
+        String email = args.getString(EMAIL);
         Log.d(TAG, "email: " + email);
 
         return view;

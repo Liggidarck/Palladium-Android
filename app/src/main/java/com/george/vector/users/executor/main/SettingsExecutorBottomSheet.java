@@ -1,5 +1,8 @@
 package com.george.vector.users.executor.main;
 
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.PERMISSION;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,7 +38,7 @@ public class SettingsExecutorBottomSheet extends BottomSheetDialogFragment {
         close_btn_executor = view.findViewById(R.id.close_btn_executor);
 
         assert this.getArguments() != null;
-        String email = this.getArguments().getString(getString(R.string.email));
+        String email = this.getArguments().getString(EMAIL);
         Log.d("ExecutorBottomSheet", String.format("email: %s", email));
 
         close_btn_executor.setOnClickListener(v -> dismiss());
@@ -46,8 +49,8 @@ public class SettingsExecutorBottomSheet extends BottomSheetDialogFragment {
 
         layout_settings_executor.setOnClickListener(v -> {
             Intent intent = new Intent(SettingsExecutorBottomSheet.this.getContext(), SettingsActivity.class);
-            intent.putExtra(getString(R.string.permission), "executor");
-            intent.putExtra(getString(R.string.email), email);
+            intent.putExtra(PERMISSION, "executor");
+            intent.putExtra(EMAIL, email);
             startActivity(intent);
         });
 

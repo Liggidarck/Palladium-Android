@@ -1,5 +1,10 @@
 package com.george.vector.users.root.tasks;
 
+import static com.george.vector.common.consts.Keys.COLLECTION;
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.ID;
+import static com.george.vector.common.consts.Keys.LOCATION;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
@@ -73,10 +78,10 @@ public class TaskRootActivity extends AppCompatActivity {
         image_root_card = findViewById(R.id.image_root_card);
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get(getString(R.string.id)).toString();
-        collection = arguments.get(getString(R.string.collection)).toString();
-        location = arguments.get(getString(R.string.location)).toString();
-        email = arguments.get(getString(R.string.email)).toString();
+        id = arguments.get(ID).toString();
+        collection = arguments.get(COLLECTION).toString();
+        location = arguments.get(LOCATION).toString();
+        email = arguments.get(EMAIL).toString();
         confirm_delete = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("confirm_before_deleting_root", true);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -84,19 +89,19 @@ public class TaskRootActivity extends AppCompatActivity {
 
         image_root_card.setOnClickListener(v -> {
             Intent intent = new Intent(this, ImageTaskActivity.class);
-            intent.putExtra(getString(R.string.id), id);
-            intent.putExtra(getString(R.string.collection), collection);
-            intent.putExtra(getString(R.string.location), location);
-            intent.putExtra(getString(R.string.email), email);
+            intent.putExtra(ID, id);
+            intent.putExtra(COLLECTION, collection);
+            intent.putExtra(LOCATION, location);
+            intent.putExtra(EMAIL, email);
             startActivity(intent);
         });
 
         edit_task_btn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskRootActivity.class);
-            intent.putExtra(getString(R.string.id), id);
-            intent.putExtra(getString(R.string.collection), collection);
-            intent.putExtra(getString(R.string.location), location);
-            intent.putExtra(getString(R.string.email), email);
+            intent.putExtra(ID, id);
+            intent.putExtra(COLLECTION, collection);
+            intent.putExtra(LOCATION, location);
+            intent.putExtra(EMAIL, email);
             startActivity(intent);
         });
 

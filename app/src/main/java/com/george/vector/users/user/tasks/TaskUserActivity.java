@@ -1,5 +1,12 @@
 package com.george.vector.users.user.tasks;
 
+import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
+import static com.george.vector.common.consts.Keys.BAR_SCHOOL_NEW;
+import static com.george.vector.common.consts.Keys.ID;
+import static com.george.vector.common.consts.Keys.OST_SCHOOL;
+import static com.george.vector.common.consts.Keys.OST_SCHOOL_NEW;
+import static com.george.vector.common.consts.Keys.PERMISSION;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -44,8 +51,8 @@ public class TaskUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task_user);
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get(getString(R.string.id)).toString();
-        permission = arguments.getString(getString(R.string.permission));
+        id = arguments.get(ID).toString();
+        permission = arguments.getString(PERMISSION);
 
         toolbar = findViewById(R.id.topAppBar_task_user);
         text_view_address_task_user = findViewById(R.id.text_view_address_task_user);
@@ -64,11 +71,11 @@ public class TaskUserActivity extends AppCompatActivity {
          setSupportActionBar(toolbar);
          toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
-         if(permission.equals(getString(R.string.ost_school)))
-             collection = getString(R.string.ost_school_new);
+         if(permission.equals(OST_SCHOOL))
+             collection = OST_SCHOOL_NEW;
 
-         if(permission.equals(getString(R.string.bar_school)))
-             collection = getString(R.string.bar_school_new);
+         if(permission.equals(BAR_SCHOOL))
+             collection = BAR_SCHOOL_NEW;
 
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {

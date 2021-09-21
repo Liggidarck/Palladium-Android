@@ -1,5 +1,7 @@
 package com.george.vector.auth;
 
+import static com.george.vector.common.utils.Utils.validateEmail;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -47,7 +49,6 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";
 
-    @SuppressWarnings("UnusedAssignment")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,17 +79,19 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
         boolean hasBeenInitialized = false;
         List<FirebaseApp> firebaseApps = FirebaseApp.getApps(this);
-        for(FirebaseApp app : firebaseApps){
-
-            if(app.getName().equals(FirebaseApp.DEFAULT_APP_NAME)){
+        for (FirebaseApp app : firebaseApps) {
+            if (app.getName().equals(FirebaseApp.DEFAULT_APP_NAME)) {
                 hasBeenInitialized = true;
+                Log.d(TAG, "Init!");
                 firebaseApp = app;
+                mAuth2 = FirebaseAuth.getInstance(firebaseApp);
             }
 
         }
-        if(!hasBeenInitialized) {
-            firebaseApp = FirebaseApp.initializeApp(this, firebaseOptions);
 
+        if (!hasBeenInitialized) {
+            firebaseApp = FirebaseApp.initializeApp(this, firebaseOptions);
+            Log.d(TAG, "Init if!");
             mAuth2 = FirebaseAuth.getInstance(firebaseApp);
         }
 
@@ -122,35 +125,40 @@ public class ActivityRegisterUser extends AppCompatActivity {
             role_user = Objects.requireNonNull(text_layout_role_user.getEditText()).getText().toString();
             permission_user = Objects.requireNonNull(text_layout_permission_user.getEditText()).getText().toString();
 
-            if(validateFields()) {
-                progress_bar_register.setVisibility(View.VISIBLE);
+            if (validateFields()) {
+                if (!validateEmail(email_user)) {
+                    Log.d(TAG, "Email non-correct");
+                    text_layout_email_user.setError("Не корректный формат e-mail");
+                } else {
+                    progress_bar_register.setVisibility(View.VISIBLE);
 
-                mAuth2.createUserWithEmailAndPassword(email_user, password_user).addOnCompleteListener(task -> {
+                    mAuth2.createUserWithEmailAndPassword(email_user, password_user).addOnCompleteListener(task -> {
 
-                    if (task.isSuccessful()) {
-                        userID = Objects.requireNonNull(mAuth2.getCurrentUser()).getUid();
-                        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
-                        Map<String, Object> user = new HashMap<>();
-                        user.put("name", name_user);
-                        user.put("last_name", last_name_user);
-                        user.put("patronymic", patronymic_user);
-                        user.put("email", email_user);
-                        user.put("role", role_user);
-                        user.put("permission", permission_user);
-                        user.put("password", password_user);
+                        if (task.isSuccessful()) {
+                            userID = Objects.requireNonNull(mAuth2.getCurrentUser()).getUid();
+                            DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+                            Map<String, Object> user = new HashMap<>();
+                            user.put("name", name_user);
+                            user.put("last_name", last_name_user);
+                            user.put("patronymic", patronymic_user);
+                            user.put("email", email_user);
+                            user.put("role", role_user);
+                            user.put("permission", permission_user);
+                            user.put("password", password_user);
 
-                        documentReference.set(user)
-                                .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user - " + userID))
-                                .addOnFailureListener(e -> Log.e("TAG", "Failure - " + e.toString()));
+                            documentReference.set(user)
+                                    .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user - " + userID))
+                                    .addOnFailureListener(e -> Log.e("TAG", "Failure - " + e.toString()));
 
-                        onBackPressed();
+                            onBackPressed();
 
-                    } else
-                        Toast.makeText(ActivityRegisterUser.this, "Error" + Objects.requireNonNull(task.getException()).getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        } else
+                            Toast.makeText(ActivityRegisterUser.this, "Error" + Objects.requireNonNull(task.getException()).getLocalizedMessage(), Toast.LENGTH_LONG).show();
 
-                    progress_bar_register.setVisibility(View.INVISIBLE);
+                        progress_bar_register.setVisibility(View.INVISIBLE);
 
-                });
+                    });
+                }
             }
 
         });
@@ -166,6 +174,7 @@ public class ActivityRegisterUser extends AppCompatActivity {
         utils.clear_error(text_layout_email_user);
         utils.clear_error(text_layout_password_user);
         utils.clear_error(text_layout_role_user);
+        utils.clear_error(text_layout_permission_user);
 
         boolean checkName = utils.validate_field(name_user, text_layout_name_user);
         boolean checkLastName = utils.validate_field(last_name_user, text_layout_last_name_user);
@@ -173,8 +182,9 @@ public class ActivityRegisterUser extends AppCompatActivity {
         boolean checkEmail = utils.validate_field(email_user, text_layout_email_user);
         boolean checkPassword = utils.validate_field(password_user, text_layout_password_user);
         boolean checkRole = utils.validate_field(role_user, text_layout_role_user);
+        boolean checkPermission = utils.validate_field(permission_user, text_layout_permission_user);
 
-        return checkName & checkLastName & checkPatronymic & checkEmail & checkPassword & checkRole;
+        return checkName & checkLastName & checkPatronymic & checkEmail & checkPassword & checkRole & checkPermission;
     }
 
 }
