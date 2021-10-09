@@ -1,6 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.firebase-perf'
+    id 'com.google.firebase.crashlytics'
+    id 'kotlin-android'
 }
 
 android {
@@ -11,8 +14,8 @@ android {
         applicationId "com.george.vector"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 1166
-        versionName "1.1.6"
+        versionCode 1200
+        versionName "1.2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -45,8 +48,19 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
     //Firebase Main
+    implementation platform('com.google.firebase:firebase-bom:28.4.1')
     implementation 'com.google.firebase:firebase-auth:21.0.1'
     implementation 'com.google.firebase:firebase-firestore:23.0.3'
+    implementation 'com.google.firebase:firebase-perf'
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
+
+    //Firebase notifications
+    implementation 'com.google.firebase:firebase-messaging-ktx:22.0.0'
+
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
 
     //Firebase ui
     implementation 'com.firebaseui:firebase-ui-database:7.1.1'
@@ -54,7 +68,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-firestore:7.1.1'
 
     implementation 'androidx.annotation:annotation:1.2.0'
-    implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.preference:preference-ktx:1.1.1'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }

@@ -98,7 +98,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/image_root_card"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
@@ -111,6 +111,16 @@
                     tools:ignore="ContentDescription" />
 
             </com.google.android.material.card.MaterialCardView>
+
+            <Button
+                android:id="@+id/rotate_image_task_root"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                app:icon="@drawable/ic_baseline_rotate_right_24"
+                android:text="повернуть"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp" />
 
             <TextView
                 android:layout_width="wrap_content"

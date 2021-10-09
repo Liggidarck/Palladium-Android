@@ -6,10 +6,6 @@ import static com.george.vector.common.consts.Keys.LOCATION;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.consts.Keys.USERS;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -30,6 +26,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
@@ -37,6 +38,7 @@ import com.george.vector.common.edit_users.User;
 import com.george.vector.common.edit_users.UserAdapter;
 import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
+import com.george.vector.common.utils.TextValidator;
 import com.george.vector.common.utils.Utils;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.chip.Chip;
@@ -80,30 +82,22 @@ public class AddTaskRootActivity extends AppCompatActivity {
     ImageView image_task;
 
     String location, userID, email, address, floor, cabinet, letter, name_task, date_complete, status, comment,
-            USER_EMAIL, NAME_IMAGE, full_name_executor;
+            USER_EMAIL, NAME_IMAGE, full_name_executor, name_executor, last_name_executor, patronymic_executor, email_executor;
     boolean urgent;
     private static final String TAG = "AddTaskRoot";
-
-    Calendar datePickCalendar;
+    private final int PICK_IMAGE_REQUEST = 71;
 
     FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
     StorageReference storageReference;
     FirebaseStorage firebaseStorage;
 
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference usersRef = db.collection(USERS);
-
-    String name_executor;
-    String last_name_executor;
-    String patronymic_executor;
-    String email_executor;
-
+    private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    private final CollectionReference usersRef = firebaseFirestore.collection(USERS);
     Query query;
-
-    private final int PICK_IMAGE_REQUEST = 71;
-
     private Uri filePath;
+
+    Calendar datePickCalendar;
+    Utils utils = new Utils();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +125,6 @@ public class AddTaskRootActivity extends AppCompatActivity {
         image_task = findViewById(R.id.image_task);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
 
@@ -143,14 +136,10 @@ public class AddTaskRootActivity extends AppCompatActivity {
         Log.d(TAG, location);
 
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReferenceUser = firebaseFirestore.collection("users").document(userID);
+        DocumentReference documentReferenceUser = firebaseFirestore.collection(USERS).document(userID);
         documentReferenceUser.addSnapshotListener(this, (value, error) -> {
             assert value != null;
-            try {
-                email = value.getString("email");
-            } catch (Exception e) {
-                Log.e(TAG, String.format("Error! %s", e));
-            }
+            email = value.getString("email");
         });
 
         add_executor_root.setOnClickListener(v -> show_add_executor_dialog());
@@ -175,9 +164,11 @@ public class AddTaskRootActivity extends AppCompatActivity {
                 else
                     save_task(location);
             }
+
         });
 
         initialize_fields(location);
+
     }
 
     private void show_dialog_image() {
@@ -198,7 +189,6 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
         dialog.show();
     }
-
 
     private void chooseImage() {
         Intent intent = new Intent();
@@ -403,6 +393,20 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
         edit_text_date_task_root.setOnClickListener(v -> new DatePickerDialog(AddTaskRootActivity.this, date, datePickCalendar
                 .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
+
+        text_input_layout_floor_root.getEditText().addTextChangedListener(new TextValidator(text_input_layout_floor_root.getEditText()) {
+            @Override
+            public void validate(TextView textView, String text) {
+                utils.validateNumberField(text, text_input_layout_floor_root, done_task_root, 1);
+            }
+        });
+
+        text_input_layout_cabinet_root.getEditText().addTextChangedListener(new TextValidator(text_input_layout_cabinet_root.getEditText()) {
+            @Override
+            public void validate(TextView textView, String text) {
+                utils.validateNumberField(text, text_input_layout_cabinet_root, done_task_root, 3);
+            }
+        });
     }
 
     void updateLabel() {
@@ -424,9 +428,9 @@ public class AddTaskRootActivity extends AppCompatActivity {
         utils.clear_error(text_input_layout_status_root);
 
         boolean check_address = utils.validate_field(address, text_input_layout_address_root);
+        boolean check_name_task = utils.validate_field(name_task, text_input_layout_name_task_root);
         boolean check_floor = utils.validate_field(floor, text_input_layout_floor_root);
         boolean check_cabinet = utils.validate_field(cabinet, text_input_layout_cabinet_root);
-        boolean check_name_task = utils.validate_field(name_task, text_input_layout_name_task_root);
         boolean check_date_task = utils.validate_field(date_complete, text_input_layout_date_task_root);
         boolean check_executor = utils.validate_field(email_executor, text_input_layout_executor_root);
         boolean check_status = utils.validate_field(status, text_input_layout_status_root);

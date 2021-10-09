@@ -6,8 +6,6 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECIVE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
-
     <application
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
@@ -16,21 +14,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Palladium">
-        <activity
-            android:name=".common.tasks.ImageTaskActivity"
-            android:exported="true" />
-        <activity
-            android:name=".users.root.main.RootMainActivity"
-            android:exported="true" />
-        <activity
-            android:name=".auth.ForgotPasswordActivity"
-            android:exported="true" />
-        <activity
-            android:name=".users.executor.tasks.EditTaskExecutorActivity"
-            android:exported="true" />
-        <activity
-            android:name=".common.settings.SettingsActivity"
-            android:exported="true" />
+
+        <meta-data
+            android:name="firebase_performance_logcat_enabled"
+            android:value="true" />
+
         <activity
             android:name=".auth.LoadingActivity"
             android:exported="true">
@@ -40,6 +28,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".develop.notifications.NotificationActivity" />
+        <activity android:name=".common.tasks.ImageTaskActivity" />
+        <activity android:name=".users.root.main.RootMainActivity"/>
+        <activity android:name=".auth.ForgotPasswordActivity" />
+        <activity android:name=".users.executor.tasks.EditTaskExecutorActivity" />
+        <activity android:name=".common.settings.SettingsActivity" />
         <activity android:name=".develop.DevelopActivity" />
         <activity android:name=".users.executor.tasks.TaskExecutorActivity" />
         <activity android:name=".users.executor.main.ExecutorTasksActivity" />
@@ -56,8 +51,8 @@
         <activity android:name=".users.user.tasks.AddTaskUserActivity" />
         <activity android:name=".users.executor.main.MainExecutorActivity" />
         <activity android:name=".users.user.main.MainUserActivity" />
-        <activity android:name=".auth.ActivityRegisterUser" />
-        <activity android:name=".auth.ActivityLogin" />
+        <activity android:name=".auth.RegisterUserActivity" />
+        <activity android:name=".auth.LoginActivity" />
     </application>
 
 </manifest>

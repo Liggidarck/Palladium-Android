@@ -1,41 +1,59 @@
 package com.george.vector.develop;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
-import android.util.Log;
-
 import com.george.vector.R;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.george.vector.common.utils.TextValidator;
+import com.george.vector.common.utils.Utils;
+import com.george.vector.develop.notifications.NotificationActivity;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class DevelopActivity extends AppCompatActivity {
 
     private static final String TAG = "DevelopActivity";
+    TextInputLayout develop_text_field, develop_text_field2;
+    ExtendedFloatingActionButton button_send;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_develop);
 
-    }
+        Button button_notifications = findViewById(R.id.button_notifications);
+        Button button_camera = findViewById(R.id.button_camera);
+        button_send = findViewById(R.id.button_send);
 
-    private void deleteUser(String email, String password) {
+        develop_text_field = findViewById(R.id.develop_text_field);
+        develop_text_field2 = findViewById(R.id.develop_text_field2);
 
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        AuthCredential credential = EmailAuthProvider.getCredential(email, password);
+        button_notifications.setOnClickListener(v -> startActivity(new Intent(this, NotificationActivity.class)));
 
-        if (user != null) {
-            user.reauthenticate(credential)
-                    .addOnCompleteListener(task ->
-                            user.delete().addOnCompleteListener(task1 -> {
-                                if (task1.isSuccessful()) {
-                                    Log.d("TAG", "User account deleted.");
-                                }
-                            }));
-        }
+
+        develop_text_field.getEditText().addTextChangedListener(new TextValidator(develop_text_field.getEditText()) {
+            @Override
+            public void validate(TextView textView, String text) {
+
+                Utils utils = new Utils();
+                utils.validateNumberField(text, develop_text_field, button_send, 3);
+
+            }
+        });
+
+        develop_text_field2.getEditText().addTextChangedListener(new TextValidator(develop_text_field2.getEditText()) {
+            @Override
+            public void validate(TextView textView, String text) {
+
+
+            }
+        });
+
+
     }
 
 }

@@ -4,10 +4,9 @@ import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.PERMISSION;
 import static com.george.vector.common.consts.Keys.ROLE;
 import static com.george.vector.common.consts.Keys.USERS;
+import static com.george.vector.common.consts.Logs.TAG_LOGIN_ACTIVITY;
+import static com.george.vector.common.consts.Logs.TAG_VALIDATE_FILED;
 import static com.george.vector.common.utils.Utils.validateEmail;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +16,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.george.vector.R;
 import com.george.vector.common.utils.Utils;
@@ -34,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class ActivityLogin extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     TextInputLayout email_login_text_layout, password_login_text_layout;
     Button btn_login, btn_forgot_password;
@@ -42,7 +44,6 @@ public class ActivityLogin extends AppCompatActivity {
     CoordinatorLayout coordinator_login;
 
     String emailED, passwordED, userID;
-    private static final String TAG = "LoginActivity";
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -69,7 +70,7 @@ public class ActivityLogin extends AppCompatActivity {
             if(isOnline()) {
                 if (validateFields()) {
                     if(!validateEmail(emailED)) {
-                        Log.d(TAG, "Email non-correct");
+                        Log.e(TAG_VALIDATE_FILED, "Email validation failed");
                         email_login_text_layout.setError("Не корректный формат e-mail");
                     } else {
                         progress_bar_auth.setVisibility(View.VISIBLE);
@@ -77,7 +78,7 @@ public class ActivityLogin extends AppCompatActivity {
 
                             if (task.isSuccessful()) {
                                 progress_bar_auth.setVisibility(View.INVISIBLE);
-                                Log.d(TAG, "Login success");
+                                Log.d(TAG_LOGIN_ACTIVITY, "Login success");
 
                                 userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
 
@@ -85,13 +86,15 @@ public class ActivityLogin extends AppCompatActivity {
                                 documentReference.addSnapshotListener(this, (value, error) -> {
                                     assert value != null;
 
-                                    String check_role = value.getString(ROLE);
-                                    String check_email = value.getString(EMAIL);
+                                    String role = value.getString(ROLE);
+                                    String email = value.getString(EMAIL);
                                     String permission = value.getString(PERMISSION);
-                                    Log.d(TAG, String.format("permission - %s", permission));
+                                    Log.d(TAG_LOGIN_ACTIVITY, String.format("permission - %s", permission));
+                                    Log.d(TAG_LOGIN_ACTIVITY, String.format("role - %s", role));
+                                    Log.d(TAG_LOGIN_ACTIVITY, String.format("email - %s", email));
 
-                                    assert check_role != null;
-                                    startApp(check_role, check_email, permission);
+                                    assert role != null;
+                                    startApp(role, email, permission);
 
                                 });
 
@@ -148,7 +151,7 @@ public class ActivityLogin extends AppCompatActivity {
         if(!isOnline())
             Snackbar.make(findViewById(R.id.coordinator_login_activity), getString(R.string.error_no_connection), Snackbar.LENGTH_LONG)
                     .setAction("Повторить", v ->  {
-                        Log.i(TAG, "Update status: " + isOnline());
+                        Log.i(TAG_LOGIN_ACTIVITY, "Update status: " + isOnline());
                         onStart();
                     }).show();
     }

@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,6 +34,7 @@ import com.george.vector.common.edit_users.UserAdapter;
 import com.george.vector.common.tasks.utils.DeleteTask;
 import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
+import com.george.vector.common.utils.TextValidator;
 import com.george.vector.common.utils.Utils;
 import com.george.vector.users.root.main.RootMainActivity;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -91,6 +93,9 @@ public class EditTaskRootActivity extends AppCompatActivity {
     String email_executor;
 
     Query query;
+
+    Utils utils = new Utils();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -330,7 +335,6 @@ public class EditTaskRootActivity extends AppCompatActivity {
     }
 
     boolean validateFields() {
-        Utils utils = new Utils();
 
         utils.clear_error(text_input_layout_address_root);
         utils.clear_error(text_input_layout_floor_root);
@@ -404,6 +408,21 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
         edit_text_date_task_root.setOnClickListener(v -> new DatePickerDialog(EditTaskRootActivity.this, date, datePickCalendar
                 .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
+
+
+        text_input_layout_floor_root.getEditText().addTextChangedListener(new TextValidator(text_input_layout_floor_root.getEditText()) {
+            @Override
+            public void validate(TextView textView, String text) {
+                utils.validateNumberField(text, text_input_layout_floor_root, done_task_root, 1);
+            }
+        });
+
+        text_input_layout_cabinet_root.getEditText().addTextChangedListener(new TextValidator(text_input_layout_cabinet_root.getEditText()) {
+            @Override
+            public void validate(TextView textView, String text) {
+                utils.validateNumberField(text, text_input_layout_cabinet_root, done_task_root, 3);
+            }
+        });
 
     }
 

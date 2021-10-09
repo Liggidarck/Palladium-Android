@@ -4,12 +4,13 @@ import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.PERMISSION;
 import static com.george.vector.common.consts.Keys.ROLE;
 import static com.george.vector.common.consts.Keys.USERS;
-
-import androidx.appcompat.app.AppCompatActivity;
+import static com.george.vector.common.consts.Logs.TAG_LOADING_ACTIVITY;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
 import com.george.vector.users.executor.main.MainExecutorActivity;
@@ -25,7 +26,6 @@ import java.util.Objects;
 
 public class LoadingActivity extends AppCompatActivity {
 
-    private static final String TAG = "LoadingActivity";
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 
@@ -41,23 +41,25 @@ public class LoadingActivity extends AppCompatActivity {
 
         if(firebaseAuth.getCurrentUser() != null) {
             userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-            Log.i(TAG, "user id: " + userID);
+            Log.i(TAG_LOADING_ACTIVITY, "user id: " + userID);
 
             DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userID);
             documentReference.addSnapshotListener(this, (value, error) -> {
                 assert value != null;
 
-                String check_role = value.getString(ROLE);
-                String check_email = value.getString(EMAIL);
+                String role = value.getString(ROLE);
+                String email = value.getString(EMAIL);
                 String permission = value.getString(PERMISSION);
-                Log.d(TAG, "permission - " + permission);
+                Log.d(TAG_LOADING_ACTIVITY, "permission - " + permission);
+                Log.d(TAG_LOADING_ACTIVITY, "email - " + email);
+                Log.d(TAG_LOADING_ACTIVITY, "role - " + role);
 
-                assert check_role != null;
-                startApp(check_role, check_email, permission);
+                assert role != null;
+                startApp(role, email, permission);
 
             });
         } else
-            startActivity(new Intent(this, ActivityLogin.class));
+            startActivity(new Intent(this, LoginActivity.class));
     }
 
     void startApp(@NotNull String role, String email, String permission) {

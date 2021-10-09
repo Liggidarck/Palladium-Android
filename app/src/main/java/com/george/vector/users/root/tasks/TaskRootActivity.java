@@ -5,10 +5,6 @@ import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.ID;
 import static com.george.vector.common.consts.Keys.LOCATION;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.preference.PreferenceManager;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +17,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
+
 import com.george.vector.R;
 import com.george.vector.common.announcements.fragmentUrgentRequest;
 import com.george.vector.common.tasks.ImageTaskActivity;
@@ -31,6 +31,8 @@ import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.perf.FirebasePerformance;
+import com.google.firebase.perf.metrics.Trace;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Callback;
@@ -46,7 +48,7 @@ public class TaskRootActivity extends AppCompatActivity {
             text_view_name_task_root, text_view_comment_task_root, text_view_status_task_root,
             text_view_date_create_task_root;
     CircleImageView circle_status_root;
-    Button edit_task_btn, delete_task_btn;
+    Button edit_task_btn, delete_task_btn, rotate_image_task_root;
     MaterialCardView image_root_card;
     ImageView image_root_task;
 
@@ -76,6 +78,7 @@ public class TaskRootActivity extends AppCompatActivity {
         delete_task_btn = findViewById(R.id.delete_task_btn_root);
         image_root_task = findViewById(R.id.image_root_task);
         image_root_card = findViewById(R.id.image_root_card);
+        rotate_image_task_root = findViewById(R.id.rotate_image_task_root);
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.get(ID).toString();
@@ -95,6 +98,11 @@ public class TaskRootActivity extends AppCompatActivity {
             intent.putExtra(EMAIL, email);
             startActivity(intent);
         });
+
+        rotate_image_task_root.setOnClickListener(v ->
+                image_root_task
+                        .animate()
+                        .rotation(image_root_task.getRotation() + 90));
 
         edit_task_btn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskRootActivity.class);
@@ -116,6 +124,9 @@ public class TaskRootActivity extends AppCompatActivity {
     }
 
     void load_data(String collection, String id) {
+        Trace myTrace = FirebasePerformance.getInstance().newTrace("load_task_root_trace");
+        myTrace.start();
+
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
             progress_bar_task_root.setVisibility(View.VISIBLE);
@@ -194,6 +205,8 @@ public class TaskRootActivity extends AppCompatActivity {
             String date_create_text = "Созданно: " + date_create + " " + time_create;
             text_view_date_create_task_root.setText(date_create_text);
         });
+
+        myTrace.stop();
     }
 
     void show_dialog_delete() {

@@ -27,5 +27,4 @@ public class Keys {
     public static final String BAR_SCHOOL_NEW = "bar_school_new";
     public static final String BAT_SCHOOL_PROGRESS = "bar_school_progress";
 
-
 }

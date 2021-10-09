@@ -1,8 +1,9 @@
 package com.george.vector.auth;
 
+import static com.george.vector.common.consts.Keys.USERS;
+import static com.george.vector.common.consts.Logs.TAG_REGISTER_ACTIVITY;
+import static com.george.vector.common.consts.Logs.TAG_VALIDATE_FILED;
 import static com.george.vector.common.utils.Utils.validateEmail;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
 import com.george.vector.common.utils.Utils;
@@ -28,26 +31,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class ActivityRegisterUser extends AppCompatActivity {
+public class RegisterUserActivity extends AppCompatActivity {
 
     MaterialToolbar topAppBar_register;
-
     Button register_user_btn;
-
     LinearProgressIndicator progress_bar_register;
-
     TextInputLayout text_layout_name_user, text_layout_last_name_user,
             text_layout_patronymic_user, text_layout_email_user,
             text_layout_password_user, text_layout_role_user, text_layout_permission_user;
-
     MaterialAutoCompleteTextView complete_text_role_user, complete_text_permission_user;
 
-    String name_user, last_name_user, patronymic_user, email_user, password_user, role_user, permission_user, userID;
+    String name_user, last_name_user, patronymic_user, email_user,
+            password_user, role_user, permission_user, userID;
 
     FirebaseAuth mAuth1, mAuth2;
     FirebaseFirestore firebaseFirestore;
-
-    private static final String TAG = "RegisterActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +80,6 @@ public class ActivityRegisterUser extends AppCompatActivity {
         for (FirebaseApp app : firebaseApps) {
             if (app.getName().equals(FirebaseApp.DEFAULT_APP_NAME)) {
                 hasBeenInitialized = true;
-                Log.d(TAG, "Init!");
                 firebaseApp = app;
                 mAuth2 = FirebaseAuth.getInstance(firebaseApp);
             }
@@ -91,7 +88,6 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
         if (!hasBeenInitialized) {
             firebaseApp = FirebaseApp.initializeApp(this, firebaseOptions);
-            Log.d(TAG, "Init if!");
             mAuth2 = FirebaseAuth.getInstance(firebaseApp);
         }
 
@@ -99,7 +95,7 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
         String[] items = getResources().getStringArray(R.array.roles);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
-                ActivityRegisterUser.this,
+                RegisterUserActivity.this,
                 R.layout.dropdown_menu_categories,
                 items
         );
@@ -108,7 +104,7 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
         String[] permissions = getResources().getStringArray(R.array.permissions);
         ArrayAdapter<String> arrayAdapterPermissions = new ArrayAdapter<>(
-                ActivityRegisterUser.this,
+                RegisterUserActivity.this,
                 R.layout.dropdown_menu_categories,
                 permissions
         );
@@ -127,7 +123,7 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
             if (validateFields()) {
                 if (!validateEmail(email_user)) {
-                    Log.d(TAG, "Email non-correct");
+                    Log.e(TAG_VALIDATE_FILED, "Email validation failed");
                     text_layout_email_user.setError("Не корректный формат e-mail");
                 } else {
                     progress_bar_register.setVisibility(View.VISIBLE);
@@ -136,7 +132,7 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
                         if (task.isSuccessful()) {
                             userID = Objects.requireNonNull(mAuth2.getCurrentUser()).getUid();
-                            DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+                            DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userID);
                             Map<String, Object> user = new HashMap<>();
                             user.put("name", name_user);
                             user.put("last_name", last_name_user);
@@ -147,13 +143,15 @@ public class ActivityRegisterUser extends AppCompatActivity {
                             user.put("password", password_user);
 
                             documentReference.set(user)
-                                    .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user - " + userID))
-                                    .addOnFailureListener(e -> Log.e("TAG", "Failure - " + e.toString()));
+                                    .addOnSuccessListener(unused -> Log.d(TAG_REGISTER_ACTIVITY, "Success register user - " + userID))
+                                    .addOnFailureListener(e -> Log.e(TAG_REGISTER_ACTIVITY, "Failure register user - " + e.toString()));
 
                             onBackPressed();
 
-                        } else
-                            Toast.makeText(ActivityRegisterUser.this, "Error" + Objects.requireNonNull(task.getException()).getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(RegisterUserActivity.this, "Error" + Objects.requireNonNull(task.getException()).getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                            Log.e(TAG_REGISTER_ACTIVITY, "Error! " + task.getException().toString());
+                        }
 
                         progress_bar_register.setVisibility(View.INVISIBLE);
 

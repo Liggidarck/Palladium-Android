@@ -4,13 +4,14 @@ import static com.george.vector.common.consts.Keys.COLLECTION;
 import static com.george.vector.common.consts.Keys.ID;
 import static com.george.vector.common.consts.Keys.LOCATION;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.george.vector.R;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Callback;
@@ -20,6 +21,8 @@ public class ImageTaskActivity extends AppCompatActivity {
 
     private static final String TAG = "ImageTaskActivity";
     ImageView task_image_activity;
+    MaterialToolbar topAppBar_task_activity;
+
     String id, collection, location, image;
 
     FirebaseFirestore firebaseFirestore;
@@ -32,11 +35,19 @@ public class ImageTaskActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         task_image_activity = findViewById(R.id.task_image_activity);
+        topAppBar_task_activity = findViewById(R.id.topAppBar_task_activity);
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.getString(ID);
         collection = arguments.getString(COLLECTION);
         location = arguments.getString(LOCATION);
+
+        topAppBar_task_activity.setNavigationOnClickListener(v -> onBackPressed());
+
+        task_image_activity.setOnClickListener(v ->
+                task_image_activity
+                        .animate()
+                        .rotation(task_image_activity.getRotation() + 90));
 
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {

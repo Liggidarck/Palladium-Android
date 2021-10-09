@@ -18,14 +18,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
-import com.george.vector.auth.ActivityRegisterUser;
+import com.george.vector.auth.RegisterUserActivity;
 import com.george.vector.common.edit_users.ListUsersActivity;
 import com.george.vector.common.settings.SettingsActivity;
+import com.george.vector.develop.DevelopActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FragmentProfile extends Fragment {
 
@@ -73,7 +76,7 @@ public class FragmentProfile extends Fragment {
             text_view_email.setText(email);
         });
 
-        layout_new_person_profile.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getActivity(), ActivityRegisterUser.class)));
+        layout_new_person_profile.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getActivity(), RegisterUserActivity.class)));
         layout_edit_person_profile.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getContext(), ListUsersActivity.class)));
 
         btn_settings_profile_root.setOnClickListener(v -> {
@@ -82,6 +85,9 @@ public class FragmentProfile extends Fragment {
             intent.putExtra(EMAIL, "null");
             startActivity(intent);
         });
+
+        CircleImageView develop_activity = view.findViewById(R.id.develop_activity);
+        develop_activity.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getContext(), DevelopActivity.class)));
 
         return view;
     }
