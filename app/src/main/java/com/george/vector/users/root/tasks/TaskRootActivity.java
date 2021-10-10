@@ -25,18 +25,15 @@ import com.george.vector.R;
 import com.george.vector.common.announcements.fragmentUrgentRequest;
 import com.george.vector.common.tasks.ImageTaskActivity;
 import com.george.vector.common.tasks.utils.DeleteTask;
+import com.george.vector.common.tasks.utils.GetDataTask;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.perf.FirebasePerformance;
-import com.google.firebase.perf.metrics.Trace;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -124,9 +121,6 @@ public class TaskRootActivity extends AppCompatActivity {
     }
 
     void load_data(String collection, String id) {
-        Trace myTrace = FirebasePerformance.getInstance().newTrace("load_task_root_trace");
-        myTrace.start();
-
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
             progress_bar_task_root.setVisibility(View.VISIBLE);
@@ -147,22 +141,8 @@ public class TaskRootActivity extends AppCompatActivity {
                 progress_bar_task_root.setVisibility(View.INVISIBLE);
                 image_root_task.setImageResource(R.drawable.no_image);
             } else {
-
-                String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image);
-                Picasso.with(this)
-                        .load(IMAGE_URL)
-                        .into(image_root_task, new Callback() {
-                            @Override
-                            public void onSuccess() {
-                                progress_bar_task_root.setVisibility(View.INVISIBLE);
-                            }
-
-                            @Override
-                            public void onError() {
-                                Log.e(TAG, "Error on download");
-                                progress_bar_task_root.setVisibility(View.INVISIBLE);
-                            }
-                        });
+                GetDataTask getDataTask = new GetDataTask();
+                getDataTask.setImage(image, progress_bar_task_root, image_root_task);
             }
 
             try {
@@ -205,8 +185,6 @@ public class TaskRootActivity extends AppCompatActivity {
             String date_create_text = "Созданно: " + date_create + " " + time_create;
             text_view_date_create_task_root.setText(date_create_text);
         });
-
-        myTrace.stop();
     }
 
     void show_dialog_delete() {
@@ -225,7 +203,7 @@ public class TaskRootActivity extends AppCompatActivity {
         DeleteTask deleteTask = new DeleteTask();
         deleteTask.delete_task(collection, id);
 
-        if(image != null) {
+        if (image != null) {
             String storageUrl = "images/" + image;
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(storageUrl);
             storageReference.delete();

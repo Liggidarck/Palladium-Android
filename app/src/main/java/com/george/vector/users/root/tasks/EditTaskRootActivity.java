@@ -5,6 +5,7 @@ import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.ID;
 import static com.george.vector.common.consts.Keys.LOCATION;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL;
+import static com.george.vector.common.consts.Keys.USERS;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -32,6 +33,7 @@ import com.george.vector.R;
 import com.george.vector.common.edit_users.User;
 import com.george.vector.common.edit_users.UserAdapter;
 import com.george.vector.common.tasks.utils.DeleteTask;
+import com.george.vector.common.tasks.utils.GetDataTask;
 import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.TextValidator;
@@ -49,8 +51,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -162,20 +162,8 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 progress_bar_add_task_root.setVisibility(View.INVISIBLE);
                 image_task.setImageResource(R.drawable.no_image);
             } else {
-                String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image);
-                Picasso.with(this)
-                        .load(IMAGE_URL)
-                        .into(image_task, new Callback() {
-                            @Override
-                            public void onSuccess() {
-                                progress_bar_add_task_root.setVisibility(View.INVISIBLE);
-                            }
-
-                            @Override
-                            public void onError() {
-                                Log.e(TAG, "Error on download");
-                            }
-                        });
+                GetDataTask getDataTask = new GetDataTask();
+                getDataTask.setImage(image, progress_bar_add_task_root, image_task);
             }
 
             try {
@@ -266,7 +254,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
 
-            DocumentReference documentReference = firebaseFirestore.collection("users").document(id);
+            DocumentReference documentReference = firebaseFirestore.collection(USERS).document(id);
             documentReference.addSnapshotListener((value, error) -> {
                 assert value != null;
                 name_executor = value.getString("name");

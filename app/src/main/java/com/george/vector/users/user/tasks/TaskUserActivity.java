@@ -7,8 +7,6 @@ import static com.george.vector.common.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL_NEW;
 import static com.george.vector.common.consts.Keys.PERMISSION;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -18,17 +16,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.george.vector.R;
+import com.george.vector.common.tasks.utils.GetDataTask;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 public class TaskUserActivity extends AppCompatActivity {
 
@@ -97,21 +94,8 @@ public class TaskUserActivity extends AppCompatActivity {
                 progress_bar_task_user.setVisibility(View.INVISIBLE);
                 image_user_task.setImageResource(R.drawable.no_image);
             } else {
-
-                String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image);
-                Picasso.with(this)
-                        .load(IMAGE_URL)
-                        .into(image_user_task, new Callback() {
-                            @Override
-                            public void onSuccess() {
-                                progress_bar_task_user.setVisibility(View.INVISIBLE);
-                            }
-
-                            @Override
-                            public void onError() {
-                                Log.e(TAG, "Error on download");
-                            }
-                        });
+                GetDataTask getDataTask = new GetDataTask();
+                getDataTask.setImage(image, progress_bar_task_user, image_user_task);
             }
 
             if (!letter.equals("-") && !letter.isEmpty())

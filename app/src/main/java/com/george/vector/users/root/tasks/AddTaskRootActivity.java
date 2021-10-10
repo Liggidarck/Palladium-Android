@@ -67,7 +67,7 @@ import java.util.UUID;
 
 public class AddTaskRootActivity extends AppCompatActivity {
 
-    MaterialToolbar topAppBar_new_task_root;
+    MaterialToolbar top_app_bar_new_task_root;
     LinearProgressIndicator progress_bar_add_task_root;
     ExtendedFloatingActionButton done_task_root;
     Button add_executor_root;
@@ -78,7 +78,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
             text_input_layout_executor_root, text_input_layout_status_root,
             text_input_layout_cabinet_liter_root;
     TextInputEditText edit_text_date_task_root;
-    MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root, liter_autoComplete_root;
+    MaterialAutoCompleteTextView address_auto_complete_root, status_auto_complete_root, liter_auto_complete_root;
     ImageView image_task;
 
     String location, userID, email, address, floor, cabinet, letter, name_task, date_complete, status, comment,
@@ -87,9 +87,9 @@ public class AddTaskRootActivity extends AppCompatActivity {
     private static final String TAG = "AddTaskRoot";
     private final int PICK_IMAGE_REQUEST = 71;
 
-    FirebaseAuth firebaseAuth;
-    StorageReference storageReference;
-    FirebaseStorage firebaseStorage;
+    FirebaseAuth firebase_auth;
+    StorageReference storage_reference;
+    FirebaseStorage firebase_storage;
 
     private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private final CollectionReference usersRef = firebaseFirestore.collection(USERS);
@@ -104,7 +104,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task_root);
 
-        topAppBar_new_task_root = findViewById(R.id.topAppBar_new_task_root);
+        top_app_bar_new_task_root = findViewById(R.id.topAppBar_new_task_root);
         progress_bar_add_task_root = findViewById(R.id.progress_bar_add_task_root);
         done_task_root = findViewById(R.id.done_task_root);
         text_input_layout_address_root = findViewById(R.id.text_input_layout_address_root);
@@ -116,26 +116,28 @@ public class AddTaskRootActivity extends AppCompatActivity {
         text_input_layout_executor_root = findViewById(R.id.text_input_layout_executor_root);
         text_input_layout_status_root = findViewById(R.id.text_input_layout_status_root);
         edit_text_date_task_root = findViewById(R.id.edit_text_date_task_root);
-        address_autoComplete_root = findViewById(R.id.address_autoComplete_root);
-        status_autoComplete_root = findViewById(R.id.status_autoComplete_root);
+        address_auto_complete_root = findViewById(R.id.address_autoComplete_root);
+        status_auto_complete_root = findViewById(R.id.status_autoComplete_root);
         add_executor_root = findViewById(R.id.add_executor_root);
         text_input_layout_cabinet_liter_root = findViewById(R.id.text_input_layout_cabinet_liter_root);
-        liter_autoComplete_root = findViewById(R.id.liter_autoComplete_root);
+        liter_auto_complete_root = findViewById(R.id.liter_autoComplete_root);
         urgent_request_check_box = findViewById(R.id.urgent_request_check_box);
         image_task = findViewById(R.id.image_task);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
+        firebase_auth = FirebaseAuth.getInstance();
+        firebase_storage = FirebaseStorage.getInstance();
+        storage_reference = firebase_storage.getReference();
 
-        topAppBar_new_task_root.setNavigationOnClickListener(v -> onBackPressed());
+        top_app_bar_new_task_root.setNavigationOnClickListener(v -> onBackPressed());
 
         Bundle arguments = getIntent().getExtras();
         location = arguments.get(LOCATION).toString();
         USER_EMAIL = arguments.get(EMAIL).toString();
         Log.d(TAG, location);
 
-        userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        initialize_fields(location);
+
+        userID = Objects.requireNonNull(firebase_auth.getCurrentUser()).getUid();
         DocumentReference documentReferenceUser = firebaseFirestore.collection(USERS).document(userID);
         documentReferenceUser.addSnapshotListener(this, (value, error) -> {
             assert value != null;
@@ -166,8 +168,6 @@ public class AddTaskRootActivity extends AppCompatActivity {
             }
 
         });
-
-        initialize_fields(location);
 
     }
 
@@ -231,7 +231,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
             NAME_IMAGE = UUID.randomUUID().toString();
 
-            StorageReference ref = storageReference.child("images/" + NAME_IMAGE);
+            StorageReference ref = storage_reference.child("images/" + NAME_IMAGE);
             ref.putBytes(data)
                     .addOnSuccessListener(taskSnapshot -> {
                         progressDialog.dismiss();
@@ -359,7 +359,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
                     items
             );
 
-            address_autoComplete_root.setAdapter(adapter);
+            address_auto_complete_root.setAdapter(adapter);
         }
 
         if (location.equals(BAR_SCHOOL))
@@ -372,7 +372,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
                 items_status
         );
 
-        status_autoComplete_root.setAdapter(adapter_status);
+        status_auto_complete_root.setAdapter(adapter_status);
 
         String[] itemsLetter = getResources().getStringArray(R.array.letter);
         ArrayAdapter<String> adapter_litera = new ArrayAdapter<>(
@@ -381,7 +381,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
                 itemsLetter
         );
 
-        liter_autoComplete_root.setAdapter(adapter_litera);
+        liter_auto_complete_root.setAdapter(adapter_litera);
 
         datePickCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {

@@ -5,9 +5,6 @@ import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.ID;
 import static com.george.vector.common.consts.Keys.LOCATION;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -19,15 +16,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+
 import com.george.vector.R;
 import com.george.vector.common.tasks.ImageTaskActivity;
+import com.george.vector.common.tasks.utils.GetDataTask;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -133,21 +132,8 @@ public class TaskExecutorActivity extends AppCompatActivity {
                     progress_bar_task_executor.setVisibility(View.INVISIBLE);
                     image_executor_task.setImageResource(R.drawable.no_image);
                 } else {
-
-                    String IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image);
-                    Picasso.with(this)
-                            .load(IMAGE_URL)
-                            .into(image_executor_task, new Callback() {
-                                @Override
-                                public void onSuccess() {
-                                    progress_bar_task_executor.setVisibility(View.INVISIBLE);
-                                }
-
-                                @Override
-                                public void onError() {
-                                    Log.e(TAG, "Error on download");
-                                }
-                            });
+                    GetDataTask getDataTask = new GetDataTask();
+                    getDataTask.setImage(image, progress_bar_task_executor, image_executor_task);
                 }
 
                 if (status.equals("Новая заявка"))

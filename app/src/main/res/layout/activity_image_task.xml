@@ -11,8 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-        style="@style/Widget.MaterialComponents.Toolbar.PrimarySurface"
-        app:layout_collapseMode="pin" />
+        style="@style/Widget.MaterialComponents.Toolbar.PrimarySurface" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_bar_image_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        android:layout_below="@+id/topAppBar_task_activity"/>
 
     <ImageView
         android:id="@+id/task_image_activity"
