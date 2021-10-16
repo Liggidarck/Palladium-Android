@@ -87,6 +87,8 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
+        topAppBar_new_task_executor.setNavigationOnClickListener(v -> onBackPressed());
+
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
             progress_bar_add_task_executor.setVisibility(View.VISIBLE);

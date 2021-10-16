@@ -12,17 +12,16 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
-import com.george.vector.common.tasks.ImageTaskActivity;
-import com.george.vector.common.tasks.utils.GetDataTask;
+import com.george.vector.common.tasks.fragmentImageTask;
+import com.george.vector.common.tasks.fragmentUrgentRequest;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
@@ -37,18 +36,19 @@ public class TaskExecutorActivity extends AppCompatActivity {
     LinearProgressIndicator progress_bar_task_executor;
     TextView text_view_address_task_executor, text_view_floor_task_executor, text_view_cabinet_task_executor,
             text_view_name_task_executor, text_view_comment_task_executor, text_view_status_task_executor,
-            text_view_date_create_task_executor;
-    Button edit_btn_executor;
+            text_view_date_create_task_executor, text_view_full_name_creator_executor, text_view_email_creator_task_executor,
+            text_view_full_name_executor_EX, text_view_email_executor_task_executor, text_view_date_done_task_executor;
     CircleImageView circle_status_executor;
-    ImageView image_executor_task;
-    CardView image_executor_card;
+    FloatingActionButton edit_task_executor_btn;
 
     String id, collection, location, address, floor, cabinet, letter, name_task, comment, status, date_create, time_create,
-            email_executor, email_creator, date_done, image;
+            email_executor, email_creator, date_done, image, full_name_creator, full_name_executor;
 
     FirebaseFirestore firebaseFirestore;
 
     String email_main_activity;
+
+    boolean urgent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +64,13 @@ public class TaskExecutorActivity extends AppCompatActivity {
         text_view_comment_task_executor = findViewById(R.id.text_view_comment_task_executor);
         text_view_status_task_executor = findViewById(R.id.text_view_status_task_executor);
         text_view_date_create_task_executor = findViewById(R.id.text_view_date_create_task_executor);
-        edit_btn_executor = findViewById(R.id.edit_btn_executor);
         circle_status_executor = findViewById(R.id.circle_status_executor);
-        image_executor_task = findViewById(R.id.image_executor_task);
-        image_executor_card = findViewById(R.id.image_executor_card);
+        edit_task_executor_btn = findViewById(R.id.edit_task_executor_btn);
+        text_view_full_name_creator_executor = findViewById(R.id.text_view_full_name_creator_executor);
+        text_view_email_creator_task_executor = findViewById(R.id.text_view_email_creator_task_executor);
+        text_view_full_name_executor_EX = findViewById(R.id.text_view_full_name_executor_EX);
+        text_view_email_executor_task_executor = findViewById(R.id.text_view_email_executor_task_executor);
+        text_view_date_done_task_executor = findViewById(R.id.text_view_date_done_task_executor);
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.getString(ID);
@@ -78,16 +81,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
         topAppBar_task_executor.setNavigationOnClickListener(v -> onBackPressed());
 
-        image_executor_card.setOnClickListener(v -> {
-            Intent intent = new Intent(this, ImageTaskActivity.class);
-            intent.putExtra(ID, id);
-            intent.putExtra(COLLECTION, collection);
-            intent.putExtra(LOCATION, location);
-            intent.putExtra(EMAIL, email_main_activity);
-            startActivity(intent);
-        });
-
-        edit_btn_executor.setOnClickListener(v -> {
+        edit_task_executor_btn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskExecutorActivity.class);
             intent.putExtra(ID, id);
             intent.putExtra(COLLECTION, collection);
@@ -111,9 +105,14 @@ public class TaskExecutorActivity extends AppCompatActivity {
                 date_create = value.getString("date_create");
                 time_create = value.getString("time_create");
                 email_executor = value.getString("executor");
-                email_creator = value.getString("email_creator");
                 date_done = value.getString("date_done");
                 image = value.getString("image");
+
+                full_name_creator = value.getString("nameCreator");
+                email_creator = value.getString("email_creator");
+
+                full_name_executor = value.getString("fullNameExecutor");
+                urgent = value.getBoolean("urgent");
 
                 Log.d(TAG, "address: " + address);
                 Log.d(TAG, "floor: " + floor);
@@ -127,15 +126,6 @@ public class TaskExecutorActivity extends AppCompatActivity {
                 Log.d(TAG, "date_done: " + date_done);
                 Log.d(TAG, "image: " + image);
 
-                if (image == null) {
-                    Log.d(TAG, "No image, stop loading");
-                    progress_bar_task_executor.setVisibility(View.INVISIBLE);
-                    image_executor_task.setImageResource(R.drawable.no_image);
-                } else {
-                    GetDataTask getDataTask = new GetDataTask();
-                    getDataTask.setImage(image, progress_bar_task_executor, image_executor_task);
-                }
-
                 if (status.equals("Новая заявка"))
                     circle_status_executor.setImageResource(R.color.red);
 
@@ -147,6 +137,36 @@ public class TaskExecutorActivity extends AppCompatActivity {
 
                 if (!letter.equals("-") && !letter.isEmpty())
                     cabinet = String.format("%s%s", cabinet, letter);
+
+                if (urgent) {
+                    Log.d(TAG, "Срочная заявка");
+
+                    Fragment urgent_fragment = new fragmentUrgentRequest();
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.frame_urgent_task_executor, urgent_fragment)
+                            .commit();
+
+                }
+
+                if (image != null) {
+                    Fragment image_fragment = new fragmentImageTask();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("image_id", image);
+                    bundle.putString(ID, id);
+                    bundle.putString(COLLECTION, collection);
+                    bundle.putString(LOCATION, location);
+                    bundle.putString(EMAIL, "email");
+
+                    image_fragment.setArguments(bundle);
+
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.frame_image_task_executor, image_fragment)
+                            .commit();
+                }
+
             } catch (Exception e) {
                 Log.e(TAG, "Error! " + e);
             }
@@ -160,7 +180,23 @@ public class TaskExecutorActivity extends AppCompatActivity {
 
             String date_create_text = String.format("Созданно: %s %s", date_create, time_create);
             text_view_date_create_task_executor.setText(date_create_text);
+
+            text_view_full_name_creator_executor.setText(full_name_creator);
+            text_view_email_creator_task_executor.setText(email_creator);
+
+            text_view_full_name_executor_EX.setText(full_name_executor);
+            text_view_email_executor_task_executor.setText(email_executor);
+
+            if (date_done == null)
+                text_view_date_done_task_executor.setText("Дата выполнения не назначена");
+            else {
+                String date_done_text = "Дата выполнения: " + date_done;
+                text_view_date_done_task_executor.setText(date_done_text);
+            }
+
         });
+
+        documentReference.get().addOnCompleteListener(task -> progress_bar_task_executor.setVisibility(View.INVISIBLE));
 
     }
 
