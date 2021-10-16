@@ -15,7 +15,6 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -28,12 +27,12 @@ public class EditUserActivity extends AppCompatActivity {
     MaterialToolbar topAppBar_register;
     TextInputLayout text_input_layout_name_user, text_input_layout_last_name_user,
             text_input_layout_patronymic_user, text_input_layout_email_user,
-            text_input_layout_role_user, text_input_layout_edit_permission_user;
+            text_input_layout_role_user, text_input_layout_edit_permission_user, text_input_layout_password_user;
     MaterialAutoCompleteTextView auto_complete_text_view_role_user, auto_complete_text_view_edit_permission_user;
     Button update_user_btn;
     LinearProgressIndicator progress_bar_edit_user;
 
-    String name_user, last_name_user, patronymic_user, email_user, role_user, permission_user, userID;
+    String name_user, last_name_user, patronymic_user, email_user, role_user, permission_user, userID, password;
 
     FirebaseFirestore firebaseFirestore;
 
@@ -56,6 +55,7 @@ public class EditUserActivity extends AppCompatActivity {
         progress_bar_edit_user = findViewById(R.id.progress_bar_edit_user);
         text_input_layout_edit_permission_user = findViewById(R.id.text_input_layout_edit_permission_user);
         auto_complete_text_view_edit_permission_user = findViewById(R.id.auto_complete_text_view_edit_permission_user);
+        text_input_layout_password_user = findViewById(R.id.text_input_layout_password_user);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -74,6 +74,7 @@ public class EditUserActivity extends AppCompatActivity {
             email_user = value.getString("email");
             role_user = value.getString("role");
             permission_user = value.getString("permission");
+            password = value.getString("password");
 
             Log.i(TAG, "name: " + name_user);
             Log.i(TAG, "last_name: " + last_name_user);
@@ -87,6 +88,11 @@ public class EditUserActivity extends AppCompatActivity {
             Objects.requireNonNull(text_input_layout_email_user.getEditText()).setText(email_user);
             Objects.requireNonNull(text_input_layout_role_user.getEditText()).setText(role_user);
             Objects.requireNonNull(text_input_layout_edit_permission_user.getEditText()).setText(permission_user);
+
+            if (email_user.equals("api@2122.pro"))
+                text_input_layout_password_user.getEditText().setText("Я не знаю никаких паролей ¯\\_(ツ)_/¯");
+            else
+                text_input_layout_password_user.getEditText().setText(password);
 
             String[] items = getResources().getStringArray(R.array.roles);
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(

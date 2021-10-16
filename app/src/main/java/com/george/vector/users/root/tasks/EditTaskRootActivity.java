@@ -70,7 +70,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
             text_input_layout_cabinet_root, text_input_layout_name_task_root,
             text_input_layout_comment_root, text_input_layout_date_task_root,
             text_input_layout_executor_root, text_input_layout_status_root,
-            text_input_layout_cabinet_liter_root;
+            text_input_layout_cabinet_liter_root, text_input_layout_full_name_executor_root;
     TextInputEditText edit_text_date_task_root;
     MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root, liter_autoComplete_root;
     ImageView image_task;
@@ -78,7 +78,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
     Calendar datePickCalendar;
 
     String id, collection, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create,
-            date_done, email, location, USER_EMAIL, image;
+            date_done, email_creator, location, USER_EMAIL, image, full_name_executor_root, name_creator;
     boolean urgent;
 
     FirebaseAuth firebaseAuth;
@@ -121,6 +121,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
         liter_autoComplete_root = findViewById(R.id.liter_autoComplete_root);
         urgent_request_check_box = findViewById(R.id.urgent_request_check_box);
         image_task = findViewById(R.id.image_task);
+        text_input_layout_full_name_executor_root = findViewById(R.id.text_input_layout_full_name_executor_root);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -150,10 +151,12 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
             date_done = value.getString("date_done");
             email_executor = value.getString("executor");
+            full_name_executor_root = value.getString("fullNameExecutor");
 
             date_create = value.getString("date_create");
             time_create = value.getString("time_create");
-            email = value.getString("email_creator");
+            email_creator = value.getString("email_creator");
+            name_creator = value.getString("nameCreator");
 
             image = value.getString("image");
 
@@ -177,6 +180,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).setText(date_done);
                 Objects.requireNonNull(text_input_layout_executor_root.getEditText()).setText(email_executor);
                 Objects.requireNonNull(text_input_layout_status_root.getEditText()).setText(status);
+                text_input_layout_full_name_executor_root.getEditText().setText(full_name_executor_root);
 
                 if (comment.equals("Нет коментария к заявке"))
                     Objects.requireNonNull(text_input_layout_comment_root.getEditText()).setText("");
@@ -261,6 +265,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 last_name_executor = value.getString("last_name");
                 patronymic_executor = value.getString("patronymic");
                 email_executor = value.getString("email");
+                String full_name_executor = last_name_executor + " " + name_executor + " " + patronymic_executor;
 
                 Log.i(TAG, String.format("name: %s", name_executor));
                 Log.i(TAG, String.format("last_name: %s", last_name_executor));
@@ -268,6 +273,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 Log.i(TAG, String.format("email: %s", email_executor));
 
                 Objects.requireNonNull(text_input_layout_executor_root.getEditText()).setText(email_executor);
+                text_input_layout_full_name_executor_root.getEditText().setText(full_name_executor);
                 dialog.dismiss();
             });
 
@@ -294,12 +300,13 @@ public class EditTaskRootActivity extends AppCompatActivity {
         String update_comment = Objects.requireNonNull(text_input_layout_comment_root.getEditText()).getText().toString();
         String update_date_task = Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).getText().toString();
         String update_executor = Objects.requireNonNull(text_input_layout_executor_root.getEditText()).getText().toString();
+        String update_name_executor = text_input_layout_full_name_executor_root.getEditText().getText().toString();
         String update_status = Objects.requireNonNull(text_input_layout_status_root.getEditText()).getText().toString();
         boolean update_urgent = urgent_request_check_box.isChecked();
 
         task.save(new SaveTask(), location, update_name, update_address, date_create, update_floor,
                 update_cabinet, update_litera, update_comment, update_date_task,
-                update_executor, update_status, time_create, email, update_urgent, update_image);
+                update_executor, update_status, time_create, email_creator, update_urgent, update_image, update_name_executor, name_creator);
 
         Intent intent = new Intent(this, RootMainActivity.class);
         intent.putExtra(EMAIL, USER_EMAIL);
@@ -331,6 +338,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
         utils.clear_error(text_input_layout_date_task_root);
         utils.clear_error(text_input_layout_executor_root);
         utils.clear_error(text_input_layout_status_root);
+        utils.clear_error(text_input_layout_full_name_executor_root);
 
         address = Objects.requireNonNull(text_input_layout_address_root.getEditText()).getText().toString();
         floor = Objects.requireNonNull(text_input_layout_floor_root.getEditText()).getText().toString();
@@ -339,6 +347,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
         String date_task = Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).getText().toString();
         email_executor = Objects.requireNonNull(text_input_layout_executor_root.getEditText()).getText().toString();
         status = Objects.requireNonNull(text_input_layout_status_root.getEditText()).getText().toString();
+        full_name_executor_root = text_input_layout_full_name_executor_root.getEditText().getText().toString();
 
         boolean check_address = utils.validate_field(address, text_input_layout_address_root);
         boolean check_floor = utils.validate_field(floor, text_input_layout_floor_root);
@@ -347,8 +356,9 @@ public class EditTaskRootActivity extends AppCompatActivity {
         boolean check_date_task = utils.validate_field(date_task, text_input_layout_date_task_root);
         boolean check_executor = utils.validate_field(email_executor, text_input_layout_executor_root);
         boolean check_status = utils.validate_field(status, text_input_layout_status_root);
+        boolean check_name_executor = utils.validate_field(full_name_executor_root, text_input_layout_full_name_executor_root);
 
-        return check_address & check_floor & check_cabinet & check_name_task & check_date_task & check_executor & check_status;
+        return check_address & check_floor & check_cabinet & check_name_task & check_date_task & check_executor & check_status & check_name_executor;
     }
 
     public boolean isOnline() {

@@ -76,13 +76,13 @@ public class AddTaskRootActivity extends AppCompatActivity {
             text_input_layout_cabinet_root, text_input_layout_name_task_root,
             text_input_layout_comment_root, text_input_layout_date_task_root,
             text_input_layout_executor_root, text_input_layout_status_root,
-            text_input_layout_cabinet_liter_root;
+            text_input_layout_cabinet_liter_root, text_input_layout_full_name_executor_root;
     TextInputEditText edit_text_date_task_root;
     MaterialAutoCompleteTextView address_auto_complete_root, status_auto_complete_root, liter_auto_complete_root;
     ImageView image_task;
 
     String location, userID, email, address, floor, cabinet, letter, name_task, date_complete, status, comment,
-            USER_EMAIL, NAME_IMAGE, full_name_executor, name_executor, last_name_executor, patronymic_executor, email_executor;
+            USER_EMAIL, NAME_IMAGE, full_name_executor, name_executor, last_name_executor, patronymic_executor, email_executor, full_name_creator;
     boolean urgent;
     private static final String TAG = "AddTaskRoot";
     private final int PICK_IMAGE_REQUEST = 71;
@@ -123,6 +123,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         liter_auto_complete_root = findViewById(R.id.liter_autoComplete_root);
         urgent_request_check_box = findViewById(R.id.urgent_request_check_box);
         image_task = findViewById(R.id.image_task);
+        text_input_layout_full_name_executor_root = findViewById(R.id.text_input_layout_full_name_executor_root);
 
         firebase_auth = FirebaseAuth.getInstance();
         firebase_storage = FirebaseStorage.getInstance();
@@ -142,6 +143,10 @@ public class AddTaskRootActivity extends AppCompatActivity {
         documentReferenceUser.addSnapshotListener(this, (value, error) -> {
             assert value != null;
             email = value.getString("email");
+            String name_creator = value.getString("name");
+            String last_name_creator = value.getString("last_name");
+            String patronymic_creator = value.getString("patronymic");
+            full_name_creator = name_creator + " " + last_name_creator + " " + patronymic_creator;
         });
 
         add_executor_root.setOnClickListener(v -> show_add_executor_dialog());
@@ -159,6 +164,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
             email_executor = Objects.requireNonNull(text_input_layout_executor_root.getEditText()).getText().toString();
             status = Objects.requireNonNull(text_input_layout_status_root.getEditText()).getText().toString();
             urgent = urgent_request_check_box.isChecked();
+            full_name_executor = text_input_layout_full_name_executor_root.getEditText().getText().toString();
 
             if (validateFields()) {
                 if (!isOnline())
@@ -260,7 +266,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         String time_create = timeFormat.format(currentDate);
 
         task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, letter, comment,
-                date_complete, email_executor, status, time_create, email, urgent, NAME_IMAGE);
+                date_complete, email_executor, status, time_create, email, urgent, NAME_IMAGE, full_name_executor, full_name_creator);
 
     }
 
@@ -329,6 +335,8 @@ public class AddTaskRootActivity extends AppCompatActivity {
                 Log.i(TAG, String.format("email: %s", email_executor));
 
                 Objects.requireNonNull(text_input_layout_executor_root.getEditText()).setText(email_executor);
+                Objects.requireNonNull(text_input_layout_full_name_executor_root.getEditText()).setText(full_name_executor);
+
                 dialog.dismiss();
             });
 
@@ -426,6 +434,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         utils.clear_error(text_input_layout_date_task_root);
         utils.clear_error(text_input_layout_executor_root);
         utils.clear_error(text_input_layout_status_root);
+        utils.clear_error(text_input_layout_full_name_executor_root);
 
         boolean check_address = utils.validate_field(address, text_input_layout_address_root);
         boolean check_name_task = utils.validate_field(name_task, text_input_layout_name_task_root);
@@ -434,9 +443,10 @@ public class AddTaskRootActivity extends AppCompatActivity {
         boolean check_date_task = utils.validate_field(date_complete, text_input_layout_date_task_root);
         boolean check_executor = utils.validate_field(email_executor, text_input_layout_executor_root);
         boolean check_status = utils.validate_field(status, text_input_layout_status_root);
+        boolean check_name_executor = utils.validate_field(full_name_executor, text_input_layout_full_name_executor_root);
 
 
-        return check_address & check_floor & check_cabinet & check_name_task & check_date_task & check_executor & check_status;
+        return check_address & check_floor & check_cabinet & check_name_task & check_date_task & check_executor & check_status & check_name_executor;
     }
 
     public boolean isOnline() {

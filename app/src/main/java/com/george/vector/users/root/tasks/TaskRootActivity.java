@@ -44,7 +44,8 @@ public class TaskRootActivity extends AppCompatActivity {
     TextView text_view_address_task_root, text_view_floor_task_root, text_view_cabinet_task_root,
             text_view_name_task_root, text_view_comment_task_root, text_view_status_task_root,
             text_view_date_create_task_root, text_view_email_creator_task_root,
-            text_view_email_executor_task_root, text_view_date_done_task_root;
+            text_view_email_executor_task_root, text_view_date_done_task_root, text_view_full_name_executor,
+            text_view_full_name_creator;
     CircleImageView circle_status_root;
     FloatingActionButton edit_task_root_btn;
 
@@ -52,7 +53,7 @@ public class TaskRootActivity extends AppCompatActivity {
 
     String id, collection, address, floor, cabinet, letter, name_task, comment, status,
             date_create, time_create, location, email, image, email_creator, email_executor,
-            date_done;
+            date_done, full_name_executor, full_name_creator;
     boolean confirm_delete, urgent;
 
     FirebaseFirestore firebaseFirestore;
@@ -77,6 +78,8 @@ public class TaskRootActivity extends AppCompatActivity {
         text_view_email_creator_task_root = findViewById(R.id.text_view_email_creator_task_root);
         text_view_email_executor_task_root = findViewById(R.id.text_view_email_executor_task_root);
         text_view_date_done_task_root = findViewById(R.id.text_view_date_done_task_root);
+        text_view_full_name_executor = findViewById(R.id.text_view_full_name_executor);
+        text_view_full_name_creator = findViewById(R.id.text_view_full_name_creator);
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.get(ID).toString();
@@ -120,9 +123,11 @@ public class TaskRootActivity extends AppCompatActivity {
             email_creator = value.getString("email_creator");
             email_executor = value.getString("executor");
             date_done = value.getString("date_done");
-            urgent = value.getBoolean("urgent");
+            full_name_executor = value.getString("fullNameExecutor");
+            full_name_creator = value.getString("nameCreator");
 
             try {
+                urgent = value.getBoolean("urgent");
                 if (status.equals("Новая заявка"))
                     circle_status_root.setImageResource(R.color.red);
 
@@ -144,7 +149,7 @@ public class TaskRootActivity extends AppCompatActivity {
                     bundle.putString("image_id", image);
                     bundle.putString(ID, id);
                     bundle.putString(COLLECTION, collection);
-                    bundle.putString(LOCATION,location);
+                    bundle.putString(LOCATION, location);
                     bundle.putString(EMAIL, email);
 
                     image_fragment.setArguments(bundle);
@@ -181,10 +186,28 @@ public class TaskRootActivity extends AppCompatActivity {
             text_view_date_create_task_root.setText(date_create_text);
 
             text_view_email_creator_task_root.setText(email_creator);
-            text_view_email_executor_task_root.setText(email_executor);
 
-            String date_done_text = "Дата выполнения: " + date_done;
-            text_view_date_done_task_root.setText(date_done_text);
+            if (full_name_creator == null)
+                text_view_full_name_creator.setText("Нет данных об этом пользователе (404)");
+            else
+                text_view_full_name_creator.setText(full_name_creator);
+
+            if (full_name_executor == null)
+                text_view_full_name_executor.setText("Нет назначенного исполнителя");
+            else
+                text_view_full_name_executor.setText(full_name_executor);
+
+            if (email_executor == null)
+                text_view_email_executor_task_root.setText("Нет данных");
+            else
+                text_view_email_executor_task_root.setText(email_executor);
+
+            if (date_done == null)
+                text_view_date_done_task_root.setText("Дата выполнения не назначена");
+            else {
+                String date_done_text = "Дата выполнения: " + date_done;
+                text_view_date_done_task_root.setText(date_done_text);
+            }
 
         });
 
@@ -199,7 +222,7 @@ public class TaskRootActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.root_delete_task) {
+        if (item.getItemId() == R.id.root_delete_task) {
 
             if (confirm_delete)
                 show_dialog_delete();

@@ -6,8 +6,6 @@ import static com.george.vector.common.consts.Keys.ID;
 import static com.george.vector.common.consts.Keys.LOCATION;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +15,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
 import com.george.vector.common.tasks.utils.DeleteTask;
@@ -54,8 +54,8 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
     String id, collection, location;
 
     String address, floor, cabinet, letter, name_task, comment, status, date_create, time_create,
-            date_done, email, email_executor, image;
-
+            date_done, email, email_executor, image, full_name_executor, email_creator, name_creator;
+    boolean urgent;
     String email_mail_activity;
 
     @Override
@@ -106,6 +106,11 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
                 date_create = value.getString("date_create");
                 time_create = value.getString("time_create");
                 email = value.getString("email_creator");
+
+                full_name_executor = value.getString("fullNameExecutor");
+                email_creator = value.getString("email_creator");
+                name_creator = value.getString("nameCreator");
+                urgent = value.getBoolean("urgent");
 
                 image = value.getString("image");
                 Objects.requireNonNull(text_input_layout_address_executor.getEditText()).setText(address);
@@ -159,7 +164,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
 
         task.save(new SaveTask(), location, update_name, update_address, date_create, update_floor,
                 update_cabinet, update_letter, update_comment, update_date_task,
-                update_executor, update_status, time_create, email, false, update_image);
+                update_executor, update_status, time_create, email, urgent, update_image, full_name_executor, name_creator);
 
         Intent intent = new Intent(this, MainExecutorActivity.class);
         intent.putExtra(EMAIL, email_mail_activity);

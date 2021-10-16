@@ -63,7 +63,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
     ExtendedFloatingActionButton crate_task;
     LinearProgressIndicator progress_bar_add_task_user;
 
-    String address, floor, cabinet, letter, name_task, comment, userID, email, status = "Новая заявка", permission, NAME_IMAGE;
+    String address, floor, cabinet, letter, name_task, comment, userID, email, status = "Новая заявка", permission, NAME_IMAGE, full_name_creator;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -109,6 +109,10 @@ public class AddTaskUserActivity extends AppCompatActivity {
         documentReferenceUser.addSnapshotListener(this, (value, error) -> {
             assert value != null;
             email = value.getString("email");
+            String name_creator = value.getString("name");
+            String last_name_creator = value.getString("last_name");
+            String patronymic_creator = value.getString("patronymic");
+            full_name_creator = name_creator + " " + last_name_creator + " " + patronymic_creator;
         });
 
         image_task_user.setOnClickListener(v -> chooseImage());
@@ -145,7 +149,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
         String time_create = timeFormat.format(currentDate);
 
         task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, letter, comment,
-                null, null, status, time_create, email, false, NAME_IMAGE);
+                null, null, status, time_create, email, false, NAME_IMAGE, null, full_name_creator);
 
     }
 
