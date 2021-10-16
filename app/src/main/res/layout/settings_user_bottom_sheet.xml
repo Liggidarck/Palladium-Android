@@ -68,6 +68,39 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/layout_setting_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        tools:targetApi="m"
+        tools:ignore="UnusedAttribute">
+
+        <ImageView
+            android:id="@+id/settings_image_user"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:src="@drawable/ic_baseline_settings_24"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/settings_image_user"
+            android:text="@string/settings"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+    </RelativeLayout>
+
+
     <View
         android:layout_width="match_parent"
         android:layout_height="100dp" />

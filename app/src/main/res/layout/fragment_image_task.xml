@@ -32,6 +32,15 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true" />
 
+            <Button
+                android:id="@+id/download_image_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Скачать"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                app:icon="@drawable/ic_baseline_cloud_download_24"
+                android:layout_centerInParent="true" />
+
         </RelativeLayout>
 
     </com.google.android.material.card.MaterialCardView>

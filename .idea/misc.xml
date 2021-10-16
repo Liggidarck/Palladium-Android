@@ -69,7 +69,7 @@
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/fragment_tasks_root.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/fragment_urgent_request.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/profile_bottom_sheet.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/settings_user_bottom_sheet.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/settings_user_bottom_sheet.xml" value="0.33" />
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/task_item.xml" value="0.5" />
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/user_item.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/menu/bottom_app_bar.xml" value="0.36666666666666664" />
@@ -78,7 +78,9 @@
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/menu/drawer_user_menu.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3828125" />
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.3828125" />
+        <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/xml/executor_preferences.xml" value="0.3625" />
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/xml/root_preferences.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/xml/user_preferences.xml" value="0.3625" />
       </map>
     </option>
   </component>

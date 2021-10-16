@@ -2,16 +2,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory android:title="Основные">
-
-        <ListPreference
-            android:entries="@array/default_root_location_text"
-            android:entryValues="@array/default_root_location"
-            android:key="default_executor_location"
-            android:title="Место по умолчанию"
-            app:defaultValue="ost" />
-    </PreferenceCategory>
-
     <PreferenceCategory android:title="@string/tasks">
 
         <SwitchPreference

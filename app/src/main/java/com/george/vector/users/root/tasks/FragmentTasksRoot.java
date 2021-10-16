@@ -451,7 +451,7 @@ public class FragmentTasksRoot extends Fragment {
             chip_all_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
-                    Query query_all = taskRef.whereEqualTo("status", "Новая заявка");
+                    Query query_all = taskRef.whereEqualTo("status", "Архив");
                     FirestoreRecyclerOptions<TaskUi> all_tasks = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_all, TaskUi.class)
                             .build();

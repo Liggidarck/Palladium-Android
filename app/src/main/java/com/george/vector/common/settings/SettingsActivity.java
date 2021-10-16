@@ -10,8 +10,6 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.george.vector.R;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -38,11 +36,18 @@ public class SettingsActivity extends AppCompatActivity {
                         .replace(R.id.settings_frame, new SettingsRootFragment())
                         .commit();
 
+            if (permission.equals("user"))
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.settings_frame, new SettingsUserFragment())
+                        .commit();
+
             if (permission.equals("executor"))
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.settings_frame, new SettingsExecutorFragment())
                         .commit();
+
         }
 
     }
@@ -55,6 +60,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    public static class SettingsUserFragment extends PreferenceFragmentCompat {
+        @Override
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            setPreferencesFromResource(R.xml.user_preferences, rootKey);
+        }
+    }
 
     public static class SettingsExecutorFragment extends PreferenceFragmentCompat {
         @Override

@@ -172,7 +172,7 @@ public class TaskRootActivity extends AppCompatActivity {
                 }
 
             } catch (Exception e) {
-                Log.e(TAG, String.format("Error! %s", e));
+                e.printStackTrace();
             }
 
             text_view_address_task_root.setText(address);
