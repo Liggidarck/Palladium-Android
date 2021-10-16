@@ -1,6 +1,5 @@
 package com.george.vector.develop;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,9 +12,6 @@ public class DevelopActivity extends AppCompatActivity {
 
     private static final String TAG = "DevelopActivity";
     ImageView image_develop;
-
-    private final int PICK_IMAGE_REQUEST = 71;
-    private Uri filePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

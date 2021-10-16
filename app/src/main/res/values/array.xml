@@ -43,8 +43,8 @@
     </string-array>
 
     <string-array name="default_root_location_text">
-        <item>Остафьево</item>
-        <item>Барыши</item>
+        <item>ОП «Остафьевская»</item>
+        <item>ОП «Барыши»</item>
     </string-array>
 
 </resources>

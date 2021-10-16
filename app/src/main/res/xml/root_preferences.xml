@@ -17,6 +17,13 @@
             android:defaultValue="true"
             android:key="confirm_before_deleting_root"
             android:title="Подтверждать перед удалением" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="economy_traffic"
+            app:title="Экономия трафика"
+            android:summary="Изображения заявок перестанут загружаться автоматически"/>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

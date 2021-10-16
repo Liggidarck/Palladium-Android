@@ -42,11 +42,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/school"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:layout_toEndOf="@+id/ava_folder_1"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"/>
+                android:layout_marginStart="20dp"
+                android:layout_toEndOf="@+id/ava_folder_1"
+                android:text="@string/ost_text"
+                android:textAppearance="?attr/textAppearanceHeadline6" />
 
         </RelativeLayout>
 

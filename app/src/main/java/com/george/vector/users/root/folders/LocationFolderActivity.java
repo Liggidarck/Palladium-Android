@@ -10,11 +10,11 @@ import static com.george.vector.common.consts.Keys.LOCATION;
 import static com.george.vector.common.consts.Keys.NEW_TASKS;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -43,8 +43,11 @@ public class LocationFolderActivity extends AppCompatActivity {
         String email = arguments.get(EMAIL).toString();
         Log.d(TAG , "email: " + email);
 
-        if(location.equals(OST_SCHOOL) || location.equals(BAR_SCHOOL))
-            toolbar_location_folder_root.setTitle(getText(R.string.school));
+        if(location.equals(OST_SCHOOL))
+            toolbar_location_folder_root.setTitle(getText(R.string.ost_text));
+
+        if(location.equals(BAR_SCHOOL))
+            toolbar_location_folder_root.setTitle(getText(R.string.bar_text));
 
         toolbar_location_folder_root.setNavigationOnClickListener(v -> onBackPressed());
 

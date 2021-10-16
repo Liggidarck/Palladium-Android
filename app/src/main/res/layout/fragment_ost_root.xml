@@ -14,7 +14,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="5dp"
-        app:cardElevation="8dp">
+        app:cardElevation="5dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -43,11 +43,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/school"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:layout_toEndOf="@+id/ava_folder_1"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"/>
+                android:layout_marginStart="20dp"
+                android:layout_toEndOf="@+id/ava_folder_1"
+                android:text="@string/ost_text"
+                android:textAppearance="?attr/textAppearanceHeadline6" />
 
         </RelativeLayout>
 
@@ -60,7 +60,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="20dp"
-        app:cardElevation="8dp">
+        app:cardElevation="5dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -89,11 +89,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/ost_aist_text"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:layout_toEndOf="@+id/ava_folder_2"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"/>
+                android:layout_marginStart="20dp"
+                android:layout_toEndOf="@+id/ava_folder_2"
+                android:text="@string/ost_aist_text"
+                android:textAppearance="?attr/textAppearanceHeadline6" />
 
         </RelativeLayout>
 
@@ -106,7 +106,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="20dp"
-        app:cardElevation="8dp">
+        app:cardElevation="5dp">
 
         <RelativeLayout
             android:layout_width="match_parent"

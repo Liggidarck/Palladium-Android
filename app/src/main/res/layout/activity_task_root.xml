@@ -4,25 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".users.root.tasks.TaskRootActivity" >
+    tools:context=".users.root.tasks.TaskRootActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/topAppBar_tasks_root"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="@string/task"
-        app:titleTextColor="@android:color/white"
-        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        android:background="@color/blue_primary"
         app:layout_collapseMode="pin"
-        android:background="@color/blue_primary" />
+        app:menu="@menu/delete_menu"
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        app:title="@string/task"
+        app:titleTextColor="@android:color/white" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progress_bar_task_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:visibility="invisible"
-        android:layout_below="@+id/topAppBar_tasks_root"/>
+        android:layout_below="@+id/topAppBar_tasks_root"
+        android:indeterminate="true" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/edit_task_root_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        app:srcCompat="@drawable/ic_baseline_edit_24"
+        app:tint="@color/white"
+        tools:ignore="ContentDescription" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -32,140 +44,170 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/address"
-                android:textSize="22sp"
-                android:textColor="@color/black"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="20dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:id="@+id/text_view_address_task_root"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
-                    android:textSize="15sp" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/text_view_floor_task_root"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"/>
-
-            <TextView
-                android:id="@+id/text_view_cabinet_task_root"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"/>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:src="@drawable/line_gray"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                tools:ignore="ContentDescription" />
-
-            <TextView
-                android:id="@+id/text_view_name_task_root"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="22sp"
-                android:textColor="@color/black"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="20dp" />
+            android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/image_root_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="10dp"
                 app:cardElevation="3dp">
 
-                <ImageView
-                    android:id="@+id/image_root_task"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="210dp"
-                    tools:ignore="ContentDescription" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/text_view_name_task_root"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Название заявки"
+                        android:textColor="@color/black"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/comment"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/text_view_comment_task_root"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/product_sans_light"
+                        android:text="@string/no_comment"
+                        android:textColor="#999999"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="3dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/line_gray"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/address"
+                        android:textColor="@color/black"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:id="@+id/text_view_address_task_root"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Улица автаторов"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/text_view_floor_task_root"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Этаж: 3"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/text_view_cabinet_task_root"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Кабинет: 3"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="3dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/line_gray"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Создатель заявки"
+                        android:textColor="@color/black"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="In development data"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/text_view_email_creator_task_root"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="null"
+                        android:textColor="#999999"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="3dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/line_gray"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Исполнитель"
+                        android:textColor="@color/black"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="In development data"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/text_view_email_executor_task_root"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="null"
+                        android:textColor="#999999"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/text_view_date_done_task_root"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="null"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-            <Button
-                android:id="@+id/rotate_image_task_root"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                app:icon="@drawable/ic_baseline_rotate_right_24"
-                android:text="повернуть"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="5dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/comment"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"/>
-
-            <TextView
-                android:id="@+id/text_view_comment_task_root"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/no_comment"
-                android:fontFamily="@font/product_sans_light"
-                android:textColor="#999999"
-                android:textSize="15sp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="5dp"/>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:src="@drawable/line_gray"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                tools:ignore="ContentDescription" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/status"
-                android:textSize="22sp"
-                android:textColor="@color/black"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="20dp" />
-
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 app:cardElevation="3dp">
 
                 <LinearLayout
@@ -219,34 +261,13 @@
                 android:id="@+id/frame_urgent_task"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"/>
+                android:layout_marginTop="5dp" />
 
-            <LinearLayout
+            <FrameLayout
+                android:id="@+id/frame_image_task"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <Button
-                    android:id="@+id/edit_task_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/edit"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="20dp"
-                    app:icon="@drawable/ic_baseline_edit_24"
-                    style="@style/Widget.MaterialComponents.Button.Icon"/>
-
-                <Button
-                    android:id="@+id/delete_task_btn_root"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/delete"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="20dp"
-                    style="@style/Widget.MaterialComponents.Button.Icon"
-                    app:icon="@drawable/ic_baseline_delete_24" />
-
-            </LinearLayout>
+                android:layout_marginTop="5dp" />
 
             <View
                 android:layout_width="match_parent"

@@ -10,8 +10,10 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.Toolbar.PrimarySurface"
-        app:title="Developer Activity" />
+        app:title="Developer Activity"
+        app:titleTextColor="@android:color/white"
+        app:layout_collapseMode="pin"
+        android:background="@color/blue_primary" />
 
     <Button
         android:id="@+id/button_notifications"
