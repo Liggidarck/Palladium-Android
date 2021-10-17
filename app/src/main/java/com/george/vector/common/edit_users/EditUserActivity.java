@@ -1,11 +1,15 @@
 package com.george.vector.common.edit_users;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -149,6 +153,19 @@ public class EditUserActivity extends AppCompatActivity {
             }
 
         });
+
+        text_input_layout_password_user.setEndIconOnClickListener(v -> {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+
+            String email = text_input_layout_email_user.getEditText().getText().toString();
+            String password = text_input_layout_password_user.getEditText().getText().toString();
+
+            ClipData clip = ClipData.newPlainText(null,email + " " + password);
+            clipboard.setPrimaryClip(clip);
+
+            Toast.makeText(getApplicationContext(),"Логин и пароль пользователя скопированы",Toast.LENGTH_SHORT).show();
+        });
+
     }
 
     boolean validateFields() {

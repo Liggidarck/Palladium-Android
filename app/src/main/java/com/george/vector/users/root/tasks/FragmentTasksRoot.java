@@ -64,6 +64,13 @@ public class FragmentTasksRoot extends Fragment {
         executed = args.getString(EXECUTED);
         email = args.getString(EMAIL);
 
+        Log.d(TAG, "-------------------");
+        Log.d(TAG, "location: " + location);
+        Log.d(TAG, "folder: " + folder);
+        Log.d(TAG, "executed: " + executed);
+        Log.d(TAG, "email: " + email);
+        Log.d(TAG, "-------------------");
+
         if (location.equals(OST_SCHOOL) && folder.equals(NEW_TASKS))
             ostSchoolNewTasks();
 
@@ -299,7 +306,7 @@ public class FragmentTasksRoot extends Fragment {
             chip_all_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
-                    Query query_all = taskRef.whereEqualTo("status", "Новая заявка");
+                    Query query_all = taskRef.whereEqualTo("status", "В работе");
                     FirestoreRecyclerOptions<TaskUi> all_tasks = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_all, TaskUi.class)
                             .build();
@@ -354,6 +361,13 @@ public class FragmentTasksRoot extends Fragment {
 
         if (executed.equals("work")) {
             Log.d(TAG, "All Executed Tasks");
+
+            Query query_all_default = taskRef.whereEqualTo("executor", email);
+            FirestoreRecyclerOptions<TaskUi> executor_options_default = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                    .setQuery(query_all_default, TaskUi.class)
+                    .build();
+
+            adapter.updateOptions(executor_options_default);
 
             chip_all_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
@@ -442,7 +456,6 @@ public class FragmentTasksRoot extends Fragment {
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
                 .build();
-
         adapter = new TaskAdapter(options);
 
         if (executed.equals("root")) {
@@ -505,7 +518,14 @@ public class FragmentTasksRoot extends Fragment {
         }
 
         if (executed.equals("work")) {
-            Log.d(TAG, "All Executed Tasks");
+            Log.d(TAG, "All Executed Archive Tasks");
+
+            Query query_all_default = taskRef.whereEqualTo("executor", email);
+            FirestoreRecyclerOptions<TaskUi> executor_options_default = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                    .setQuery(query_all_default, TaskUi.class)
+                    .build();
+
+            adapter.updateOptions(executor_options_default);
 
             chip_all_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
@@ -516,6 +536,8 @@ public class FragmentTasksRoot extends Fragment {
                             .build();
 
                     adapter.updateOptions(executor_options);
+
+                    Log.d(TAG, "Query updated");
                 }
 
             });

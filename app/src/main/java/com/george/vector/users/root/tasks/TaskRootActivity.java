@@ -188,7 +188,7 @@ public class TaskRootActivity extends AppCompatActivity {
             text_view_email_creator_task_root.setText(email_creator);
 
             if (full_name_creator == null)
-                text_view_full_name_creator.setText("Нет данных об этом пользователе (404)");
+                text_view_full_name_creator.setText("Нет данных об этом пользователе");
             else
                 text_view_full_name_creator.setText(full_name_creator);
 
@@ -216,12 +216,13 @@ public class TaskRootActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.delete_menu, menu);
+        getMenuInflater().inflate(R.menu.task_root_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
         if (item.getItemId() == R.id.root_delete_task) {
 
             if (confirm_delete)
@@ -230,6 +231,32 @@ public class TaskRootActivity extends AppCompatActivity {
                 delete_task();
 
         }
+
+        if (item.getItemId() == R.id.root_share_task) {
+            String IMAGE_URL;
+
+            if (image == null)
+                IMAGE_URL = "К заявке не прикреплено изображение";
+            else
+                IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image);
+
+            String sharing_data = name_task + "\n" + comment + "\n \n" +
+                    address + "\n" + "Этаж: " + floor + "\n" + "Кабинет: " + cabinet + "\n \n" +
+                    "Создатель заявки" + "\n" + full_name_creator + "\n" + email_creator + "\n \n" +
+                    "Исполнитель" + "\n" + full_name_executor + "\n" + email_executor + "\n" + "Дата выполнения: " + date_done + "\n \n" +
+                    "Статус" + "\n" + status + "\n" + "Созданно: " + date_create + " " + time_create + "\n \n" +
+                    "Изображение" + "\n" + IMAGE_URL;
+
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, sharing_data);
+            sendIntent.setType("text/plain");
+
+            Intent shareIntent = Intent.createChooser(sendIntent, null);
+            startActivity(shareIntent);
+
+        }
+
         return true;
     }
 

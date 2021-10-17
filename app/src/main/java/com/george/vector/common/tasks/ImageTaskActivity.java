@@ -50,7 +50,8 @@ public class ImageTaskActivity extends AppCompatActivity {
         task_image_activity.setOnClickListener(v ->
                 task_image_activity
                         .animate()
-                        .rotation(task_image_activity.getRotation() + 90));
+                        .rotation(task_image_activity.getRotation() + 90)
+                        .setDuration(60));
 
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {

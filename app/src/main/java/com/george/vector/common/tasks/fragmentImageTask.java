@@ -25,6 +25,7 @@ import com.google.android.material.card.MaterialCardView;
 
 public class fragmentImageTask extends Fragment {
 
+    private static final String TAG = "fragmentImageTask";
     Button rotate_image_task_root, download_image_btn;
     ImageView image_root_task;
     MaterialCardView image_root_card;
@@ -58,7 +59,8 @@ public class fragmentImageTask extends Fragment {
         rotate_image_task_root.setOnClickListener(v ->
                 image_root_task
                         .animate()
-                        .rotation(image_root_task.getRotation() + 90));
+                        .rotation(image_root_task.getRotation() + 90)
+                        .setDuration(60));
 
         if (economy_traffic) {
             download_image_btn.setVisibility(View.VISIBLE);
