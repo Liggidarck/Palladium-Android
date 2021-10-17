@@ -1,5 +1,8 @@
 package com.george.vector.users.root.main.fragments.tasks;
 
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.OST;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,10 +36,10 @@ public class FragmentTasks extends Fragment {
 
         Bundle args = getArguments();
         assert args != null;
-        email = args.getString(getString(R.string.email));
+        email = args.getString(EMAIL);
         Log.d(TAG, "email: " + email);
 
-        zone = PreferenceManager.getDefaultSharedPreferences(FragmentTasks.this.getContext()).getString("default_root_location", getString(R.string.ost));
+        zone = PreferenceManager.getDefaultSharedPreferences(FragmentTasks.this.getContext()).getString("default_root_location", OST);
 
         if(zone.equals("ost"))
             chip_root_future_ost_tasks.setChecked(true);
@@ -74,7 +77,7 @@ public class FragmentTasks extends Fragment {
                 currentFragment = new FragmentOstWork();
 
                 Bundle email = new Bundle();
-                email.putString(getString(R.string.email), this.email);
+                email.putString(EMAIL, this.email);
                 currentFragment.setArguments(email);
 
                 break;

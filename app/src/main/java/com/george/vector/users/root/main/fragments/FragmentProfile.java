@@ -1,5 +1,9 @@
 package com.george.vector.users.root.main.fragments;
 
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.PERMISSION;
+import static com.george.vector.common.consts.Keys.USERS;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,14 +18,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
-import com.george.vector.auth.ActivityRegisterUser;
+import com.george.vector.auth.RegisterUserActivity;
 import com.george.vector.common.edit_users.ListUsersActivity;
 import com.george.vector.common.settings.SettingsActivity;
+import com.george.vector.develop.DevelopActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FragmentProfile extends Fragment {
 
@@ -50,7 +57,7 @@ public class FragmentProfile extends Fragment {
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+        DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userID);
         documentReference.addSnapshotListener((value, error) -> {
             assert value != null;
             name = value.getString("name");
@@ -69,15 +76,18 @@ public class FragmentProfile extends Fragment {
             text_view_email.setText(email);
         });
 
-        layout_new_person_profile.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getActivity(), ActivityRegisterUser.class)));
+        layout_new_person_profile.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getActivity(), RegisterUserActivity.class)));
         layout_edit_person_profile.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getContext(), ListUsersActivity.class)));
 
         btn_settings_profile_root.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentProfile.this.getContext(), SettingsActivity.class);
-            intent.putExtra(getString(R.string.permission), "root");
-            intent.putExtra(getString(R.string.email), "null");
+            intent.putExtra(PERMISSION, "root");
+            intent.putExtra(EMAIL, "null");
             startActivity(intent);
         });
+
+        CircleImageView develop_activity = view.findViewById(R.id.develop_activity);
+        develop_activity.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getContext(), DevelopActivity.class)));
 
         return view;
     }

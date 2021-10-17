@@ -1,5 +1,16 @@
 package com.george.vector.users.executor.tasks;
 
+import static com.george.vector.common.consts.Keys.COLLECTION;
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.FOLDER;
+import static com.george.vector.common.consts.Keys.ID;
+import static com.george.vector.common.consts.Keys.IN_PROGRESS_TASKS;
+import static com.george.vector.common.consts.Keys.LOCATION;
+import static com.george.vector.common.consts.Keys.NEW_TASKS;
+import static com.george.vector.common.consts.Keys.OST_SCHOOL;
+import static com.george.vector.common.consts.Keys.OST_SCHOOL_NEW;
+import static com.george.vector.common.consts.Keys.OST_SCHOOL_PROGRESS;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,17 +56,17 @@ public class FragmentExecutorTasks extends Fragment {
 
         Bundle args = getArguments();
         assert args != null;
-        location = args.getString(getString(R.string.location));
-        folder = args.getString(getString(R.string.folder));
-        email = args.getString(getString(R.string.email));
+        location = args.getString(LOCATION);
+        folder = args.getString(FOLDER);
+        email = args.getString(EMAIL);
         Log.d(TAG, "location: " + location);
         Log.d(TAG, "folder: " + folder);
         Log.d(TAG, "email: " + email);
 
-        if(location.equals(getString(R.string.ost_school)) && folder.equals(getString(R.string.new_tasks)))
+        if(location.equals(OST_SCHOOL) && folder.equals(NEW_TASKS))
             ostSchoolNewTasks();
 
-        if(location.equals(getString(R.string.ost_school)) && folder.equals(getString(R.string.in_progress_tasks)))
+        if(location.equals(OST_SCHOOL) && folder.equals(IN_PROGRESS_TASKS))
             ostSchoolProgressTasks();
 
         return view;
@@ -78,10 +89,10 @@ public class FragmentExecutorTasks extends Fragment {
             Log.d(TAG, String.format("position: %d id: %s", position, id));
 
             Intent intent = new Intent(FragmentExecutorTasks.this.getContext(), TaskExecutorActivity.class);
-            intent.putExtra(getString(R.string.id), id);
-            intent.putExtra(getString(R.string.location), getString(R.string.ost_school));
-            intent.putExtra(getString(R.string.collection), getString(R.string.ost_school_new));
-            intent.putExtra(getString(R.string.email), email);
+            intent.putExtra(ID, id);
+            intent.putExtra(LOCATION, OST_SCHOOL);
+            intent.putExtra(COLLECTION, OST_SCHOOL_NEW);
+            intent.putExtra(EMAIL, email);
             startActivity(intent);
 
         });
@@ -171,10 +182,10 @@ public class FragmentExecutorTasks extends Fragment {
             Log.d(TAG, String.format("position: %d id: %s", position, id));
 
             Intent intent = new Intent(FragmentExecutorTasks.this.getContext(), TaskExecutorActivity.class);
-            intent.putExtra(getString(R.string.id), id);
-            intent.putExtra(getString(R.string.location), getString(R.string.ost_school));
-            intent.putExtra(getString(R.string.collection), getString(R.string.ost_school_progress));
-            intent.putExtra(getString(R.string.email), email);
+            intent.putExtra(ID, id);
+            intent.putExtra(LOCATION, OST_SCHOOL);
+            intent.putExtra(COLLECTION, OST_SCHOOL_PROGRESS);
+            intent.putExtra(EMAIL, email);
             startActivity(intent);
 
         });

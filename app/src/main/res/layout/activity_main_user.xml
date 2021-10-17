@@ -32,7 +32,8 @@
         android:layout_below="@+id/main_user_frame"
         app:singleLine="true"
         app:singleSelection="true"
-        android:layout_marginStart="10dp">
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp">
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_today_user"

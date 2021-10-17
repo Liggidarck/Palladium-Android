@@ -1,5 +1,9 @@
 package com.george.vector.users.executor.main;
 
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.FOLDER;
+import static com.george.vector.common.consts.Keys.LOCATION;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -23,9 +27,9 @@ public class ExecutorTasksActivity extends AppCompatActivity {
         toolbar_tasks_executor_activity = findViewById(R.id.toolbar_tasks_executor_activity);
 
         Bundle arguments = getIntent().getExtras();
-        location = arguments.get(getString(R.string.location)).toString();
-        folder = arguments.get(getString(R.string.folder)).toString();
-        email = arguments.get(getString(R.string.email)).toString();
+        location = arguments.get(LOCATION).toString();
+        folder = arguments.get(FOLDER).toString();
+        email = arguments.get(EMAIL).toString();
 
         String text_toolbar = null;
         switch (location) {
@@ -57,9 +61,9 @@ public class ExecutorTasksActivity extends AppCompatActivity {
         Fragment currentFragment = new FragmentExecutorTasks();
 
         Bundle bundle = new Bundle();
-        bundle.putString(getString(R.string.location), location);
-        bundle.putString(getString(R.string.folder), folder);
-        bundle.putString(getString(R.string.email), this.email);
+        bundle.putString(LOCATION, location);
+        bundle.putString(FOLDER, folder);
+        bundle.putString(EMAIL, this.email);
         currentFragment.setArguments(bundle);
 
         getSupportFragmentManager()

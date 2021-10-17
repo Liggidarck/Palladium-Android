@@ -1,7 +1,12 @@
 package com.george.vector.auth;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.PERMISSION;
+import static com.george.vector.common.consts.Keys.ROLE;
+import static com.george.vector.common.consts.Keys.USERS;
+import static com.george.vector.common.consts.Logs.TAG_LOGIN_ACTIVITY;
+import static com.george.vector.common.consts.Logs.TAG_VALIDATE_FILED;
+import static com.george.vector.common.utils.Utils.validateEmail;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +16,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.george.vector.R;
 import com.george.vector.common.utils.Utils;
@@ -28,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class ActivityLogin extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     TextInputLayout email_login_text_layout, password_login_text_layout;
     Button btn_login, btn_forgot_password;
@@ -36,7 +44,6 @@ public class ActivityLogin extends AppCompatActivity {
     CoordinatorLayout coordinator_login;
 
     String emailED, passwordED, userID;
-    private static final String TAG = "LoginActivity";
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -62,37 +69,44 @@ public class ActivityLogin extends AppCompatActivity {
 
             if(isOnline()) {
                 if (validateFields()) {
-                    progress_bar_auth.setVisibility(View.VISIBLE);
-                    firebaseAuth.signInWithEmailAndPassword(emailED, passwordED).addOnCompleteListener(task -> {
+                    if(!validateEmail(emailED)) {
+                        Log.e(TAG_VALIDATE_FILED, "Email validation failed");
+                        email_login_text_layout.setError("Не корректный формат e-mail");
+                    } else {
+                        progress_bar_auth.setVisibility(View.VISIBLE);
+                        firebaseAuth.signInWithEmailAndPassword(emailED, passwordED).addOnCompleteListener(task -> {
 
-                        if (task.isSuccessful()) {
-                            progress_bar_auth.setVisibility(View.INVISIBLE);
-                            Log.d(TAG, "Login success");
+                            if (task.isSuccessful()) {
+                                progress_bar_auth.setVisibility(View.INVISIBLE);
+                                Log.d(TAG_LOGIN_ACTIVITY, "Login success");
 
-                            userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+                                userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
 
-                            DocumentReference documentReference = firebaseFirestore.collection((String) getText(R.string.users)).document(userID);
-                            documentReference.addSnapshotListener(this, (value, error) -> {
-                                assert value != null;
+                                DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userID);
+                                documentReference.addSnapshotListener(this, (value, error) -> {
+                                    assert value != null;
 
-                                String check_role = value.getString((String) getText(R.string.role));
-                                String check_email = value.getString(getString(R.string.email));
-                                String permission = value.getString(getString(R.string.permission));
-                                Log.d(TAG, String.format("permission - %s", permission));
+                                    String role = value.getString(ROLE);
+                                    String email = value.getString(EMAIL);
+                                    String permission = value.getString(PERMISSION);
+                                    Log.d(TAG_LOGIN_ACTIVITY, String.format("permission - %s", permission));
+                                    Log.d(TAG_LOGIN_ACTIVITY, String.format("role - %s", role));
+                                    Log.d(TAG_LOGIN_ACTIVITY, String.format("email - %s", email));
 
-                                assert check_role != null;
-                                startApp(check_role, check_email, permission);
+                                    assert role != null;
+                                    startApp(role, email, permission);
 
-                            });
+                                });
 
-                        } else {
-                            progress_bar_auth.setVisibility(View.INVISIBLE);
-                            String error = Objects.requireNonNull(task.getException()).getMessage();
-                            assert error != null;
-                            Snackbar.make(coordinator_login, error, Snackbar.LENGTH_LONG).show();
-                        }
+                            } else {
+                                progress_bar_auth.setVisibility(View.INVISIBLE);
+                                String error = Objects.requireNonNull(task.getException()).getMessage();
+                                assert error != null;
+                                Snackbar.make(coordinator_login, error, Snackbar.LENGTH_LONG).show();
+                            }
 
-                    });
+                        });
+                    }
                 }
             } else
                 onStart();
@@ -106,20 +120,20 @@ public class ActivityLogin extends AppCompatActivity {
     void startApp(@NotNull String role, String email, String permission) {
         if (role.equals("Root")) {
             Intent intent = new Intent(this, RootMainActivity.class);
-            intent.putExtra(getString(R.string.email), email);
+            intent.putExtra(EMAIL, email);
             startActivity(intent);
         }
 
         if (role.equals("Пользователь")) {
             Intent intent = new Intent(this, MainUserActivity.class);
-            intent.putExtra((String) getText(R.string.email), email);
-            intent.putExtra((String) getText(R.string.permission), permission);
+            intent.putExtra(EMAIL, email);
+            intent.putExtra(PERMISSION, permission);
             startActivity(intent);
         }
 
         if (role.equals("Исполнитель")) {
             Intent intent = new Intent(this, MainExecutorActivity.class);
-            intent.putExtra((String) getText(R.string.email), email);
+            intent.putExtra(EMAIL, email);
             startActivity(intent);
         }
     }
@@ -137,7 +151,7 @@ public class ActivityLogin extends AppCompatActivity {
         if(!isOnline())
             Snackbar.make(findViewById(R.id.coordinator_login_activity), getString(R.string.error_no_connection), Snackbar.LENGTH_LONG)
                     .setAction("Повторить", v ->  {
-                        Log.i(TAG, "Update status: " + isOnline());
+                        Log.i(TAG_LOGIN_ACTIVITY, "Update status: " + isOnline());
                         onStart();
                     }).show();
     }

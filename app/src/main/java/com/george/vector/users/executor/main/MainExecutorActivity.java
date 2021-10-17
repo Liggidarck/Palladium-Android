@@ -1,5 +1,8 @@
 package com.george.vector.users.executor.main;
 
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.OST;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -40,8 +43,8 @@ public class MainExecutorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_executor);
 
         Bundle arguments = getIntent().getExtras();
-        email = arguments.get(getString(R.string.email)).toString();
-        zone = PreferenceManager.getDefaultSharedPreferences(this).getString("default_executor_location", getString(R.string.ost));
+        email = arguments.getString(EMAIL);
+        zone = PreferenceManager.getDefaultSharedPreferences(this).getString("default_executor_location", OST);
 
         bottomAppBarWorker = findViewById(R.id.bottomAppBarWorker);
         chip_executor_ost = findViewById(R.id.chip_executor_ost);
@@ -52,7 +55,7 @@ public class MainExecutorActivity extends AppCompatActivity {
             SettingsExecutorBottomSheet bottomSheet = new SettingsExecutorBottomSheet();
             Bundle bundle = new Bundle();
 
-            bundle.putString(getString(R.string.email), email);
+            bundle.putString(EMAIL, email);
             bottomSheet.setArguments(bundle);
 
             bottomSheet.show(getSupportFragmentManager(), "SettingsExecutorBottomSheet");
@@ -94,7 +97,7 @@ public class MainExecutorActivity extends AppCompatActivity {
                 currentFragment = new fragment_ost();
 
                 Bundle email = new Bundle();
-                email.putString(getString(R.string.email), this.email);
+                email.putString(EMAIL, this.email);
                 currentFragment.setArguments(email);
 
                 break;
@@ -103,7 +106,7 @@ public class MainExecutorActivity extends AppCompatActivity {
                 currentFragment = new fragment_bar();
 
                 Bundle email_bar = new Bundle();
-                email_bar.putString(getString(R.string.email), this.email);
+                email_bar.putString(EMAIL, this.email);
                 currentFragment.setArguments(email_bar);
 
                 break;

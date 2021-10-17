@@ -16,12 +16,14 @@ public class TaskUi {
     private String time_create;
     private String email_creator;
     private String image;
+    private String full_name_executor;
+    private String name_creator;
 
     public TaskUi() {}
 
     public TaskUi(String name_task, String address, String date_create, String floor,
                   String cabinet, String litera, String comment, String date_done, String executor, String status,
-                  String time_create, String email_creator, boolean urgent, String image) {
+                  String time_create, String email_creator, boolean urgent, String image, String full_name_executor, String name_creator) {
         this.name_task = name_task;
         this.address = address;
         this.date_create = date_create;
@@ -36,6 +38,8 @@ public class TaskUi {
         this.time_create = time_create;
         this.email_creator = email_creator;
         this.image = image;
+        this.full_name_executor = full_name_executor;
+        this.name_creator = name_creator;
     }
 
     public String getName_task() {
@@ -93,4 +97,13 @@ public class TaskUi {
     public String getImage() {
         return image;
     }
+
+    public String getFullNameExecutor() {
+        return full_name_executor;
+    }
+
+    public String getNameCreator() {
+        return name_creator;
+    }
+
 }

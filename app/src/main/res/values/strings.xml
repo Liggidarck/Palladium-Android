@@ -22,7 +22,7 @@
     <string name="done">Готово</string>
 
     <string name="authorization">Авторизация</string>
-    <string name="email_text">Электронный адрес</string>
+    <string name="email_text">Логин</string>
     <string name="password">Пароль</string>
     <string name="login">Войти</string>
 
@@ -34,14 +34,13 @@
     <string name="permission_text">Разрешения</string>
     <string name="add_user">добавить пользователя</string>
 
-    <string name="school">Школа</string>
-    <string name="ost_aist_text">Детский сад Аист</string>
-    <string name="ost_yagodka_text">Детский сад Ягодка</string>
-    <string name="bar_rucheek_text">Детский сад Ручеек</string>
-    <string name="bar_star_text">Детский сад Звездочка</string>
+    <string name="ost_aist_text">ОП «Аист»</string>
+    <string name="ost_yagodka_text">ОП «Ягодка»</string>
+    <string name="bar_rucheek_text">ОП «Ручеек»</string>
+    <string name="bar_star_text">ОП «Звездочка»</string>
     <string name="new_task">Новая заявка</string>
-    <string name="ost_text">Остафьево</string>
-    <string name="bar_text">Барыши</string>
+    <string name="ost_text">ОП «Остафьевская»</string>
+    <string name="bar_text"> ОП «Барыши»</string>
 
     <string name="bar_school_address">Улица Местечко Барыши дом 25</string>
 

@@ -25,6 +25,16 @@
             android:textColor="@color/black"
             android:textSize="20sp" />
 
+        <ImageView
+            android:id="@+id/image_warning_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:src="@drawable/ic_red_warning"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp" />
+
         <TextView
             android:id="@+id/text_view_address"
             android:layout_width="wrap_content"

@@ -1,10 +1,12 @@
 package com.george.vector.users.user.main;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
+import static com.george.vector.common.consts.Keys.BAR_SCHOOL_NEW;
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.ID;
+import static com.george.vector.common.consts.Keys.OST_SCHOOL;
+import static com.george.vector.common.consts.Keys.OST_SCHOOL_NEW;
+import static com.george.vector.common.consts.Keys.PERMISSION;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,12 +18,18 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.george.vector.common.announcements.fragment_news;
 import com.george.vector.common.bottom_sheets.ProfileBottomSheet;
-import com.george.vector.common.tasks.ui.TaskUi;
 import com.george.vector.common.tasks.ui.TaskAdapter;
+import com.george.vector.common.tasks.ui.TaskUi;
 import com.george.vector.common.utils.Utils;
 import com.george.vector.users.user.tasks.AddTaskUserActivity;
 import com.george.vector.users.user.tasks.TaskUserActivity;
@@ -43,13 +51,11 @@ public class MainUserActivity extends AppCompatActivity {
     MaterialToolbar toolbar_main_user;
     Chip chip_today_user;
 
-    FirebaseFirestore db;
-    CollectionReference taskRef;
+    CollectionReference collectionReference;
+    FirebaseFirestore firebaseFirestore;
 
     private TaskAdapter adapter;
     private Query query;
-
-    FirebaseFirestore firebaseFirestore;
 
     String permission;
     boolean show_news_fragment;
@@ -61,8 +67,8 @@ public class MainUserActivity extends AppCompatActivity {
 
         Utils utils = new Utils();
         Bundle arguments = getIntent().getExtras();
-        String email = arguments.get(getString(R.string.email)).toString();
-        permission = arguments.getString(getString(R.string.permission));
+        String email = arguments.get(EMAIL).toString();
+        permission = arguments.getString(PERMISSION);
         String collection = null;
 
         create_task_user = findViewById(R.id.create_task_user);
@@ -75,7 +81,6 @@ public class MainUserActivity extends AppCompatActivity {
             bottomSheet.show(getSupportFragmentManager(), "SettingsUserBottomSheet");
         });
 
-        db = FirebaseFirestore.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         DocumentReference documentReference = firebaseFirestore.collection("news").document("news_fragment");
@@ -90,15 +95,15 @@ public class MainUserActivity extends AppCompatActivity {
 
         create_task_user.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddTaskUserActivity.class);
-            intent.putExtra(getString(R.string.permission), permission);
+            intent.putExtra(PERMISSION, permission);
             startActivity(intent);
         });
 
-        if (permission.equals(getString(R.string.ost_school)))
-            collection = getString(R.string.ost_school_new);
+        if (permission.equals(OST_SCHOOL))
+            collection = OST_SCHOOL_NEW;
 
-        if (permission.equals(getString(R.string.bar_school)))
-            collection = getString(R.string.bar_school_new);
+        if (permission.equals(BAR_SCHOOL))
+            collection = BAR_SCHOOL_NEW;
 
         setUpRecyclerView(email, collection);
 
@@ -126,7 +131,7 @@ public class MainUserActivity extends AppCompatActivity {
     }
 
     private void todayTasks(String date, String email) {
-        query = taskRef.whereEqualTo("date_create", date).whereEqualTo("email_creator", email);
+        query = collectionReference.whereEqualTo("date_create", date).whereEqualTo("email_creator", email);
 
         FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
@@ -136,7 +141,7 @@ public class MainUserActivity extends AppCompatActivity {
     }
 
     private void defaultQuery(String email) {
-        query = taskRef.whereEqualTo("email_creator", email);
+        query = collectionReference.whereEqualTo("email_creator", email);
 
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
@@ -146,9 +151,9 @@ public class MainUserActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerView(String email, String collection) {
-        taskRef = db.collection(collection);
+        collectionReference = firebaseFirestore.collection(collection);
 
-        query = taskRef.whereEqualTo("email_creator", email);
+        query = collectionReference.whereEqualTo("email_creator", email);
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
                 .build();
@@ -165,8 +170,8 @@ public class MainUserActivity extends AppCompatActivity {
             Log.i(TAG, "Position: " + position + " ID: " + id);
 
             Intent intent = new Intent(this, TaskUserActivity.class);
-            intent.putExtra(getString(R.string.id), id);
-            intent.putExtra(getString(R.string.permission), permission);
+            intent.putExtra(ID, id);
+            intent.putExtra(PERMISSION, permission);
             startActivity(intent);
 
         });

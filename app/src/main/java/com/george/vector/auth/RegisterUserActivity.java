@@ -1,6 +1,9 @@
 package com.george.vector.auth;
 
-import androidx.appcompat.app.AppCompatActivity;
+import static com.george.vector.common.consts.Keys.USERS;
+import static com.george.vector.common.consts.Logs.TAG_REGISTER_ACTIVITY;
+import static com.george.vector.common.consts.Logs.TAG_VALIDATE_FILED;
+import static com.george.vector.common.utils.Utils.validateEmail;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +11,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
 import com.george.vector.common.utils.Utils;
@@ -26,28 +31,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class ActivityRegisterUser extends AppCompatActivity {
+public class RegisterUserActivity extends AppCompatActivity {
 
     MaterialToolbar topAppBar_register;
-
     Button register_user_btn;
-
     LinearProgressIndicator progress_bar_register;
-
     TextInputLayout text_layout_name_user, text_layout_last_name_user,
             text_layout_patronymic_user, text_layout_email_user,
             text_layout_password_user, text_layout_role_user, text_layout_permission_user;
-
     MaterialAutoCompleteTextView complete_text_role_user, complete_text_permission_user;
 
-    String name_user, last_name_user, patronymic_user, email_user, password_user, role_user, permission_user, userID;
+    String name_user, last_name_user, patronymic_user, email_user,
+            password_user, role_user, permission_user, userID;
 
     FirebaseAuth mAuth1, mAuth2;
     FirebaseFirestore firebaseFirestore;
 
-    private static final String TAG = "RegisterActivity";
-
-    @SuppressWarnings("UnusedAssignment")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,17 +77,17 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
         boolean hasBeenInitialized = false;
         List<FirebaseApp> firebaseApps = FirebaseApp.getApps(this);
-        for(FirebaseApp app : firebaseApps){
-
-            if(app.getName().equals(FirebaseApp.DEFAULT_APP_NAME)){
+        for (FirebaseApp app : firebaseApps) {
+            if (app.getName().equals(FirebaseApp.DEFAULT_APP_NAME)) {
                 hasBeenInitialized = true;
                 firebaseApp = app;
+                mAuth2 = FirebaseAuth.getInstance(firebaseApp);
             }
 
         }
-        if(!hasBeenInitialized) {
-            firebaseApp = FirebaseApp.initializeApp(this, firebaseOptions);
 
+        if (!hasBeenInitialized) {
+            firebaseApp = FirebaseApp.initializeApp(this, firebaseOptions);
             mAuth2 = FirebaseAuth.getInstance(firebaseApp);
         }
 
@@ -96,7 +95,7 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
         String[] items = getResources().getStringArray(R.array.roles);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
-                ActivityRegisterUser.this,
+                RegisterUserActivity.this,
                 R.layout.dropdown_menu_categories,
                 items
         );
@@ -105,7 +104,7 @@ public class ActivityRegisterUser extends AppCompatActivity {
 
         String[] permissions = getResources().getStringArray(R.array.permissions);
         ArrayAdapter<String> arrayAdapterPermissions = new ArrayAdapter<>(
-                ActivityRegisterUser.this,
+                RegisterUserActivity.this,
                 R.layout.dropdown_menu_categories,
                 permissions
         );
@@ -122,35 +121,42 @@ public class ActivityRegisterUser extends AppCompatActivity {
             role_user = Objects.requireNonNull(text_layout_role_user.getEditText()).getText().toString();
             permission_user = Objects.requireNonNull(text_layout_permission_user.getEditText()).getText().toString();
 
-            if(validateFields()) {
-                progress_bar_register.setVisibility(View.VISIBLE);
+            if (validateFields()) {
+                if (!validateEmail(email_user)) {
+                    Log.e(TAG_VALIDATE_FILED, "Email validation failed");
+                    text_layout_email_user.setError("Не корректный формат e-mail");
+                } else {
+                    progress_bar_register.setVisibility(View.VISIBLE);
 
-                mAuth2.createUserWithEmailAndPassword(email_user, password_user).addOnCompleteListener(task -> {
+                    mAuth2.createUserWithEmailAndPassword(email_user, password_user).addOnCompleteListener(task -> {
 
-                    if (task.isSuccessful()) {
-                        userID = Objects.requireNonNull(mAuth2.getCurrentUser()).getUid();
-                        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
-                        Map<String, Object> user = new HashMap<>();
-                        user.put("name", name_user);
-                        user.put("last_name", last_name_user);
-                        user.put("patronymic", patronymic_user);
-                        user.put("email", email_user);
-                        user.put("role", role_user);
-                        user.put("permission", permission_user);
-                        user.put("password", password_user);
+                        if (task.isSuccessful()) {
+                            userID = Objects.requireNonNull(mAuth2.getCurrentUser()).getUid();
+                            DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userID);
+                            Map<String, Object> user = new HashMap<>();
+                            user.put("name", name_user);
+                            user.put("last_name", last_name_user);
+                            user.put("patronymic", patronymic_user);
+                            user.put("email", email_user);
+                            user.put("role", role_user);
+                            user.put("permission", permission_user);
+                            user.put("password", password_user);
 
-                        documentReference.set(user)
-                                .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user - " + userID))
-                                .addOnFailureListener(e -> Log.e("TAG", "Failure - " + e.toString()));
+                            documentReference.set(user)
+                                    .addOnSuccessListener(unused -> Log.d(TAG_REGISTER_ACTIVITY, "Success register user - " + userID))
+                                    .addOnFailureListener(e -> Log.e(TAG_REGISTER_ACTIVITY, "Failure register user - " + e.toString()));
 
-                        onBackPressed();
+                            onBackPressed();
 
-                    } else
-                        Toast.makeText(ActivityRegisterUser.this, "Error" + Objects.requireNonNull(task.getException()).getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(RegisterUserActivity.this, "Error" + Objects.requireNonNull(task.getException()).getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                            Log.e(TAG_REGISTER_ACTIVITY, "Error! " + task.getException().toString());
+                        }
 
-                    progress_bar_register.setVisibility(View.INVISIBLE);
+                        progress_bar_register.setVisibility(View.INVISIBLE);
 
-                });
+                    });
+                }
             }
 
         });
@@ -166,6 +172,7 @@ public class ActivityRegisterUser extends AppCompatActivity {
         utils.clear_error(text_layout_email_user);
         utils.clear_error(text_layout_password_user);
         utils.clear_error(text_layout_role_user);
+        utils.clear_error(text_layout_permission_user);
 
         boolean checkName = utils.validate_field(name_user, text_layout_name_user);
         boolean checkLastName = utils.validate_field(last_name_user, text_layout_last_name_user);
@@ -173,8 +180,9 @@ public class ActivityRegisterUser extends AppCompatActivity {
         boolean checkEmail = utils.validate_field(email_user, text_layout_email_user);
         boolean checkPassword = utils.validate_field(password_user, text_layout_password_user);
         boolean checkRole = utils.validate_field(role_user, text_layout_role_user);
+        boolean checkPermission = utils.validate_field(permission_user, text_layout_permission_user);
 
-        return checkName & checkLastName & checkPatronymic & checkEmail & checkPassword & checkRole;
+        return checkName & checkLastName & checkPatronymic & checkEmail & checkPassword & checkRole & checkPermission;
     }
 
 }

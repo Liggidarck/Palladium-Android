@@ -3,8 +3,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".develop.DevelopActivity"
     android:orientation="vertical">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="Developer Activity"
+        app:titleTextColor="@android:color/white"
+        app:layout_collapseMode="pin"
+        android:background="@color/blue_primary" />
+
+    <Button
+        android:id="@+id/button_notifications"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="notifications"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"/>
+
+    <Button
+        android:id="@+id/button_camera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="camera"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp" />
+
+
+    <ImageView
+        android:id="@+id/image_develop"
+        android:layout_width="match_parent"
+        android:layout_height="320dp" />
 
 </LinearLayout>

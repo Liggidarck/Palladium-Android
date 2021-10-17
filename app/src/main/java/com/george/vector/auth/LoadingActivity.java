@@ -1,10 +1,16 @@
 package com.george.vector.auth;
 
-import androidx.appcompat.app.AppCompatActivity;
+import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.PERMISSION;
+import static com.george.vector.common.consts.Keys.ROLE;
+import static com.george.vector.common.consts.Keys.USERS;
+import static com.george.vector.common.consts.Logs.TAG_LOADING_ACTIVITY;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
 import com.george.vector.users.executor.main.MainExecutorActivity;
@@ -20,7 +26,6 @@ import java.util.Objects;
 
 public class LoadingActivity extends AppCompatActivity {
 
-    private static final String TAG = "LoadingActivity";
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 
@@ -36,42 +41,44 @@ public class LoadingActivity extends AppCompatActivity {
 
         if(firebaseAuth.getCurrentUser() != null) {
             userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-            Log.i(TAG, "user id: " + userID);
+            Log.i(TAG_LOADING_ACTIVITY, "user id: " + userID);
 
-            DocumentReference documentReference = firebaseFirestore.collection(getString(R.string.users)).document(userID);
+            DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userID);
             documentReference.addSnapshotListener(this, (value, error) -> {
                 assert value != null;
 
-                String check_role = value.getString(getString(R.string.role));
-                String check_email = value.getString(getString(R.string.email));
-                String permission = value.getString(getString(R.string.permission));
-                Log.d(TAG, "permission - " + permission);
+                String role = value.getString(ROLE);
+                String email = value.getString(EMAIL);
+                String permission = value.getString(PERMISSION);
+                Log.d(TAG_LOADING_ACTIVITY, "permission - " + permission);
+                Log.d(TAG_LOADING_ACTIVITY, "email - " + email);
+                Log.d(TAG_LOADING_ACTIVITY, "role - " + role);
 
-                assert check_role != null;
-                startApp(check_role, check_email, permission);
+                assert role != null;
+                startApp(role, email, permission);
 
             });
         } else
-            startActivity(new Intent(this, ActivityLogin.class));
+            startActivity(new Intent(this, LoginActivity.class));
     }
 
     void startApp(@NotNull String role, String email, String permission) {
         if (role.equals("Root")) {
             Intent intent = new Intent(this, RootMainActivity.class);
-            intent.putExtra(getString(R.string.email), email);
+            intent.putExtra(EMAIL, email);
             startActivity(intent);
         }
 
         if (role.equals("Пользователь")) {
             Intent intent = new Intent(this, MainUserActivity.class);
-            intent.putExtra(getString(R.string.email), email);
-            intent.putExtra(getString(R.string.permission), permission);
+            intent.putExtra(EMAIL, email);
+            intent.putExtra(PERMISSION, permission);
             startActivity(intent);
         }
 
         if (role.equals("Исполнитель")) {
             Intent intent = new Intent(this, MainExecutorActivity.class);
-            intent.putExtra(getString(R.string.email), email);
+            intent.putExtra(EMAIL, email);
             startActivity(intent);
         }
     }

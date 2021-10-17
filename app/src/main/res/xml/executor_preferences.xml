@@ -12,4 +12,14 @@
             app:defaultValue="ost" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/tasks">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="economy_traffic"
+            app:title="Экономия трафика"
+            android:summary="Изображения заявок перестанут загружаться автоматически"/>
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

@@ -48,7 +48,7 @@
         android:id="@+id/ost_school_new_task"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/school"
+        android:text="@string/ost_text"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_marginTop="10dp" />
 
@@ -80,7 +80,7 @@
         android:id="@+id/bar_school_new_task"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/school"
+        android:text="@string/bar_text"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_marginTop="10dp" />
 
