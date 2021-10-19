@@ -14,8 +14,8 @@ android {
         applicationId "com.george.vector"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 1200
-        versionName "1.2.0"
+        versionCode 1201
+        versionName "1.2.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -45,6 +45,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation "io.grpc:grpc-okhttp:1.32.2"
 
     //Firebase Main
     implementation platform('com.google.firebase:firebase-bom:28.4.1')

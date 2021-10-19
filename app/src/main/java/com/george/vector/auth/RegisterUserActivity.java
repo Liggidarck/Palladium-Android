@@ -68,27 +68,19 @@ public class RegisterUserActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
         mAuth1 = FirebaseAuth.getInstance();
 
-        FirebaseOptions firebaseOptions = new FirebaseOptions.Builder()
-                .setDatabaseUrl("https://school-2122.firebaseio.com")
-                .setApiKey("AIzaSyAAaS5-aMMTMBa6BWNBbM_0FHnlO5Ql328")
-                .setApplicationId("school-2122").build();
+        try {
+            FirebaseOptions firebaseOptions = new FirebaseOptions.Builder()
+                    .setDatabaseUrl("https://school-2122.firebaseio.com")
+                    .setApiKey("AIzaSyAAaS5-aMMTMBa6BWNBbM_0FHnlO5Ql328")
+                    .setApplicationId("school-2122")
+                    .build();
 
-        FirebaseApp firebaseApp;
+            FirebaseApp myApp = FirebaseApp.initializeApp(getApplicationContext(), firebaseOptions,
+                    "school-2122");
 
-        boolean hasBeenInitialized = false;
-        List<FirebaseApp> firebaseApps = FirebaseApp.getApps(this);
-        for (FirebaseApp app : firebaseApps) {
-            if (app.getName().equals(FirebaseApp.DEFAULT_APP_NAME)) {
-                hasBeenInitialized = true;
-                firebaseApp = app;
-                mAuth2 = FirebaseAuth.getInstance(firebaseApp);
-            }
-
-        }
-
-        if (!hasBeenInitialized) {
-            firebaseApp = FirebaseApp.initializeApp(this, firebaseOptions);
-            mAuth2 = FirebaseAuth.getInstance(firebaseApp);
+            mAuth2 = FirebaseAuth.getInstance(myApp);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         topAppBar_register.setNavigationOnClickListener(v -> onBackPressed());
@@ -124,7 +116,7 @@ public class RegisterUserActivity extends AppCompatActivity {
             if (validateFields()) {
                 if (!validateEmail(email_user)) {
                     Log.e(TAG_VALIDATE_FILED, "Email validation failed");
-                    text_layout_email_user.setError("Не корректный формат e-mail");
+                    text_layout_email_user.setError("Некорректный формат e-mail");
                 } else {
                     progress_bar_register.setVisibility(View.VISIBLE);
 

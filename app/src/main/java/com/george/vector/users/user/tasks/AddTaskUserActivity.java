@@ -54,6 +54,7 @@ import java.util.UUID;
 
 public class AddTaskUserActivity extends AppCompatActivity {
 
+    private static final String TAG = "AddTaskUser";
     MaterialToolbar topAppBar_new_task_user;
     TextInputLayout text_input_layout_address, text_input_layout_floor,
             text_input_layout_cabinet, text_input_layout_name_task,
@@ -112,7 +113,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
             String name_creator = value.getString("name");
             String last_name_creator = value.getString("last_name");
             String patronymic_creator = value.getString("patronymic");
-            full_name_creator = name_creator + " " + last_name_creator + " " + patronymic_creator;
+            full_name_creator = last_name_creator + " " + name_creator + " " + patronymic_creator;
         });
 
         image_task_user.setOnClickListener(v -> chooseImage());
@@ -192,7 +193,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
                 byte[] data = byteArrayOutputStream.toByteArray();
 
                 final ProgressDialog progressDialog = new ProgressDialog(AddTaskUserActivity.this);
-                progressDialog.setTitle("Uploading...");
+                progressDialog.setTitle("Загрузка...");
                 progressDialog.show();
 
                 NAME_IMAGE = UUID.randomUUID().toString();
@@ -201,12 +202,12 @@ public class AddTaskUserActivity extends AppCompatActivity {
                 ref.putBytes(data)
                         .addOnSuccessListener(taskSnapshot -> {
                             progressDialog.dismiss();
-                            Toast.makeText(AddTaskUserActivity.this, "Изображение успешно загружено", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "Изображение успешно загружено");
                             onBackPressed();
                         })
                         .addOnFailureListener(e -> {
                             progressDialog.dismiss();
-                            Toast.makeText(AddTaskUserActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "Failed: " + e.getMessage());
                         })
                         .addOnProgressListener(taskSnapshot -> {
                             double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot

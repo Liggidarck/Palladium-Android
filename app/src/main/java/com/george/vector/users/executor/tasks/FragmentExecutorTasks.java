@@ -1,6 +1,7 @@
 package com.george.vector.users.executor.tasks;
 
 import static com.george.vector.common.consts.Keys.COLLECTION;
+import static com.george.vector.common.consts.Keys.COMPLETED_TASKS;
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.FOLDER;
 import static com.george.vector.common.consts.Keys.ID;
@@ -68,6 +69,9 @@ public class FragmentExecutorTasks extends Fragment {
 
         if(location.equals(OST_SCHOOL) && folder.equals(IN_PROGRESS_TASKS))
             ostSchoolProgressTasks();
+
+        if(location.equals(OST_SCHOOL) && folder.equals(COMPLETED_TASKS))
+            ostSchoolCompleteTasks();
 
         return view;
     }
@@ -261,6 +265,100 @@ public class FragmentExecutorTasks extends Fragment {
                 adapter.updateOptions(address_options);
             }
         }));
+    }
+
+
+    void ostSchoolCompleteTasks() {
+        queryOstSchoolCompleteTasks(email);
+
+        setUpRecyclerView();
+
+        adapter.setOnItemClickListener((documentSnapshot, position) -> {
+            String id = documentSnapshot.getId();
+
+            Log.d(TAG, String.format("position: %d id: %s", position, id));
+
+            Intent intent = new Intent(FragmentExecutorTasks.this.getContext(), TaskExecutorActivity.class);
+            intent.putExtra(ID, id);
+            intent.putExtra(LOCATION, OST_SCHOOL);
+            intent.putExtra(COLLECTION, COMPLETED_TASKS);
+            intent.putExtra(EMAIL, email);
+            startActivity(intent);
+
+        });
+    }
+
+    void queryOstSchoolCompleteTasks(String email) {
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final CollectionReference taskRef = db.collection(COMPLETED_TASKS);
+
+        Log.d(TAG, "Query email: " + email);
+        Query query = taskRef.whereEqualTo("executor", email);
+        FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                .setQuery(query, TaskUi.class)
+                .build();
+        adapter = new TaskAdapter(options);
+
+        chip_all_tasks_executor.setOnCheckedChangeListener(((compoundButton, isChecked) -> {
+
+            if(isChecked) {
+
+                Log.d(TAG, "All Tasks");
+
+                Query query_all = taskRef.whereEqualTo("executor", email);
+                FirestoreRecyclerOptions<TaskUi> options_all = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                        .setQuery(query_all, TaskUi.class)
+                        .build();
+                adapter.updateOptions(options_all);
+            }
+
+        }));
+
+        chip_urgent_tasks_executor.setOnCheckedChangeListener(((compoundButton, b) -> {
+
+            if(b) {
+                Log.i(TAG, "urgent checked");
+                Query query_urgent = taskRef
+                        .whereEqualTo("urgent", true)
+                        .whereEqualTo("executor", email);
+
+                FirestoreRecyclerOptions<TaskUi> urgent_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                        .setQuery(query_urgent, TaskUi.class)
+                        .build();
+
+                adapter.updateOptions(urgent_options);
+            }
+
+        }));
+
+        chip_old_school_tasks_executor.setOnCheckedChangeListener(((compoundButton, b) -> {
+            if(b){
+                Query query_address = taskRef
+                        .whereEqualTo("address", getText(R.string.old_school_full_text))
+                        .whereEqualTo("executor", email);
+
+                FirestoreRecyclerOptions<TaskUi> address_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                        .setQuery(query_address, TaskUi.class)
+                        .build();
+
+                adapter.updateOptions(address_options);
+            }
+        }));
+
+        chip_new_school_tasks_executor.setOnCheckedChangeListener(((compoundButton, b) -> {
+            if(b) {
+                Query query_address = taskRef
+                        .whereEqualTo("address", getText(R.string.new_school_full_text))
+                        .whereEqualTo("executor", email);
+
+                FirestoreRecyclerOptions<TaskUi> address_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
+                        .setQuery(query_address, TaskUi.class)
+                        .build();
+
+                adapter.updateOptions(address_options);
+            }
+        }));
+
     }
 
     @Override

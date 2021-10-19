@@ -134,7 +134,7 @@ public class TaskRootActivity extends AppCompatActivity {
                 if (status.equals("В работе"))
                     circle_status_root.setImageResource(R.color.orange);
 
-                if (status.equals("Архив"))
+                if (status.equals("Архив") || status.equals("Завершенная заявка"))
                     circle_status_root.setImageResource(R.color.green);
 
                 if (!letter.equals("-") && !letter.isEmpty())

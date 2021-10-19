@@ -125,6 +125,7 @@ public class EditUserActivity extends AppCompatActivity {
             email_user = Objects.requireNonNull(text_input_layout_email_user.getEditText()).getText().toString();
             role_user = Objects.requireNonNull(text_input_layout_role_user.getEditText()).getText().toString();
             permission_user = Objects.requireNonNull(text_input_layout_edit_permission_user.getEditText()).getText().toString();
+            password = text_input_layout_password_user.getEditText().getText().toString();
 
             if (validateFields()) {
                 progress_bar_edit_user.setVisibility(View.VISIBLE);
@@ -136,6 +137,7 @@ public class EditUserActivity extends AppCompatActivity {
                 user.put("email", email_user);
                 user.put("role", role_user);
                 user.put("permission", permission_user);
+                user.put("password", password);
 
                 documentReference.get().addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

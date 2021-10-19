@@ -146,7 +146,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
             String name_creator = value.getString("name");
             String last_name_creator = value.getString("last_name");
             String patronymic_creator = value.getString("patronymic");
-            full_name_creator = name_creator + " " + last_name_creator + " " + patronymic_creator;
+            full_name_creator =  last_name_creator + " " + name_creator + " " + patronymic_creator;
         });
 
         add_executor_root.setOnClickListener(v -> show_add_executor_dialog());
@@ -267,7 +267,6 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
         task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, letter, comment,
                 date_complete, email_executor, status, time_create, email, urgent, NAME_IMAGE, full_name_executor, full_name_creator);
-
     }
 
     public void show_add_executor_dialog() {

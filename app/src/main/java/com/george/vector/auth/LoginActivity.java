@@ -1,15 +1,23 @@
 package com.george.vector.auth;
 
 import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.LAST_NAME;
+import static com.george.vector.common.consts.Keys.NAME;
+import static com.george.vector.common.consts.Keys.PATRONYMIC;
 import static com.george.vector.common.consts.Keys.PERMISSION;
 import static com.george.vector.common.consts.Keys.ROLE;
 import static com.george.vector.common.consts.Keys.USERS;
+import static com.george.vector.common.consts.Keys.USER_DATA;
+import static com.george.vector.common.consts.Keys.USER_DATA_EMAIL;
+import static com.george.vector.common.consts.Keys.USER_PERMISSION;
+import static com.george.vector.common.consts.Keys.USER_ROLE;
 import static com.george.vector.common.consts.Logs.TAG_LOGIN_ACTIVITY;
 import static com.george.vector.common.consts.Logs.TAG_VALIDATE_FILED;
 import static com.george.vector.common.utils.Utils.validateEmail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -86,6 +94,9 @@ public class LoginActivity extends AppCompatActivity {
                                 documentReference.addSnapshotListener(this, (value, error) -> {
                                     assert value != null;
 
+                                    String name = value.getString("name");
+                                    String last_name = value.getString("last_name");
+                                    String patronymic = value.getString("patronymic");
                                     String role = value.getString(ROLE);
                                     String email = value.getString(EMAIL);
                                     String permission = value.getString(PERMISSION);
@@ -94,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.d(TAG_LOGIN_ACTIVITY, String.format("email - %s", email));
 
                                     assert role != null;
-                                    startApp(role, email, permission);
+                                    startApp(name, last_name, patronymic, role, email, permission);
 
                                 });
 
@@ -117,7 +128,20 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    void startApp(@NotNull String role, String email, String permission) {
+    void startApp(@NotNull String name, String last_name, String patronymic, String role, String email, String permission) {
+        SharedPreferences mDataUser;
+        mDataUser = getSharedPreferences(USER_DATA, Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = mDataUser.edit();
+        editor.putString(NAME, name);
+        editor.putString(LAST_NAME, last_name);
+        editor.putString(PATRONYMIC, patronymic);
+        editor.putString(USER_DATA_EMAIL, email);
+        editor.putString(USER_PERMISSION, permission);
+        editor.putString(USER_ROLE, role);
+
+        editor.apply();
+
         if (role.equals("Root")) {
             Intent intent = new Intent(this, RootMainActivity.class);
             intent.putExtra(EMAIL, email);

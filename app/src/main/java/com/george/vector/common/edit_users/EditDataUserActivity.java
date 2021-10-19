@@ -29,11 +29,12 @@ public class EditDataUserActivity extends AppCompatActivity {
     LinearProgressIndicator progress_bar_edit_data_user;
 
     TextInputLayout text_input_layout_name_user_edit, text_input_layout_last_name_user_edit,
-            text_input_layout_patronymic_user_edit, text_input_layout_email_user_edit, text_input_layout_role_user_edit;
+            text_input_layout_patronymic_user_edit, text_input_layout_email_user_edit,
+            text_input_layout_role_user_edit, text_input_layout_password_user_edit;
 
     Button btn_save_edit_data_user;
 
-    String name_user, last_name_user, patronymic_user, email_user, role_user, userID;
+    String name_user, last_name_user, patronymic_user, email_user, role_user, userID, password;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -51,6 +52,7 @@ public class EditDataUserActivity extends AppCompatActivity {
         text_input_layout_email_user_edit = findViewById(R.id.text_input_layout_email_user_edit);
         btn_save_edit_data_user = findViewById(R.id.btn_save_edit_data_user);
         text_input_layout_role_user_edit = findViewById(R.id.text_input_layout_role_user_edit);
+        text_input_layout_password_user_edit = findViewById(R.id.text_input_layout_password_user_edit);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -66,6 +68,7 @@ public class EditDataUserActivity extends AppCompatActivity {
             patronymic_user = value.getString("patronymic");
             email_user = value.getString("email");
             role_user = value.getString("role");
+            password = value.getString("password");
             Log.i(TAG, String.format("name: %s last_name: %s patronymic: %s email: %s", name_user, last_name_user, patronymic_user, email_user));
 
             Objects.requireNonNull(text_input_layout_name_user_edit.getEditText()).setText(name_user);
@@ -73,6 +76,7 @@ public class EditDataUserActivity extends AppCompatActivity {
             Objects.requireNonNull(text_input_layout_patronymic_user_edit.getEditText()).setText(patronymic_user);
             Objects.requireNonNull(text_input_layout_email_user_edit.getEditText()).setText(email_user);
             Objects.requireNonNull(text_input_layout_role_user_edit.getEditText()).setText(role_user);
+            text_input_layout_password_user_edit.getEditText().setText(password);
         });
 
         btn_save_edit_data_user.setOnClickListener(v -> {
@@ -81,6 +85,7 @@ public class EditDataUserActivity extends AppCompatActivity {
             patronymic_user = Objects.requireNonNull(text_input_layout_patronymic_user_edit.getEditText()).getText().toString();
             email_user = Objects.requireNonNull(text_input_layout_email_user_edit.getEditText()).getText().toString();
             role_user = Objects.requireNonNull(text_input_layout_role_user_edit.getEditText()).getText().toString();
+            password = text_input_layout_password_user_edit.getEditText().getText().toString();
 
             if(validateFields()) {
                 progress_bar_edit_data_user.setVisibility(View.VISIBLE);
@@ -91,6 +96,7 @@ public class EditDataUserActivity extends AppCompatActivity {
                 user.put("patronymic", patronymic_user);
                 user.put("email", email_user);
                 user.put("role", role_user);
+                user.put("password", password);
 
                 documentReference.get().addOnCompleteListener(task -> {
                     if(task.isSuccessful()) {

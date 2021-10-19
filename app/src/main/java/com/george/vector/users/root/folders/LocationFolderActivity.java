@@ -2,6 +2,7 @@ package com.george.vector.users.root.folders;
 
 import static com.george.vector.common.consts.Keys.ARCHIVE_TASKS;
 import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
+import static com.george.vector.common.consts.Keys.COMPLETED_TASKS;
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.EXECUTED;
 import static com.george.vector.common.consts.Keys.FOLDER;
@@ -25,7 +26,8 @@ public class LocationFolderActivity extends AppCompatActivity {
     private static final String TAG = "LocationFolderAct";
 
     MaterialToolbar toolbar_location_folder_root;
-    MaterialCardView new_tasks_card_root, in_progress_tasks_card_root, archive_tasks_card_root;
+    MaterialCardView new_tasks_card_root, in_progress_tasks_card_root, completed_tasks_card_root,
+            archive_tasks_card_root;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class LocationFolderActivity extends AppCompatActivity {
         toolbar_location_folder_root = findViewById(R.id.toolbar_location_folder_root);
         new_tasks_card_root = findViewById(R.id.new_tasks_card_root);
         in_progress_tasks_card_root = findViewById(R.id.in_progress_tasks_card_root);
+        completed_tasks_card_root = findViewById(R.id.completed_tasks_card_root);
         archive_tasks_card_root = findViewById(R.id.archive_tasks_card_root);
 
         Bundle arguments = getIntent().getExtras();
@@ -64,6 +67,15 @@ public class LocationFolderActivity extends AppCompatActivity {
             Intent intent = new Intent(this, FolderRootActivity.class);
             intent.putExtra(LOCATION, location);
             intent.putExtra(FOLDER, IN_PROGRESS_TASKS);
+            intent.putExtra(EXECUTED, executed);
+            intent.putExtra(EMAIL, email);
+            startActivity(intent);
+        });
+
+        completed_tasks_card_root.setOnClickListener(v -> {
+            Intent intent = new Intent(this, FolderRootActivity.class);
+            intent.putExtra(LOCATION, location);
+            intent.putExtra(FOLDER, COMPLETED_TASKS);
             intent.putExtra(EXECUTED, executed);
             intent.putExtra(EMAIL, email);
             startActivity(intent);

@@ -1,12 +1,20 @@
 package com.george.vector.auth;
 
 import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.LAST_NAME;
+import static com.george.vector.common.consts.Keys.NAME;
+import static com.george.vector.common.consts.Keys.PATRONYMIC;
 import static com.george.vector.common.consts.Keys.PERMISSION;
 import static com.george.vector.common.consts.Keys.ROLE;
 import static com.george.vector.common.consts.Keys.USERS;
+import static com.george.vector.common.consts.Keys.USER_DATA;
+import static com.george.vector.common.consts.Keys.USER_PERMISSION;
+import static com.george.vector.common.consts.Keys.USER_ROLE;
 import static com.george.vector.common.consts.Logs.TAG_LOADING_ACTIVITY;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -29,7 +37,7 @@ public class LoadingActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 
-    String userID;
+    String userID, name, last_name, patronymic, email, permission, role;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +46,18 @@ public class LoadingActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
+
+        SharedPreferences mDataUser;
+        mDataUser = getSharedPreferences(USER_DATA, Context.MODE_PRIVATE);
+
+        if (mDataUser.contains(USER_DATA)) {
+            name = mDataUser.getString(NAME, "");
+            last_name = mDataUser.getString(LAST_NAME, "");
+            patronymic = mDataUser.getString(PATRONYMIC, "");
+            email = mDataUser.getString(EMAIL, "");
+            permission = mDataUser.getString(USER_PERMISSION, "");
+            role = mDataUser.getString(USER_ROLE, "");
+        }
 
         if(firebaseAuth.getCurrentUser() != null) {
             userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();

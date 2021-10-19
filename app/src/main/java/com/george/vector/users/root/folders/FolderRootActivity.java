@@ -1,6 +1,7 @@
 package com.george.vector.users.root.folders;
 
 import static com.george.vector.common.consts.Keys.ARCHIVE_TASKS;
+import static com.george.vector.common.consts.Keys.COMPLETED_TASKS;
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.EXECUTED;
 import static com.george.vector.common.consts.Keys.FOLDER;
@@ -47,6 +48,9 @@ public class FolderRootActivity extends AppCompatActivity {
 
         if(folder.equals(ARCHIVE_TASKS))
             text_toolbar = getString(R.string.archive_tasks_text);
+
+        if(folder.equals(COMPLETED_TASKS))
+            text_toolbar = "Завершенные";
 
         toolbar_folder_root_activity.setNavigationOnClickListener(v -> onBackPressed());
         toolbar_folder_root_activity.setTitle(text_toolbar);

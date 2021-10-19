@@ -9,6 +9,7 @@
     <string-array name="status" >
         <item>Новая заявка</item>
         <item>В работе</item>
+        <item>Завершенная заявка</item>
         <item>Архив</item>
     </string-array>
 
