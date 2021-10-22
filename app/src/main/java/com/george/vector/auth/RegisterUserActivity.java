@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 public class RegisterUserActivity extends AppCompatActivity {
 
@@ -75,14 +76,98 @@ public class RegisterUserActivity extends AppCompatActivity {
                     .setApplicationId("school-2122")
                     .build();
 
-            FirebaseApp myApp = FirebaseApp.initializeApp(getApplicationContext(), firebaseOptions,
-                    "school-2122");
+            FirebaseApp firebaseApp = null;
+            List<FirebaseApp> firebaseApps = FirebaseApp.getApps(this);
 
-            mAuth2 = FirebaseAuth.getInstance(myApp);
+            if (firebaseApps != null && !firebaseApps.isEmpty()) {
+
+                for (FirebaseApp app : firebaseApps) {
+                    if (app.getName().equals(FirebaseApp.DEFAULT_APP_NAME))
+                        firebaseApp = FirebaseApp.initializeApp(getApplicationContext(), firebaseOptions, UUID.randomUUID().toString());
+                }
+
+            } else
+                firebaseApp = FirebaseApp.initializeApp(this, firebaseOptions);
+
+            mAuth2 = FirebaseAuth.getInstance(firebaseApp);
+
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(this, "Error! " + e.toString(), Toast.LENGTH_SHORT).show();
+            Log.e(TAG_REGISTER_ACTIVITY, "Error! " + e.toString());
         }
 
+
+        register_user_btn.setOnClickListener(v -> {
+
+            name_user = Objects.requireNonNull(text_layout_name_user.getEditText()).getText().toString();
+            last_name_user = Objects.requireNonNull(text_layout_last_name_user.getEditText()).getText().toString();
+            patronymic_user = Objects.requireNonNull(text_layout_patronymic_user.getEditText()).getText().toString();
+            email_user = Objects.requireNonNull(text_layout_email_user.getEditText()).getText().toString();
+            password_user = Objects.requireNonNull(text_layout_password_user.getEditText()).getText().toString();
+            role_user = Objects.requireNonNull(text_layout_role_user.getEditText()).getText().toString();
+            permission_user = Objects.requireNonNull(text_layout_permission_user.getEditText()).getText().toString();
+
+            if (validateFields()) {
+                if (!validateEmail(email_user)) {
+                    Log.e(TAG_VALIDATE_FILED, "Email validation failed");
+                    text_layout_email_user.setError("Не корректный формат e-mail");
+                } else {
+                    progress_bar_register.setVisibility(View.VISIBLE);
+
+                    try {
+                        mAuth2.createUserWithEmailAndPassword(email_user, password_user).addOnCompleteListener(task -> {
+
+                            if (task.isSuccessful()) {
+                                userID = Objects.requireNonNull(mAuth2.getCurrentUser()).getUid();
+                                DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userID);
+                                Map<String, Object> user = new HashMap<>();
+                                user.put("name", name_user);
+                                user.put("last_name", last_name_user);
+                                user.put("patronymic", patronymic_user);
+                                user.put("email", email_user);
+                                user.put("role", role_user);
+                                user.put("permission", permission_user);
+                                user.put("password", password_user);
+
+                                documentReference.set(user)
+                                        .addOnSuccessListener(unused -> Log.d(TAG_REGISTER_ACTIVITY, "Success register user - " + userID))
+                                        .addOnFailureListener(e -> Log.e(TAG_REGISTER_ACTIVITY, "Failure register user - " + e.toString()));
+
+                                onBackPressed();
+
+                            } else {
+                                Toast.makeText(RegisterUserActivity.this, "Error" + Objects.requireNonNull(task.getException()).getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                                Log.e(TAG_REGISTER_ACTIVITY, "Error! " + task.getException().toString());
+                            }
+
+                            progress_bar_register.setVisibility(View.INVISIBLE);
+                            Log.d(TAG_REGISTER_ACTIVITY, "Complete: " + task.getResult());
+                            Toast.makeText(this, "Complete: " + task.getResult(), Toast.LENGTH_SHORT).show();
+
+                        }).addOnFailureListener(e -> {
+                            progress_bar_register.setVisibility(View.INVISIBLE);
+                            Log.e(TAG_REGISTER_ACTIVITY, "Error: " + e.toString());
+                            Toast.makeText(this, "Error: " + e.toString(), Toast.LENGTH_SHORT).show();
+                        });
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e(TAG_REGISTER_ACTIVITY, "Error! " + e.toString());
+                        Toast.makeText(this, "Error: " + e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }
+            }
+
+        });
+
+        initFields();
+
+    }
+
+    void initFields() {
         topAppBar_register.setNavigationOnClickListener(v -> onBackPressed());
 
         String[] items = getResources().getStringArray(R.array.roles);
@@ -102,57 +187,6 @@ public class RegisterUserActivity extends AppCompatActivity {
         );
 
         complete_text_permission_user.setAdapter(arrayAdapterPermissions);
-
-        register_user_btn.setOnClickListener(v -> {
-
-            name_user = Objects.requireNonNull(text_layout_name_user.getEditText()).getText().toString();
-            last_name_user = Objects.requireNonNull(text_layout_last_name_user.getEditText()).getText().toString();
-            patronymic_user = Objects.requireNonNull(text_layout_patronymic_user.getEditText()).getText().toString();
-            email_user = Objects.requireNonNull(text_layout_email_user.getEditText()).getText().toString();
-            password_user = Objects.requireNonNull(text_layout_password_user.getEditText()).getText().toString();
-            role_user = Objects.requireNonNull(text_layout_role_user.getEditText()).getText().toString();
-            permission_user = Objects.requireNonNull(text_layout_permission_user.getEditText()).getText().toString();
-
-            if (validateFields()) {
-                if (!validateEmail(email_user)) {
-                    Log.e(TAG_VALIDATE_FILED, "Email validation failed");
-                    text_layout_email_user.setError("Некорректный формат e-mail");
-                } else {
-                    progress_bar_register.setVisibility(View.VISIBLE);
-
-                    mAuth2.createUserWithEmailAndPassword(email_user, password_user).addOnCompleteListener(task -> {
-
-                        if (task.isSuccessful()) {
-                            userID = Objects.requireNonNull(mAuth2.getCurrentUser()).getUid();
-                            DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userID);
-                            Map<String, Object> user = new HashMap<>();
-                            user.put("name", name_user);
-                            user.put("last_name", last_name_user);
-                            user.put("patronymic", patronymic_user);
-                            user.put("email", email_user);
-                            user.put("role", role_user);
-                            user.put("permission", permission_user);
-                            user.put("password", password_user);
-
-                            documentReference.set(user)
-                                    .addOnSuccessListener(unused -> Log.d(TAG_REGISTER_ACTIVITY, "Success register user - " + userID))
-                                    .addOnFailureListener(e -> Log.e(TAG_REGISTER_ACTIVITY, "Failure register user - " + e.toString()));
-
-                            onBackPressed();
-
-                        } else {
-                            Toast.makeText(RegisterUserActivity.this, "Error" + Objects.requireNonNull(task.getException()).getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                            Log.e(TAG_REGISTER_ACTIVITY, "Error! " + task.getException().toString());
-                        }
-
-                        progress_bar_register.setVisibility(View.INVISIBLE);
-
-                    });
-                }
-            }
-
-        });
-
     }
 
     boolean validateFields() {
