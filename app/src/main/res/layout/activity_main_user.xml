@@ -6,68 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".users.user.main.MainUserActivity">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar_main_user"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/blue_primary"
-        app:layout_collapseMode="pin"
-        app:navigationIcon="@drawable/ic_baseline_menu_24"
-        app:navigationIconTint="@color/white"
-        app:title="@string/tasks"
-        style="@style/Widget.MaterialComponents.Toolbar.Primary"
-        app:menu="@menu/bottom_app_bar"
-        app:titleTextColor="@android:color/white" />
-
     <FrameLayout
-        android:id="@+id/main_user_frame"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar_main_user" />
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/group_chip_user"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/main_user_frame"
-        app:singleLine="true"
-        app:singleSelection="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_today_user"
-            style="@style/Widget.MaterialComponents.Chip.Filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/today_create" />
-
-    </com.google.android.material.chip.ChipGroup>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_view_user"
+        android:id="@+id/frame_main_user"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/group_chip_user"
-        android:clipToPadding="false"
-        android:paddingBottom="100dp" />
+        android:layout_above="@id/bottom_user_navigation" />
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinator_main_user"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_user_navigation"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/create_task_user"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="25dp"
-        android:text="@string/create"
-        android:textColor="@color/white"
-        app:icon="@drawable/ic_baseline_add_24"
-        app:iconTint="@color/white" />
+        app:menu="@menu/bottom_user_navigation"
+        android:background="?android:attr/windowBackground" />
 
 </RelativeLayout>
