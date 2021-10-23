@@ -43,7 +43,6 @@
         <activity android:name=".develop.notifications.NotificationActivity" />
         <activity android:name=".common.tasks.ImageTaskActivity" />
         <activity android:name=".users.root.main.RootMainActivity" />
-        <activity android:name=".auth.ForgotPasswordActivity" />
         <activity android:name=".users.executor.tasks.EditTaskExecutorActivity" />
         <activity android:name=".common.settings.SettingsActivity" />
         <activity android:name=".develop.DevelopActivity" />

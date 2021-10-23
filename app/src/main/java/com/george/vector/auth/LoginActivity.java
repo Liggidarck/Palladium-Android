@@ -47,7 +47,7 @@ import java.util.Objects;
 public class LoginActivity extends AppCompatActivity {
 
     TextInputLayout email_login_text_layout, password_login_text_layout;
-    Button btn_login, btn_forgot_password;
+    Button btn_login;
     LinearProgressIndicator progress_bar_auth;
     CoordinatorLayout coordinator_login;
 
@@ -66,7 +66,6 @@ public class LoginActivity extends AppCompatActivity {
         password_login_text_layout = findViewById(R.id.password_login_text_layout);
         progress_bar_auth = findViewById(R.id.progress_bar_auth);
         coordinator_login = findViewById(R.id.coordinator_login_activity);
-        btn_forgot_password = findViewById(R.id.btn_forgot_password);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -109,13 +108,11 @@ public class LoginActivity extends AppCompatActivity {
 
                                 });
 
-                            } else {
-                                progress_bar_auth.setVisibility(View.INVISIBLE);
-                                String error = Objects.requireNonNull(task.getException()).getMessage();
-                                assert error != null;
-                                Snackbar.make(coordinator_login, error, Snackbar.LENGTH_LONG).show();
                             }
 
+                        }).addOnFailureListener(e -> {
+                            progress_bar_auth.setVisibility(View.INVISIBLE);
+                            Snackbar.make(coordinator_login, e.toString(), Snackbar.LENGTH_LONG).show();
                         });
                     }
                 }
@@ -124,7 +121,6 @@ public class LoginActivity extends AppCompatActivity {
 
         });
 
-        btn_forgot_password.setOnClickListener(v -> startActivity(new Intent(this, ForgotPasswordActivity.class)));
 
     }
 
