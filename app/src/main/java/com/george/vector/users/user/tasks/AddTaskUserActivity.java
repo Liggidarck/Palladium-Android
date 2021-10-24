@@ -100,7 +100,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
         storageReference = firebaseStorage.getReference();
 
         Bundle arguments = getIntent().getExtras();
-        permission = arguments.get(PERMISSION).toString();
+        permission = arguments.getString(PERMISSION);
         Log.i(TAG_SAVE_TASK, String.format("permission: %s", permission));
 
         topAppBar_new_task_user.setNavigationOnClickListener(v -> onBackPressed());

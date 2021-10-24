@@ -11,6 +11,7 @@ import static com.george.vector.common.consts.Keys.OST_SCHOOL_NEW;
 import static com.george.vector.common.consts.Keys.PERMISSION;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
 import com.george.vector.common.tasks.fragmentImageTask;
+import com.george.vector.users.user.main.MainUserActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
@@ -39,8 +41,8 @@ public class TaskUserActivity extends AppCompatActivity {
             text_view_date_create_task_user, text_view_full_name_creator_user, text_view_email_creator_task_user;
     LinearProgressIndicator progress_bar_task_user;
 
-    String id, permission, collection, address, floor, cabinet, letter, name_task,
-            comment, status, date_create, time_create, image, email_creator, full_name_creator;
+    String id, collection, address, floor, cabinet, letter, name_task,
+            comment, status, date_create, time_create, image, email_creator, full_name_creator, email_user;
 
     FirebaseFirestore firebaseFirestore;
     FirebaseStorage firebaseStorage;
@@ -51,8 +53,9 @@ public class TaskUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task_user);
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get(ID).toString();
-        permission = arguments.getString(PERMISSION);
+        id = arguments.getString(ID);
+        collection = arguments.getString(COLLECTION);
+        email_user = arguments.getString(EMAIL);
 
         toolbar = findViewById(R.id.topAppBar_task_user);
         text_view_address_task_user = findViewById(R.id.text_view_address_task_user);
@@ -71,12 +74,6 @@ public class TaskUserActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
-
-        if (permission.equals(OST_SCHOOL))
-            collection = OST_SCHOOL_NEW;
-
-        if (permission.equals(BAR_SCHOOL))
-            collection = BAR_SCHOOL_NEW;
 
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
 
