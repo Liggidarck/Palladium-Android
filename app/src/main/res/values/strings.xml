@@ -46,7 +46,7 @@
 
     <string name="users_text">Пользователи</string>
     <string name="add_new_user">Добавить нового пользователя</string>
-    <string name="edit_data_user">Отредактировать данные</string>
+    <string name="edit_data_user">Редактировать данные</string>
     <string name="logout">выйти из аккаунта</string>
     <string name="profile">Профиль</string>
     <string name="settings">Настройки</string>

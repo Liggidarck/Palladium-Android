@@ -24,6 +24,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Palladium">
         <activity
+            android:name=".users.user.main.FolderUserActivity"
+            android:exported="false" />
+        <activity
             android:name=".users.demo_user.MainDemoUserActivity"
             android:exported="false" />
 

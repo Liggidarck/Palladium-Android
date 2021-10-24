@@ -83,6 +83,11 @@ public class MainUserActivity extends AppCompatActivity {
                     Log.d(TAG, "Start history user fragment");
                     selectedFragment = new FragmentHistory();
 
+                    Bundle data_history_fragment = new Bundle();
+                    data_history_fragment.putString(EMAIL, email);
+                    data_history_fragment.putString(PERMISSION, permission);
+                    selectedFragment.setArguments(data_history_fragment);
+
                     break;
 
                 case R.id.item_profile_user:

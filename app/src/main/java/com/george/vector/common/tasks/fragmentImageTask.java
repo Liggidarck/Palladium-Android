@@ -54,7 +54,7 @@ public class fragmentImageTask extends Fragment {
 
         boolean economy_traffic = PreferenceManager
                 .getDefaultSharedPreferences(fragmentImageTask.this.getContext())
-                .getBoolean("economy_traffic", true);
+                .getBoolean("economy_traffic", false);
 
         rotate_image_task_root.setOnClickListener(v ->
                 image_root_task

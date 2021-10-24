@@ -41,7 +41,7 @@ public class TaskUserActivity extends AppCompatActivity {
             text_view_date_create_task_user, text_view_full_name_creator_user, text_view_email_creator_task_user;
     LinearProgressIndicator progress_bar_task_user;
 
-    String id, permission, collection, address, floor, cabinet, letter, name_task,
+    String id, collection, address, floor, cabinet, letter, name_task,
             comment, status, date_create, time_create, image, email_creator, full_name_creator, email_user;
 
     FirebaseFirestore firebaseFirestore;
@@ -54,14 +54,8 @@ public class TaskUserActivity extends AppCompatActivity {
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.getString(ID);
-        permission = arguments.getString(PERMISSION);
+        collection = arguments.getString(COLLECTION);
         email_user = arguments.getString(EMAIL);
-
-        if (permission.equals(OST_SCHOOL))
-            collection = OST_SCHOOL_NEW;
-
-        if (permission.equals(BAR_SCHOOL))
-            collection = BAR_SCHOOL_NEW;
 
         toolbar = findViewById(R.id.topAppBar_task_user);
         text_view_address_task_user = findViewById(R.id.text_view_address_task_user);
@@ -137,13 +131,6 @@ public class TaskUserActivity extends AppCompatActivity {
         });
 
         documentReference.get().addOnCompleteListener(task -> progress_bar_task_user.setVisibility(View.INVISIBLE));
-    }
-
-    void goMain() {
-        Intent intent = new Intent(this, MainUserActivity.class);
-        intent.putExtra(EMAIL, email_user);
-        intent.putExtra(PERMISSION, permission);
-        startActivity(intent);
     }
 
     public boolean isOnline() {

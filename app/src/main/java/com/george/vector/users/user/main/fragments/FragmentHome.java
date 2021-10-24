@@ -78,7 +78,7 @@ public class FragmentHome extends Fragment {
 
             Intent intent = new Intent(FragmentHome.this.getContext(), TaskUserActivity.class);
             intent.putExtra(ID, id);
-            intent.putExtra(PERMISSION, permission);
+            intent.putExtra(COLLECTION, collection);
             intent.putExtra(EMAIL, email);
             startActivity(intent);
 

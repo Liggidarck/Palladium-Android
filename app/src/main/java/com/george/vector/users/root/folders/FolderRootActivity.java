@@ -34,10 +34,10 @@ public class FolderRootActivity extends AppCompatActivity {
         toolbar_folder_root_activity = findViewById(R.id.toolbar_folder_root_activity);
 
         Bundle arguments = getIntent().getExtras();
-        String location = arguments.get(LOCATION).toString();
-        String folder = arguments.get(FOLDER).toString();
-        String executed = arguments.get(EXECUTED).toString();
-        String email = arguments.get(EMAIL).toString();
+        String location = arguments.getString(LOCATION);
+        String folder = arguments.getString(FOLDER);
+        String executed = arguments.getString(EXECUTED);
+        String email = arguments.getString(EMAIL);
         Log.d(TAG, "email: " + email);
 
         if(folder.equals(NEW_TASKS))

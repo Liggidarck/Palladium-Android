@@ -1,23 +1,15 @@
 package com.george.vector.auth;
 
 import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.LAST_NAME;
-import static com.george.vector.common.consts.Keys.NAME;
-import static com.george.vector.common.consts.Keys.PATRONYMIC;
 import static com.george.vector.common.consts.Keys.PERMISSION;
 import static com.george.vector.common.consts.Keys.ROLE;
 import static com.george.vector.common.consts.Keys.USERS;
-import static com.george.vector.common.consts.Keys.USER_DATA;
-import static com.george.vector.common.consts.Keys.USER_DATA_EMAIL;
-import static com.george.vector.common.consts.Keys.USER_PERMISSION;
-import static com.george.vector.common.consts.Keys.USER_ROLE;
 import static com.george.vector.common.consts.Logs.TAG_LOGIN_ACTIVITY;
 import static com.george.vector.common.consts.Logs.TAG_VALIDATE_FILED;
 import static com.george.vector.common.utils.Utils.validateEmail;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -73,18 +65,22 @@ public class LoginActivity extends AppCompatActivity {
         btn_login.setOnClickListener(v -> {
             emailED = Objects.requireNonNull(email_login_text_layout.getEditText()).getText().toString();
             passwordED = Objects.requireNonNull(password_login_text_layout.getEditText()).getText().toString();
+            progress_bar_auth.setVisibility(View.VISIBLE);
 
             if(isOnline()) {
+
                 if (validateFields()) {
+
                     if(!validateEmail(emailED)) {
+
                         Log.e(TAG_VALIDATE_FILED, "Email validation failed");
                         email_login_text_layout.setError("Не корректный формат e-mail");
+
                     } else {
-                        progress_bar_auth.setVisibility(View.VISIBLE);
+
                         firebaseAuth.signInWithEmailAndPassword(emailED, passwordED).addOnCompleteListener(task -> {
 
                             if (task.isSuccessful()) {
-                                progress_bar_auth.setVisibility(View.INVISIBLE);
                                 Log.d(TAG_LOGIN_ACTIVITY, "Login success");
 
                                 userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
@@ -105,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                     assert role != null;
                                     startApp(name, last_name, patronymic, role, email, permission);
-
+                                    progress_bar_auth.setVisibility(View.INVISIBLE);
                                 });
 
                             }
@@ -114,8 +110,13 @@ public class LoginActivity extends AppCompatActivity {
                             progress_bar_auth.setVisibility(View.INVISIBLE);
                             Snackbar.make(coordinator_login, e.toString(), Snackbar.LENGTH_LONG).show();
                         });
+
+
                     }
+
+
                 }
+
             } else
                 onStart();
 
@@ -125,19 +126,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void startApp(@NotNull String name, String last_name, String patronymic, String role, String email, String permission) {
-        SharedPreferences mDataUser;
-        mDataUser = getSharedPreferences(USER_DATA, Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = mDataUser.edit();
-        editor.putString(NAME, name);
-        editor.putString(LAST_NAME, last_name);
-        editor.putString(PATRONYMIC, patronymic);
-        editor.putString(USER_DATA_EMAIL, email);
-        editor.putString(USER_PERMISSION, permission);
-        editor.putString(USER_ROLE, role);
-
-        editor.apply();
-
         if (role.equals("Root")) {
             Intent intent = new Intent(this, RootMainActivity.class);
             intent.putExtra(EMAIL, email);
