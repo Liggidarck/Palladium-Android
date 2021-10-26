@@ -15,16 +15,12 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
-import com.george.vector.common.announcements.fragment_news;
 import com.george.vector.users.root.tasks.BottomSheetAddTask;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 public class FragmentHome extends Fragment {
 
@@ -34,9 +30,7 @@ public class FragmentHome extends Fragment {
     Chip chip_root_future_ost, chip_root_future_bar;
     ExtendedFloatingActionButton create_task_root;
 
-    FirebaseFirestore firebaseFirestore;
-
-    boolean show_news_fragment;
+    FirebaseFirestore firebase_firestore;
 
     @Nullable
     @Override
@@ -47,7 +41,7 @@ public class FragmentHome extends Fragment {
         chip_root_future_bar = view.findViewById(R.id.chip_root_future_bar);
         create_task_root = view.findViewById(R.id.create_task_root);
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebase_firestore = FirebaseFirestore.getInstance();
 
         Bundle args = getArguments();
         assert args != null;
@@ -57,16 +51,6 @@ public class FragmentHome extends Fragment {
                 .getDefaultSharedPreferences(FragmentHome.this.getContext())
                 .getString("default_root_location", OST);
         Log.d(TAG, "Zone: " + zone);
-
-        DocumentReference documentReference = firebaseFirestore.collection("news").document("news_fragment");
-        documentReference.addSnapshotListener((value, error) -> {
-            assert value != null;
-            show_news_fragment = Objects.requireNonNull(value.getBoolean("show"));
-            Log.d(TAG, String.format("show_news_fragment: %s", show_news_fragment));
-
-            if (show_news_fragment)
-                show_news_fragment();
-        });
 
         create_task_root.setOnClickListener(v -> {
             BottomSheetAddTask bottomSheet = new BottomSheetAddTask();
@@ -114,15 +98,6 @@ public class FragmentHome extends Fragment {
                 .getString("default_root_location", OST);
         Log.d(TAG, "Zone: " + zone);
     }
-
-    void show_news_fragment() {
-        Fragment fragment_news = new fragment_news();
-        getParentFragmentManager()
-                .beginTransaction()
-                .replace(R.id.root_announcement, fragment_news)
-                .commit();
-    }
-
 
     void updateZones(@NotNull String zone_update) {
         Fragment currentFragment = null;

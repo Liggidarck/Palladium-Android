@@ -43,10 +43,10 @@ public class LoginActivity extends AppCompatActivity {
     LinearProgressIndicator progress_bar_auth;
     CoordinatorLayout coordinator_login;
 
-    String emailED, passwordED, userID;
+    String email, password, user_id;
 
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
+    FirebaseAuth firebase_auth;
+    FirebaseFirestore firebase_firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,33 +59,33 @@ public class LoginActivity extends AppCompatActivity {
         progress_bar_auth = findViewById(R.id.progress_bar_auth);
         coordinator_login = findViewById(R.id.coordinator_login_activity);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebase_auth = FirebaseAuth.getInstance();
+        firebase_firestore = FirebaseFirestore.getInstance();
 
         btn_login.setOnClickListener(v -> {
-            emailED = Objects.requireNonNull(email_login_text_layout.getEditText()).getText().toString();
-            passwordED = Objects.requireNonNull(password_login_text_layout.getEditText()).getText().toString();
+            email = Objects.requireNonNull(email_login_text_layout.getEditText()).getText().toString();
+            password = Objects.requireNonNull(password_login_text_layout.getEditText()).getText().toString();
             progress_bar_auth.setVisibility(View.VISIBLE);
 
             if(isOnline()) {
 
                 if (validateFields()) {
 
-                    if(!validateEmail(emailED)) {
+                    if(!validateEmail(email)) {
 
                         Log.e(TAG_VALIDATE_FILED, "Email validation failed");
                         email_login_text_layout.setError("Не корректный формат e-mail");
 
                     } else {
 
-                        firebaseAuth.signInWithEmailAndPassword(emailED, passwordED).addOnCompleteListener(task -> {
+                        firebase_auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
 
                             if (task.isSuccessful()) {
                                 Log.d(TAG_LOGIN_ACTIVITY, "Login success");
 
-                                userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+                                user_id = Objects.requireNonNull(firebase_auth.getCurrentUser()).getUid();
 
-                                DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userID);
+                                DocumentReference documentReference = firebase_firestore.collection(USERS).document(user_id);
                                 documentReference.addSnapshotListener(this, (value, error) -> {
                                     assert value != null;
 
@@ -170,8 +170,8 @@ public class LoginActivity extends AppCompatActivity {
         utils.clear_error(email_login_text_layout);
         utils.clear_error(password_login_text_layout);
 
-        boolean checkEmail = utils.validate_field(emailED, email_login_text_layout);
-        boolean checkPassword = utils.validate_field(passwordED, password_login_text_layout);
+        boolean checkEmail = utils.validate_field(email, email_login_text_layout);
+        boolean checkPassword = utils.validate_field(password, password_login_text_layout);
         return checkEmail & checkPassword;
     }
 

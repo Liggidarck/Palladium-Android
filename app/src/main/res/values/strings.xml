@@ -3,14 +3,20 @@
 
     <string name="tasks">Заявки</string>
     <string name="task">Заявка</string>
+
     <string name="new_tasks_text">Новые заявки</string>
     <string name="progress_tasks">Заявки в работе</string>
-    <string name="archive_tasks_text">Архив</string>
+    <string name="archive_tasks_text">Архивные заявки</string>
+    <string name="completed_tasks_text">Завершенные заявки</string>
+
+    <string name="tasks_creator">Создатель заявки</string>
+    <string name="history_text">История</string>
+
+
     <string name="address">Адрес</string>
     <string name="comment">Коментарий</string>
     <string name="no_comment">Нет коментариев к заявке</string>
     <string name="status">Статус</string>
-    <string name="edit">Изменить</string>
     <string name="delete">Удалить</string>
     <string name="floor">Этаж</string>
     <string name="cabinet">Кабинет</string>
@@ -34,9 +40,9 @@
     <string name="permission_text">Разрешения</string>
     <string name="add_user">добавить пользователя</string>
 
-    <string name="ost_aist_text">ОП «Аист»</string>
-    <string name="ost_yagodka_text">ОП «Ягодка»</string>
-    <string name="bar_rucheek_text">ОП «Ручеек»</string>
+    <string name="ost_stork_text">ОП «Аист»</string>
+    <string name="ost_berry_text">ОП «Ягодка»</string>
+    <string name="bar_stream_text">ОП «Ручеек»</string>
     <string name="bar_star_text">ОП «Звездочка»</string>
     <string name="new_task">Новая заявка</string>
     <string name="ost_text">ОП «Остафьевская»</string>
@@ -63,10 +69,7 @@
     <string name="error_no_connection">Ошибка! Проверьте подключение к интернету</string>
 
     <string name="letter">Литера</string>
-    <string name="restore_password">Восстановить пароль</string>
-    <string name="search_task">Поиск заявок</string>
     <string name="create">Создать</string>
-    <string name="today_create">Сегодня созданы</string>
     <string name="main">Главная</string>
     <string name="my_tasks">Мои заявки</string>
     <string name="all_tasks">Все заявки</string>
@@ -80,6 +83,13 @@
 
     <string name="urgent_task">Срочная заявка</string>
     <string name="urgent_task_description">Обратите внимание на эту заявку и выполните всё в срок</string>
-    <string name="user_label">Черновики</string>
+    <string name="login_executor">Логин исполнителя</string>
+    <string name="add_image_text">Добавить изображение</string>
+    <string name="take_photo">Сделать фотографию</string>
+    <string name="choose_existing">Выбрать на устройстве</string>
+    <string name="download">Скачать</string>
+    <string name="rotate">повернуть</string>
+    <string name="app">Приложение</string>
+    <string name="share">Поделиться</string>
 
 </resources>

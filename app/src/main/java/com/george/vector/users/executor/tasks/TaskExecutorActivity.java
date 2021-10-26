@@ -18,8 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
-import com.george.vector.common.tasks.fragmentImageTask;
-import com.george.vector.common.tasks.fragmentUrgentRequest;
+import com.george.vector.common.tasks.FragmentImageTask;
+import com.george.vector.common.tasks.FragmentUrgentRequest;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -32,7 +32,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class TaskExecutorActivity extends AppCompatActivity {
 
     private static final String TAG = "TaskExecutor";
-    MaterialToolbar topAppBar_task_executor;
+    MaterialToolbar top_app_bar_task_executor;
     LinearProgressIndicator progress_bar_task_executor;
     TextView text_view_address_task_executor, text_view_floor_task_executor, text_view_cabinet_task_executor,
             text_view_name_task_executor, text_view_comment_task_executor, text_view_status_task_executor,
@@ -55,7 +55,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_executor);
 
-        topAppBar_task_executor = findViewById(R.id.topAppBar_task_executor);
+        top_app_bar_task_executor = findViewById(R.id.topAppBar_task_executor);
         progress_bar_task_executor = findViewById(R.id.progress_bar_task_executor);
         text_view_address_task_executor = findViewById(R.id.text_view_address_task_executor);
         text_view_floor_task_executor = findViewById(R.id.text_view_floor_task_executor);
@@ -79,7 +79,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
         email_main_activity = arguments.getString(EMAIL);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
-        topAppBar_task_executor.setNavigationOnClickListener(v -> onBackPressed());
+        top_app_bar_task_executor.setNavigationOnClickListener(v -> onBackPressed());
 
         edit_task_executor_btn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskExecutorActivity.class);
@@ -141,7 +141,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
                 if (urgent) {
                     Log.d(TAG, "Срочная заявка");
 
-                    Fragment urgent_fragment = new fragmentUrgentRequest();
+                    Fragment urgent_fragment = new FragmentUrgentRequest();
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.frame_urgent_task_executor, urgent_fragment)
@@ -150,7 +150,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
                 }
 
                 if (image != null) {
-                    Fragment image_fragment = new fragmentImageTask();
+                    Fragment image_fragment = new FragmentImageTask();
 
                     Bundle bundle = new Bundle();
                     bundle.putString("image_id", image);

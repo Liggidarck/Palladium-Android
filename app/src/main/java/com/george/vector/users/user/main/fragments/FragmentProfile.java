@@ -19,7 +19,6 @@ import androidx.fragment.app.Fragment;
 import com.george.vector.R;
 import com.george.vector.common.edit_users.EditDataUserActivity;
 import com.george.vector.common.settings.SettingsActivity;
-import com.george.vector.users.user.main.SettingsUserBottomSheet;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,10 +30,10 @@ public class FragmentProfile extends Fragment {
     TextView text_view_name_ava, text_view_full_name, text_view_email;
     Button edit_data_user_btn, settings_user_btn;
 
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
+    FirebaseAuth firebase_auth;
+    FirebaseFirestore firebase_firestore;
 
-    String userID, name, last_name, patronymic, email, role;
+    String user_id, name, last_name, patronymic, email, role;
 
 
     @Nullable
@@ -48,11 +47,11 @@ public class FragmentProfile extends Fragment {
         edit_data_user_btn = view.findViewById(R.id.edit_data_user_btn);
         settings_user_btn = view.findViewById(R.id.settings_user_btn);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebase_auth = FirebaseAuth.getInstance();
+        firebase_firestore = FirebaseFirestore.getInstance();
 
-        userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userID);
+        user_id = Objects.requireNonNull(firebase_auth.getCurrentUser()).getUid();
+        DocumentReference documentReference = firebase_firestore.collection(USERS).document(user_id);
         documentReference.addSnapshotListener((value, error) -> {
             assert value != null;
             name = value.getString("name");

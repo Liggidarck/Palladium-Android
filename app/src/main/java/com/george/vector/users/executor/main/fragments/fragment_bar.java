@@ -2,7 +2,6 @@ package com.george.vector.users.executor.main.fragments;
 
 import static com.george.vector.common.consts.Keys.EMAIL;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
-import com.george.vector.users.executor.main.FolderExecutorActivity;
 import com.google.android.material.card.MaterialCardView;
 
 import org.jetbrains.annotations.NotNull;

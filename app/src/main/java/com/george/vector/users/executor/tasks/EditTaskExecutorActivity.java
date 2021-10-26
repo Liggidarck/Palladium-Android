@@ -36,7 +36,7 @@ import java.util.Objects;
 public class EditTaskExecutorActivity extends AppCompatActivity {
 
     private static final String TAG = "EditTaskExecutor";
-    MaterialToolbar topAppBar_new_task_executor;
+    MaterialToolbar top_app_bar_new_task_executor;
     LinearProgressIndicator progress_bar_add_task_executor;
     ExtendedFloatingActionButton edit_task_executor;
 
@@ -63,7 +63,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_task_executor);
 
-        topAppBar_new_task_executor = findViewById(R.id.topAppBar_new_task_executor);
+        top_app_bar_new_task_executor = findViewById(R.id.topAppBar_new_task_executor);
         progress_bar_add_task_executor = findViewById(R.id.progress_bar_add_task_executor);
         edit_task_executor = findViewById(R.id.edit_task_executor);
         text_input_layout_address_executor = findViewById(R.id.text_input_layout_address_executor);
@@ -87,7 +87,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        topAppBar_new_task_executor.setNavigationOnClickListener(v -> onBackPressed());
+        top_app_bar_new_task_executor.setNavigationOnClickListener(v -> onBackPressed());
 
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {

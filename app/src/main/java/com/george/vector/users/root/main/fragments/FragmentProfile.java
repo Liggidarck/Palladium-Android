@@ -18,8 +18,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
-import com.george.vector.auth.RegisterUserActivity;
-import com.george.vector.common.edit_users.ListUsersActivity;
+import com.george.vector.users.root.edit_users.RegisterUserActivity;
+import com.george.vector.users.root.edit_users.ListUsersActivity;
 import com.george.vector.common.settings.SettingsActivity;
 import com.george.vector.develop.DevelopActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,10 +36,10 @@ public class FragmentProfile extends Fragment {
     Button btn_settings_profile_root;
     RelativeLayout layout_new_person_profile, layout_edit_person_profile;
 
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
+    FirebaseAuth firebase_auth;
+    FirebaseFirestore firebase_firestore;
 
-    String userID, name, last_name, patronymic, email, role;
+    String user_id, name, last_name, patronymic, email, role;
 
     @Nullable
     @Override
@@ -53,11 +53,11 @@ public class FragmentProfile extends Fragment {
         layout_new_person_profile = view.findViewById(R.id.layout_new_person_profile);
         layout_edit_person_profile = view.findViewById(R.id.layout_edit_person_profile);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebase_auth = FirebaseAuth.getInstance();
+        firebase_firestore = FirebaseFirestore.getInstance();
 
-        userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userID);
+        user_id = Objects.requireNonNull(firebase_auth.getCurrentUser()).getUid();
+        DocumentReference documentReference = firebase_firestore.collection(USERS).document(user_id);
         documentReference.addSnapshotListener((value, error) -> {
             assert value != null;
             name = value.getString("name");

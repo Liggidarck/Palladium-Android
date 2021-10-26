@@ -34,18 +34,18 @@ import java.util.Objects;
 
 public class LoadingActivity extends AppCompatActivity {
 
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
+    FirebaseAuth firebase_auth;
+    FirebaseFirestore firebase_firestore;
 
-    String userID, name, last_name, patronymic, email, permission, role;
+    String user_id, name, last_name, patronymic, email, permission, role;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebase_auth = FirebaseAuth.getInstance();
+        firebase_firestore = FirebaseFirestore.getInstance();
 
         SharedPreferences mDataUser;
         mDataUser = getSharedPreferences(USER_DATA, Context.MODE_PRIVATE);
@@ -59,11 +59,11 @@ public class LoadingActivity extends AppCompatActivity {
             role = mDataUser.getString(USER_ROLE, "");
         }
 
-        if(firebaseAuth.getCurrentUser() != null) {
-            userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-            Log.i(TAG_LOADING_ACTIVITY, "user id: " + userID);
+        if(firebase_auth.getCurrentUser() != null) {
+            user_id = Objects.requireNonNull(firebase_auth.getCurrentUser()).getUid();
+            Log.i(TAG_LOADING_ACTIVITY, "user id: " + user_id);
 
-            DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userID);
+            DocumentReference documentReference = firebase_firestore.collection(USERS).document(user_id);
             documentReference.addSnapshotListener(this, (value, error) -> {
                 assert value != null;
 

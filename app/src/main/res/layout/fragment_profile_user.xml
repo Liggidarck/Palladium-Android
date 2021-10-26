@@ -43,8 +43,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:textColor="@color/white"
-                            android:text="ФГ"/>
+                            android:textColor="@color/white" />
 
                     </RelativeLayout>
 
@@ -61,15 +60,13 @@
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:textColor="@color/black"
-                            android:textSize="17sp"
-                            android:text="Филатов Георгий Андреевич"/>
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/text_view_email_fragment_user"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/text_view_full_name_fragment_user"
-                            android:text="api@2122.pro"/>
+                            android:layout_below="@+id/text_view_full_name_fragment_user" />
 
                     </RelativeLayout>
 

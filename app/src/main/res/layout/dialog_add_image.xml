@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Добавить изображение"
+        android:text="@string/add_image_text"
         android:textColor="@color/black"
         android:textSize="22sp" />
 
@@ -38,7 +38,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@id/camera_image"
-            android:text="Сделать фотографию"
+            android:text="@string/take_photo"
             android:textColor="@color/black"
             android:textSize="17sp" />
 
@@ -69,7 +69,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@id/following_image_sheet"
-            android:text="Выбрать на устройстве"
+            android:text="@string/choose_existing"
             android:textColor="@color/black"
             android:textSize="17sp" />
 

@@ -13,10 +13,10 @@ class NotificationActivity : AppCompatActivity() {
     val TAG = "NotificationActivity"
     private val TOPIC = "/topics/topic-test"
 
-    lateinit var btnSend: Button
-    lateinit var etTitle: EditText
-    lateinit var etMessage: EditText
-    lateinit var etToken: EditText
+    private lateinit var btnSend: Button
+    private lateinit var etTitle: EditText
+    private lateinit var etMessage: EditText
+    private lateinit var etToken: EditText
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

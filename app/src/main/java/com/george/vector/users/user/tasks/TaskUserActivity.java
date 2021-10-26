@@ -1,17 +1,11 @@
 package com.george.vector.users.user.tasks;
 
-import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
-import static com.george.vector.common.consts.Keys.BAR_SCHOOL_NEW;
 import static com.george.vector.common.consts.Keys.COLLECTION;
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.ID;
 import static com.george.vector.common.consts.Keys.LOCATION;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL_NEW;
-import static com.george.vector.common.consts.Keys.PERMISSION;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -23,8 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
-import com.george.vector.common.tasks.fragmentImageTask;
-import com.george.vector.users.user.main.MainUserActivity;
+import com.george.vector.common.tasks.FragmentImageTask;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
@@ -44,8 +37,8 @@ public class TaskUserActivity extends AppCompatActivity {
     String id, collection, address, floor, cabinet, letter, name_task,
             comment, status, date_create, time_create, image, email_creator, full_name_creator, email_user;
 
-    FirebaseFirestore firebaseFirestore;
-    FirebaseStorage firebaseStorage;
+    FirebaseFirestore firebase_firestore;
+    FirebaseStorage firebase_storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,13 +62,13 @@ public class TaskUserActivity extends AppCompatActivity {
         text_view_full_name_creator_user = findViewById(R.id.text_view_full_name_creator_user);
         text_view_email_creator_task_user = findViewById(R.id.text_view_email_creator_task_user);
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseStorage = FirebaseStorage.getInstance();
+        firebase_firestore = FirebaseFirestore.getInstance();
+        firebase_storage = FirebaseStorage.getInstance();
 
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
-        DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
+        DocumentReference documentReference = firebase_firestore.collection(collection).document(id);
 
         documentReference.addSnapshotListener(this, (value, error) -> {
             assert value != null;
@@ -110,7 +103,7 @@ public class TaskUserActivity extends AppCompatActivity {
             if (image == null) {
                 Log.d(TAG, "No image, stop loading");
             } else {
-                Fragment image_fragment = new fragmentImageTask();
+                Fragment image_fragment = new FragmentImageTask();
 
                 Bundle bundle = new Bundle();
                 bundle.putString("image_id", image);

@@ -61,7 +61,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
     private static final String TAG = "EditTaskRoot";
 
-    MaterialToolbar topAppBar_new_task_root;
+    MaterialToolbar top_app_bar_new_task_root;
     LinearProgressIndicator progress_bar_add_task_root;
     ExtendedFloatingActionButton done_task_root;
     Button add_executor_root;
@@ -72,17 +72,17 @@ public class EditTaskRootActivity extends AppCompatActivity {
             text_input_layout_executor_root, text_input_layout_status_root,
             text_input_layout_cabinet_liter_root, text_input_layout_full_name_executor_root;
     TextInputEditText edit_text_date_task_root;
-    MaterialAutoCompleteTextView address_autoComplete_root, status_autoComplete_root, liter_autoComplete_root;
+    MaterialAutoCompleteTextView address_auto_complete_root, status_auto_complete_root, liter_auto_complete_root;
     ImageView image_task;
 
-    Calendar datePickCalendar;
+    Calendar date_pick_calendar;
 
-    String id, collection, address, floor, cabinet, litera, name_task, comment, status, date_create, time_create,
-            date_done, email_creator, location, USER_EMAIL, image, full_name_executor_root, name_creator;
+    String id, collection, address, floor, cabinet, letter, name_task, comment, status, date_create, time_create,
+            date_done, email_creator, location, user_email, image, full_name_executor_root, name_creator;
     boolean urgent;
 
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
+    FirebaseAuth firebase_auth;
+    FirebaseFirestore firebase_firestore;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference usersRef = db.collection("users");
@@ -102,7 +102,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task_root);
 
-        topAppBar_new_task_root = findViewById(R.id.topAppBar_new_task_root);
+        top_app_bar_new_task_root = findViewById(R.id.topAppBar_new_task_root);
         progress_bar_add_task_root = findViewById(R.id.progress_bar_add_task_root);
         done_task_root = findViewById(R.id.done_task_root);
         text_input_layout_address_root = findViewById(R.id.text_input_layout_address_root);
@@ -114,29 +114,29 @@ public class EditTaskRootActivity extends AppCompatActivity {
         text_input_layout_executor_root = findViewById(R.id.text_input_layout_executor_root);
         text_input_layout_status_root = findViewById(R.id.text_input_layout_status_root);
         edit_text_date_task_root = findViewById(R.id.edit_text_date_task_root);
-        address_autoComplete_root = findViewById(R.id.address_autoComplete_root);
-        status_autoComplete_root = findViewById(R.id.status_autoComplete_root);
+        address_auto_complete_root = findViewById(R.id.address_autoComplete_root);
+        status_auto_complete_root = findViewById(R.id.status_autoComplete_root);
         add_executor_root = findViewById(R.id.add_executor_root);
         text_input_layout_cabinet_liter_root = findViewById(R.id.text_input_layout_cabinet_liter_root);
-        liter_autoComplete_root = findViewById(R.id.liter_autoComplete_root);
+        liter_auto_complete_root = findViewById(R.id.liter_autoComplete_root);
         urgent_request_check_box = findViewById(R.id.urgent_request_check_box);
         image_task = findViewById(R.id.image_task);
         text_input_layout_full_name_executor_root = findViewById(R.id.text_input_layout_full_name_executor_root);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebase_auth = FirebaseAuth.getInstance();
+        firebase_firestore = FirebaseFirestore.getInstance();
 
-        topAppBar_new_task_root.setNavigationOnClickListener(v -> onBackPressed());
+        top_app_bar_new_task_root.setNavigationOnClickListener(v -> onBackPressed());
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.get(ID).toString();
         collection = arguments.get(COLLECTION).toString();
         location = arguments.get(LOCATION).toString();
-        USER_EMAIL = arguments.get(EMAIL).toString();
+        user_email = arguments.get(EMAIL).toString();
 
         add_executor_root.setOnClickListener(v -> show_add_executor_dialog());
 
-        DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
+        DocumentReference documentReference = firebase_firestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
             progress_bar_add_task_root.setVisibility(View.VISIBLE);
 
@@ -144,7 +144,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
             address = value.getString("address");
             floor = value.getString("floor");
             cabinet = value.getString("cabinet");
-            litera = value.getString("litera");
+            letter = value.getString("litera");
             name_task = value.getString("name_task");
             comment = value.getString("comment");
             status = value.getString("status");
@@ -175,7 +175,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 Objects.requireNonNull(text_input_layout_address_root.getEditText()).setText(address);
                 Objects.requireNonNull(text_input_layout_floor_root.getEditText()).setText(floor);
                 Objects.requireNonNull(text_input_layout_cabinet_root.getEditText()).setText(cabinet);
-                Objects.requireNonNull(text_input_layout_cabinet_liter_root.getEditText()).setText(litera);
+                Objects.requireNonNull(text_input_layout_cabinet_liter_root.getEditText()).setText(letter);
                 Objects.requireNonNull(text_input_layout_name_task_root.getEditText()).setText(name_task);
                 Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).setText(date_done);
                 Objects.requireNonNull(text_input_layout_executor_root.getEditText()).setText(email_executor);
@@ -258,7 +258,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
 
-            DocumentReference documentReference = firebaseFirestore.collection(USERS).document(id);
+            DocumentReference documentReference = firebase_firestore.collection(USERS).document(id);
             documentReference.addSnapshotListener((value, error) -> {
                 assert value != null;
                 name_executor = value.getString("name");
@@ -295,7 +295,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
         String update_address = Objects.requireNonNull(text_input_layout_address_root.getEditText()).getText().toString();
         String update_floor = Objects.requireNonNull(text_input_layout_floor_root.getEditText()).getText().toString();
         String update_cabinet = Objects.requireNonNull(text_input_layout_cabinet_root.getEditText()).getText().toString();
-        String update_litera = Objects.requireNonNull(text_input_layout_cabinet_liter_root.getEditText()).getText().toString();
+        String update_letter = Objects.requireNonNull(text_input_layout_cabinet_liter_root.getEditText()).getText().toString();
         String update_name = Objects.requireNonNull(text_input_layout_name_task_root.getEditText()).getText().toString();
         String update_comment = Objects.requireNonNull(text_input_layout_comment_root.getEditText()).getText().toString();
         String update_date_task = Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).getText().toString();
@@ -305,11 +305,11 @@ public class EditTaskRootActivity extends AppCompatActivity {
         boolean update_urgent = urgent_request_check_box.isChecked();
 
         task.save(new SaveTask(), location, update_name, update_address, date_create, update_floor,
-                update_cabinet, update_litera, update_comment, update_date_task,
+                update_cabinet, update_letter, update_comment, update_date_task,
                 update_executor, update_status, time_create, email_creator, update_urgent, update_image, update_name_executor, name_creator);
 
         Intent intent = new Intent(this, RootMainActivity.class);
-        intent.putExtra(EMAIL, USER_EMAIL);
+        intent.putExtra(EMAIL, user_email);
         startActivity(intent);
     }
 
@@ -321,7 +321,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 .setPositiveButton(getText(R.string.save), (dialog, id) -> updateTask(collection))
                 .setNegativeButton(android.R.string.cancel, (dialog, id) -> {
                     Intent intent = new Intent(this, RootMainActivity.class);
-                    intent.putExtra(EMAIL, USER_EMAIL);
+                    intent.putExtra(EMAIL, user_email);
                     startActivity(intent);
                 });
 
@@ -375,7 +375,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
                     R.layout.dropdown_menu_categories,
                     items
             );
-            address_autoComplete_root.setAdapter(adapter);
+            address_auto_complete_root.setAdapter(adapter);
         }
 
         String[] items_status = getResources().getStringArray(R.array.status);
@@ -385,27 +385,27 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 items_status
         );
 
-        status_autoComplete_root.setAdapter(adapter_status);
+        status_auto_complete_root.setAdapter(adapter_status);
 
-        String[] itemsLitera = getResources().getStringArray(R.array.letter);
-        ArrayAdapter<String> adapter_litera = new ArrayAdapter<>(
+        String[] items_letter = getResources().getStringArray(R.array.letter);
+        ArrayAdapter<String> adapter_letter = new ArrayAdapter<>(
                 EditTaskRootActivity.this,
                 R.layout.dropdown_menu_categories,
-                itemsLitera
+                items_letter
         );
 
-        liter_autoComplete_root.setAdapter(adapter_litera);
+        liter_auto_complete_root.setAdapter(adapter_letter);
 
-        datePickCalendar = Calendar.getInstance();
+        date_pick_calendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
-            datePickCalendar.set(Calendar.YEAR, year);
-            datePickCalendar.set(Calendar.MONTH, month);
-            datePickCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            date_pick_calendar.set(Calendar.YEAR, year);
+            date_pick_calendar.set(Calendar.MONTH, month);
+            date_pick_calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             updateLabel();
         };
 
-        edit_text_date_task_root.setOnClickListener(v -> new DatePickerDialog(EditTaskRootActivity.this, date, datePickCalendar
-                .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
+        edit_text_date_task_root.setOnClickListener(v -> new DatePickerDialog(EditTaskRootActivity.this, date, date_pick_calendar
+                .get(Calendar.YEAR), date_pick_calendar.get(Calendar.MONTH), date_pick_calendar.get(Calendar.DAY_OF_MONTH)).show());
 
 
         text_input_layout_floor_root.getEditText().addTextChangedListener(new TextValidator(text_input_layout_floor_root.getEditText()) {
@@ -428,6 +428,6 @@ public class EditTaskRootActivity extends AppCompatActivity {
         String date_text = "dd.MM.yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(date_text, Locale.US);
 
-        Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).setText(sdf.format(datePickCalendar.getTime()));
+        Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).setText(sdf.format(date_pick_calendar.getTime()));
     }
 }

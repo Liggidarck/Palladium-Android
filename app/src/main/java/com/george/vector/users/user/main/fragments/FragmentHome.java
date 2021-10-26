@@ -22,7 +22,6 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.george.vector.common.tasks.ui.TaskAdapter;
 import com.george.vector.common.tasks.ui.TaskUi;
-import com.george.vector.common.utils.Utils;
 import com.george.vector.users.user.tasks.AddTaskUserActivity;
 import com.george.vector.users.user.tasks.TaskUserActivity;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;

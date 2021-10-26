@@ -1,4 +1,4 @@
-package com.george.vector.common.bottom_sheets;
+package com.george.vector.users.executor.main;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,10 +24,10 @@ public class ProfileBottomSheet extends BottomSheetDialogFragment {
     ImageView close_btn;
     TextView text_view_full_name, text_view_email, text_view_role, text_view_name_ava;
 
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
+    FirebaseAuth firebase_auth;
+    FirebaseFirestore firebase_firestore;
 
-    String userID, name, last_name, patronymic, email, role;
+    String user_id, name, last_name, patronymic, email, role;
 
     @Nullable
     @Override
@@ -40,13 +40,13 @@ public class ProfileBottomSheet extends BottomSheetDialogFragment {
         text_view_role = view.findViewById(R.id.text_view_role);
         text_view_name_ava = view.findViewById(R.id.text_view_name_ava);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebase_auth = FirebaseAuth.getInstance();
+        firebase_firestore = FirebaseFirestore.getInstance();
 
         close_btn.setOnClickListener(v -> dismiss());
 
-        userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+        user_id = Objects.requireNonNull(firebase_auth.getCurrentUser()).getUid();
+        DocumentReference documentReference = firebase_firestore.collection("users").document(user_id);
         documentReference.addSnapshotListener((value, error) -> {
             assert value != null;
             name = value.getString("name");

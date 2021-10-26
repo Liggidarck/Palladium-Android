@@ -23,8 +23,8 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
-import com.george.vector.common.tasks.fragmentImageTask;
-import com.george.vector.common.tasks.fragmentUrgentRequest;
+import com.george.vector.common.tasks.FragmentImageTask;
+import com.george.vector.common.tasks.FragmentUrgentRequest;
 import com.george.vector.common.tasks.utils.DeleteTask;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -39,7 +39,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TaskRootActivity extends AppCompatActivity {
 
-    MaterialToolbar topAppBar_tasks_root;
+    MaterialToolbar top_app_bar_tasks_root;
     LinearProgressIndicator progress_bar_task_root;
     TextView text_view_address_task_root, text_view_floor_task_root, text_view_cabinet_task_root,
             text_view_name_task_root, text_view_comment_task_root, text_view_status_task_root,
@@ -56,14 +56,14 @@ public class TaskRootActivity extends AppCompatActivity {
             date_done, full_name_executor, full_name_creator;
     boolean confirm_delete, urgent;
 
-    FirebaseFirestore firebaseFirestore;
+    FirebaseFirestore firebase_firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_root);
 
-        topAppBar_tasks_root = findViewById(R.id.topAppBar_tasks_root);
+        top_app_bar_tasks_root = findViewById(R.id.topAppBar_tasks_root);
         progress_bar_task_root = findViewById(R.id.progress_bar_task_root);
         text_view_address_task_root = findViewById(R.id.text_view_address_task_root);
         text_view_floor_task_root = findViewById(R.id.text_view_floor_task_root);
@@ -88,10 +88,10 @@ public class TaskRootActivity extends AppCompatActivity {
         email = arguments.get(EMAIL).toString();
         confirm_delete = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("confirm_before_deleting_root", true);
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebase_firestore = FirebaseFirestore.getInstance();
 
-        setSupportActionBar(topAppBar_tasks_root);
-        topAppBar_tasks_root.setNavigationOnClickListener(v -> onBackPressed());
+        setSupportActionBar(top_app_bar_tasks_root);
+        top_app_bar_tasks_root.setNavigationOnClickListener(v -> onBackPressed());
 
         edit_task_root_btn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskRootActivity.class);
@@ -106,7 +106,7 @@ public class TaskRootActivity extends AppCompatActivity {
     }
 
     void load_data(String collection, String id) {
-        DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
+        DocumentReference documentReference = firebase_firestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
             assert value != null;
             address = value.getString("address");
@@ -143,7 +143,7 @@ public class TaskRootActivity extends AppCompatActivity {
                 if (image == null) {
                     Log.d(TAG, "No image, stop loading");
                 } else {
-                    Fragment image_fragment = new fragmentImageTask();
+                    Fragment image_fragment = new FragmentImageTask();
 
                     Bundle bundle = new Bundle();
                     bundle.putString("image_id", image);
@@ -163,7 +163,7 @@ public class TaskRootActivity extends AppCompatActivity {
                 if (urgent) {
                     Log.d(TAG, "Срочная заявка");
 
-                    Fragment urgent_fragment = new fragmentUrgentRequest();
+                    Fragment urgent_fragment = new FragmentUrgentRequest();
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.frame_urgent_task, urgent_fragment)

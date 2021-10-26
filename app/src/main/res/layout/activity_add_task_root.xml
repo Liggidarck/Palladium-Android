@@ -235,7 +235,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="5dp"
-                android:text="Срочная заявка" />
+                android:text="@string/urgent_task" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_executor_root"
@@ -245,7 +245,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
-                android:hint="Логин исполнителя"
+                android:hint="@string/login_executor"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText

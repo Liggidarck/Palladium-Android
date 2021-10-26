@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
-import com.george.vector.common.utils.Utils;
 import com.george.vector.users.user.main.fragments.FragmentHistory;
 import com.george.vector.users.user.main.fragments.FragmentHome;
 import com.george.vector.users.user.main.fragments.FragmentProfile;

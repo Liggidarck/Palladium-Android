@@ -23,7 +23,7 @@ import com.george.vector.R;
 import com.george.vector.common.tasks.utils.GetDataTask;
 import com.google.android.material.card.MaterialCardView;
 
-public class fragmentImageTask extends Fragment {
+public class FragmentImageTask extends Fragment {
 
     private static final String TAG = "fragmentImageTask";
     Button rotate_image_task_root, download_image_btn;
@@ -53,7 +53,7 @@ public class fragmentImageTask extends Fragment {
         email = args.getString(EMAIL);
 
         boolean economy_traffic = PreferenceManager
-                .getDefaultSharedPreferences(fragmentImageTask.this.getContext())
+                .getDefaultSharedPreferences(FragmentImageTask.this.getContext())
                 .getBoolean("economy_traffic", false);
 
         rotate_image_task_root.setOnClickListener(v ->
@@ -90,7 +90,7 @@ public class fragmentImageTask extends Fragment {
     }
 
     void goActivityImage() {
-        Intent intent = new Intent(fragmentImageTask.this.getContext(), ImageTaskActivity.class);
+        Intent intent = new Intent(FragmentImageTask.this.getContext(), ImageTaskActivity.class);
         intent.putExtra(ID, id);
         intent.putExtra(COLLECTION, collection);
         intent.putExtra(LOCATION, location);

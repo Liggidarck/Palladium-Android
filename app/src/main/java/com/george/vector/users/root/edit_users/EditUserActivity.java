@@ -1,4 +1,4 @@
-package com.george.vector.common.edit_users;
+package com.george.vector.users.root.edit_users;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -28,7 +28,7 @@ import java.util.Objects;
 
 public class EditUserActivity extends AppCompatActivity {
 
-    MaterialToolbar topAppBar_register;
+    MaterialToolbar top_app_bar_register;
     TextInputLayout text_input_layout_name_user, text_input_layout_last_name_user,
             text_input_layout_patronymic_user, text_input_layout_email_user,
             text_input_layout_role_user, text_input_layout_edit_permission_user, text_input_layout_password_user;
@@ -48,7 +48,7 @@ public class EditUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_user_activity);
 
-        topAppBar_register = findViewById(R.id.topAppBar_edit);
+        top_app_bar_register = findViewById(R.id.topAppBar_edit);
         text_input_layout_name_user = findViewById(R.id.text_input_layout_edit_name_user);
         text_input_layout_last_name_user = findViewById(R.id.text_input_layout_edit_last_name_user);
         text_input_layout_patronymic_user = findViewById(R.id.text_input_layout_edit_patronymic_user);
@@ -67,7 +67,7 @@ public class EditUserActivity extends AppCompatActivity {
         userID = arguments.get("user_id").toString();
         Log.d(TAG, String.format("id: %s", userID));
 
-        topAppBar_register.setNavigationOnClickListener(v -> onBackPressed());
+        top_app_bar_register.setNavigationOnClickListener(v -> onBackPressed());
 
         DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
         documentReference.addSnapshotListener(this, (value, error) -> {

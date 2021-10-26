@@ -21,7 +21,6 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -55,7 +54,7 @@ import java.util.UUID;
 public class AddTaskUserActivity extends AppCompatActivity {
 
     private static final String TAG = "AddTaskUser";
-    MaterialToolbar topAppBar_new_task_user;
+    MaterialToolbar top_app_bar_new_task_user;
     TextInputLayout text_input_layout_address, text_input_layout_floor,
             text_input_layout_cabinet, text_input_layout_name_task,
             text_input_layout_comment, text_input_layout_cabinet_liter_user;
@@ -81,7 +80,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task_user);
 
-        topAppBar_new_task_user = findViewById(R.id.topAppBar_new_task_user);
+        top_app_bar_new_task_user = findViewById(R.id.topAppBar_new_task_user);
         text_input_layout_address = findViewById(R.id.text_input_layout_address);
         text_input_layout_floor = findViewById(R.id.text_input_layout_floor);
         text_input_layout_cabinet = findViewById(R.id.text_input_layout_cabinet);
@@ -103,7 +102,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
         permission = arguments.getString(PERMISSION);
         Log.i(TAG_SAVE_TASK, String.format("permission: %s", permission));
 
-        topAppBar_new_task_user.setNavigationOnClickListener(v -> onBackPressed());
+        top_app_bar_new_task_user.setNavigationOnClickListener(v -> onBackPressed());
 
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         DocumentReference documentReferenceUser = firebaseFirestore.collection(USERS).document(userID);

@@ -1,4 +1,4 @@
-package com.george.vector.auth;
+package com.george.vector.users.root.edit_users;
 
 import static com.george.vector.common.consts.Keys.USERS;
 import static com.george.vector.common.consts.Logs.TAG_REGISTER_ACTIVITY;
@@ -34,7 +34,7 @@ import java.util.UUID;
 
 public class RegisterUserActivity extends AppCompatActivity {
 
-    MaterialToolbar topAppBar_register;
+    MaterialToolbar top_app_bar_register;
     Button register_user_btn;
     LinearProgressIndicator progress_bar_register;
     TextInputLayout text_layout_name_user, text_layout_last_name_user,
@@ -53,7 +53,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_user);
 
-        topAppBar_register = findViewById(R.id.topAppBar_register);
+        top_app_bar_register = findViewById(R.id.topAppBar_register);
         register_user_btn = findViewById(R.id.register_user_btn);
         text_layout_name_user = findViewById(R.id.text_input_layout_name_user);
         text_layout_last_name_user = findViewById(R.id.text_input_layout_last_name_user);
@@ -168,7 +168,7 @@ public class RegisterUserActivity extends AppCompatActivity {
     }
 
     void initFields() {
-        topAppBar_register.setNavigationOnClickListener(v -> onBackPressed());
+        top_app_bar_register.setNavigationOnClickListener(v -> onBackPressed());
 
         String[] items = getResources().getStringArray(R.array.roles);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(

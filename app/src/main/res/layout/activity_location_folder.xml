@@ -156,7 +156,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="20dp"
                         android:layout_toEndOf="@+id/ava_folder_7"
-                        android:text="Завершенные"
+                        android:text="@string/completed_tasks_text"
                         android:textAppearance="?attr/textAppearanceHeadline6" />
 
                 </RelativeLayout>

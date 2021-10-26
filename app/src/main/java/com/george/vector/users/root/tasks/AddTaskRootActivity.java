@@ -81,7 +81,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
     MaterialAutoCompleteTextView address_auto_complete_root, status_auto_complete_root, liter_auto_complete_root;
     ImageView image_task;
 
-    String location, userID, email, address, floor, cabinet, letter, name_task, date_complete, status, comment,
+    String location, user_id, email, address, floor, cabinet, letter, name_task, date_complete, status, comment,
             USER_EMAIL, NAME_IMAGE, full_name_executor, name_executor, last_name_executor, patronymic_executor, email_executor, full_name_creator;
     boolean urgent;
     private static final String TAG = "AddTaskRoot";
@@ -138,8 +138,8 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
         initialize_fields(location);
 
-        userID = Objects.requireNonNull(firebase_auth.getCurrentUser()).getUid();
-        DocumentReference documentReferenceUser = firebaseFirestore.collection(USERS).document(userID);
+        user_id = Objects.requireNonNull(firebase_auth.getCurrentUser()).getUid();
+        DocumentReference documentReferenceUser = firebaseFirestore.collection(USERS).document(user_id);
         documentReferenceUser.addSnapshotListener(this, (value, error) -> {
             assert value != null;
             email = value.getString("email");
@@ -382,13 +382,13 @@ public class AddTaskRootActivity extends AppCompatActivity {
         status_auto_complete_root.setAdapter(adapter_status);
 
         String[] itemsLetter = getResources().getStringArray(R.array.letter);
-        ArrayAdapter<String> adapter_litera = new ArrayAdapter<>(
+        ArrayAdapter<String> adapter_letter = new ArrayAdapter<>(
                 AddTaskRootActivity.this,
                 R.layout.dropdown_menu_categories,
                 itemsLetter
         );
 
-        liter_auto_complete_root.setAdapter(adapter_litera);
+        liter_auto_complete_root.setAdapter(adapter_letter);
 
         datePickCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {

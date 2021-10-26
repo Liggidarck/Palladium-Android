@@ -18,7 +18,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.george.vector.R;
-import com.george.vector.common.bottom_sheets.ProfileBottomSheet;
 import com.george.vector.users.executor.main.fragments.fragment_bar;
 import com.george.vector.users.executor.main.fragments.fragment_ost;
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -30,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 public class MainExecutorActivity extends AppCompatActivity {
 
     private static final String TAG = "ExecutorMain";
-    BottomAppBar bottomAppBarWorker;
+    BottomAppBar bottom_app_bar_worker;
 
     Chip chip_executor_ost, chip_executor_bar;
     String zone;
@@ -46,12 +45,12 @@ public class MainExecutorActivity extends AppCompatActivity {
         email = arguments.getString(EMAIL);
         zone = PreferenceManager.getDefaultSharedPreferences(this).getString("default_executor_location", OST);
 
-        bottomAppBarWorker = findViewById(R.id.bottomAppBarWorker);
+        bottom_app_bar_worker = findViewById(R.id.bottomAppBarWorker);
         chip_executor_ost = findViewById(R.id.chip_executor_ost);
         chip_executor_bar = findViewById(R.id.chip_executor_bar);
 
-        setSupportActionBar(bottomAppBarWorker);
-        bottomAppBarWorker.setNavigationOnClickListener(v -> {
+        setSupportActionBar(bottom_app_bar_worker);
+        bottom_app_bar_worker.setNavigationOnClickListener(v -> {
             SettingsExecutorBottomSheet bottomSheet = new SettingsExecutorBottomSheet();
             Bundle bundle = new Bundle();
 

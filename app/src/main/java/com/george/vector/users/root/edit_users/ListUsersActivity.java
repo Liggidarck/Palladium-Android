@@ -1,4 +1,4 @@
-package com.george.vector.common.edit_users;
+package com.george.vector.users.root.edit_users;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,6 +10,8 @@ import android.util.Log;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
+import com.george.vector.common.edit_users.User;
+import com.george.vector.common.edit_users.UserAdapter;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.chip.Chip;
 import com.google.firebase.firestore.CollectionReference;
