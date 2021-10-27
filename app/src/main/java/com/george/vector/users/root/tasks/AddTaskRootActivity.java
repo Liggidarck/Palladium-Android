@@ -4,21 +4,25 @@ import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.LOCATION;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL;
+import static com.george.vector.common.consts.Keys.PERMISSION_CAMERA_CODE;
+import static com.george.vector.common.consts.Keys.PERMISSION_GALLERY_CODE;
 import static com.george.vector.common.consts.Keys.USERS;
 
-import android.annotation.SuppressLint;
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Window;
 import android.widget.ArrayAdapter;
@@ -27,8 +31,14 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -56,9 +66,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -85,7 +97,6 @@ public class AddTaskRootActivity extends AppCompatActivity {
             USER_EMAIL, NAME_IMAGE, full_name_executor, name_executor, last_name_executor, patronymic_executor, email_executor, full_name_creator;
     boolean urgent;
     private static final String TAG = "AddTaskRoot";
-    private final int PICK_IMAGE_REQUEST = 71;
 
     FirebaseAuth firebase_auth;
     StorageReference storage_reference;
@@ -94,10 +105,24 @@ public class AddTaskRootActivity extends AppCompatActivity {
     private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private final CollectionReference usersRef = firebaseFirestore.collection(USERS);
     Query query;
-    private Uri filePath;
+    private Uri fileUri;
 
     Calendar datePickCalendar;
     Utils utils = new Utils();
+
+    ActivityResultLauncher<String> selectPictureLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
+            uri -> {
+                fileUri = uri;
+                image_task.setImageURI(fileUri);
+            });
+
+    ActivityResultLauncher<Uri> cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicture(),
+            result -> {
+                if (result) {
+                    image_task.setImageURI(fileUri);
+                }
+            });
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +161,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         USER_EMAIL = arguments.get(EMAIL).toString();
         Log.d(TAG, location);
 
-        initialize_fields(location);
+        initializeFields(location);
 
         user_id = Objects.requireNonNull(firebase_auth.getCurrentUser()).getUid();
         DocumentReference documentReferenceUser = firebaseFirestore.collection(USERS).document(user_id);
@@ -146,12 +171,12 @@ public class AddTaskRootActivity extends AppCompatActivity {
             String name_creator = value.getString("name");
             String last_name_creator = value.getString("last_name");
             String patronymic_creator = value.getString("patronymic");
-            full_name_creator =  last_name_creator + " " + name_creator + " " + patronymic_creator;
+            full_name_creator = last_name_creator + " " + name_creator + " " + patronymic_creator;
         });
 
-        add_executor_root.setOnClickListener(v -> show_add_executor_dialog());
+        add_executor_root.setOnClickListener(v -> showAddExecutorDialog());
 
-        image_task.setOnClickListener(v -> show_dialog_image());
+        image_task.setOnClickListener(v -> showDialogImage());
 
         done_task_root.setOnClickListener(v -> {
             address = Objects.requireNonNull(text_input_layout_address_root.getEditText()).getText().toString();
@@ -168,68 +193,80 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
             if (validateFields()) {
                 if (!isOnline())
-                    show_dialog();
+                    showDialogNoInternet();
                 else
-                    save_task(location);
+                    saveTask(location);
             }
 
         });
 
-    }
-
-    private void show_dialog_image() {
-        Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_add_image);
-
-        RelativeLayout layout_new_photo = dialog.findViewById(R.id.layout_new_photo);
-        RelativeLayout layout_folder = dialog.findViewById(R.id.layout_folder);
-
-        layout_new_photo.setOnClickListener(v -> {
-            dialog.dismiss();
-        });
-        layout_folder.setOnClickListener(v -> {
-            chooseImage();
-            dialog.dismiss();
-        });
-
-        dialog.show();
-    }
-
-    private void chooseImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            filePath = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                image_task.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        switch (requestCode) {
+            case PERMISSION_GALLERY_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    selectPictureLauncher.launch("image/*");
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                    builder.setTitle(getText(R.string.warning))
+                            .setMessage("Для того, чтобы загрузить изображение необходимо разрешить Palladium доступ файловому хранилищу")
+                            .setPositiveButton("Настройки", (dialog, id) ->
+                                    startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                            Uri.fromParts("package", getPackageName(), null))))
+                            .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.cancel());
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+
+                break;
+
+            case PERMISSION_CAMERA_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    File file = new File(getFilesDir(), "picFromCamera");
+                    fileUri = FileProvider.getUriForFile(
+                            this,
+                            getApplicationContext().getPackageName() + ".provider",
+                            file);
+                    cameraLauncher.launch(fileUri);
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                    builder.setTitle(getText(R.string.warning))
+                            .setMessage("Для того, чтобы загрузить изображение необходимо разрешить Palladium доступ к камере")
+                            .setPositiveButton("Настройки", (dialog, id) ->
+                                    startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                            Uri.fromParts("package", getPackageName(), null))))
+                            .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.cancel());
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+
+                break;
         }
+
     }
 
-    @SuppressLint("DefaultLocale")
     private void uploadImage() {
-        if (filePath != null) {
+        if (fileUri != null) {
             Bitmap bmp = null;
             try {
-                bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), fileUri);
+                Log.d(TAG, "Bitmap: " + bmp);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bmp.compress(Bitmap.CompressFormat.JPEG, 25, byteArrayOutputStream);
+            Log.d(TAG, "Bitmap: " + bmp);
             byte[] data = byteArrayOutputStream.toByteArray();
+            Log.d(TAG, "Data: " + Arrays.toString(data));
 
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Загрузка...");
@@ -246,7 +283,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
                     .addOnFailureListener(e -> progressDialog.dismiss())
                     .addOnProgressListener(taskSnapshot -> {
                         double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                        progressDialog.setMessage(String.format("Прогресс: %d%%", (int) progress));
+                        progressDialog.setMessage("Прогресс: " + (int) progress + "%");
                     });
         } else {
             NAME_IMAGE = null;
@@ -254,7 +291,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         }
     }
 
-    void save_task(String location) {
+    void saveTask(String location) {
         Task task = new Task();
 
         uploadImage();
@@ -269,7 +306,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
                 date_complete, email_executor, status, time_create, email, urgent, NAME_IMAGE, full_name_executor, full_name_creator);
     }
 
-    public void show_add_executor_dialog() {
+    void showAddExecutorDialog() {
         Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_choose_executor);
@@ -336,6 +373,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
                 Objects.requireNonNull(text_input_layout_executor_root.getEditText()).setText(email_executor);
                 Objects.requireNonNull(text_input_layout_full_name_executor_root.getEditText()).setText(full_name_executor);
 
+                adapter.stopListening();
                 dialog.dismiss();
             });
 
@@ -346,18 +384,52 @@ public class AddTaskRootActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    void show_dialog() {
+    void showDialogImage() {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_add_image);
+
+        RelativeLayout camera_btn = dialog.findViewById(R.id.layout_new_photo);
+        RelativeLayout gallery_btn = dialog.findViewById(R.id.layout_folder);
+
+        camera_btn.setOnClickListener(v -> {
+            ActivityCompat.requestPermissions(
+                    AddTaskRootActivity.this,
+                    new String[]{
+                            Manifest.permission.CAMERA,
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    }, PERMISSION_CAMERA_CODE);
+
+            dialog.dismiss();
+        });
+
+        gallery_btn.setOnClickListener(v -> {
+            ActivityCompat.requestPermissions(
+                    AddTaskRootActivity.this,
+                    new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    }, PERMISSION_GALLERY_CODE);
+
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    void showDialogNoInternet() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_no_connection))
-                .setPositiveButton(getText(R.string.save), (dialog, id) -> save_task(location))
+                .setPositiveButton(getText(R.string.save), (dialog, id) -> saveTask(location))
                 .setNegativeButton(android.R.string.cancel, (dialog, id) -> onBackPressed());
 
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
-    void initialize_fields(String location) {
+    void initializeFields(String location) {
         if (location.equals(OST_SCHOOL)) {
             String[] items = getResources().getStringArray(R.array.addresses_ost_school);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -395,7 +467,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
             datePickCalendar.set(Calendar.YEAR, year);
             datePickCalendar.set(Calendar.MONTH, month);
             datePickCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            updateLabel();
+            setDate();
         };
 
         edit_text_date_task_root.setOnClickListener(v -> new DatePickerDialog(AddTaskRootActivity.this, date, datePickCalendar
@@ -416,7 +488,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         });
     }
 
-    void updateLabel() {
+    void setDate() {
         String date_text = "dd.MM.yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(date_text, Locale.US);
 

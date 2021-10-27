@@ -18,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
-import com.george.vector.common.tasks.FragmentImageTask;
+import com.george.vector.common.tasks.images.FragmentImageTask;
 import com.george.vector.common.tasks.FragmentUrgentRequest;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

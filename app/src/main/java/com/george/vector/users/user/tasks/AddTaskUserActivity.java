@@ -3,26 +3,38 @@ package com.george.vector.users.user.tasks;
 import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.consts.Keys.PERMISSION;
+import static com.george.vector.common.consts.Keys.PERMISSION_CAMERA_CODE;
+import static com.george.vector.common.consts.Keys.PERMISSION_GALLERY_CODE;
 import static com.george.vector.common.consts.Keys.USERS;
 import static com.george.vector.common.consts.Logs.TAG_SAVE_TASK;
 
-import android.annotation.SuppressLint;
+import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 
 import com.george.vector.R;
 import com.george.vector.common.tasks.utils.SaveTask;
@@ -43,6 +55,7 @@ import com.google.firebase.storage.StorageReference;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -63,17 +76,30 @@ public class AddTaskUserActivity extends AppCompatActivity {
     ExtendedFloatingActionButton crate_task;
     LinearProgressIndicator progress_bar_add_task_user;
 
-    String address, floor, cabinet, letter, name_task, comment, userID, email, status = "Новая заявка", permission, NAME_IMAGE, full_name_creator;
+    String address, floor, cabinet, letter, name_task, comment, userID, email, permission, name_image, full_name_creator;
+    String status = "Новая заявка";
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
 
-    private final int PICK_IMAGE_REQUEST = 71;
-    private Uri filePath;
+    private Uri fileUri;
 
     Utils utils = new Utils();
+
+    ActivityResultLauncher<String> selectPictureLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
+            uri -> {
+                fileUri = uri;
+                image_task_user.setImageURI(fileUri);
+            });
+
+    ActivityResultLauncher<Uri> cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicture(),
+            result -> {
+                if (result) {
+                    image_task_user.setImageURI(fileUri);
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,8 +141,6 @@ public class AddTaskUserActivity extends AppCompatActivity {
             full_name_creator = last_name_creator + " " + name_creator + " " + patronymic_creator;
         });
 
-        image_task_user.setOnClickListener(v -> chooseImage());
-
         crate_task.setOnClickListener(v -> {
             address = Objects.requireNonNull(text_input_layout_address.getEditText()).getText().toString();
             floor = Objects.requireNonNull(text_input_layout_floor.getEditText()).getText().toString();
@@ -127,17 +151,19 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
             if (validateFields()) {
                 if (!isOnline())
-                    show_dialog();
+                    showDialogNoInternet();
                 else
-                    save_task(permission);
+                    saveTask(permission);
             }
 
         });
 
-        initialize_field(permission);
+        image_task_user.setOnClickListener(v -> showDialogImage());
+
+        initializeField(permission);
     }
 
-    void save_task(@NotNull String location) {
+    void saveTask(@NotNull String location) {
         Task task = new Task();
 
         uploadImage();
@@ -149,41 +175,16 @@ public class AddTaskUserActivity extends AppCompatActivity {
         String time_create = timeFormat.format(currentDate);
 
         task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, letter, comment,
-                null, null, status, time_create, email, false, NAME_IMAGE, null, full_name_creator);
+                null, null, status, time_create, email, false, name_image, null, full_name_creator);
 
     }
 
-    private void chooseImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null) {
-            filePath = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                image_task_user.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
-
-    @SuppressLint("DefaultLocale")
-    private void uploadImage() {
+    void uploadImage() {
         if (isOnline()) {
-            if (filePath != null) {
+            if (fileUri != null) {
                 Bitmap bmp = null;
                 try {
-                    bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                    bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), fileUri);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -195,9 +196,9 @@ public class AddTaskUserActivity extends AppCompatActivity {
                 progressDialog.setTitle("Загрузка...");
                 progressDialog.show();
 
-                NAME_IMAGE = UUID.randomUUID().toString();
+                name_image = UUID.randomUUID().toString();
 
-                StorageReference ref = storageReference.child("images/" + NAME_IMAGE);
+                StorageReference ref = storageReference.child("images/" + name_image);
                 ref.putBytes(data)
                         .addOnSuccessListener(taskSnapshot -> {
                             progressDialog.dismiss();
@@ -206,12 +207,11 @@ public class AddTaskUserActivity extends AppCompatActivity {
                         })
                         .addOnFailureListener(e -> {
                             progressDialog.dismiss();
-                            Log.d(TAG, "Failed: " + e.getMessage());
+                            Log.e(TAG, "Failed: " + e.getMessage());
                         })
                         .addOnProgressListener(taskSnapshot -> {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
-                                    .getTotalByteCount());
-                            progressDialog.setMessage(String.format("Загрузка: %d%%", (int) progress));
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                            progressDialog.setMessage("Загрузка: " + (int) progress + "%");
                         });
             } else {
                 onBackPressed();
@@ -221,7 +221,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
         }
     }
 
-    void initialize_field(String permission) {
+    void initializeField(String permission) {
         if (permission.equals(OST_SCHOOL)) {
             String[] items = getResources().getStringArray(R.array.addresses_ost_school);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -261,12 +261,96 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
     }
 
-    void show_dialog() {
+    void showDialogImage() {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_add_image);
+
+        RelativeLayout camera_btn = dialog.findViewById(R.id.layout_new_photo);
+        RelativeLayout gallery_btn = dialog.findViewById(R.id.layout_folder);
+
+        camera_btn.setOnClickListener(v -> {
+            ActivityCompat.requestPermissions(
+                    AddTaskUserActivity.this,
+                    new String[]{
+                            Manifest.permission.CAMERA,
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    }, PERMISSION_CAMERA_CODE);
+
+            dialog.dismiss();
+        });
+
+        gallery_btn.setOnClickListener(v -> {
+            ActivityCompat.requestPermissions(
+                    AddTaskUserActivity.this,
+                    new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    }, PERMISSION_GALLERY_CODE);
+
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+
+            case PERMISSION_GALLERY_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    selectPictureLauncher.launch("image/*");
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                    builder.setTitle(getText(R.string.warning))
+                            .setMessage("Для того, чтобы загрузить изображение необходимо разрешить Palladium доступ файловому хранилищу")
+                            .setPositiveButton("Настройки", (dialog, id) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+                            .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.cancel());
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+
+                break;
+
+            case PERMISSION_CAMERA_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    File file = new File(getFilesDir(), "picFromCamera");
+                    fileUri = FileProvider.getUriForFile(
+                            this,
+                            getApplicationContext().getPackageName() + ".provider",
+                            file);
+                    cameraLauncher.launch(fileUri);
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                    builder.setTitle(getText(R.string.warning))
+                            .setMessage("Для того, чтобы загрузить изображение необходимо разрешить Palladium доступ к камере")
+                            .setPositiveButton("Настройки", (dialog, id) ->
+                                    startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                            Uri.fromParts("package", getPackageName(), null))))
+                            .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.cancel());
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+
+                break;
+        }
+
+    }
+
+    void showDialogNoInternet() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_no_connection))
-                .setPositiveButton(getText(R.string.save), (dialog, id) -> save_task(permission))
+                .setPositiveButton(getText(R.string.save), (dialog, id) -> saveTask(permission))
                 .setNegativeButton(android.R.string.cancel, (dialog, id) -> onBackPressed());
 
         AlertDialog dialog = builder.create();

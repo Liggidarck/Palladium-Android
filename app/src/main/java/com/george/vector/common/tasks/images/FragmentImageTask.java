@@ -1,4 +1,4 @@
-package com.george.vector.common.tasks;
+package com.george.vector.common.tasks.images;
 
 import static com.george.vector.common.consts.Keys.COLLECTION;
 import static com.george.vector.common.consts.Keys.EMAIL;
@@ -7,6 +7,7 @@ import static com.george.vector.common.consts.Keys.LOCATION;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ public class FragmentImageTask extends Fragment {
     ImageView image_root_task;
     MaterialCardView image_root_card;
     ProgressBar view_progress_indicator_image;
+    View error_view;
 
     String image, id, collection, location, email;
 
@@ -43,6 +45,7 @@ public class FragmentImageTask extends Fragment {
         image_root_card = view.findViewById(R.id.image_root_card);
         view_progress_indicator_image = view.findViewById(R.id.view_progress_indicator_image);
         download_image_btn = view.findViewById(R.id.download_image_btn);
+        error_view = view.findViewById(R.id.error_view);
 
         Bundle args = getArguments();
         assert args != null;
@@ -55,6 +58,15 @@ public class FragmentImageTask extends Fragment {
         boolean economy_traffic = PreferenceManager
                 .getDefaultSharedPreferences(FragmentImageTask.this.getContext())
                 .getBoolean("economy_traffic", false);
+
+        String buffer_size_preference = PreferenceManager
+                .getDefaultSharedPreferences(FragmentImageTask.this.getContext())
+                .getString("buffer_size", "2");
+        Log.d(TAG, "buffer_size_preference: " + buffer_size_preference);
+
+        int buffer_size = Integer.parseInt(buffer_size_preference);
+
+        Log.d(TAG, "buffer_size: " + buffer_size);
 
         rotate_image_task_root.setOnClickListener(v ->
                 image_root_task
@@ -75,13 +87,13 @@ public class FragmentImageTask extends Fragment {
                 rotate_image_task_root.setVisibility(View.VISIBLE);
 
                 GetDataTask getDataTask = new GetDataTask();
-                getDataTask.setImageFuture(image, view_progress_indicator_image, image_root_task);
+                getDataTask.setImageFuture(image, view_progress_indicator_image, image_root_task, buffer_size);
             });
 
         } else {
             download_image_btn.setVisibility(View.INVISIBLE);
             GetDataTask getDataTask = new GetDataTask();
-            getDataTask.setImageFuture(image, view_progress_indicator_image, image_root_task);
+            getDataTask.setImageFuture(image, view_progress_indicator_image, image_root_task, buffer_size);
         }
 
         image_root_card.setOnClickListener(v -> goActivityImage());

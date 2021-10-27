@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.george.vector">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECIVE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -14,6 +26,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Palladium">
+        <activity
+            android:name=".develop.DevelopJavaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".develop.DevelopKotlinActivity"
+            android:exported="false" />
         <activity
             android:name=".users.user.main.FolderUserActivity"
             android:exported="false" />
@@ -34,12 +52,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".develop.notifications.NotificationActivity" />
-        <activity android:name=".common.tasks.ImageTaskActivity" />
+        <activity android:name=".common.tasks.images.ImageTaskActivity" />
         <activity android:name=".users.root.main.RootMainActivity" />
         <activity android:name=".users.executor.tasks.EditTaskExecutorActivity" />
         <activity android:name=".common.settings.SettingsActivity" />
-        <activity android:name=".develop.DevelopActivity" />
         <activity android:name=".users.executor.tasks.TaskExecutorActivity" />
         <activity android:name=".users.executor.main.ExecutorTasksActivity" />
         <activity android:name=".users.executor.main.FolderExecutorActivity" />
@@ -57,6 +73,16 @@
         <activity android:name=".users.user.main.MainUserActivity" />
         <activity android:name=".users.root.edit_users.RegisterUserActivity" />
         <activity android:name=".auth.LoginActivity" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

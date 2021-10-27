@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -129,10 +130,17 @@ public class EditTaskRootActivity extends AppCompatActivity {
         top_app_bar_new_task_root.setNavigationOnClickListener(v -> onBackPressed());
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get(ID).toString();
-        collection = arguments.get(COLLECTION).toString();
-        location = arguments.get(LOCATION).toString();
-        user_email = arguments.get(EMAIL).toString();
+        id = arguments.getString(ID);
+        collection = arguments.getString(COLLECTION);
+        location = arguments.getString(LOCATION);
+        user_email = arguments.getString(EMAIL);
+
+        String buffer_size_preference = PreferenceManager
+                .getDefaultSharedPreferences(EditTaskRootActivity.this)
+                .getString("buffer_size", "2");
+        Log.d(TAG, "buffer_size_preference: " + buffer_size_preference);
+
+        int buffer_size = Integer.parseInt(buffer_size_preference);
 
         add_executor_root.setOnClickListener(v -> show_add_executor_dialog());
 
@@ -166,7 +174,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 image_task.setImageResource(R.drawable.no_image);
             } else {
                 GetDataTask getDataTask = new GetDataTask();
-                getDataTask.setImage(image, progress_bar_add_task_root, image_task);
+                getDataTask.setImage(image, progress_bar_add_task_root, image_task, buffer_size);
             }
 
             try {

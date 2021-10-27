@@ -2,14 +2,25 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory android:title="@string/tasks">
+    <PreferenceCategory
+        android:textColor="#1976D2"
+        android:title="@string/tasks">
 
         <SwitchPreference
             android:defaultValue="false"
             android:key="economy_traffic"
-            app:title="Экономия трафика"
-            android:summary="Изображения заявок перестанут загружаться автоматически"/>
+            android:summary="Изображения заявок перестанут загружаться автоматически"
+            app:title="Экономия трафика" />
+
+        <ListPreference
+            android:defaultValue="2"
+            android:entries="@array/maximum_buffer_size_text"
+            android:entryValues="@array/maximum_buffer_size_values"
+            android:key="buffer_size"
+            android:title="Буфер изображения"
+            android:summary="Максимально допустимый размер буфера изображения"/>
 
     </PreferenceCategory>
+
 
 </PreferenceScreen>

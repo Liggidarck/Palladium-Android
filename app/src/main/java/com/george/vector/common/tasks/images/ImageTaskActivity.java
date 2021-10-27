@@ -1,4 +1,4 @@
-package com.george.vector.common.tasks;
+package com.george.vector.common.tasks.images;
 
 import static com.george.vector.common.consts.Keys.COLLECTION;
 import static com.george.vector.common.consts.Keys.ID;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
 import com.george.vector.common.tasks.utils.GetDataTask;
@@ -45,6 +46,13 @@ public class ImageTaskActivity extends AppCompatActivity {
         collection = arguments.getString(COLLECTION);
         location = arguments.getString(LOCATION);
 
+        String buffer_size_preference = PreferenceManager
+                .getDefaultSharedPreferences(ImageTaskActivity.this)
+                .getString("buffer_size", "2");
+        Log.d(TAG, "buffer_size_preference: " + buffer_size_preference);
+
+        int buffer_size = Integer.parseInt(buffer_size_preference);
+
         top_app_bar_task_activity.setNavigationOnClickListener(v -> onBackPressed());
 
         task_image_activity.setOnClickListener(v ->
@@ -64,7 +72,7 @@ public class ImageTaskActivity extends AppCompatActivity {
                 task_image_activity.setImageResource(R.drawable.no_image);
             } else {
                 GetDataTask getDataTask = new GetDataTask();
-                getDataTask.setImage(image, progress_bar_image_activity, task_image_activity);
+                getDataTask.setImage(image, progress_bar_image_activity, task_image_activity, buffer_size);
             }
         });
     }

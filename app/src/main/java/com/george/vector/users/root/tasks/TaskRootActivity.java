@@ -23,7 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
-import com.george.vector.common.tasks.FragmentImageTask;
+import com.george.vector.common.tasks.images.FragmentImageTask;
 import com.george.vector.common.tasks.FragmentUrgentRequest;
 import com.george.vector.common.tasks.utils.DeleteTask;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -119,6 +119,8 @@ public class TaskRootActivity extends AppCompatActivity {
             date_create = value.getString("date_create");
             time_create = value.getString("time_create");
             image = value.getString("image");
+
+            Log.d(TAG, "image: " + image);
 
             email_creator = value.getString("email_creator");
             email_executor = value.getString("executor");

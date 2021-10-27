@@ -18,10 +18,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
+import com.george.vector.develop.DevelopJavaActivity;
+import com.george.vector.develop.DevelopKotlinActivity;
 import com.george.vector.users.root.edit_users.RegisterUserActivity;
 import com.george.vector.users.root.edit_users.ListUsersActivity;
 import com.george.vector.common.settings.SettingsActivity;
-import com.george.vector.develop.DevelopActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -87,7 +88,7 @@ public class FragmentProfile extends Fragment {
         });
 
         CircleImageView develop_activity = view.findViewById(R.id.develop_activity);
-        develop_activity.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getContext(), DevelopActivity.class)));
+        develop_activity.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getContext(), DevelopJavaActivity.class)));
 
         return view;
     }

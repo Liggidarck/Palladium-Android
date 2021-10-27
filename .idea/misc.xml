@@ -7,6 +7,9 @@
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.15052083333333333" />
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/drawable/ic_warning.xml" value="0.15052083333333333" />
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/activity_add_task_root.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/activity_develop.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/activity_develop_java.xml" value="0.35260416666666666" />
+        <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/activity_develop_kotlin.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/activity_edit_data_user.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/activity_edit_task_executor.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/activity_folder_executor.xml" value="0.36666666666666664" />
@@ -21,6 +24,7 @@
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/activity_main_demo_user.xml" value="0.134375" />
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/activity_main_executor.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/activity_main_user.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/activity_notification.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/activity_root_future_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/activity_task_executor.xml" value="0.33" />
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/activity_task_root.xml" value="0.33" />
@@ -30,7 +34,7 @@
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/edit_user_activity.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/fragment_bar_root.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/fragment_history_user.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/fragment_image_task.xml" value="0.134375" />
+        <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/fragment_image_task.xml" value="0.33" />
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/fragment_news.xml" value="0.134375" />
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/fragment_ost_root.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/layout/fragment_profile_user.xml" value="0.36666666666666664" />
@@ -49,7 +53,10 @@
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/menu/bottom_root_navigation.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/menu/bottom_user_navigation.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/menu/task_root_menu.xml" value="0.134375" />
+        <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/xml/executor_preferences.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/xml/file_paths.xml" value="0.1" />
         <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/xml/root_preferences.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/George Filatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/xml/user_preferences.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.3828125" />
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/drawable/ic_baseline_assignment_late_24.xml" value="0.3828125" />
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.3828125" />
