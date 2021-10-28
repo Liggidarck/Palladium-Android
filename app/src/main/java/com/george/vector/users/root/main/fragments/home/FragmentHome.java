@@ -15,9 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
+import com.george.vector.databinding.FragmentRootHomeBinding;
 import com.george.vector.users.root.tasks.BottomSheetAddTask;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
@@ -27,19 +26,15 @@ public class FragmentHome extends Fragment {
     private static final String TAG = "FragmentHomeRoot";
     String zone, email;
 
-    Chip chip_root_future_ost, chip_root_future_bar;
-    ExtendedFloatingActionButton create_task_root;
-
     FirebaseFirestore firebase_firestore;
+
+    FragmentRootHomeBinding homeBinding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_root_home, container, false);
-
-        chip_root_future_ost = view.findViewById(R.id.chip_root_future_ost);
-        chip_root_future_bar = view.findViewById(R.id.chip_root_future_bar);
-        create_task_root = view.findViewById(R.id.create_task_root);
+        homeBinding = FragmentRootHomeBinding.inflate(inflater, container, false);
+        View view = homeBinding.getRoot();
 
         firebase_firestore = FirebaseFirestore.getInstance();
 
@@ -52,7 +47,7 @@ public class FragmentHome extends Fragment {
                 .getString("default_root_location", OST);
         Log.d(TAG, "Zone: " + zone);
 
-        create_task_root.setOnClickListener(v -> {
+        homeBinding.createTaskRoot.setOnClickListener(v -> {
             BottomSheetAddTask bottomSheet = new BottomSheetAddTask();
 
             Bundle email = new Bundle();
@@ -63,12 +58,12 @@ public class FragmentHome extends Fragment {
         });
 
         if (zone.equals("ost"))
-            chip_root_future_ost.setChecked(true);
+            homeBinding.chipRootOst.setChecked(true);
 
         if (zone.equals("bar"))
-            chip_root_future_bar.setChecked(true);
+            homeBinding.chipRootBar.setChecked(true);
 
-        chip_root_future_ost.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        homeBinding.chipRootOst.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             if (isChecked) {
                 Log.i(TAG, "Остафьево checked");
@@ -77,7 +72,7 @@ public class FragmentHome extends Fragment {
             }
 
         });
-        chip_root_future_bar.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        homeBinding.chipRootBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 Log.i(TAG, "Барыши checked");
                 zone = "bar";
@@ -97,6 +92,12 @@ public class FragmentHome extends Fragment {
                 .getDefaultSharedPreferences(FragmentHome.this.getContext())
                 .getString("default_root_location", OST);
         Log.d(TAG, "Zone: " + zone);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        homeBinding = null;
     }
 
     void updateZones(@NotNull String zone_update) {

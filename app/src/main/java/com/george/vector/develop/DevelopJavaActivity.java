@@ -11,50 +11,41 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.view.View;
 import android.widget.Toast;
 
-import com.george.vector.R;
+import com.george.vector.databinding.ActivityDevelopKotlinBinding;
 
 import java.io.File;
-import java.util.Arrays;
 
 public class DevelopJavaActivity extends AppCompatActivity {
 
-
-    ImageView image_dev;
-    Button gallery_btn, camera_btn, send_to_server;
-
     Uri tempImageUri;
 
+    ActivityDevelopKotlinBinding activityDevelopJavaBinding;
 
     ActivityResultLauncher<String> selectPictureLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
             uri -> {
                 tempImageUri = uri;
-                image_dev.setImageURI(tempImageUri);
+                activityDevelopJavaBinding.imageDev.setImageURI(tempImageUri);
             });
 
     ActivityResultLauncher<Uri> cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicture(),
             result -> {
                 if (result) {
-                    image_dev.setImageURI(tempImageUri);
+                    activityDevelopJavaBinding.imageDev.setImageURI(tempImageUri);
                 }
             });
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_develop_kotlin);
 
-        gallery_btn = findViewById(R.id.gallery_btn);
-        camera_btn = findViewById(R.id.camera_btn);
-        send_to_server = findViewById(R.id.send_to_server);
-        image_dev = findViewById(R.id.image_dev);
+        activityDevelopJavaBinding = ActivityDevelopKotlinBinding.inflate(getLayoutInflater());
+        View view = activityDevelopJavaBinding.getRoot();
+        setContentView(view);
 
-        gallery_btn.setOnClickListener(v ->
+        activityDevelopJavaBinding.galleryBtn.setOnClickListener(v ->
                 ActivityCompat.requestPermissions(
                         DevelopJavaActivity.this,
                         new String[]{
@@ -62,7 +53,7 @@ public class DevelopJavaActivity extends AppCompatActivity {
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         }, 1));
 
-        camera_btn.setOnClickListener(v -> ActivityCompat.requestPermissions(
+        activityDevelopJavaBinding.cameraBtn.setOnClickListener(v -> ActivityCompat.requestPermissions(
                 DevelopJavaActivity.this,
                 new String[]{
                         Manifest.permission.CAMERA,

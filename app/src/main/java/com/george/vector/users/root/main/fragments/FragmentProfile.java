@@ -9,20 +9,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
-import com.george.vector.develop.DevelopJavaActivity;
-import com.george.vector.develop.DevelopKotlinActivity;
-import com.george.vector.users.root.edit_users.RegisterUserActivity;
-import com.george.vector.users.root.edit_users.ListUsersActivity;
 import com.george.vector.common.settings.SettingsActivity;
+import com.george.vector.databinding.FragmentRootProfileBinding;
+import com.george.vector.develop.DevelopJavaActivity;
+import com.george.vector.users.root.edit_users.ListUsersActivity;
+import com.george.vector.users.root.edit_users.RegisterUserActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -33,26 +30,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FragmentProfile extends Fragment {
 
-    TextView text_view_name_ava, text_view_full_name, text_view_email;
-    Button btn_settings_profile_root;
-    RelativeLayout layout_new_person_profile, layout_edit_person_profile;
-
     FirebaseAuth firebase_auth;
     FirebaseFirestore firebase_firestore;
 
     String user_id, name, last_name, patronymic, email, role;
 
+    FragmentRootProfileBinding profileBinding;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_root_profile, container, false);
-
-        text_view_name_ava = view.findViewById(R.id.text_view_name_ava_fragment);
-        text_view_full_name = view.findViewById(R.id.text_view_full_name_fragment);
-        text_view_email = view.findViewById(R.id.text_view_email_fragment);
-        btn_settings_profile_root =view.findViewById(R.id.btn_settings_profile_root);
-        layout_new_person_profile = view.findViewById(R.id.layout_new_person_profile);
-        layout_edit_person_profile = view.findViewById(R.id.layout_edit_person_profile);
+        profileBinding = FragmentRootProfileBinding.inflate(inflater, container, false);
+        View view = profileBinding.getRoot();
 
         firebase_auth = FirebaseAuth.getInstance();
         firebase_firestore = FirebaseFirestore.getInstance();
@@ -72,15 +61,15 @@ public class FragmentProfile extends Fragment {
             String _last_name = Character.toString(last_name.charAt(0));
             String ava = String.format("%s%s", _name, _last_name);
 
-            text_view_full_name.setText(full_name);
-            text_view_name_ava.setText(ava);
-            text_view_email.setText(email);
+            profileBinding.textViewFullNameFragment.setText(full_name);
+            profileBinding.textViewNameAvaFragment.setText(ava);
+            profileBinding.textViewEmailFragment.setText(email);
         });
 
-        layout_new_person_profile.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getActivity(), RegisterUserActivity.class)));
-        layout_edit_person_profile.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getContext(), ListUsersActivity.class)));
+        profileBinding.layoutNewPersonProfile.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getActivity(), RegisterUserActivity.class)));
+        profileBinding.layoutEditPersonProfile.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getContext(), ListUsersActivity.class)));
 
-        btn_settings_profile_root.setOnClickListener(v -> {
+        profileBinding.settingsProfileBtn.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentProfile.this.getContext(), SettingsActivity.class);
             intent.putExtra(PERMISSION, "root");
             intent.putExtra(EMAIL, "null");
@@ -91,5 +80,11 @@ public class FragmentProfile extends Fragment {
         develop_activity.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getContext(), DevelopJavaActivity.class)));
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        profileBinding = null;
     }
 }

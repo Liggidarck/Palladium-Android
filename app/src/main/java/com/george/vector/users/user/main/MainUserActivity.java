@@ -19,26 +19,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
+import com.george.vector.databinding.ActivityMainUserBinding;
 import com.george.vector.users.user.main.fragments.FragmentHistory;
 import com.george.vector.users.user.main.fragments.FragmentHome;
 import com.george.vector.users.user.main.fragments.FragmentProfile;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainUserActivity extends AppCompatActivity {
 
+    ActivityMainUserBinding mainUserBinding;
     private static final String TAG = "MainUserActivity";
-
     String permission, email, collection;
-    BottomNavigationView bottom_user_navigation;
 
     @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.MainActivity);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_user);
-
-        bottom_user_navigation = findViewById(R.id.bottom_user_navigation);
+        mainUserBinding = ActivityMainUserBinding.inflate(getLayoutInflater());
+        setContentView(mainUserBinding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
         email = arguments.getString(EMAIL);
@@ -63,7 +61,7 @@ public class MainUserActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_user, fragmentHome).commit();
         }
 
-        bottom_user_navigation.setOnNavigationItemSelectedListener(item -> {
+        mainUserBinding.bottomUserNavigation.setOnNavigationItemSelectedListener(item -> {
             Fragment selectedFragment = null;
             switch (item.getItemId()) {
                 case R.id.item_home_user:

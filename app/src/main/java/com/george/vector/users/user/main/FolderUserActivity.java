@@ -16,22 +16,20 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.george.vector.R;
+import com.george.vector.databinding.ActivityFolderUserBinding;
 import com.george.vector.users.user.tasks.FragmentTasksUser;
-import com.google.android.material.appbar.MaterialToolbar;
 
 public class FolderUserActivity extends AppCompatActivity {
 
     private static final String TAG = "FolderUserActivity";
-    MaterialToolbar toolbar_folder_user_activity;
-
     String email, permission, collection, folder, text_toolbar;
+    ActivityFolderUserBinding folderUserBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_folder_user);
-
-        toolbar_folder_user_activity = findViewById(R.id.toolbar_folder_user_activity);
+        folderUserBinding = ActivityFolderUserBinding.inflate(getLayoutInflater());
+        setContentView(folderUserBinding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
         email = arguments.getString(EMAIL);
@@ -56,8 +54,8 @@ public class FolderUserActivity extends AppCompatActivity {
         if(folder.equals(COMPLETED_TASKS))
             text_toolbar = "Завершенные";
 
-        toolbar_folder_user_activity.setNavigationOnClickListener(v -> onBackPressed());
-        toolbar_folder_user_activity.setTitle(text_toolbar);
+        folderUserBinding.toolbarFolderUserActivity.setNavigationOnClickListener(v -> onBackPressed());
+        folderUserBinding.toolbarFolderUserActivity.setTitle(text_toolbar);
 
         Fragment fragment_user_tasks = new FragmentTasksUser();
         Bundle data_user_tasks = new Bundle();

@@ -20,7 +20,7 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.george.vector.R;
+import com.george.vector.databinding.ActivityLoadingBinding;
 import com.george.vector.users.executor.main.MainExecutorActivity;
 import com.george.vector.users.root.main.RootMainActivity;
 import com.george.vector.users.user.main.MainUserActivity;
@@ -39,10 +39,14 @@ public class LoadingActivity extends AppCompatActivity {
 
     String user_id, name, last_name, patronymic, email, permission, role;
 
+    ActivityLoadingBinding loadingBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_loading);
+
+        loadingBinding = ActivityLoadingBinding.inflate(getLayoutInflater());
+        setContentView(loadingBinding.getRoot());
 
         firebase_auth = FirebaseAuth.getInstance();
         firebase_firestore = FirebaseFirestore.getInstance();

@@ -18,27 +18,19 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.card.MaterialCardView;
+import com.george.vector.databinding.ActivityLocationFolderBinding;
 
 public class LocationFolderActivity extends AppCompatActivity {
 
     private static final String TAG = "LocationFolderAct";
+    ActivityLocationFolderBinding folderBinding;
 
-    MaterialToolbar toolbar_location_folder_root;
-    MaterialCardView new_tasks_card_root, in_progress_tasks_card_root, completed_tasks_card_root,
-            archive_tasks_card_root;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_location_folder);
-
-        toolbar_location_folder_root = findViewById(R.id.toolbar_location_folder_root);
-        new_tasks_card_root = findViewById(R.id.new_tasks_card_root);
-        in_progress_tasks_card_root = findViewById(R.id.in_progress_tasks_card_root);
-        completed_tasks_card_root = findViewById(R.id.completed_tasks_card_root);
-        archive_tasks_card_root = findViewById(R.id.archive_tasks_card_root);
+        folderBinding = ActivityLocationFolderBinding.inflate(getLayoutInflater());
+        setContentView(folderBinding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
         String location = arguments.get(LOCATION).toString();
@@ -47,14 +39,14 @@ public class LocationFolderActivity extends AppCompatActivity {
         Log.d(TAG , "email: " + email);
 
         if(location.equals(OST_SCHOOL))
-            toolbar_location_folder_root.setTitle(getText(R.string.ost_text));
+            folderBinding.toolbarLocationFolderRoot.setTitle(getText(R.string.ost_text));
 
         if(location.equals(BAR_SCHOOL))
-            toolbar_location_folder_root.setTitle(getText(R.string.bar_text));
+            folderBinding.toolbarLocationFolderRoot.setTitle(getText(R.string.bar_text));
 
-        toolbar_location_folder_root.setNavigationOnClickListener(v -> onBackPressed());
+        folderBinding.toolbarLocationFolderRoot.setNavigationOnClickListener(v -> onBackPressed());
 
-        new_tasks_card_root.setOnClickListener(v -> {
+        folderBinding.newTasksCardRoot.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);
             intent.putExtra(LOCATION, location);
             intent.putExtra(FOLDER, NEW_TASKS);
@@ -63,7 +55,7 @@ public class LocationFolderActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        in_progress_tasks_card_root.setOnClickListener(v -> {
+        folderBinding.inProgressTasksCardRoot.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);
             intent.putExtra(LOCATION, location);
             intent.putExtra(FOLDER, IN_PROGRESS_TASKS);
@@ -72,7 +64,7 @@ public class LocationFolderActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        completed_tasks_card_root.setOnClickListener(v -> {
+        folderBinding.completedTasksCardRoot.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);
             intent.putExtra(LOCATION, location);
             intent.putExtra(FOLDER, COMPLETED_TASKS);
@@ -81,7 +73,7 @@ public class LocationFolderActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        archive_tasks_card_root.setOnClickListener(v -> {
+        folderBinding.archiveTasksCardRoot.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);
             intent.putExtra(LOCATION, location);
             intent.putExtra(FOLDER, ARCHIVE_TASKS);

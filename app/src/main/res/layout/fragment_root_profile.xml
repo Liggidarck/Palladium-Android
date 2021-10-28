@@ -160,7 +160,7 @@
                         android:textSize="22sp" />
 
                     <Button
-                        android:id="@+id/btn_settings_profile_root"
+                        android:id="@+id/settings_profile_btn"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -21,30 +21,27 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.george.vector.R;
+import com.george.vector.databinding.FragmentHistoryUserBinding;
 import com.george.vector.users.user.main.FolderUserActivity;
-import com.google.android.material.card.MaterialCardView;
 
 public class FragmentHistory extends Fragment {
 
-    MaterialCardView task_in_progress_user, task_completed_user, task_archive_user;
     String email, permission;
+    FragmentHistoryUserBinding historyUserBinding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_history_user, container, false);
+        historyUserBinding = FragmentHistoryUserBinding.inflate(inflater, container, false);
+        View view = historyUserBinding.getRoot();
 
-        task_in_progress_user = view.findViewById(R.id.task_in_progress_user);
-        task_completed_user = view.findViewById(R.id.task_completed_user);
-        task_archive_user = view.findViewById(R.id.task_archive_user);
 
         Bundle args = getArguments();
         assert args != null;
         email = args.getString(EMAIL);
         permission = args.getString(PERMISSION);
 
-        task_in_progress_user.setOnClickListener(v -> {
+        historyUserBinding.taskInProgressUser.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentHistory.this.getContext(), FolderUserActivity.class);
             intent.putExtra(FOLDER, IN_PROGRESS_TASKS);
             intent.putExtra(EMAIL, email);
@@ -53,7 +50,7 @@ public class FragmentHistory extends Fragment {
             startActivity(intent);
         });
 
-        task_completed_user.setOnClickListener(v -> {
+        historyUserBinding.taskCompletedUser.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentHistory.this.getContext(), FolderUserActivity.class);
             intent.putExtra(FOLDER, COMPLETED_TASKS);
             intent.putExtra(EMAIL, email);
@@ -62,7 +59,7 @@ public class FragmentHistory extends Fragment {
             startActivity(intent);
         });
 
-        task_archive_user.setOnClickListener(v -> {
+        historyUserBinding.taskArchiveUser.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentHistory.this.getContext(), FolderUserActivity.class);
             intent.putExtra(FOLDER, ARCHIVE_TASKS);
             intent.putExtra(EMAIL, email);
@@ -72,5 +69,11 @@ public class FragmentHistory extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        historyUserBinding = null;
     }
 }

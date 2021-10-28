@@ -9,16 +9,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.george.vector.R;
 import com.george.vector.common.edit_users.EditDataUserActivity;
 import com.george.vector.common.settings.SettingsActivity;
+import com.george.vector.databinding.FragmentRootProfileBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,26 +24,18 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Objects;
 
 public class FragmentProfile extends Fragment {
-
-    TextView text_view_name_ava, text_view_full_name, text_view_email;
-    Button edit_data_user_btn, settings_user_btn;
-
     FirebaseAuth firebase_auth;
     FirebaseFirestore firebase_firestore;
 
     String user_id, name, last_name, patronymic, email, role;
 
+    FragmentRootProfileBinding profileBinding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile_user, container, false);
-
-        text_view_name_ava = view.findViewById(R.id.text_view_name_ava_fragment_user);
-        text_view_full_name = view.findViewById(R.id.text_view_full_name_fragment_user);
-        text_view_email = view.findViewById(R.id.text_view_email_fragment_user);
-        edit_data_user_btn = view.findViewById(R.id.edit_data_user_btn);
-        settings_user_btn = view.findViewById(R.id.settings_user_btn);
+        profileBinding = FragmentRootProfileBinding.inflate(inflater, container, false);
+        View view = profileBinding.getRoot();
 
         firebase_auth = FirebaseAuth.getInstance();
         firebase_firestore = FirebaseFirestore.getInstance();
@@ -65,14 +55,14 @@ public class FragmentProfile extends Fragment {
             String _last_name = Character.toString(last_name.charAt(0));
             String ava = String.format("%s%s", _last_name, _name);
 
-            text_view_full_name.setText(full_name);
-            text_view_name_ava.setText(ava);
-            text_view_email.setText(email);
+            profileBinding.textViewFullNameFragment.setText(full_name);
+            profileBinding.textViewNameAvaFragment.setText(ava);
+            profileBinding.textViewEmailFragment.setText(email);
         });
 
-        edit_data_user_btn.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getContext(), EditDataUserActivity.class)));
+        profileBinding.layoutEditPersonProfile.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getContext(), EditDataUserActivity.class)));
 
-        settings_user_btn.setOnClickListener(v -> {
+        profileBinding.settingsProfileBtn.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentProfile.this.getContext(), SettingsActivity.class);
             intent.putExtra(PERMISSION, "user");
             intent.putExtra(EMAIL, "null");

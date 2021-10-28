@@ -1,4 +1,4 @@
-package com.george.vector.users.root.main.fragments.tasks;
+package com.george.vector.users.root.main.fragments.notifications;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,24 +9,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.george.vector.databinding.FragmentBarRootBinding;
+import com.george.vector.databinding.FragmentNotificationsBinding;
 
-public class FragmentBarWork extends Fragment {
+public class FragmentNotifications extends Fragment {
 
-    FragmentBarRootBinding barRootBinding;
+    FragmentNotificationsBinding notificationsBinding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        barRootBinding = FragmentBarRootBinding.inflate(inflater, container, false);
-        View view = barRootBinding.getRoot();
+        notificationsBinding = FragmentNotificationsBinding.inflate(inflater, container, false);
+        View view = notificationsBinding.getRoot();
 
         return view;
     }
 
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        barRootBinding = null;
+        notificationsBinding = null;
     }
 }

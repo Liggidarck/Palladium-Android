@@ -16,30 +16,26 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.george.vector.R;
+import com.george.vector.databinding.FragmentOstRootBinding;
 import com.george.vector.users.root.folders.LocationFolderActivity;
-import com.google.android.material.card.MaterialCardView;
 
 public class FragmentOstWork extends Fragment {
 
     private static final String TAG = "FragmentWorkOst";
-    MaterialCardView ost_school_root, ost_kids_one_root, ost_kids_two_root;
+    FragmentOstRootBinding ostRootBinding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_ost_root, container,false);
+        ostRootBinding = FragmentOstRootBinding.inflate(inflater, container, false);
+        View view = ostRootBinding.getRoot();
 
         Bundle args = getArguments();
         assert args != null;
         String email = args.getString(EMAIL);
         Log.d(TAG, "Email: " + email);
 
-        ost_school_root = view.findViewById(R.id.ost_school_root);
-        ost_kids_one_root = view.findViewById(R.id.ost_kids_one_root);
-        ost_kids_two_root = view.findViewById(R.id.ost_kids_two_root);
-
-        ost_school_root.setOnClickListener(v -> {
+        ostRootBinding.ostSchoolRoot.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentOstWork.this.getContext(), LocationFolderActivity.class);
             intent.putExtra(LOCATION, OST_SCHOOL);
             intent.putExtra(EMAIL, email);
@@ -48,5 +44,11 @@ public class FragmentOstWork extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ostRootBinding = null;
     }
 }

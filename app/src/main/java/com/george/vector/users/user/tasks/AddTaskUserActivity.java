@@ -25,7 +25,6 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Window;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,11 +40,7 @@ import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.TextValidator;
 import com.george.vector.common.utils.Utils;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
-import com.google.android.material.textfield.MaterialAutoCompleteTextView;
-import com.google.android.material.textfield.TextInputLayout;
+import com.george.vector.databinding.ActivityAddTaskUserBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -67,14 +62,6 @@ import java.util.UUID;
 public class AddTaskUserActivity extends AppCompatActivity {
 
     private static final String TAG = "AddTaskUser";
-    MaterialToolbar top_app_bar_new_task_user;
-    TextInputLayout text_input_layout_address, text_input_layout_floor,
-            text_input_layout_cabinet, text_input_layout_name_task,
-            text_input_layout_comment, text_input_layout_cabinet_liter_user;
-    MaterialAutoCompleteTextView address_autoComplete, liter_autoComplete_user;
-    ImageView image_task_user;
-    ExtendedFloatingActionButton crate_task;
-    LinearProgressIndicator progress_bar_add_task_user;
 
     String address, floor, cabinet, letter, name_task, comment, userID, email, permission, name_image, full_name_creator;
     String status = "Новая заявка";
@@ -88,36 +75,26 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
     Utils utils = new Utils();
 
+    ActivityAddTaskUserBinding binding;
+
     ActivityResultLauncher<String> selectPictureLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
             uri -> {
                 fileUri = uri;
-                image_task_user.setImageURI(fileUri);
+                binding.imageTaskUser.setImageURI(fileUri);
             });
 
     ActivityResultLauncher<Uri> cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicture(),
             result -> {
                 if (result) {
-                    image_task_user.setImageURI(fileUri);
+                    binding.imageTaskUser.setImageURI(fileUri);
                 }
             });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_task_user);
-
-        top_app_bar_new_task_user = findViewById(R.id.topAppBar_new_task_user);
-        text_input_layout_address = findViewById(R.id.text_input_layout_address);
-        text_input_layout_floor = findViewById(R.id.text_input_layout_floor);
-        text_input_layout_cabinet = findViewById(R.id.text_input_layout_cabinet);
-        text_input_layout_name_task = findViewById(R.id.text_input_layout_name_task);
-        text_input_layout_comment = findViewById(R.id.text_input_layout_comment);
-        address_autoComplete = findViewById(R.id.address_autoComplete);
-        crate_task = findViewById(R.id.crate_task);
-        progress_bar_add_task_user = findViewById(R.id.progress_bar_add_task_user);
-        text_input_layout_cabinet_liter_user = findViewById(R.id.text_input_layout_cabinet_liter_user);
-        liter_autoComplete_user = findViewById(R.id.liter_autoComplete_user);
-        image_task_user = findViewById(R.id.image_task_user);
+        binding = ActivityAddTaskUserBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -128,7 +105,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
         permission = arguments.getString(PERMISSION);
         Log.i(TAG_SAVE_TASK, String.format("permission: %s", permission));
 
-        top_app_bar_new_task_user.setNavigationOnClickListener(v -> onBackPressed());
+        binding.topAppBarNewTaskUser.setNavigationOnClickListener(v -> onBackPressed());
 
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         DocumentReference documentReferenceUser = firebaseFirestore.collection(USERS).document(userID);
@@ -141,13 +118,13 @@ public class AddTaskUserActivity extends AppCompatActivity {
             full_name_creator = last_name_creator + " " + name_creator + " " + patronymic_creator;
         });
 
-        crate_task.setOnClickListener(v -> {
-            address = Objects.requireNonNull(text_input_layout_address.getEditText()).getText().toString();
-            floor = Objects.requireNonNull(text_input_layout_floor.getEditText()).getText().toString();
-            cabinet = Objects.requireNonNull(text_input_layout_cabinet.getEditText()).getText().toString();
-            letter = Objects.requireNonNull(text_input_layout_cabinet_liter_user.getEditText()).getText().toString();
-            name_task = Objects.requireNonNull(text_input_layout_name_task.getEditText()).getText().toString();
-            comment = Objects.requireNonNull(text_input_layout_comment.getEditText()).getText().toString();
+        binding.crateTask.setOnClickListener(v -> {
+            address = Objects.requireNonNull(binding.textInputLayoutAddress.getEditText()).getText().toString();
+            floor = Objects.requireNonNull(binding.textInputLayoutFloor.getEditText()).getText().toString();
+            cabinet = Objects.requireNonNull(binding.textInputLayoutCabinet.getEditText()).getText().toString();
+            letter = Objects.requireNonNull(binding.textInputLayoutCabinetLiterUser.getEditText()).getText().toString();
+            name_task = Objects.requireNonNull(binding.textInputLayoutNameTask.getEditText()).getText().toString();
+            comment = Objects.requireNonNull(binding.textInputLayoutComment.getEditText()).getText().toString();
 
             if (validateFields()) {
                 if (!isOnline())
@@ -158,7 +135,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
         });
 
-        image_task_user.setOnClickListener(v -> showDialogImage());
+        binding.imageTaskUser.setOnClickListener(v -> showDialogImage());
 
         initializeField(permission);
     }
@@ -229,7 +206,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
                     R.layout.dropdown_menu_categories,
                     items
             );
-            address_autoComplete.setAdapter(adapter);
+            binding.addressAutoComplete.setAdapter(adapter);
         }
 
         String[] itemsLetter = getResources().getStringArray(R.array.letter);
@@ -239,23 +216,23 @@ public class AddTaskUserActivity extends AppCompatActivity {
                 itemsLetter
         );
 
-        liter_autoComplete_user.setAdapter(adapter_letter);
+        binding.literAutoCompleteUser.setAdapter(adapter_letter);
 
 
         if (permission.equals(BAR_SCHOOL))
-            Objects.requireNonNull(text_input_layout_address.getEditText()).setText(getText(R.string.bar_school_address));
+            Objects.requireNonNull(binding.textInputLayoutAddress.getEditText()).setText(getText(R.string.bar_school_address));
 
-        text_input_layout_floor.getEditText().addTextChangedListener(new TextValidator(text_input_layout_floor.getEditText()) {
+        binding.textInputLayoutFloor.getEditText().addTextChangedListener(new TextValidator(binding.textInputLayoutFloor.getEditText()) {
             @Override
             public void validate(TextView textView, String text) {
-                utils.validateNumberField(text, text_input_layout_floor, crate_task, 1);
+                utils.validateNumberField(text, binding.textInputLayoutFloor, binding.crateTask, 1);
             }
         });
 
-        text_input_layout_cabinet.getEditText().addTextChangedListener(new TextValidator(text_input_layout_cabinet.getEditText()) {
+        binding.textInputLayoutCabinet.getEditText().addTextChangedListener(new TextValidator(binding.textInputLayoutCabinet.getEditText()) {
             @Override
             public void validate(TextView textView, String text) {
-                utils.validateNumberField(text, text_input_layout_cabinet, crate_task, 3);
+                utils.validateNumberField(text, binding.textInputLayoutCabinet, binding.crateTask, 3);
             }
         });
 
@@ -364,15 +341,15 @@ public class AddTaskUserActivity extends AppCompatActivity {
     }
 
     boolean validateFields() {
-        utils.clear_error(text_input_layout_address);
-        utils.clear_error(text_input_layout_floor);
-        utils.clear_error(text_input_layout_cabinet);
-        utils.clear_error(text_input_layout_name_task);
+        utils.clear_error(binding.textInputLayoutAddress);
+        utils.clear_error(binding.textInputLayoutFloor);
+        utils.clear_error(binding.textInputLayoutCabinet);
+        utils.clear_error(binding.textInputLayoutNameTask);
 
-        boolean check_address = utils.validate_field(address, text_input_layout_address);
-        boolean check_floor = utils.validate_field(floor, text_input_layout_floor);
-        boolean check_cabinet = utils.validate_field(cabinet, text_input_layout_cabinet);
-        boolean check_name_task = utils.validate_field(name_task, text_input_layout_name_task);
+        boolean check_address = utils.validate_field(address, binding.textInputLayoutAddress);
+        boolean check_floor = utils.validate_field(floor, binding.textInputLayoutFloor);
+        boolean check_cabinet = utils.validate_field(cabinet, binding.textInputLayoutCabinet);
+        boolean check_name_task = utils.validate_field(name_task, binding.textInputLayoutNameTask);
 
         return check_address & check_floor & check_cabinet & check_name_task;
     }

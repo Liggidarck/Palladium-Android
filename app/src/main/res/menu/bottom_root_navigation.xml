@@ -13,6 +13,11 @@
         android:title="@string/my_tasks">
     </item>
 
+    <item
+        android:id="@+id/nav_notifications"
+        android:icon="@drawable/ic_baseline_notifications_24"
+        android:title="Уведомления" />
+
 
     <item
         android:id="@+id/nav_profile"

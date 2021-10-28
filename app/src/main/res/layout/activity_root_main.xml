@@ -7,7 +7,7 @@
     tools:context=".users.root.main.RootMainActivity" >
 
     <FrameLayout
-        android:id="@+id/frame_future_main_root"
+        android:id="@+id/frame_main_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_root_navigation" />

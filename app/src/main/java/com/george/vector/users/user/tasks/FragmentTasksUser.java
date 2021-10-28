@@ -24,13 +24,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.george.vector.R;
 import com.george.vector.common.tasks.ui.TaskAdapter;
 import com.george.vector.common.tasks.ui.TaskUi;
-import com.google.android.material.chip.Chip;
+import com.george.vector.databinding.FragmentTasksUserBinding;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -38,22 +36,17 @@ import com.google.firebase.firestore.Query;
 public class FragmentTasksUser extends Fragment {
 
     private static final String TAG = "FragmentTasksUser";
-    RecyclerView recyclerview_user_tasks;
-    Chip chip_all_tasks_user, chip_old_school_tasks_user, chip_new_school_tasks_user;
-
     String folder, email, permission, collection;
 
     TaskAdapter adapter;
 
+    FragmentTasksUserBinding userBinding;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tasks_user, container, false);
-
-        recyclerview_user_tasks = view.findViewById(R.id.recyclerview_user_tasks);
-        chip_all_tasks_user = view.findViewById(R.id.chip_all_tasks_user);
-        chip_old_school_tasks_user = view.findViewById(R.id.chip_old_school_tasks_user);
-        chip_new_school_tasks_user = view.findViewById(R.id.chip_new_school_tasks_user);
+        userBinding = FragmentTasksUserBinding.inflate(inflater, container, false);
+        View view = userBinding.getRoot();
 
         Bundle args = getArguments();
         assert args != null;
@@ -81,9 +74,9 @@ public class FragmentTasksUser extends Fragment {
     }
 
     void setUpRecyclerView() {
-        recyclerview_user_tasks.setHasFixedSize(true);
-        recyclerview_user_tasks.setLayoutManager(new LinearLayoutManager(FragmentTasksUser.this.getContext()));
-        recyclerview_user_tasks.setAdapter(adapter);
+        userBinding.recyclerviewUserTasks.setHasFixedSize(true);
+        userBinding.recyclerviewUserTasks.setLayoutManager(new LinearLayoutManager(FragmentTasksUser.this.getContext()));
+        userBinding.recyclerviewUserTasks.setAdapter(adapter);
     }
 
     private void ArchiveTasks() {
@@ -174,6 +167,12 @@ public class FragmentTasksUser extends Fragment {
     public void onStop() {
         super.onStop();
         adapter.stopListening();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        userBinding = null;
     }
 
 }

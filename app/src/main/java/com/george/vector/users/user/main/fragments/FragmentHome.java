@@ -16,36 +16,31 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.george.vector.R;
 import com.george.vector.common.tasks.ui.TaskAdapter;
 import com.george.vector.common.tasks.ui.TaskUi;
+import com.george.vector.databinding.FragmentUserHomeBinding;
 import com.george.vector.users.user.tasks.AddTaskUserActivity;
 import com.george.vector.users.user.tasks.TaskUserActivity;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 public class FragmentHome extends Fragment {
 
-    ExtendedFloatingActionButton create_task_btn;
-    RecyclerView recyclerview_view_user;
-
     private static final String TAG = "MainUserFragment";
     String permission, collection, email;
 
     TaskAdapter adapter;
 
+    FragmentUserHomeBinding homeBinding;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_user_home, container, false);
-
-        create_task_btn = view.findViewById(R.id.create_task_user);
-        recyclerview_view_user = view.findViewById(R.id.recyclerview_view_user);
+        homeBinding = FragmentUserHomeBinding.inflate(inflater, container, false);
+        View view = homeBinding.getRoot();
 
         Bundle args = getArguments();
         assert args != null;
@@ -66,9 +61,9 @@ public class FragmentHome extends Fragment {
                 .build();
         adapter = new TaskAdapter(options);
 
-        recyclerview_view_user.setHasFixedSize(true);
-        recyclerview_view_user.setLayoutManager(new LinearLayoutManager(FragmentHome.this.getContext()));
-        recyclerview_view_user.setAdapter(adapter);
+        homeBinding.recyclerviewViewUser.setHasFixedSize(true);
+        homeBinding.recyclerviewViewUser.setLayoutManager(new LinearLayoutManager(FragmentHome.this.getContext()));
+        homeBinding.recyclerviewViewUser.setAdapter(adapter);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
@@ -83,7 +78,7 @@ public class FragmentHome extends Fragment {
 
         });
 
-        create_task_btn.setOnClickListener(v -> {
+        homeBinding.createTaskUser.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentHome.this.getContext(), AddTaskUserActivity.class);
             intent.putExtra(PERMISSION, permission);
             startActivity(intent);
@@ -102,5 +97,11 @@ public class FragmentHome extends Fragment {
     public void onStop() {
         super.onStop();
         adapter.stopListening();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        homeBinding = null;
     }
 }
