@@ -10,53 +10,55 @@ import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 
 import com.george.vector.R;
+import com.george.vector.databinding.ActivityExecutorTasksBinding;
 import com.george.vector.users.executor.tasks.FragmentExecutorTasks;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class ExecutorTasksActivity extends AppCompatActivity {
 
     private static final String TAG = "ExecutorTasks";
-    MaterialToolbar toolbar_tasks_executor_activity;
     String location, folder, email;
+    ActivityExecutorTasksBinding tasksBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_executor_tasks);
-
-        toolbar_tasks_executor_activity = findViewById(R.id.toolbar_tasks_executor_activity);
+        tasksBinding = ActivityExecutorTasksBinding.inflate(getLayoutInflater());
+        setContentView(tasksBinding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        location = arguments.get(LOCATION).toString();
-        folder = arguments.get(FOLDER).toString();
-        email = arguments.get(EMAIL).toString();
+        location = arguments.getString(LOCATION);
+        folder = arguments.getString(FOLDER);
+        email = arguments.getString(EMAIL);
 
         String text_toolbar = null;
         switch (location) {
             case "ost_school":
+                text_toolbar = getString(R.string.ost_text);
+
             case "bar_school":
-                text_toolbar = "Школа";
+                text_toolbar = getString(R.string.bar_text);
                 break;
 
             case "ost_aist":
-                text_toolbar = "Детский сад 'Аист'";
+                text_toolbar = getString(R.string.ost_stork_text);
                 break;
 
             case "ost_yagodka":
-                text_toolbar = "Детский сад 'Ягодка'";
+                text_toolbar = getString(R.string.ost_berry_text);
                 break;
 
             case "bar_rucheek":
-                text_toolbar = "Детский сад 'Ручеек'";
+                text_toolbar = getString(R.string.bar_stream_text);
                 break;
 
             case "bar_star":
-                text_toolbar = "Детский сад 'Звездочка'";
+                text_toolbar = getString(R.string.bar_star_text);
                 break;
         }
 
-        toolbar_tasks_executor_activity.setNavigationOnClickListener(v -> onBackPressed());
-        toolbar_tasks_executor_activity.setTitle(text_toolbar);
+        tasksBinding.toolbarTasksExecutorActivity.setNavigationOnClickListener(v -> onBackPressed());
+        tasksBinding.toolbarTasksExecutorActivity.setTitle(text_toolbar);
 
         Fragment currentFragment = new FragmentExecutorTasks();
 
