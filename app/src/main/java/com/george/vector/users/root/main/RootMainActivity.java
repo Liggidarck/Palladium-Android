@@ -13,7 +13,6 @@ import com.george.vector.R;
 import com.george.vector.databinding.ActivityRootMainBinding;
 import com.george.vector.users.root.main.fragments.FragmentProfile;
 import com.george.vector.users.root.main.fragments.home.FragmentHome;
-import com.george.vector.users.root.main.fragments.notifications.FragmentNotifications;
 import com.george.vector.users.root.main.fragments.tasks.FragmentTasks;
 
 public class RootMainActivity extends AppCompatActivity {
@@ -64,11 +63,6 @@ public class RootMainActivity extends AppCompatActivity {
                     bundle.putString(EMAIL, this.email);
                     selectedFragment.setArguments(bundle);
 
-                    break;
-
-                case R.id.nav_notifications:
-                    Log.d(TAG, "Start notifications root fragment");
-                    selectedFragment = new FragmentNotifications();
                     break;
 
                 case R.id.nav_profile:
