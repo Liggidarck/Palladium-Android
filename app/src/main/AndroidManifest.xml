@@ -4,9 +4,12 @@
     package="com.george.vector">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECIVE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
@@ -26,11 +29,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Palladium">
+
+        <service android:name=".develop.notifications.FirebaseService"
+            android:permission="com.google.android.c2dm.permission.SEND"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+
+        </service>
+
         <activity
             android:name=".develop.DevelopJavaActivity"
             android:exported="false" />
         <activity
-            android:name=".develop.DevelopKotlinActivity"
+            android:name=".develop.notifications.DevelopKotlinActivity"
             android:exported="false" />
         <activity
             android:name=".users.user.main.FolderUserActivity"

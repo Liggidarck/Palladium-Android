@@ -18,6 +18,7 @@ import com.george.vector.R;
 import com.george.vector.common.settings.SettingsActivity;
 import com.george.vector.databinding.FragmentRootProfileBinding;
 import com.george.vector.develop.DevelopJavaActivity;
+import com.george.vector.develop.notifications.DevelopKotlinActivity;
 import com.george.vector.users.root.edit_users.ListUsersActivity;
 import com.george.vector.users.root.edit_users.RegisterUserActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -77,7 +78,7 @@ public class FragmentProfile extends Fragment {
         });
 
         CircleImageView develop_activity = view.findViewById(R.id.develop_activity);
-        develop_activity.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getContext(), DevelopJavaActivity.class)));
+        develop_activity.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getContext(), DevelopKotlinActivity.class)));
 
         return view;
     }
