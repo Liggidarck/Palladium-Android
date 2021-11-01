@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.george.vector.databinding.ActivityDevelopKotlinBinding
-import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,8 +21,8 @@ class DevelopKotlinActivity : AppCompatActivity() {
         binding = ActivityDevelopKotlinBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
-            binding.developTokenEditText.editText?.setText(it.token)
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            binding.developTokenEditText.editText?.setText(it)
         }
 
         FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
