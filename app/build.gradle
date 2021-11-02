@@ -18,8 +18,8 @@ android {
         applicationId "com.george.vector"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 1201
-        versionName "1.2.1"
+        versionCode 1202
+        versionName "1.2.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
