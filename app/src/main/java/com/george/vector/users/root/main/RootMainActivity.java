@@ -1,6 +1,7 @@
 package com.george.vector.users.root.main;
 
 import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.consts.Keys.TOPIC_NEW_TASKS_CREATE;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -13,8 +14,8 @@ import com.george.vector.R;
 import com.george.vector.databinding.ActivityRootMainBinding;
 import com.george.vector.users.root.main.fragments.FragmentProfile;
 import com.george.vector.users.root.main.fragments.home.FragmentHome;
-import com.george.vector.users.root.main.fragments.notifications.FragmentNotifications;
 import com.george.vector.users.root.main.fragments.tasks.FragmentTasks;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class RootMainActivity extends AppCompatActivity {
 
@@ -28,12 +29,13 @@ public class RootMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.MainActivity);
         super.onCreate(savedInstanceState);
-
         rootMainBinding = ActivityRootMainBinding.inflate(getLayoutInflater());
         setContentView(rootMainBinding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
         email = arguments.getString(EMAIL);
+
+        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC_NEW_TASKS_CREATE);
 
         if (savedInstanceState == null) {
             Fragment fragmentHome = new FragmentHome();
@@ -64,11 +66,6 @@ public class RootMainActivity extends AppCompatActivity {
                     bundle.putString(EMAIL, this.email);
                     selectedFragment.setArguments(bundle);
 
-                    break;
-
-                case R.id.nav_notifications:
-                    Log.d(TAG, "Start notifications root fragment");
-                    selectedFragment = new FragmentNotifications();
                     break;
 
                 case R.id.nav_profile:

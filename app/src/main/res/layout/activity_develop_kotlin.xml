@@ -4,34 +4,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".develop.DevelopKotlinActivity">
+    tools:context=".develop.notifications.DevelopKotlinActivity">
 
-    <ImageView
-        android:id="@+id/image_dev"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/developTitleEditText"
         android:layout_width="match_parent"
-        android:layout_height="600dp" />
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp" >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter title"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/developMessageEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_below="@id/developTitleEditText" >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter message"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/developTokenEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_below="@id/developMessageEditText" >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter token"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/gallery_btn"
+        android:id="@+id/sendButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/image_dev"
-        android:text="Галерея"/>
-
-    <Button
-        android:id="@+id/camera_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/gallery_btn"
-        android:text="Камера" />
-
-    <Button
-        android:id="@+id/send_to_server"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/image_dev"
-        android:layout_toEndOf="@id/gallery_btn"
-        android:layout_marginStart="10dp"
-        android:text="send to database" />
+        android:text="send"
+        android:layout_below="@id/developTokenEditText"
+        android:layout_margin="10dp"/>
 
 </RelativeLayout>
