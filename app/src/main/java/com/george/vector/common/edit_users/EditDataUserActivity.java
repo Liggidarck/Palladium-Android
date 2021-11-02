@@ -34,7 +34,7 @@ public class EditDataUserActivity extends AppCompatActivity {
 
     Button btn_save_edit_data_user;
 
-    String name_user, last_name_user, patronymic_user, email_user, role_user, userID, password;
+    String name_user, last_name_user, patronymic_user, email_user, role_user, user_id, password;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -59,8 +59,8 @@ public class EditDataUserActivity extends AppCompatActivity {
 
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
-        userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+        user_id = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        DocumentReference documentReference = firebaseFirestore.collection("users").document(user_id);
         documentReference.addSnapshotListener((value, error) -> {
             assert value != null;
             name_user = value.getString("name");
@@ -111,7 +111,7 @@ public class EditDataUserActivity extends AppCompatActivity {
                 });
 
                 documentReference.set(user)
-                        .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user - " + userID))
+                        .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user - " + user_id))
                         .addOnFailureListener(e -> Log.d("TAG", "Failure - " + e.toString()));
             }
         });

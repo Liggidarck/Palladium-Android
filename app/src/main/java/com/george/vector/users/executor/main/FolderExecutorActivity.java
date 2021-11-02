@@ -13,26 +13,21 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.george.vector.R;
+import com.george.vector.databinding.ActivityFolderExecutorBinding;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.card.MaterialCardView;
 
 public class FolderExecutorActivity extends AppCompatActivity {
 
-    MaterialToolbar toolbar;
-    MaterialCardView new_tasks_card_executor, completed_tasks_card_executor, in_progress_tasks_card_executor;
-
     String location, email;
     private static final String TAG = "FolderExecutorActivity";
+    ActivityFolderExecutorBinding executorBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_folder_executor);
-
-        toolbar = findViewById(R.id.toolbar_folder_executor_activity);
-        new_tasks_card_executor = findViewById(R.id.new_tasks_card_executor);
-        in_progress_tasks_card_executor = findViewById(R.id.in_progress_tasks_card_executor);
-        completed_tasks_card_executor = findViewById(R.id.completed_tasks_card_executor);
+        executorBinding = ActivityFolderExecutorBinding.inflate(getLayoutInflater());
+        setContentView(executorBinding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
         location = arguments.getString(LOCATION);
@@ -41,31 +36,33 @@ public class FolderExecutorActivity extends AppCompatActivity {
         String text_toolbar = null;
         switch (location) {
             case "ost_school":
+                text_toolbar = getString(R.string.ost_text);
+
             case "bar_school":
-                text_toolbar = "Школа";
+                text_toolbar = getString(R.string.bar_text);
                 break;
 
             case "ost_aist":
-                text_toolbar = "Детский сад 'Аист'";
+                text_toolbar = getString(R.string.ost_stork_text);
                 break;
 
             case "ost_yagodka":
-                text_toolbar = "Детский сад 'Ягодка'";
+                text_toolbar = getString(R.string.ost_berry_text);
                 break;
 
             case "bar_rucheek":
-                text_toolbar = "Детский сад 'Ручеек'";
+                text_toolbar = getString(R.string.bar_stream_text);
                 break;
 
             case "bar_star":
-                text_toolbar = "Детский сад 'Звездочка'";
+                text_toolbar = getString(R.string.bar_star_text);
                 break;
         }
 
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
-        toolbar.setTitle(text_toolbar);
+        executorBinding.toolbarFolderExecutorActivity.setNavigationOnClickListener(v -> onBackPressed());
+        executorBinding.toolbarFolderExecutorActivity.setTitle(text_toolbar);
 
-        new_tasks_card_executor.setOnClickListener(v -> {
+        executorBinding.newTasksCardExecutor.setOnClickListener(v -> {
             Intent intent = new Intent(this, ExecutorTasksActivity.class);
             intent.putExtra(LOCATION, location);
             intent.putExtra(FOLDER, NEW_TASKS);
@@ -73,7 +70,7 @@ public class FolderExecutorActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        completed_tasks_card_executor.setOnClickListener(v -> {
+        executorBinding.completedTasksCardExecutor.setOnClickListener(v -> {
             Intent intent = new Intent(this, ExecutorTasksActivity.class);
             intent.putExtra(LOCATION, location);
             intent.putExtra(FOLDER, COMPLETED_TASKS);
@@ -81,7 +78,7 @@ public class FolderExecutorActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        in_progress_tasks_card_executor.setOnClickListener(v -> {
+        executorBinding.inProgressTasksCardExecutor.setOnClickListener(v -> {
             Intent intent = new Intent(this, ExecutorTasksActivity.class);
             intent.putExtra(LOCATION, location);
             intent.putExtra(FOLDER, IN_PROGRESS_TASKS);

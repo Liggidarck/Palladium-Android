@@ -3,38 +3,46 @@ package com.george.vector.users.user.tasks;
 import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.consts.Keys.PERMISSION;
+import static com.george.vector.common.consts.Keys.PERMISSION_CAMERA_CODE;
+import static com.george.vector.common.consts.Keys.PERMISSION_GALLERY_CODE;
+import static com.george.vector.common.consts.Keys.TOPIC_NEW_TASKS_CREATE;
 import static com.george.vector.common.consts.Keys.USERS;
 import static com.george.vector.common.consts.Logs.TAG_SAVE_TASK;
 
-import android.annotation.SuppressLint;
+import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
+import android.view.Window;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 
 import com.george.vector.R;
 import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.TextValidator;
 import com.george.vector.common.utils.Utils;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
-import com.google.android.material.textfield.MaterialAutoCompleteTextView;
-import com.google.android.material.textfield.TextInputLayout;
+import com.george.vector.databinding.ActivityAddTaskUserBinding;
+import com.george.vector.notifications.SendNotification;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -44,6 +52,7 @@ import com.google.firebase.storage.StorageReference;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -55,44 +64,39 @@ import java.util.UUID;
 public class AddTaskUserActivity extends AppCompatActivity {
 
     private static final String TAG = "AddTaskUser";
-    MaterialToolbar topAppBar_new_task_user;
-    TextInputLayout text_input_layout_address, text_input_layout_floor,
-            text_input_layout_cabinet, text_input_layout_name_task,
-            text_input_layout_comment, text_input_layout_cabinet_liter_user;
-    MaterialAutoCompleteTextView address_autoComplete, liter_autoComplete_user;
-    ImageView image_task_user;
-    ExtendedFloatingActionButton crate_task;
-    LinearProgressIndicator progress_bar_add_task_user;
 
-    String address, floor, cabinet, letter, name_task, comment, userID, email, status = "Новая заявка", permission, NAME_IMAGE, full_name_creator;
+    String address, floor, cabinet, letter, name_task, comment, userID, email, permission, name_image, full_name_creator;
+    String status = "Новая заявка";
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
 
-    private final int PICK_IMAGE_REQUEST = 71;
-    private Uri filePath;
+    private Uri fileUri;
 
     Utils utils = new Utils();
+
+    ActivityAddTaskUserBinding binding;
+
+    ActivityResultLauncher<String> selectPictureLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
+            uri -> {
+                fileUri = uri;
+                binding.imageTaskUser.setImageURI(fileUri);
+            });
+
+    ActivityResultLauncher<Uri> cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicture(),
+            result -> {
+                if (result) {
+                    binding.imageTaskUser.setImageURI(fileUri);
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_task_user);
-
-        topAppBar_new_task_user = findViewById(R.id.topAppBar_new_task_user);
-        text_input_layout_address = findViewById(R.id.text_input_layout_address);
-        text_input_layout_floor = findViewById(R.id.text_input_layout_floor);
-        text_input_layout_cabinet = findViewById(R.id.text_input_layout_cabinet);
-        text_input_layout_name_task = findViewById(R.id.text_input_layout_name_task);
-        text_input_layout_comment = findViewById(R.id.text_input_layout_comment);
-        address_autoComplete = findViewById(R.id.address_autoComplete);
-        crate_task = findViewById(R.id.crate_task);
-        progress_bar_add_task_user = findViewById(R.id.progress_bar_add_task_user);
-        text_input_layout_cabinet_liter_user = findViewById(R.id.text_input_layout_cabinet_liter_user);
-        liter_autoComplete_user = findViewById(R.id.liter_autoComplete_user);
-        image_task_user = findViewById(R.id.image_task_user);
+        binding = ActivityAddTaskUserBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -100,10 +104,10 @@ public class AddTaskUserActivity extends AppCompatActivity {
         storageReference = firebaseStorage.getReference();
 
         Bundle arguments = getIntent().getExtras();
-        permission = arguments.get(PERMISSION).toString();
+        permission = arguments.getString(PERMISSION);
         Log.i(TAG_SAVE_TASK, String.format("permission: %s", permission));
 
-        topAppBar_new_task_user.setNavigationOnClickListener(v -> onBackPressed());
+        binding.topAppBarNewTaskUser.setNavigationOnClickListener(v -> onBackPressed());
 
         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         DocumentReference documentReferenceUser = firebaseFirestore.collection(USERS).document(userID);
@@ -116,29 +120,29 @@ public class AddTaskUserActivity extends AppCompatActivity {
             full_name_creator = last_name_creator + " " + name_creator + " " + patronymic_creator;
         });
 
-        image_task_user.setOnClickListener(v -> chooseImage());
-
-        crate_task.setOnClickListener(v -> {
-            address = Objects.requireNonNull(text_input_layout_address.getEditText()).getText().toString();
-            floor = Objects.requireNonNull(text_input_layout_floor.getEditText()).getText().toString();
-            cabinet = Objects.requireNonNull(text_input_layout_cabinet.getEditText()).getText().toString();
-            letter = Objects.requireNonNull(text_input_layout_cabinet_liter_user.getEditText()).getText().toString();
-            name_task = Objects.requireNonNull(text_input_layout_name_task.getEditText()).getText().toString();
-            comment = Objects.requireNonNull(text_input_layout_comment.getEditText()).getText().toString();
+        binding.crateTask.setOnClickListener(v -> {
+            address = Objects.requireNonNull(binding.textInputLayoutAddress.getEditText()).getText().toString();
+            floor = Objects.requireNonNull(binding.textInputLayoutFloor.getEditText()).getText().toString();
+            cabinet = Objects.requireNonNull(binding.textInputLayoutCabinet.getEditText()).getText().toString();
+            letter = Objects.requireNonNull(binding.textInputLayoutCabinetLiterUser.getEditText()).getText().toString();
+            name_task = Objects.requireNonNull(binding.textInputLayoutNameTask.getEditText()).getText().toString();
+            comment = Objects.requireNonNull(binding.textInputLayoutComment.getEditText()).getText().toString();
 
             if (validateFields()) {
                 if (!isOnline())
-                    show_dialog();
+                    showDialogNoInternet();
                 else
-                    save_task(permission);
+                    saveTask(permission);
             }
 
         });
 
-        initialize_field(permission);
+        binding.imageTaskUser.setOnClickListener(v -> showDialogImage());
+
+        initializeField(permission);
     }
 
-    void save_task(@NotNull String location) {
+    void saveTask(@NotNull String location) {
         Task task = new Task();
 
         uploadImage();
@@ -150,41 +154,19 @@ public class AddTaskUserActivity extends AppCompatActivity {
         String time_create = timeFormat.format(currentDate);
 
         task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, letter, comment,
-                null, null, status, time_create, email, false, NAME_IMAGE, null, full_name_creator);
+                null, null, status, time_create, email, false, name_image, null, full_name_creator);
+
+        SendNotification sendNotification = new SendNotification();
+        sendNotification.sendNotification("Созданна новая заявка", name_task, TOPIC_NEW_TASKS_CREATE);
 
     }
 
-    private void chooseImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null) {
-            filePath = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                image_task_user.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
-
-    @SuppressLint("DefaultLocale")
-    private void uploadImage() {
+    void uploadImage() {
         if (isOnline()) {
-            if (filePath != null) {
+            if (fileUri != null) {
                 Bitmap bmp = null;
                 try {
-                    bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                    bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), fileUri);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -196,9 +178,9 @@ public class AddTaskUserActivity extends AppCompatActivity {
                 progressDialog.setTitle("Загрузка...");
                 progressDialog.show();
 
-                NAME_IMAGE = UUID.randomUUID().toString();
+                name_image = UUID.randomUUID().toString();
 
-                StorageReference ref = storageReference.child("images/" + NAME_IMAGE);
+                StorageReference ref = storageReference.child("images/" + name_image);
                 ref.putBytes(data)
                         .addOnSuccessListener(taskSnapshot -> {
                             progressDialog.dismiss();
@@ -207,12 +189,11 @@ public class AddTaskUserActivity extends AppCompatActivity {
                         })
                         .addOnFailureListener(e -> {
                             progressDialog.dismiss();
-                            Log.d(TAG, "Failed: " + e.getMessage());
+                            Log.e(TAG, "Failed: " + e.getMessage());
                         })
                         .addOnProgressListener(taskSnapshot -> {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
-                                    .getTotalByteCount());
-                            progressDialog.setMessage(String.format("Загрузка: %d%%", (int) progress));
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                            progressDialog.setMessage("Загрузка: " + (int) progress + "%");
                         });
             } else {
                 onBackPressed();
@@ -222,7 +203,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
         }
     }
 
-    void initialize_field(String permission) {
+    void initializeField(String permission) {
         if (permission.equals(OST_SCHOOL)) {
             String[] items = getResources().getStringArray(R.array.addresses_ost_school);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -230,7 +211,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
                     R.layout.dropdown_menu_categories,
                     items
             );
-            address_autoComplete.setAdapter(adapter);
+            binding.addressAutoComplete.setAdapter(adapter);
         }
 
         String[] itemsLetter = getResources().getStringArray(R.array.letter);
@@ -240,34 +221,118 @@ public class AddTaskUserActivity extends AppCompatActivity {
                 itemsLetter
         );
 
-        liter_autoComplete_user.setAdapter(adapter_letter);
+        binding.literAutoCompleteUser.setAdapter(adapter_letter);
 
 
         if (permission.equals(BAR_SCHOOL))
-            Objects.requireNonNull(text_input_layout_address.getEditText()).setText(getText(R.string.bar_school_address));
+            Objects.requireNonNull(binding.textInputLayoutAddress.getEditText()).setText(getText(R.string.bar_school_address));
 
-        text_input_layout_floor.getEditText().addTextChangedListener(new TextValidator(text_input_layout_floor.getEditText()) {
+        binding.textInputLayoutFloor.getEditText().addTextChangedListener(new TextValidator(binding.textInputLayoutFloor.getEditText()) {
             @Override
             public void validate(TextView textView, String text) {
-                utils.validateNumberField(text, text_input_layout_floor, crate_task, 1);
+                utils.validateNumberField(text, binding.textInputLayoutFloor, binding.crateTask, 1);
             }
         });
 
-        text_input_layout_cabinet.getEditText().addTextChangedListener(new TextValidator(text_input_layout_cabinet.getEditText()) {
+        binding.textInputLayoutCabinet.getEditText().addTextChangedListener(new TextValidator(binding.textInputLayoutCabinet.getEditText()) {
             @Override
             public void validate(TextView textView, String text) {
-                utils.validateNumberField(text, text_input_layout_cabinet, crate_task, 3);
+                utils.validateNumberField(text, binding.textInputLayoutCabinet, binding.crateTask, 3);
             }
         });
 
     }
 
-    void show_dialog() {
+    void showDialogImage() {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_add_image);
+
+        RelativeLayout camera_btn = dialog.findViewById(R.id.layout_new_photo);
+        RelativeLayout gallery_btn = dialog.findViewById(R.id.layout_folder);
+
+        camera_btn.setOnClickListener(v -> {
+            ActivityCompat.requestPermissions(
+                    AddTaskUserActivity.this,
+                    new String[]{
+                            Manifest.permission.CAMERA,
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    }, PERMISSION_CAMERA_CODE);
+
+            dialog.dismiss();
+        });
+
+        gallery_btn.setOnClickListener(v -> {
+            ActivityCompat.requestPermissions(
+                    AddTaskUserActivity.this,
+                    new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    }, PERMISSION_GALLERY_CODE);
+
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+
+            case PERMISSION_GALLERY_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    selectPictureLauncher.launch("image/*");
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                    builder.setTitle(getText(R.string.warning))
+                            .setMessage("Для того, чтобы загрузить изображение необходимо разрешить Palladium доступ файловому хранилищу")
+                            .setPositiveButton("Настройки", (dialog, id) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+                            .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.cancel());
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+
+                break;
+
+            case PERMISSION_CAMERA_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    File file = new File(getFilesDir(), "picFromCamera");
+                    fileUri = FileProvider.getUriForFile(
+                            this,
+                            getApplicationContext().getPackageName() + ".provider",
+                            file);
+                    cameraLauncher.launch(fileUri);
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                    builder.setTitle(getText(R.string.warning))
+                            .setMessage("Для того, чтобы загрузить изображение необходимо разрешить Palladium доступ к камере")
+                            .setPositiveButton("Настройки", (dialog, id) ->
+                                    startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                            Uri.fromParts("package", getPackageName(), null))))
+                            .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.cancel());
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+
+                break;
+        }
+
+    }
+
+    void showDialogNoInternet() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_no_connection))
-                .setPositiveButton(getText(R.string.save), (dialog, id) -> save_task(permission))
+                .setPositiveButton(getText(R.string.save), (dialog, id) -> saveTask(permission))
                 .setNegativeButton(android.R.string.cancel, (dialog, id) -> onBackPressed());
 
         AlertDialog dialog = builder.create();
@@ -281,15 +346,15 @@ public class AddTaskUserActivity extends AppCompatActivity {
     }
 
     boolean validateFields() {
-        utils.clear_error(text_input_layout_address);
-        utils.clear_error(text_input_layout_floor);
-        utils.clear_error(text_input_layout_cabinet);
-        utils.clear_error(text_input_layout_name_task);
+        utils.clear_error(binding.textInputLayoutAddress);
+        utils.clear_error(binding.textInputLayoutFloor);
+        utils.clear_error(binding.textInputLayoutCabinet);
+        utils.clear_error(binding.textInputLayoutNameTask);
 
-        boolean check_address = utils.validate_field(address, text_input_layout_address);
-        boolean check_floor = utils.validate_field(floor, text_input_layout_floor);
-        boolean check_cabinet = utils.validate_field(cabinet, text_input_layout_cabinet);
-        boolean check_name_task = utils.validate_field(name_task, text_input_layout_name_task);
+        boolean check_address = utils.validate_field(address, binding.textInputLayoutAddress);
+        boolean check_floor = utils.validate_field(floor, binding.textInputLayoutFloor);
+        boolean check_cabinet = utils.validate_field(cabinet, binding.textInputLayoutCabinet);
+        boolean check_name_task = utils.validate_field(name_task, binding.textInputLayoutNameTask);
 
         return check_address & check_floor & check_cabinet & check_name_task;
     }

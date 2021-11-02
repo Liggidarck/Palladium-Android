@@ -19,35 +19,30 @@ import androidx.annotation.Nullable;
 import com.george.vector.R;
 import com.george.vector.common.edit_users.EditDataUserActivity;
 import com.george.vector.common.settings.SettingsActivity;
+import com.george.vector.databinding.SettingsExecutorBottomSheetBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class SettingsExecutorBottomSheet extends BottomSheetDialogFragment {
 
-    RelativeLayout layout_settings_executor, layout_edit_person_executor;
-    Button btn_logout_executor;
-    ImageView close_btn_executor;
+    SettingsExecutorBottomSheetBinding sheetBinding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.settings_executor_bottom_sheet, container, false);
-
-        layout_settings_executor = view.findViewById(R.id.layout_settings_executor);
-        layout_edit_person_executor = view.findViewById(R.id.layout_edit_person_executor);
-        btn_logout_executor = view.findViewById(R.id.btn_logout_executor);
-        close_btn_executor = view.findViewById(R.id.close_btn_executor);
+        sheetBinding = SettingsExecutorBottomSheetBinding.inflate(inflater, container, false);
+        View view = sheetBinding.getRoot();
 
         assert this.getArguments() != null;
         String email = this.getArguments().getString(EMAIL);
         Log.d("ExecutorBottomSheet", String.format("email: %s", email));
 
-        close_btn_executor.setOnClickListener(v -> dismiss());
-        layout_edit_person_executor.setOnClickListener(v -> startActivity(new Intent(SettingsExecutorBottomSheet.this.getContext(), EditDataUserActivity.class)));
-        btn_logout_executor.setOnClickListener(v -> {
+        sheetBinding.closeBtnExecutor.setOnClickListener(v -> dismiss());
+        sheetBinding.layoutEditPersonExecutor.setOnClickListener(v -> startActivity(new Intent(SettingsExecutorBottomSheet.this.getContext(), EditDataUserActivity.class)));
+        sheetBinding.btnLogoutExecutor.setOnClickListener(v -> {
 
         });
 
-        layout_settings_executor.setOnClickListener(v -> {
+        sheetBinding.layoutSettingsExecutor.setOnClickListener(v -> {
             Intent intent = new Intent(SettingsExecutorBottomSheet.this.getContext(), SettingsActivity.class);
             intent.putExtra(PERMISSION, "executor");
             intent.putExtra(EMAIL, email);
@@ -55,5 +50,11 @@ public class SettingsExecutorBottomSheet extends BottomSheetDialogFragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        sheetBinding = null;
     }
 }

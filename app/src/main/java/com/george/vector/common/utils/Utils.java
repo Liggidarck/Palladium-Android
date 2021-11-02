@@ -18,28 +18,28 @@ import java.util.regex.Pattern;
 
 public class Utils {
 
-    public boolean validate_field(@NonNull String text, TextInputLayout textInputLayout) {
+    public boolean validate_field(@NonNull String text, TextInputLayout text_input_layout) {
         if (text.isEmpty()) {
-            textInputLayout.setError("Это поле не может быть пустым");
-            textInputLayout.setErrorEnabled(true);
+            text_input_layout.setError("Это поле не может быть пустым");
+            text_input_layout.setErrorEnabled(true);
             return false;
         } else {
-            textInputLayout.setErrorEnabled(false);
+            text_input_layout.setErrorEnabled(false);
             return true;
         }
     }
 
-    public void validateNumberField(String text, TextInputLayout textInputLayout, ExtendedFloatingActionButton floatingActionButton, int length) {
+    public void validateNumberField(String text, TextInputLayout text_input_layout, ExtendedFloatingActionButton floating_action_button, int length) {
         if (!validateNumberText(text)) {
-            textInputLayout.setError("Ошибка! Проверьте правильность написания");
-            floatingActionButton.setClickable(false);
-            textInputLayout.setErrorEnabled(true);
+            text_input_layout.setError("Ошибка! Проверьте правильность написания");
+            floating_action_button.setClickable(false);
+            text_input_layout.setErrorEnabled(true);
         } else if (text.length() > length) {
-            floatingActionButton.setClickable(false);
-            textInputLayout.setErrorEnabled(true);
+            floating_action_button.setClickable(false);
+            text_input_layout.setErrorEnabled(true);
         } else {
-            floatingActionButton.setClickable(true);
-            textInputLayout.setErrorEnabled(false);
+            floating_action_button.setClickable(true);
+            text_input_layout.setErrorEnabled(false);
         }
     }
 

@@ -15,25 +15,25 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
+import com.george.vector.databinding.FragmentOstExecutorBinding;
 import com.george.vector.users.executor.main.FolderExecutorActivity;
 import com.google.android.material.card.MaterialCardView;
 
 public class fragment_ost extends Fragment {
 
-    MaterialCardView ost_school_executor;
+    FragmentOstExecutorBinding executorBinding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_ost_executor, container, false);
-
-        ost_school_executor = view.findViewById(R.id.ost_school_executor);
+        executorBinding = FragmentOstExecutorBinding.inflate(inflater, container, false);
+        View view = executorBinding.getRoot();
 
         Bundle args = getArguments();
         assert args != null;
         String email = args.getString(EMAIL);
 
-        ost_school_executor.setOnClickListener(v -> {
+        executorBinding.ostSchoolExecutor.setOnClickListener(v -> {
             Intent intent = new Intent(fragment_ost.this.getContext(), FolderExecutorActivity.class);
             intent.putExtra(LOCATION, OST_SCHOOL);
             intent.putExtra(EMAIL, email);

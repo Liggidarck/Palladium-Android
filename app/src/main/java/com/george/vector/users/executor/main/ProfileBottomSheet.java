@@ -1,4 +1,4 @@
-package com.george.vector.common.bottom_sheets;
+package com.george.vector.users.executor.main;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.george.vector.R;
+import com.george.vector.databinding.ProfileBottomSheetBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -21,32 +22,27 @@ import java.util.Objects;
 public class ProfileBottomSheet extends BottomSheetDialogFragment {
 
     private static final String TAG = "ProfileBottomSheet";
-    ImageView close_btn;
-    TextView text_view_full_name, text_view_email, text_view_role, text_view_name_ava;
 
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
+    FirebaseAuth firebase_auth;
+    FirebaseFirestore firebase_firestore;
 
-    String userID, name, last_name, patronymic, email, role;
+    String user_id, name, last_name, patronymic, email, role;
+
+    ProfileBottomSheetBinding sheetBinding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.profile_bottom_sheet, container, false);
+        sheetBinding = ProfileBottomSheetBinding.inflate(inflater, container, false);
+        View view = sheetBinding.getRoot();
 
-        close_btn = view.findViewById(R.id.close_btn);
-        text_view_full_name = view.findViewById(R.id.text_view_full_name);
-        text_view_email = view.findViewById(R.id.text_view_email);
-        text_view_role = view.findViewById(R.id.text_view_role);
-        text_view_name_ava = view.findViewById(R.id.text_view_name_ava);
+        firebase_auth = FirebaseAuth.getInstance();
+        firebase_firestore = FirebaseFirestore.getInstance();
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        sheetBinding.closeBtn.setOnClickListener(v -> dismiss());
 
-        close_btn.setOnClickListener(v -> dismiss());
-
-        userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+        user_id = Objects.requireNonNull(firebase_auth.getCurrentUser()).getUid();
+        DocumentReference documentReference = firebase_firestore.collection("users").document(user_id);
         documentReference.addSnapshotListener((value, error) -> {
             assert value != null;
             name = value.getString("name");
@@ -60,11 +56,18 @@ public class ProfileBottomSheet extends BottomSheetDialogFragment {
             String _last_name = Character.toString(last_name.charAt(0));
             String ava = String.format("%s%s", _name, _last_name);
 
-            text_view_full_name.setText(full_name);
-            text_view_name_ava.setText(ava);
-            text_view_email.setText(email);
-            text_view_role.setText(role);
+            sheetBinding.textViewFullName.setText(full_name);
+            sheetBinding.textViewNameAva.setText(ava);
+            sheetBinding.textViewEmail.setText(email);
+            sheetBinding.textViewRole.setText(role);
         });
         return view;
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        sheetBinding = null;
+    }
+
 }

@@ -35,14 +35,14 @@
                         app:singleLine="true">
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/chip_root_future_ost_tasks"
+                            android:id="@+id/chip_ost_tasks"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/ost_text"
                             style="@style/Widget.MaterialComponents.Chip.Filter" />
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/chip_root_future_bar_tasks"
+                            android:id="@+id/chip_bar_tasks"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/bar_text"

@@ -1,17 +1,16 @@
-package com.george.vector.common.edit_users;
+package com.george.vector.users.root.edit_users;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.george.vector.R;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.chip.Chip;
+import com.george.vector.common.edit_users.User;
+import com.george.vector.common.edit_users.UserAdapter;
+import com.george.vector.databinding.ActivityListUsersBinding;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -20,33 +19,25 @@ public class ListUsersActivity extends AppCompatActivity {
 
     private static final String TAG = "ListUserActivity";
 
-    RecyclerView recycler_view_list_users;
-    Chip chip_root, chip_user, chip_worker;
-    MaterialToolbar toolbar_list_users;
-
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference usersRef = db.collection("users");
 
     private UserAdapter adapter;
     private Query query;
 
+    ActivityListUsersBinding usersBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_users);
+        usersBinding = ActivityListUsersBinding.inflate(getLayoutInflater());
+        setContentView(usersBinding.getRoot());
 
-        chip_root = findViewById(R.id.chip_root);
-        chip_user = findViewById(R.id.chip_user);
-        chip_worker = findViewById(R.id.chip_worker);
-
-        recycler_view_list_users = findViewById(R.id.recycler_view_list_users);
-        toolbar_list_users = findViewById(R.id.toolbar_list_users);
-
-        toolbar_list_users.setNavigationOnClickListener(v -> onBackPressed());
+        usersBinding.toolbarListUsers.setNavigationOnClickListener(v -> onBackPressed());
 
         setUpRecyclerView();
 
-        chip_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        usersBinding.chipRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             if(isChecked){
                 Log.i(TAG, "Root checked");
@@ -62,7 +53,7 @@ public class ListUsersActivity extends AppCompatActivity {
 
         });
 
-        chip_user.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        usersBinding.chipUser.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked){
                 Log.i(TAG, "user checked");
 
@@ -77,7 +68,7 @@ public class ListUsersActivity extends AppCompatActivity {
 
         });
 
-        chip_worker.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        usersBinding.chipWorker.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked){
                 Log.i(TAG, "executor checked");
 
@@ -102,9 +93,9 @@ public class ListUsersActivity extends AppCompatActivity {
 
         adapter = new UserAdapter(options);
 
-        recycler_view_list_users.setHasFixedSize(true);
-        recycler_view_list_users.setLayoutManager(new LinearLayoutManager(this));
-        recycler_view_list_users.setAdapter(adapter);
+        usersBinding.recyclerViewListUsers.setHasFixedSize(true);
+        usersBinding.recyclerViewListUsers.setLayoutManager(new LinearLayoutManager(this));
+        usersBinding.recyclerViewListUsers.setAdapter(adapter);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();

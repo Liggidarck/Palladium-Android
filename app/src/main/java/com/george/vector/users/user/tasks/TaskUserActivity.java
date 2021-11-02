@@ -1,14 +1,9 @@
 package com.george.vector.users.user.tasks;
 
-import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
-import static com.george.vector.common.consts.Keys.BAR_SCHOOL_NEW;
 import static com.george.vector.common.consts.Keys.COLLECTION;
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.ID;
 import static com.george.vector.common.consts.Keys.LOCATION;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL_NEW;
-import static com.george.vector.common.consts.Keys.PERMISSION;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -16,15 +11,13 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
-import com.george.vector.common.tasks.fragmentImageTask;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.george.vector.common.tasks.images.FragmentImageTask;
+import com.george.vector.databinding.ActivityTaskUserBinding;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -33,52 +26,32 @@ import com.google.firebase.storage.FirebaseStorage;
 public class TaskUserActivity extends AppCompatActivity {
 
     private static final String TAG = "TaskUserActivity";
-    MaterialToolbar toolbar;
-    TextView text_view_address_task_user, text_view_floor_task_user, text_view_cabinet_task_user,
-            text_view_name_task_user, text_view_comment_task_user, text_view_status_task_user,
-            text_view_date_create_task_user, text_view_full_name_creator_user, text_view_email_creator_task_user;
-    LinearProgressIndicator progress_bar_task_user;
+    String id, collection, address, floor, cabinet, letter, name_task,
+            comment, status, date_create, time_create, image, email_creator, full_name_creator, email_user;
 
-    String id, permission, collection, address, floor, cabinet, letter, name_task,
-            comment, status, date_create, time_create, image, email_creator, full_name_creator;
+    FirebaseFirestore firebase_firestore;
+    FirebaseStorage firebase_storage;
 
-    FirebaseFirestore firebaseFirestore;
-    FirebaseStorage firebaseStorage;
+    ActivityTaskUserBinding userBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_task_user);
+        userBinding = ActivityTaskUserBinding.inflate(getLayoutInflater());
+        setContentView(userBinding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.get(ID).toString();
-        permission = arguments.getString(PERMISSION);
+        id = arguments.getString(ID);
+        collection = arguments.getString(COLLECTION);
+        email_user = arguments.getString(EMAIL);
 
-        toolbar = findViewById(R.id.topAppBar_task_user);
-        text_view_address_task_user = findViewById(R.id.text_view_address_task_user);
-        text_view_floor_task_user = findViewById(R.id.text_view_floor_task_user);
-        text_view_cabinet_task_user = findViewById(R.id.text_view_cabinet_task_user);
-        text_view_name_task_user = findViewById(R.id.text_view_name_task_user);
-        text_view_comment_task_user = findViewById(R.id.text_view_comment_task_user);
-        text_view_status_task_user = findViewById(R.id.text_view_status_task_user);
-        text_view_date_create_task_user = findViewById(R.id.text_view_date_create_task_user);
-        progress_bar_task_user = findViewById(R.id.progress_bar_task_user);
-        text_view_full_name_creator_user = findViewById(R.id.text_view_full_name_creator_user);
-        text_view_email_creator_task_user = findViewById(R.id.text_view_email_creator_task_user);
+        firebase_firestore = FirebaseFirestore.getInstance();
+        firebase_storage = FirebaseStorage.getInstance();
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseStorage = FirebaseStorage.getInstance();
+        setSupportActionBar(userBinding.topAppBarTaskUser);
+        userBinding.topAppBarTaskUser.setNavigationOnClickListener(v -> onBackPressed());
 
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
-
-        if (permission.equals(OST_SCHOOL))
-            collection = OST_SCHOOL_NEW;
-
-        if (permission.equals(BAR_SCHOOL))
-            collection = BAR_SCHOOL_NEW;
-
-        DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
+        DocumentReference documentReference = firebase_firestore.collection(collection).document(id);
 
         documentReference.addSnapshotListener(this, (value, error) -> {
             assert value != null;
@@ -98,22 +71,22 @@ public class TaskUserActivity extends AppCompatActivity {
             if (!letter.equals("-") && !letter.isEmpty())
                 cabinet = String.format("%s%s", cabinet, letter);
 
-            text_view_address_task_user.setText(address);
-            text_view_floor_task_user.setText(floor);
-            text_view_cabinet_task_user.setText(cabinet);
-            text_view_name_task_user.setText(name_task);
-            text_view_comment_task_user.setText(comment);
-            text_view_status_task_user.setText(status);
-            text_view_email_creator_task_user.setText(email_creator);
-            text_view_full_name_creator_user.setText(full_name_creator);
+            userBinding.textViewAddressTaskUser.setText(address);
+            userBinding.textViewFloorTaskUser.setText(floor);
+            userBinding.textViewCabinetTaskUser.setText(cabinet);
+            userBinding.textViewNameTaskUser.setText(name_task);
+            userBinding.textViewCommentTaskUser.setText(comment);
+            userBinding.textViewStatusTaskUser.setText(status);
+            userBinding.textViewEmailCreatorTaskUser.setText(email_creator);
+            userBinding.textViewFullNameCreatorUser.setText(full_name_creator);
 
             String date_create_text = "Созданно: " + date_create + " " + time_create;
-            text_view_date_create_task_user.setText(date_create_text);
+            userBinding.textViewDateCreateTaskUser.setText(date_create_text);
 
             if (image == null) {
                 Log.d(TAG, "No image, stop loading");
             } else {
-                Fragment image_fragment = new fragmentImageTask();
+                Fragment image_fragment = new FragmentImageTask();
 
                 Bundle bundle = new Bundle();
                 bundle.putString("image_id", image);
@@ -133,7 +106,7 @@ public class TaskUserActivity extends AppCompatActivity {
 
         });
 
-        documentReference.get().addOnCompleteListener(task -> progress_bar_task_user.setVisibility(View.INVISIBLE));
+        documentReference.get().addOnCompleteListener(task -> userBinding.progressBarTaskUser.setVisibility(View.INVISIBLE));
     }
 
     public boolean isOnline() {

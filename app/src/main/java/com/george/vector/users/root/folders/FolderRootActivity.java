@@ -16,28 +16,27 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.george.vector.R;
+import com.george.vector.databinding.ActivityFolderRootBinding;
 import com.george.vector.users.root.tasks.FragmentTasksRoot;
-import com.google.android.material.appbar.MaterialToolbar;
 
 public class FolderRootActivity extends AppCompatActivity {
 
-    private static final String TAG = "FolderRootActivity";
+    ActivityFolderRootBinding folderRootBinding;
 
-    MaterialToolbar toolbar_folder_root_activity;
+    private static final String TAG = "FolderRootActivity";
     String text_toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_folder_root);
-
-        toolbar_folder_root_activity = findViewById(R.id.toolbar_folder_root_activity);
+        folderRootBinding = ActivityFolderRootBinding.inflate(getLayoutInflater());
+        setContentView(folderRootBinding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        String location = arguments.get(LOCATION).toString();
-        String folder = arguments.get(FOLDER).toString();
-        String executed = arguments.get(EXECUTED).toString();
-        String email = arguments.get(EMAIL).toString();
+        String location = arguments.getString(LOCATION);
+        String folder = arguments.getString(FOLDER);
+        String executed = arguments.getString(EXECUTED);
+        String email = arguments.getString(EMAIL);
         Log.d(TAG, "email: " + email);
 
         if(folder.equals(NEW_TASKS))
@@ -52,8 +51,8 @@ public class FolderRootActivity extends AppCompatActivity {
         if(folder.equals(COMPLETED_TASKS))
             text_toolbar = "Завершенные";
 
-        toolbar_folder_root_activity.setNavigationOnClickListener(v -> onBackPressed());
-        toolbar_folder_root_activity.setTitle(text_toolbar);
+        folderRootBinding.toolbarFolderRootActivity.setNavigationOnClickListener(v -> onBackPressed());
+        folderRootBinding.toolbarFolderRootActivity.setTitle(text_toolbar);
         Log.d(TAG, String.format("location: %s", location));
         Log.d(TAG, String.format("folder: %s", folder));
 

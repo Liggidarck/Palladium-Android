@@ -1,6 +1,5 @@
 package com.george.vector.common.settings;
 
-import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.PERMISSION;
 
 import android.os.Bundle;
@@ -24,7 +23,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         Bundle arguments = getIntent().getExtras();
         String permission = arguments.getString(PERMISSION);
-        String email = arguments.getString(EMAIL);
 
         toolbar_root_toolbar.setNavigationOnClickListener(v -> onBackPressed());
 

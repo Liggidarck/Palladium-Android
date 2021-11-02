@@ -47,5 +47,21 @@
         <item>ОП «Остафьевская»</item>
         <item>ОП «Барыши»</item>
     </string-array>
+    
+    <string-array name="maximum_buffer_size_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="maximum_buffer_size_text">
+        <item>1 Мегабайт</item>
+        <item>2 Мегабайт</item>
+        <item>3 Мегабайт</item>
+        <item>4 Мегабайт</item>
+        <item>5 Мегабайт</item>
+    </string-array>
 
 </resources>

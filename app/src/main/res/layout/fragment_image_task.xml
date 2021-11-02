@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/error_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/image_root_card"
@@ -36,7 +45,7 @@
                 android:id="@+id/download_image_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Скачать"
+                android:text="@string/download"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
                 app:icon="@drawable/ic_baseline_cloud_download_24"
                 android:layout_centerInParent="true" />
@@ -52,7 +61,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
-        android:text="повернуть"
+        android:text="@string/rotate"
         app:icon="@drawable/ic_baseline_rotate_right_24" />
 
-</LinearLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -6,18 +6,18 @@ import android.widget.TextView;
 
 public abstract class TextValidator implements TextWatcher {
 
-    private final TextView textView;
+    private final TextView text_view;
 
     public TextValidator(TextView textView) {
-        this.textView = textView;
+        this.text_view = textView;
     }
 
-    public abstract void validate(TextView textView, String text);
+    public abstract void validate(TextView text_view, String text);
 
     @Override
     final public void afterTextChanged(Editable s) {
-        String text = textView.getText().toString();
-        validate(textView, text);
+        String text = text_view.getText().toString();
+        validate(text_view, text);
     }
 
     @Override

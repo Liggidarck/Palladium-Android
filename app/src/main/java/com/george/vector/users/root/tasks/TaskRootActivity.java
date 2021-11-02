@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,63 +22,34 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
-import com.george.vector.common.tasks.fragmentImageTask;
-import com.george.vector.common.tasks.fragmentUrgentRequest;
+import com.george.vector.common.tasks.FragmentUrgentRequest;
+import com.george.vector.common.tasks.images.FragmentImageTask;
 import com.george.vector.common.tasks.utils.DeleteTask;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.george.vector.databinding.ActivityTaskRootBinding;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class TaskRootActivity extends AppCompatActivity {
 
-    MaterialToolbar topAppBar_tasks_root;
-    LinearProgressIndicator progress_bar_task_root;
-    TextView text_view_address_task_root, text_view_floor_task_root, text_view_cabinet_task_root,
-            text_view_name_task_root, text_view_comment_task_root, text_view_status_task_root,
-            text_view_date_create_task_root, text_view_email_creator_task_root,
-            text_view_email_executor_task_root, text_view_date_done_task_root, text_view_full_name_executor,
-            text_view_full_name_creator;
-    CircleImageView circle_status_root;
-    FloatingActionButton edit_task_root_btn;
-
     private static final String TAG = "TaskActivityRoot";
-
     String id, collection, address, floor, cabinet, letter, name_task, comment, status,
             date_create, time_create, location, email, image, email_creator, email_executor,
             date_done, full_name_executor, full_name_creator;
     boolean confirm_delete, urgent;
 
-    FirebaseFirestore firebaseFirestore;
+    FirebaseFirestore firebase_firestore;
+
+    ActivityTaskRootBinding taskRootBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_task_root);
 
-        topAppBar_tasks_root = findViewById(R.id.topAppBar_tasks_root);
-        progress_bar_task_root = findViewById(R.id.progress_bar_task_root);
-        text_view_address_task_root = findViewById(R.id.text_view_address_task_root);
-        text_view_floor_task_root = findViewById(R.id.text_view_floor_task_root);
-        text_view_cabinet_task_root = findViewById(R.id.text_view_cabinet_task_root);
-        text_view_name_task_root = findViewById(R.id.text_view_name_task_root);
-        text_view_comment_task_root = findViewById(R.id.text_view_comment_task_root);
-        text_view_status_task_root = findViewById(R.id.text_view_status_task_root);
-        text_view_date_create_task_root = findViewById(R.id.text_view_date_create_task_root);
-        circle_status_root = findViewById(R.id.circle_status_root);
-        edit_task_root_btn = findViewById(R.id.edit_task_root_btn);
-
-        text_view_email_creator_task_root = findViewById(R.id.text_view_email_creator_task_root);
-        text_view_email_executor_task_root = findViewById(R.id.text_view_email_executor_task_root);
-        text_view_date_done_task_root = findViewById(R.id.text_view_date_done_task_root);
-        text_view_full_name_executor = findViewById(R.id.text_view_full_name_executor);
-        text_view_full_name_creator = findViewById(R.id.text_view_full_name_creator);
+        taskRootBinding = ActivityTaskRootBinding.inflate(getLayoutInflater());
+        setContentView(taskRootBinding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.get(ID).toString();
@@ -88,12 +58,12 @@ public class TaskRootActivity extends AppCompatActivity {
         email = arguments.get(EMAIL).toString();
         confirm_delete = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("confirm_before_deleting_root", true);
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebase_firestore = FirebaseFirestore.getInstance();
 
-        setSupportActionBar(topAppBar_tasks_root);
-        topAppBar_tasks_root.setNavigationOnClickListener(v -> onBackPressed());
+        setSupportActionBar(taskRootBinding.topAppBarTasksRoot);
+        taskRootBinding.topAppBarTasksRoot.setNavigationOnClickListener(v -> onBackPressed());
 
-        edit_task_root_btn.setOnClickListener(v -> {
+        taskRootBinding.editTaskRootBtn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskRootActivity.class);
             intent.putExtra(ID, id);
             intent.putExtra(COLLECTION, collection);
@@ -106,7 +76,7 @@ public class TaskRootActivity extends AppCompatActivity {
     }
 
     void load_data(String collection, String id) {
-        DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
+        DocumentReference documentReference = firebase_firestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
             assert value != null;
             address = value.getString("address");
@@ -120,6 +90,8 @@ public class TaskRootActivity extends AppCompatActivity {
             time_create = value.getString("time_create");
             image = value.getString("image");
 
+            Log.d(TAG, "image: " + image);
+
             email_creator = value.getString("email_creator");
             email_executor = value.getString("executor");
             date_done = value.getString("date_done");
@@ -129,13 +101,13 @@ public class TaskRootActivity extends AppCompatActivity {
             try {
                 urgent = value.getBoolean("urgent");
                 if (status.equals("Новая заявка"))
-                    circle_status_root.setImageResource(R.color.red);
+                    taskRootBinding.circleStatusRoot.setImageResource(R.color.red);
 
                 if (status.equals("В работе"))
-                    circle_status_root.setImageResource(R.color.orange);
+                    taskRootBinding.circleStatusRoot.setImageResource(R.color.orange);
 
                 if (status.equals("Архив") || status.equals("Завершенная заявка"))
-                    circle_status_root.setImageResource(R.color.green);
+                    taskRootBinding.circleStatusRoot.setImageResource(R.color.green);
 
                 if (!letter.equals("-") && !letter.isEmpty())
                     cabinet = String.format("%s%s", cabinet, letter);
@@ -143,7 +115,7 @@ public class TaskRootActivity extends AppCompatActivity {
                 if (image == null) {
                     Log.d(TAG, "No image, stop loading");
                 } else {
-                    Fragment image_fragment = new fragmentImageTask();
+                    Fragment image_fragment = new FragmentImageTask();
 
                     Bundle bundle = new Bundle();
                     bundle.putString("image_id", image);
@@ -163,7 +135,7 @@ public class TaskRootActivity extends AppCompatActivity {
                 if (urgent) {
                     Log.d(TAG, "Срочная заявка");
 
-                    Fragment urgent_fragment = new fragmentUrgentRequest();
+                    Fragment urgent_fragment = new FragmentUrgentRequest();
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.frame_urgent_task, urgent_fragment)
@@ -175,43 +147,43 @@ public class TaskRootActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            text_view_address_task_root.setText(address);
-            text_view_floor_task_root.setText(floor);
-            text_view_cabinet_task_root.setText(cabinet);
-            text_view_name_task_root.setText(name_task);
-            text_view_comment_task_root.setText(comment);
-            text_view_status_task_root.setText(status);
+            taskRootBinding.textViewAddressTaskRoot.setText(address);
+            taskRootBinding.textViewFloorTaskRoot.setText(floor);
+            taskRootBinding.textViewCabinetTaskRoot.setText(cabinet);
+            taskRootBinding.textViewNameTaskRoot.setText(name_task);
+            taskRootBinding.textViewCommentTaskRoot.setText(comment);
+            taskRootBinding.textViewStatusTaskRoot.setText(status);
 
             String date_create_text = "Созданно: " + date_create + " " + time_create;
-            text_view_date_create_task_root.setText(date_create_text);
+            taskRootBinding.textViewDateCreateTaskRoot.setText(date_create_text);
 
-            text_view_email_creator_task_root.setText(email_creator);
+            taskRootBinding.textViewEmailCreatorTaskRoot.setText(email_creator);
 
             if (full_name_creator == null)
-                text_view_full_name_creator.setText("Нет данных об этом пользователе");
+                taskRootBinding.textViewFullNameCreator.setText("Нет данных об этом пользователе");
             else
-                text_view_full_name_creator.setText(full_name_creator);
+                taskRootBinding.textViewFullNameCreator.setText(full_name_creator);
 
             if (full_name_executor == null)
-                text_view_full_name_executor.setText("Нет назначенного исполнителя");
+                taskRootBinding.textViewFullNameExecutor.setText("Нет назначенного исполнителя");
             else
-                text_view_full_name_executor.setText(full_name_executor);
+                taskRootBinding.textViewFullNameExecutor.setText(full_name_executor);
 
             if (email_executor == null)
-                text_view_email_executor_task_root.setText("Нет данных");
+                taskRootBinding.textViewEmailExecutorTaskRoot.setText("Нет данных");
             else
-                text_view_email_executor_task_root.setText(email_executor);
+                taskRootBinding.textViewEmailExecutorTaskRoot.setText(email_executor);
 
             if (date_done == null)
-                text_view_date_done_task_root.setText("Дата выполнения не назначена");
+                taskRootBinding.textViewDateDoneTaskRoot.setText("Дата выполнения не назначена");
             else {
                 String date_done_text = "Дата выполнения: " + date_done;
-                text_view_date_done_task_root.setText(date_done_text);
+                taskRootBinding.textViewDateDoneTaskRoot.setText(date_done_text);
             }
 
         });
 
-        documentReference.get().addOnCompleteListener(task -> progress_bar_task_root.setVisibility(View.INVISIBLE));
+        documentReference.get().addOnCompleteListener(task -> taskRootBinding.progressBarTaskRoot.setVisibility(View.INVISIBLE));
     }
 
     @Override

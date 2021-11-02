@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
 
-public class fragmentUrgentRequest extends Fragment {
+public class FragmentUrgentRequest extends Fragment {
 
     @Nullable
     @Override

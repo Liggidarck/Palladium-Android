@@ -56,7 +56,7 @@
         android:id="@+id/ost_aist_new_task"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ost_aist_text"
+        android:text="@string/ost_stork_text"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_marginTop="10dp" />
 
@@ -64,7 +64,7 @@
         android:id="@+id/ost_yagodka_new_task"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ost_yagodka_text"
+        android:text="@string/ost_berry_text"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_marginTop="10dp" />
 
@@ -88,7 +88,7 @@
         android:id="@+id/bar_rucheek_new_task"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/bar_rucheek_text"
+        android:text="@string/bar_stream_text"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_marginTop="10dp" />
 

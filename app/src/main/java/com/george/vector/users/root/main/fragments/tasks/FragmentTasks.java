@@ -15,24 +15,21 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
-import com.google.android.material.chip.Chip;
+import com.george.vector.databinding.FragmentRootTasksBinding;
 
 import org.jetbrains.annotations.NotNull;
 
 public class FragmentTasks extends Fragment {
 
     private static final String TAG = "FragmentTasksRoot";
-    Chip chip_root_future_ost_tasks, chip_root_future_bar_tasks;
-
     String zone, email;
+    FragmentRootTasksBinding rootTasksBinding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_root_tasks, container, false);
-
-        chip_root_future_ost_tasks = view.findViewById(R.id.chip_root_future_ost_tasks);
-        chip_root_future_bar_tasks = view.findViewById(R.id.chip_root_future_bar_tasks);
+        rootTasksBinding = FragmentRootTasksBinding.inflate(inflater, container, false);
+        View view = rootTasksBinding.getRoot();
 
         Bundle args = getArguments();
         assert args != null;
@@ -42,12 +39,12 @@ public class FragmentTasks extends Fragment {
         zone = PreferenceManager.getDefaultSharedPreferences(FragmentTasks.this.getContext()).getString("default_root_location", OST);
 
         if(zone.equals("ost"))
-            chip_root_future_ost_tasks.setChecked(true);
+            rootTasksBinding.chipOstTasks.setChecked(true);
 
         if(zone.equals("bar"))
-            chip_root_future_bar_tasks.setChecked(true);
+            rootTasksBinding.chipBarTasks.setChecked(true);
 
-        chip_root_future_ost_tasks.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        rootTasksBinding.chipOstTasks.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             if(isChecked){
                 Log.i(TAG, "Остафьево checked");
@@ -57,7 +54,7 @@ public class FragmentTasks extends Fragment {
 
         });
 
-        chip_root_future_bar_tasks.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        rootTasksBinding.chipBarTasks.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked){
                 Log.i(TAG, "Барыши checked");
                 zone = "bar";
@@ -91,4 +88,9 @@ public class FragmentTasks extends Fragment {
 
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        rootTasksBinding = null;
+    }
 }

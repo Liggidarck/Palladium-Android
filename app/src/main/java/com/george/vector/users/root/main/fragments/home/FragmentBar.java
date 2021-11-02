@@ -12,23 +12,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.george.vector.R;
-import com.google.android.material.card.MaterialCardView;
+import com.george.vector.databinding.FragmentBarRootBinding;
 
 public class FragmentBar extends Fragment {
 
     private static final String TAG = "FragmentBar";
-    MaterialCardView bar_school_root, bar_kids_one_root, bar_kids_two_root;
-
+    FragmentBarRootBinding barRootBinding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_bar_root, container, false);
-
-        bar_school_root = view.findViewById(R.id.bar_school_root);
-        bar_kids_one_root = view.findViewById(R.id.bar_kids_one_root);
-        bar_kids_two_root = view.findViewById(R.id.bar_kids_two_root);
+        barRootBinding = FragmentBarRootBinding.inflate(inflater, container, false);
+        View view = barRootBinding.getRoot();
 
         Bundle args = getArguments();
         assert args != null;
@@ -36,5 +31,11 @@ public class FragmentBar extends Fragment {
         Log.d(TAG, "email: " + email);
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        barRootBinding = null;
     }
 }

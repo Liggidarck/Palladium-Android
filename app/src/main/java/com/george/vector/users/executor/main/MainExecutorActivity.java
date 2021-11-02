@@ -18,7 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.george.vector.R;
-import com.george.vector.common.bottom_sheets.ProfileBottomSheet;
+import com.george.vector.databinding.ActivityMainExecutorBinding;
 import com.george.vector.users.executor.main.fragments.fragment_bar;
 import com.george.vector.users.executor.main.fragments.fragment_ost;
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -30,28 +30,22 @@ import org.jetbrains.annotations.NotNull;
 public class MainExecutorActivity extends AppCompatActivity {
 
     private static final String TAG = "ExecutorMain";
-    BottomAppBar bottomAppBarWorker;
-
-    Chip chip_executor_ost, chip_executor_bar;
-    String zone;
-    String email;
+    String zone, email;
+    ActivityMainExecutorBinding executorBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.MainActivity);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_executor);
+        executorBinding = ActivityMainExecutorBinding.inflate(getLayoutInflater());
+        setContentView(executorBinding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
         email = arguments.getString(EMAIL);
         zone = PreferenceManager.getDefaultSharedPreferences(this).getString("default_executor_location", OST);
 
-        bottomAppBarWorker = findViewById(R.id.bottomAppBarWorker);
-        chip_executor_ost = findViewById(R.id.chip_executor_ost);
-        chip_executor_bar = findViewById(R.id.chip_executor_bar);
-
-        setSupportActionBar(bottomAppBarWorker);
-        bottomAppBarWorker.setNavigationOnClickListener(v -> {
+        setSupportActionBar(executorBinding.bottomAppBarWorker);
+        executorBinding.bottomAppBarWorker.setNavigationOnClickListener(v -> {
             SettingsExecutorBottomSheet bottomSheet = new SettingsExecutorBottomSheet();
             Bundle bundle = new Bundle();
 
@@ -62,12 +56,12 @@ public class MainExecutorActivity extends AppCompatActivity {
         });
 
         if(zone.equals("ost"))
-            chip_executor_ost.setChecked(true);
+            executorBinding.chipExecutorOst.setChecked(true);
 
         if(zone.equals("bar"))
-            chip_executor_bar.setChecked(true);
+            executorBinding.chipExecutorBar.setChecked(true);
 
-        chip_executor_ost.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        executorBinding.chipExecutorOst.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             if(isChecked){
                 Log.i(TAG, "Остафьево checked");
@@ -77,7 +71,7 @@ public class MainExecutorActivity extends AppCompatActivity {
 
         });
 
-        chip_executor_bar.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        executorBinding.chipExecutorBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked){
                 Log.i(TAG, "Барыши checked");
                 zone = "bar";

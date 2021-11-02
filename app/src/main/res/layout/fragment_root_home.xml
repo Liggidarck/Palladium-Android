@@ -13,7 +13,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="25dp"
-        android:text="Создать"
+        android:text="@string/create"
         android:textColor="@color/white"
         app:icon="@drawable/ic_baseline_add_24"
         app:iconTint="@color/white" />
@@ -48,14 +48,14 @@
                         app:singleLine="true">
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/chip_root_future_ost"
+                            android:id="@+id/chip_root_ost"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/ost_text"
                             style="@style/Widget.MaterialComponents.Chip.Filter" />
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/chip_root_future_bar"
+                            android:id="@+id/chip_root_bar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/bar_text"

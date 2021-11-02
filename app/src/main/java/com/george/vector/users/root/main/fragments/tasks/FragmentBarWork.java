@@ -9,13 +9,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.george.vector.R;
+import com.george.vector.databinding.FragmentBarRootBinding;
 
 public class FragmentBarWork extends Fragment {
+
+    FragmentBarRootBinding barRootBinding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_bar_root, container, false);
+        barRootBinding = FragmentBarRootBinding.inflate(inflater, container, false);
+        View view = barRootBinding.getRoot();
+
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        barRootBinding = null;
     }
 }

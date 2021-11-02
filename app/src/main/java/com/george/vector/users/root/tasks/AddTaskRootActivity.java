@@ -4,31 +4,37 @@ import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.LOCATION;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL;
+import static com.george.vector.common.consts.Keys.PERMISSION_CAMERA_CODE;
+import static com.george.vector.common.consts.Keys.PERMISSION_GALLERY_CODE;
 import static com.george.vector.common.consts.Keys.USERS;
 
-import android.annotation.SuppressLint;
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Window;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,13 +46,8 @@ import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.TextValidator;
 import com.george.vector.common.utils.Utils;
-import com.google.android.material.appbar.MaterialToolbar;
+import com.george.vector.databinding.ActivityAddTaskRootBinding;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
-import com.google.android.material.textfield.MaterialAutoCompleteTextView;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -56,9 +57,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -67,25 +70,10 @@ import java.util.UUID;
 
 public class AddTaskRootActivity extends AppCompatActivity {
 
-    MaterialToolbar top_app_bar_new_task_root;
-    LinearProgressIndicator progress_bar_add_task_root;
-    ExtendedFloatingActionButton done_task_root;
-    Button add_executor_root;
-    CheckBox urgent_request_check_box;
-    TextInputLayout text_input_layout_address_root, text_input_layout_floor_root,
-            text_input_layout_cabinet_root, text_input_layout_name_task_root,
-            text_input_layout_comment_root, text_input_layout_date_task_root,
-            text_input_layout_executor_root, text_input_layout_status_root,
-            text_input_layout_cabinet_liter_root, text_input_layout_full_name_executor_root;
-    TextInputEditText edit_text_date_task_root;
-    MaterialAutoCompleteTextView address_auto_complete_root, status_auto_complete_root, liter_auto_complete_root;
-    ImageView image_task;
-
-    String location, userID, email, address, floor, cabinet, letter, name_task, date_complete, status, comment,
+    String location, user_id, email, address, floor, cabinet, letter, name_task, date_complete, status, comment,
             USER_EMAIL, NAME_IMAGE, full_name_executor, name_executor, last_name_executor, patronymic_executor, email_executor, full_name_creator;
     boolean urgent;
     private static final String TAG = "AddTaskRoot";
-    private final int PICK_IMAGE_REQUEST = 71;
 
     FirebaseAuth firebase_auth;
     StorageReference storage_reference;
@@ -94,142 +82,151 @@ public class AddTaskRootActivity extends AppCompatActivity {
     private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private final CollectionReference usersRef = firebaseFirestore.collection(USERS);
     Query query;
-    private Uri filePath;
+    private Uri fileUri;
 
     Calendar datePickCalendar;
     Utils utils = new Utils();
 
+    ActivityAddTaskRootBinding mBuilding;
+
+    ActivityResultLauncher<String> selectPictureLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
+            uri -> {
+                fileUri = uri;
+                mBuilding.imageTask.setImageURI(fileUri);
+            });
+
+    ActivityResultLauncher<Uri> cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicture(),
+            result -> {
+                if (result) {
+                    mBuilding.imageTask.setImageURI(fileUri);
+                }
+            });
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_task_root);
 
-        top_app_bar_new_task_root = findViewById(R.id.topAppBar_new_task_root);
-        progress_bar_add_task_root = findViewById(R.id.progress_bar_add_task_root);
-        done_task_root = findViewById(R.id.done_task_root);
-        text_input_layout_address_root = findViewById(R.id.text_input_layout_address_root);
-        text_input_layout_floor_root = findViewById(R.id.text_input_layout_floor_root);
-        text_input_layout_cabinet_root = findViewById(R.id.text_input_layout_cabinet_root);
-        text_input_layout_name_task_root = findViewById(R.id.text_input_layout_name_task_root);
-        text_input_layout_comment_root = findViewById(R.id.text_input_layout_comment_root);
-        text_input_layout_date_task_root = findViewById(R.id.text_input_layout_date_task_root);
-        text_input_layout_executor_root = findViewById(R.id.text_input_layout_executor_root);
-        text_input_layout_status_root = findViewById(R.id.text_input_layout_status_root);
-        edit_text_date_task_root = findViewById(R.id.edit_text_date_task_root);
-        address_auto_complete_root = findViewById(R.id.address_autoComplete_root);
-        status_auto_complete_root = findViewById(R.id.status_autoComplete_root);
-        add_executor_root = findViewById(R.id.add_executor_root);
-        text_input_layout_cabinet_liter_root = findViewById(R.id.text_input_layout_cabinet_liter_root);
-        liter_auto_complete_root = findViewById(R.id.liter_autoComplete_root);
-        urgent_request_check_box = findViewById(R.id.urgent_request_check_box);
-        image_task = findViewById(R.id.image_task);
-        text_input_layout_full_name_executor_root = findViewById(R.id.text_input_layout_full_name_executor_root);
+        mBuilding = ActivityAddTaskRootBinding.inflate(getLayoutInflater());
+        setContentView(mBuilding.getRoot());
 
         firebase_auth = FirebaseAuth.getInstance();
         firebase_storage = FirebaseStorage.getInstance();
         storage_reference = firebase_storage.getReference();
 
-        top_app_bar_new_task_root.setNavigationOnClickListener(v -> onBackPressed());
+        mBuilding.topAppBarNewTaskRoot.setNavigationOnClickListener(v -> onBackPressed());
 
         Bundle arguments = getIntent().getExtras();
         location = arguments.get(LOCATION).toString();
         USER_EMAIL = arguments.get(EMAIL).toString();
         Log.d(TAG, location);
 
-        initialize_fields(location);
+        initializeFields(location);
 
-        userID = Objects.requireNonNull(firebase_auth.getCurrentUser()).getUid();
-        DocumentReference documentReferenceUser = firebaseFirestore.collection(USERS).document(userID);
+        user_id = Objects.requireNonNull(firebase_auth.getCurrentUser()).getUid();
+        DocumentReference documentReferenceUser = firebaseFirestore.collection(USERS).document(user_id);
         documentReferenceUser.addSnapshotListener(this, (value, error) -> {
             assert value != null;
             email = value.getString("email");
             String name_creator = value.getString("name");
             String last_name_creator = value.getString("last_name");
             String patronymic_creator = value.getString("patronymic");
-            full_name_creator =  last_name_creator + " " + name_creator + " " + patronymic_creator;
+            full_name_creator = last_name_creator + " " + name_creator + " " + patronymic_creator;
         });
 
-        add_executor_root.setOnClickListener(v -> show_add_executor_dialog());
+        mBuilding.addExecutorRoot.setOnClickListener(v -> showAddExecutorDialog());
 
-        image_task.setOnClickListener(v -> show_dialog_image());
+        mBuilding.imageTask.setOnClickListener(v -> showDialogImage());
 
-        done_task_root.setOnClickListener(v -> {
-            address = Objects.requireNonNull(text_input_layout_address_root.getEditText()).getText().toString();
-            floor = Objects.requireNonNull(text_input_layout_floor_root.getEditText()).getText().toString();
-            cabinet = Objects.requireNonNull(text_input_layout_cabinet_root.getEditText()).getText().toString();
-            letter = Objects.requireNonNull(text_input_layout_cabinet_liter_root.getEditText()).getText().toString();
-            name_task = Objects.requireNonNull(text_input_layout_name_task_root.getEditText()).getText().toString();
-            comment = Objects.requireNonNull(text_input_layout_comment_root.getEditText()).getText().toString();
-            date_complete = Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).getText().toString();
-            email_executor = Objects.requireNonNull(text_input_layout_executor_root.getEditText()).getText().toString();
-            status = Objects.requireNonNull(text_input_layout_status_root.getEditText()).getText().toString();
-            urgent = urgent_request_check_box.isChecked();
-            full_name_executor = text_input_layout_full_name_executor_root.getEditText().getText().toString();
+        mBuilding.doneTaskRoot.setOnClickListener(v -> {
+            address = Objects.requireNonNull(mBuilding.textInputLayoutAddressRoot.getEditText()).getText().toString();
+            floor = Objects.requireNonNull(mBuilding.textInputLayoutFloorRoot.getEditText()).getText().toString();
+            cabinet = Objects.requireNonNull(mBuilding.textInputLayoutCabinetRoot.getEditText()).getText().toString();
+            letter = Objects.requireNonNull(mBuilding.textInputLayoutCabinetLiterRoot.getEditText()).getText().toString();
+            name_task = Objects.requireNonNull(mBuilding.textInputLayoutNameTaskRoot.getEditText()).getText().toString();
+            comment = Objects.requireNonNull(mBuilding.textInputLayoutCommentRoot.getEditText()).getText().toString();
+            date_complete = Objects.requireNonNull(mBuilding.textInputLayoutDateTaskRoot.getEditText()).getText().toString();
+            email_executor = Objects.requireNonNull(mBuilding.textInputLayoutExecutorRoot.getEditText()).getText().toString();
+            status = Objects.requireNonNull(mBuilding.textInputLayoutStatusRoot.getEditText()).getText().toString();
+            urgent = mBuilding.urgentRequestCheckBox.isChecked();
+            full_name_executor = mBuilding.textInputLayoutFullNameExecutorRoot.getEditText().getText().toString();
 
             if (validateFields()) {
                 if (!isOnline())
-                    show_dialog();
+                    showDialogNoInternet();
                 else
-                    save_task(location);
+                    saveTask(location);
             }
 
         });
 
-    }
-
-    private void show_dialog_image() {
-        Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_add_image);
-
-        RelativeLayout layout_new_photo = dialog.findViewById(R.id.layout_new_photo);
-        RelativeLayout layout_folder = dialog.findViewById(R.id.layout_folder);
-
-        layout_new_photo.setOnClickListener(v -> {
-            dialog.dismiss();
-        });
-        layout_folder.setOnClickListener(v -> {
-            chooseImage();
-            dialog.dismiss();
-        });
-
-        dialog.show();
-    }
-
-    private void chooseImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            filePath = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                image_task.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        switch (requestCode) {
+            case PERMISSION_GALLERY_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    selectPictureLauncher.launch("image/*");
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                    builder.setTitle(getText(R.string.warning))
+                            .setMessage("Для того, чтобы загрузить изображение необходимо разрешить Palladium доступ файловому хранилищу")
+                            .setPositiveButton("Настройки", (dialog, id) ->
+                                    startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                            Uri.fromParts("package", getPackageName(), null))))
+                            .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.cancel());
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+
+                break;
+
+            case PERMISSION_CAMERA_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    File file = new File(getFilesDir(), "picFromCamera");
+                    fileUri = FileProvider.getUriForFile(
+                            this,
+                            getApplicationContext().getPackageName() + ".provider",
+                            file);
+                    cameraLauncher.launch(fileUri);
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                    builder.setTitle(getText(R.string.warning))
+                            .setMessage("Для того, чтобы загрузить изображение необходимо разрешить Palladium доступ к камере")
+                            .setPositiveButton("Настройки", (dialog, id) ->
+                                    startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                            Uri.fromParts("package", getPackageName(), null))))
+                            .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.cancel());
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+
+                break;
         }
+
     }
 
-    @SuppressLint("DefaultLocale")
     private void uploadImage() {
-        if (filePath != null) {
+        if (fileUri != null) {
             Bitmap bmp = null;
             try {
-                bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), fileUri);
+                Log.d(TAG, "Bitmap: " + bmp);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bmp.compress(Bitmap.CompressFormat.JPEG, 25, byteArrayOutputStream);
+            Log.d(TAG, "Bitmap: " + bmp);
             byte[] data = byteArrayOutputStream.toByteArray();
+            Log.d(TAG, "Data: " + Arrays.toString(data));
 
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Загрузка...");
@@ -246,7 +243,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
                     .addOnFailureListener(e -> progressDialog.dismiss())
                     .addOnProgressListener(taskSnapshot -> {
                         double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                        progressDialog.setMessage(String.format("Прогресс: %d%%", (int) progress));
+                        progressDialog.setMessage("Прогресс: " + (int) progress + "%");
                     });
         } else {
             NAME_IMAGE = null;
@@ -254,7 +251,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
         }
     }
 
-    void save_task(String location) {
+    void saveTask(String location) {
         Task task = new Task();
 
         uploadImage();
@@ -269,7 +266,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
                 date_complete, email_executor, status, time_create, email, urgent, NAME_IMAGE, full_name_executor, full_name_creator);
     }
 
-    public void show_add_executor_dialog() {
+    void showAddExecutorDialog() {
         Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_choose_executor);
@@ -333,9 +330,10 @@ public class AddTaskRootActivity extends AppCompatActivity {
                 Log.i(TAG, String.format("patronymic: %s", patronymic_executor));
                 Log.i(TAG, String.format("email: %s", email_executor));
 
-                Objects.requireNonNull(text_input_layout_executor_root.getEditText()).setText(email_executor);
-                Objects.requireNonNull(text_input_layout_full_name_executor_root.getEditText()).setText(full_name_executor);
+                Objects.requireNonNull(mBuilding.textInputLayoutExecutorRoot.getEditText()).setText(email_executor);
+                Objects.requireNonNull(mBuilding.textInputLayoutFullNameExecutorRoot.getEditText()).setText(full_name_executor);
 
+                adapter.stopListening();
                 dialog.dismiss();
             });
 
@@ -346,18 +344,52 @@ public class AddTaskRootActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    void show_dialog() {
+    void showDialogImage() {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_add_image);
+
+        RelativeLayout camera_btn = dialog.findViewById(R.id.layout_new_photo);
+        RelativeLayout gallery_btn = dialog.findViewById(R.id.layout_folder);
+
+        camera_btn.setOnClickListener(v -> {
+            ActivityCompat.requestPermissions(
+                    AddTaskRootActivity.this,
+                    new String[]{
+                            Manifest.permission.CAMERA,
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    }, PERMISSION_CAMERA_CODE);
+
+            dialog.dismiss();
+        });
+
+        gallery_btn.setOnClickListener(v -> {
+            ActivityCompat.requestPermissions(
+                    AddTaskRootActivity.this,
+                    new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    }, PERMISSION_GALLERY_CODE);
+
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    void showDialogNoInternet() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_no_connection))
-                .setPositiveButton(getText(R.string.save), (dialog, id) -> save_task(location))
+                .setPositiveButton(getText(R.string.save), (dialog, id) -> saveTask(location))
                 .setNegativeButton(android.R.string.cancel, (dialog, id) -> onBackPressed());
 
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
-    void initialize_fields(String location) {
+    void initializeFields(String location) {
         if (location.equals(OST_SCHOOL)) {
             String[] items = getResources().getStringArray(R.array.addresses_ost_school);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -366,11 +398,11 @@ public class AddTaskRootActivity extends AppCompatActivity {
                     items
             );
 
-            address_auto_complete_root.setAdapter(adapter);
+            mBuilding.addressAutoCompleteRoot.setAdapter(adapter);
         }
 
         if (location.equals(BAR_SCHOOL))
-            Objects.requireNonNull(text_input_layout_address_root.getEditText()).setText(getText(R.string.bar_school_address));
+            Objects.requireNonNull(mBuilding.textInputLayoutAddressRoot.getEditText()).setText(getText(R.string.bar_school_address));
 
         String[] items_status = getResources().getStringArray(R.array.status);
         ArrayAdapter<String> adapter_status = new ArrayAdapter<>(
@@ -379,71 +411,70 @@ public class AddTaskRootActivity extends AppCompatActivity {
                 items_status
         );
 
-        status_auto_complete_root.setAdapter(adapter_status);
+        mBuilding.statusAutoCompleteRoot.setAdapter(adapter_status);
 
         String[] itemsLetter = getResources().getStringArray(R.array.letter);
-        ArrayAdapter<String> adapter_litera = new ArrayAdapter<>(
+        ArrayAdapter<String> adapter_letter = new ArrayAdapter<>(
                 AddTaskRootActivity.this,
                 R.layout.dropdown_menu_categories,
                 itemsLetter
         );
 
-        liter_auto_complete_root.setAdapter(adapter_litera);
+        mBuilding.literAutoCompleteRoot.setAdapter(adapter_letter);
 
         datePickCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
             datePickCalendar.set(Calendar.YEAR, year);
             datePickCalendar.set(Calendar.MONTH, month);
             datePickCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            updateLabel();
+            setDate();
         };
 
-        edit_text_date_task_root.setOnClickListener(v -> new DatePickerDialog(AddTaskRootActivity.this, date, datePickCalendar
+        mBuilding.editTextDateTaskRoot.setOnClickListener(v -> new DatePickerDialog(AddTaskRootActivity.this, date, datePickCalendar
                 .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
 
-        text_input_layout_floor_root.getEditText().addTextChangedListener(new TextValidator(text_input_layout_floor_root.getEditText()) {
+        mBuilding.textInputLayoutFloorRoot.getEditText().addTextChangedListener(new TextValidator(mBuilding.textInputLayoutFloorRoot.getEditText()) {
             @Override
             public void validate(TextView textView, String text) {
-                utils.validateNumberField(text, text_input_layout_floor_root, done_task_root, 1);
+                utils.validateNumberField(text, mBuilding.textInputLayoutFloorRoot, mBuilding.doneTaskRoot, 1);
             }
         });
 
-        text_input_layout_cabinet_root.getEditText().addTextChangedListener(new TextValidator(text_input_layout_cabinet_root.getEditText()) {
+        mBuilding.textInputLayoutCabinetRoot.getEditText().addTextChangedListener(new TextValidator(mBuilding.textInputLayoutCabinetRoot.getEditText()) {
             @Override
             public void validate(TextView textView, String text) {
-                utils.validateNumberField(text, text_input_layout_cabinet_root, done_task_root, 3);
+                utils.validateNumberField(text, mBuilding.textInputLayoutCabinetRoot, mBuilding.doneTaskRoot, 3);
             }
         });
     }
 
-    void updateLabel() {
+    void setDate() {
         String date_text = "dd.MM.yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(date_text, Locale.US);
 
-        Objects.requireNonNull(text_input_layout_date_task_root.getEditText()).setText(sdf.format(datePickCalendar.getTime()));
+        Objects.requireNonNull(mBuilding.textInputLayoutDateTaskRoot.getEditText()).setText(sdf.format(datePickCalendar.getTime()));
     }
 
     boolean validateFields() {
         Utils utils = new Utils();
 
-        utils.clear_error(text_input_layout_address_root);
-        utils.clear_error(text_input_layout_floor_root);
-        utils.clear_error(text_input_layout_cabinet_root);
-        utils.clear_error(text_input_layout_name_task_root);
-        utils.clear_error(text_input_layout_date_task_root);
-        utils.clear_error(text_input_layout_executor_root);
-        utils.clear_error(text_input_layout_status_root);
-        utils.clear_error(text_input_layout_full_name_executor_root);
+        utils.clear_error(mBuilding.textInputLayoutAddressRoot);
+        utils.clear_error(mBuilding.textInputLayoutFloorRoot);
+        utils.clear_error(mBuilding.textInputLayoutCabinetRoot);
+        utils.clear_error(mBuilding.textInputLayoutNameTaskRoot);
+        utils.clear_error(mBuilding.textInputLayoutDateTaskRoot);
+        utils.clear_error(mBuilding.textInputLayoutExecutorRoot);
+        utils.clear_error(mBuilding.textInputLayoutStatusRoot);
+        utils.clear_error(mBuilding.textInputLayoutFullNameExecutorRoot);
 
-        boolean check_address = utils.validate_field(address, text_input_layout_address_root);
-        boolean check_name_task = utils.validate_field(name_task, text_input_layout_name_task_root);
-        boolean check_floor = utils.validate_field(floor, text_input_layout_floor_root);
-        boolean check_cabinet = utils.validate_field(cabinet, text_input_layout_cabinet_root);
-        boolean check_date_task = utils.validate_field(date_complete, text_input_layout_date_task_root);
-        boolean check_executor = utils.validate_field(email_executor, text_input_layout_executor_root);
-        boolean check_status = utils.validate_field(status, text_input_layout_status_root);
-        boolean check_name_executor = utils.validate_field(full_name_executor, text_input_layout_full_name_executor_root);
-
+        boolean check_address = utils.validate_field(address, mBuilding.textInputLayoutAddressRoot);
+        boolean check_name_task = utils.validate_field(name_task, mBuilding.textInputLayoutNameTaskRoot);
+        boolean check_floor = utils.validate_field(floor, mBuilding.textInputLayoutFloorRoot);
+        boolean check_cabinet = utils.validate_field(cabinet, mBuilding.textInputLayoutCabinetRoot);
+        boolean check_date_task = utils.validate_field(date_complete, mBuilding.textInputLayoutDateTaskRoot);
+        boolean check_executor = utils.validate_field(email_executor, mBuilding.textInputLayoutExecutorRoot);
+        boolean check_status = utils.validate_field(status, mBuilding.textInputLayoutStatusRoot);
+        boolean check_name_executor = utils.validate_field(full_name_executor, mBuilding.textInputLayoutFullNameExecutorRoot);
 
         return check_address & check_floor & check_cabinet & check_name_task & check_date_task & check_executor & check_status & check_name_executor;
     }

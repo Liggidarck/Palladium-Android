@@ -64,7 +64,6 @@
                         android:id="@+id/text_view_name_task_root"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Название заявки"
                         android:textColor="@color/black"
                         android:textSize="22sp" />
 
@@ -105,7 +104,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Улица автаторов"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
@@ -114,7 +112,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="Этаж: 3"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
@@ -123,7 +120,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="Кабинет: 3"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
@@ -138,7 +134,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Создатель заявки"
+                        android:text="@string/tasks_creator"
                         android:textColor="@color/black"
                         android:textSize="22sp" />
 
@@ -147,7 +143,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="In development data"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
@@ -155,7 +150,6 @@
                         android:id="@+id/text_view_email_creator_task_root"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="null"
                         android:textColor="#999999"
                         android:textSize="12sp" />
 
@@ -170,7 +164,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Исполнитель"
+                        android:text="@string/executor"
                         android:textColor="@color/black"
                         android:textSize="22sp" />
 
@@ -179,7 +173,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="In development data"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
@@ -187,7 +180,6 @@
                         android:id="@+id/text_view_email_executor_task_root"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="null"
                         android:textColor="#999999"
                         android:textSize="12sp" />
 
@@ -196,7 +188,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="null"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 

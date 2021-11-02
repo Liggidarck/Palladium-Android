@@ -27,13 +27,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.george.vector.common.tasks.ui.TaskAdapter;
 import com.george.vector.common.tasks.ui.TaskUi;
-import com.google.android.material.chip.Chip;
+import com.george.vector.databinding.FragmentTasksRootBinding;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -45,19 +44,13 @@ public class FragmentTasksRoot extends Fragment {
 
     TaskAdapter adapter;
 
-    RecyclerView recyclerview_tasks_root;
-    Chip chip_all_tasks_root, chip_urgent_tasks_root, chip_old_school_tasks_root, chip_new_school_tasks_root;
+    FragmentTasksRootBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tasks_root, container, false);
-
-        recyclerview_tasks_root = view.findViewById(R.id.recyclerview_school_ost_new_tasks);
-        chip_all_tasks_root = view.findViewById(R.id.chip_all_tasks_root);
-        chip_urgent_tasks_root = view.findViewById(R.id.chip_urgent_tasks_root);
-        chip_old_school_tasks_root = view.findViewById(R.id.chip_old_school_tasks_root);
-        chip_new_school_tasks_root = view.findViewById(R.id.chip_new_school_tasks_root);
+        binding = FragmentTasksRootBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
         Bundle args = getArguments();
         assert args != null;
@@ -89,9 +82,9 @@ public class FragmentTasksRoot extends Fragment {
     }
 
     void setUpRecyclerView() {
-        recyclerview_tasks_root.setHasFixedSize(true);
-        recyclerview_tasks_root.setLayoutManager(new LinearLayoutManager(FragmentTasksRoot.this.getContext()));
-        recyclerview_tasks_root.setAdapter(adapter);
+        binding.recyclerviewSchoolOstNewTasks.setHasFixedSize(true);
+        binding.recyclerviewSchoolOstNewTasks.setLayoutManager(new LinearLayoutManager(FragmentTasksRoot.this.getContext()));
+        binding.recyclerviewSchoolOstNewTasks.setAdapter(adapter);
 
         //Удаление по свайпу
 //        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -149,7 +142,7 @@ public class FragmentTasksRoot extends Fragment {
         if (executed.equals("root")) {
             Log.d(TAG, "All Tasks");
 
-            chip_all_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Log.d(TAG, "Default Query");
@@ -164,7 +157,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_urgent_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Log.i(TAG, "urgent checked");
@@ -179,7 +172,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_old_school_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipOldSchoolTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Query query_address = taskRef.whereEqualTo("address", getText(R.string.old_school_full_text));
@@ -193,7 +186,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_new_school_tasks_root.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            binding.chipNewSchoolTasksRoot.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 if (isChecked) {
                     Query query_address = taskRef.whereEqualTo("address", getText(R.string.new_school_full_text));
 
@@ -217,7 +210,7 @@ public class FragmentTasksRoot extends Fragment {
 
             adapter.updateOptions(executor_options_default);
 
-            chip_all_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Query query_all = taskRef.whereEqualTo("executor", email);
@@ -230,7 +223,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_urgent_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Log.i(TAG, "urgent checked");
@@ -245,7 +238,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_old_school_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipOldSchoolTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Query query_address = taskRef.whereEqualTo("address", getText(R.string.old_school_full_text)).whereEqualTo("executor", email);
@@ -259,7 +252,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_new_school_tasks_root.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            binding.chipNewSchoolTasksRoot.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 if (isChecked) {
                     Query query_address = taskRef.whereEqualTo("address", getText(R.string.new_school_full_text)).whereEqualTo("executor", email);
 
@@ -308,7 +301,7 @@ public class FragmentTasksRoot extends Fragment {
         if (executed.equals("root")) {
             Log.d(TAG, "All Tasks");
 
-            chip_all_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Query query_all = taskRef.whereEqualTo("status", "В работе");
@@ -321,7 +314,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_urgent_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Log.i(TAG, "urgent checked");
@@ -336,7 +329,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_old_school_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipOldSchoolTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Query query_address = taskRef.whereEqualTo("address", getText(R.string.old_school_full_text));
@@ -350,7 +343,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_new_school_tasks_root.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            binding.chipNewSchoolTasksRoot.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 if (isChecked) {
                     Query query_address = taskRef.whereEqualTo("address", getText(R.string.new_school_full_text));
 
@@ -374,7 +367,7 @@ public class FragmentTasksRoot extends Fragment {
 
             adapter.updateOptions(executor_options_default);
 
-            chip_all_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Query query_all = taskRef.whereEqualTo("executor", email);
@@ -387,7 +380,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_urgent_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Log.i(TAG, "urgent checked");
@@ -402,7 +395,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_old_school_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipOldSchoolTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Query query_address = taskRef.whereEqualTo("address", getText(R.string.old_school_full_text)).whereEqualTo("executor", email);
@@ -416,7 +409,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_new_school_tasks_root.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            binding.chipNewSchoolTasksRoot.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 if (isChecked) {
                     Query query_address = taskRef.whereEqualTo("address", getText(R.string.new_school_full_text)).whereEqualTo("executor", email);
 
@@ -466,7 +459,7 @@ public class FragmentTasksRoot extends Fragment {
         if (executed.equals("root")) {
             Log.d(TAG, "All Tasks");
 
-            chip_all_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Log.d(TAG, "Default Query");
@@ -481,7 +474,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_urgent_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Log.i(TAG, "urgent checked");
@@ -496,7 +489,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_old_school_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipOldSchoolTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Query query_address = taskRef.whereEqualTo("address", getText(R.string.old_school_full_text));
@@ -510,7 +503,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_new_school_tasks_root.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            binding.chipNewSchoolTasksRoot.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 if (isChecked) {
                     Query query_address = taskRef.whereEqualTo("address", getText(R.string.new_school_full_text));
 
@@ -534,7 +527,7 @@ public class FragmentTasksRoot extends Fragment {
 
             adapter.updateOptions(executor_options_default);
 
-            chip_all_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Query query_all = taskRef.whereEqualTo("executor", email);
@@ -547,7 +540,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_urgent_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Log.i(TAG, "urgent checked");
@@ -562,7 +555,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_old_school_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipOldSchoolTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Query query_address = taskRef.whereEqualTo("address", getText(R.string.old_school_full_text)).whereEqualTo("executor", email);
@@ -576,7 +569,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_new_school_tasks_root.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            binding.chipNewSchoolTasksRoot.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 if (isChecked) {
                     Query query_address = taskRef.whereEqualTo("address", getText(R.string.new_school_full_text)).whereEqualTo("executor", email);
 
@@ -624,7 +617,7 @@ public class FragmentTasksRoot extends Fragment {
         if (executed.equals("root")) {
             Log.d(TAG, "All Tasks");
 
-            chip_all_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Query query_all = taskRef.whereEqualTo("status", "Архив");
@@ -637,7 +630,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_urgent_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Log.i(TAG, "urgent checked");
@@ -652,7 +645,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_old_school_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipOldSchoolTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Query query_address = taskRef.whereEqualTo("address", getText(R.string.old_school_full_text));
@@ -666,7 +659,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_new_school_tasks_root.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            binding.chipNewSchoolTasksRoot.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 if (isChecked) {
                     Query query_address = taskRef.whereEqualTo("address", getText(R.string.new_school_full_text));
 
@@ -690,7 +683,7 @@ public class FragmentTasksRoot extends Fragment {
 
             adapter.updateOptions(executor_options_default);
 
-            chip_all_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Query query_all = taskRef.whereEqualTo("executor", email);
@@ -705,7 +698,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_urgent_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Log.i(TAG, "urgent checked");
@@ -720,7 +713,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_old_school_tasks_root.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.chipOldSchoolTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
                     Query query_address = taskRef.whereEqualTo("address", getText(R.string.old_school_full_text)).whereEqualTo("executor", email);
@@ -734,7 +727,7 @@ public class FragmentTasksRoot extends Fragment {
 
             });
 
-            chip_new_school_tasks_root.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            binding.chipNewSchoolTasksRoot.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 if (isChecked) {
                     Query query_address = taskRef.whereEqualTo("address", getText(R.string.new_school_full_text)).whereEqualTo("executor", email);
 
@@ -761,4 +754,11 @@ public class FragmentTasksRoot extends Fragment {
         super.onStop();
         adapter.stopListening();
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
 }

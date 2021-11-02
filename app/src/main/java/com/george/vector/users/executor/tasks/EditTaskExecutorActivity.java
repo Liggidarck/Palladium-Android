@@ -22,12 +22,8 @@ import com.george.vector.R;
 import com.george.vector.common.tasks.utils.DeleteTask;
 import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
+import com.george.vector.databinding.ActivityEditTaskExecutorBinding;
 import com.george.vector.users.executor.main.MainExecutorActivity;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
-import com.google.android.material.textfield.MaterialAutoCompleteTextView;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -36,48 +32,21 @@ import java.util.Objects;
 public class EditTaskExecutorActivity extends AppCompatActivity {
 
     private static final String TAG = "EditTaskExecutor";
-    MaterialToolbar topAppBar_new_task_executor;
-    LinearProgressIndicator progress_bar_add_task_executor;
-    ExtendedFloatingActionButton edit_task_executor;
-
-    TextInputLayout text_input_layout_address_executor, text_input_layout_floor_executor,
-            text_input_layout_cabinet_executor, text_input_layout_cabinet_liter_executor,
-            text_input_layout_name_task_executor, text_input_layout_comment_executor,
-            text_input_layout_status_executor, text_input_layout_date_task_executor,
-            text_input_layout_executor_executor;
-
-    MaterialAutoCompleteTextView address_autoComplete_executor, liter_autoComplete_executor,
-            status_autoComplete_executor;
 
     FirebaseFirestore firebaseFirestore;
 
-    String id, collection, location;
-
-    String address, floor, cabinet, letter, name_task, comment, status, date_create, time_create,
-            date_done, email, email_executor, image, full_name_executor, email_creator, name_creator;
+    String id, collection, location, address, floor, cabinet, letter, name_task, comment, status, date_create, time_create,
+            date_done, email, email_executor, image, full_name_executor, email_creator, name_creator,
+            email_mail_activity;
     boolean urgent;
-    String email_mail_activity;
+
+    ActivityEditTaskExecutorBinding executorBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_task_executor);
-
-        topAppBar_new_task_executor = findViewById(R.id.topAppBar_new_task_executor);
-        progress_bar_add_task_executor = findViewById(R.id.progress_bar_add_task_executor);
-        edit_task_executor = findViewById(R.id.edit_task_executor);
-        text_input_layout_address_executor = findViewById(R.id.text_input_layout_address_executor);
-        text_input_layout_floor_executor = findViewById(R.id.text_input_layout_floor_executor);
-        text_input_layout_cabinet_executor = findViewById(R.id.text_input_layout_cabinet_executor);
-        text_input_layout_cabinet_liter_executor = findViewById(R.id.text_input_layout_cabinet_liter_executor);
-        text_input_layout_name_task_executor = findViewById(R.id.text_input_layout_name_task_executor);
-        text_input_layout_comment_executor = findViewById(R.id.text_input_layout_comment_executor);
-        text_input_layout_status_executor = findViewById(R.id.text_input_layout_status_executor);
-        address_autoComplete_executor = findViewById(R.id.address_autoComplete_executor);
-        liter_autoComplete_executor = findViewById(R.id.liter_autoComplete_executor);
-        status_autoComplete_executor = findViewById(R.id.status_autoComplete_executor);
-        text_input_layout_date_task_executor = findViewById(R.id.text_input_layout_date_task_executor);
-        text_input_layout_executor_executor = findViewById(R.id.text_input_layout_executor_executor);
+        executorBinding = ActivityEditTaskExecutorBinding.inflate(getLayoutInflater());
+        setContentView(executorBinding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.getString(ID);
@@ -87,11 +56,11 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        topAppBar_new_task_executor.setNavigationOnClickListener(v -> onBackPressed());
+        executorBinding.topAppBarNewTaskExecutor.setNavigationOnClickListener(v -> onBackPressed());
 
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
-            progress_bar_add_task_executor.setVisibility(View.VISIBLE);
+            executorBinding.progressBarAddTaskExecutor.setVisibility(View.VISIBLE);
             try {
                 assert value != null;
                 address = value.getString("address");
@@ -115,19 +84,19 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
                 urgent = value.getBoolean("urgent");
 
                 image = value.getString("image");
-                Objects.requireNonNull(text_input_layout_address_executor.getEditText()).setText(address);
-                Objects.requireNonNull(text_input_layout_floor_executor.getEditText()).setText(floor);
-                Objects.requireNonNull(text_input_layout_cabinet_executor.getEditText()).setText(cabinet);
-                Objects.requireNonNull(text_input_layout_cabinet_liter_executor.getEditText()).setText(letter);
-                Objects.requireNonNull(text_input_layout_name_task_executor.getEditText()).setText(name_task);
-                Objects.requireNonNull(text_input_layout_status_executor.getEditText()).setText(status);
-                Objects.requireNonNull(text_input_layout_date_task_executor.getEditText()).setText(date_done);
-                Objects.requireNonNull(text_input_layout_executor_executor.getEditText()).setText(email_executor);
+                Objects.requireNonNull(executorBinding.textInputLayoutAddressExecutor.getEditText()).setText(address);
+                Objects.requireNonNull(executorBinding.textInputLayoutFloorExecutor.getEditText()).setText(floor);
+                Objects.requireNonNull(executorBinding.textInputLayoutCabinetExecutor.getEditText()).setText(cabinet);
+                Objects.requireNonNull(executorBinding.textInputLayoutCabinetLiterExecutor.getEditText()).setText(letter);
+                Objects.requireNonNull(executorBinding.textInputLayoutNameTaskExecutor.getEditText()).setText(name_task);
+                Objects.requireNonNull(executorBinding.textInputLayoutStatusExecutor.getEditText()).setText(status);
+                Objects.requireNonNull(executorBinding.textInputLayoutDateTaskExecutor.getEditText()).setText(date_done);
+                Objects.requireNonNull(executorBinding.textInputLayoutEmailExecutor.getEditText()).setText(email_executor);
 
                 if (comment.equals("Нет коментария к заявке"))
-                    Objects.requireNonNull(text_input_layout_comment_executor.getEditText()).setText("");
+                    Objects.requireNonNull(executorBinding.textInputLayoutCommentExecutor.getEditText()).setText("");
                 else
-                    Objects.requireNonNull(text_input_layout_comment_executor.getEditText()).setText(comment);
+                    Objects.requireNonNull(executorBinding.textInputLayoutCommentExecutor.getEditText()).setText(comment);
 
             } catch (Exception e) {
                 Log.i(TAG, "Error! " + e);
@@ -136,9 +105,9 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
             initialize_fields(location);
         });
 
-        documentReference.get().addOnCompleteListener(v -> progress_bar_add_task_executor.setVisibility(View.INVISIBLE));
+        documentReference.get().addOnCompleteListener(v -> executorBinding.progressBarAddTaskExecutor.setVisibility(View.INVISIBLE));
 
-        edit_task_executor.setOnClickListener(v -> {
+        executorBinding.editTaskExecutor.setOnClickListener(v -> {
             if (!isOnline())
                 show_dialog();
             else
@@ -154,15 +123,15 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         DeleteTask deleteTask = new DeleteTask();
         deleteTask.delete_task(collection, id);
 
-        String update_address = Objects.requireNonNull(text_input_layout_address_executor.getEditText()).getText().toString();
-        String update_floor = Objects.requireNonNull(text_input_layout_floor_executor.getEditText()).getText().toString();
-        String update_cabinet = Objects.requireNonNull(text_input_layout_cabinet_executor.getEditText()).getText().toString();
-        String update_letter = Objects.requireNonNull(text_input_layout_cabinet_liter_executor.getEditText()).getText().toString();
-        String update_name = Objects.requireNonNull(text_input_layout_name_task_executor.getEditText()).getText().toString();
-        String update_comment = Objects.requireNonNull(text_input_layout_comment_executor.getEditText()).getText().toString();
-        String update_date_task = Objects.requireNonNull(text_input_layout_date_task_executor.getEditText()).getText().toString();
-        String update_executor = Objects.requireNonNull(text_input_layout_executor_executor.getEditText()).getText().toString();
-        String update_status = Objects.requireNonNull(text_input_layout_status_executor.getEditText()).getText().toString();
+        String update_address = Objects.requireNonNull(executorBinding.textInputLayoutAddressExecutor.getEditText()).getText().toString();
+        String update_floor = Objects.requireNonNull(executorBinding.textInputLayoutFloorExecutor.getEditText()).getText().toString();
+        String update_cabinet = Objects.requireNonNull(executorBinding.textInputLayoutCabinetExecutor.getEditText()).getText().toString();
+        String update_letter = Objects.requireNonNull(executorBinding.textInputLayoutCabinetLiterExecutor.getEditText()).getText().toString();
+        String update_name = Objects.requireNonNull(executorBinding.textInputLayoutNameTaskExecutor.getEditText()).getText().toString();
+        String update_comment = Objects.requireNonNull(executorBinding.textInputLayoutCommentExecutor.getEditText()).getText().toString();
+        String update_date_task = Objects.requireNonNull(executorBinding.textInputLayoutDateTaskExecutor.getEditText()).getText().toString();
+        String update_executor = Objects.requireNonNull(executorBinding.textInputLayoutEmailExecutor.getEditText()).getText().toString();
+        String update_status = Objects.requireNonNull(executorBinding.textInputLayoutStatusExecutor.getEditText()).getText().toString();
 
         task.save(new SaveTask(), location, update_name, update_address, date_create, update_floor,
                 update_cabinet, update_letter, update_comment, update_date_task,
@@ -193,7 +162,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
                     R.layout.dropdown_menu_categories,
                     items
             );
-            address_autoComplete_executor.setAdapter(adapter);
+            executorBinding.addressAutoCompleteExecutor.setAdapter(adapter);
         }
 
         String[] items_status = getResources().getStringArray(R.array.status);
@@ -203,7 +172,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
                 items_status
         );
 
-        status_autoComplete_executor.setAdapter(adapter_status);
+        executorBinding.statusAutoCompleteExecutor.setAdapter(adapter_status);
 
         String[] items_letter = getResources().getStringArray(R.array.letter);
         ArrayAdapter<String> adapter_letter = new ArrayAdapter<>(
@@ -212,7 +181,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
                 items_letter
         );
 
-        liter_autoComplete_executor.setAdapter(adapter_letter);
+        executorBinding.literAutoCompleteExecutor.setAdapter(adapter_letter);
 
     }
 
