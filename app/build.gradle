@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.firebase-perf'
+    id 'com.google.firebase.crashlytics'
     id 'kotlin-android'
 }
 
@@ -50,8 +52,12 @@ dependencies {
     implementation "io.grpc:grpc-okhttp:1.32.2"
 
     //Firebase Main
+    implementation platform('com.google.firebase:firebase-bom:28.4.1')
     implementation 'com.google.firebase:firebase-auth:21.0.1'
     implementation 'com.google.firebase:firebase-firestore:23.0.4'
+    implementation 'com.google.firebase:firebase-perf'
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
 
     // FCM
     implementation 'com.google.firebase:firebase-messaging:22.0.0'

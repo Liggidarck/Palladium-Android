@@ -1,15 +1,17 @@
-package com.george.vector.develop.notifications
+package com.george.vector.develop
 
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.george.vector.databinding.ActivityDevelopKotlinBinding
-import com.google.firebase.messaging.FirebaseMessaging
+import com.george.vector.notifications.NotificationData
+import com.george.vector.notifications.PushNotification
+import com.george.vector.notifications.RetrofitInstance
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-const val TOPIC = "/topics/myTopic"
+const val TOPIC = "/topics/myTopic1"
 
 class DevelopKotlinActivity : AppCompatActivity() {
 
@@ -21,20 +23,20 @@ class DevelopKotlinActivity : AppCompatActivity() {
         binding = ActivityDevelopKotlinBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        FirebaseMessaging.getInstance().token.addOnSuccessListener {
-            binding.developTokenEditText.editText?.setText(it)
-        }
+//        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+//            binding.developTokenEditText.editText?.setText(it)
+//        }
 
-        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
+//        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
 
         binding.sendButton.setOnClickListener {
             val title = binding.developTitleEditText.editText?.text.toString()
             val message = binding.developMessageEditText.editText?.text.toString()
             val recipientToken = binding.developTokenEditText.editText?.text.toString()
-            if (title.isNotEmpty() && message.isNotEmpty() && recipientToken.isNotEmpty()) {
+            if (title.isNotEmpty() && message.isNotEmpty()) {
                 PushNotification(
                     NotificationData(title, message),
-                    recipientToken
+                    TOPIC
                 ).also {
                     sendNotification(it)
                 }

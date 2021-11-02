@@ -1,6 +1,6 @@
-package com.george.vector.develop.notifications
+package com.george.vector.notifications
 
-import com.george.vector.develop.notifications.Constants.Companion.BASE_URL
+import com.george.vector.notifications.Constants.Companion.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

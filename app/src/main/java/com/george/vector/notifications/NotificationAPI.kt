@@ -1,7 +1,7 @@
-package com.george.vector.develop.notifications
+package com.george.vector.notifications
 
-import com.george.vector.develop.notifications.Constants.Companion.CONTENT_TYPE
-import com.george.vector.develop.notifications.Constants.Companion.SERVER_KEY
+import com.george.vector.notifications.Constants.Companion.CONTENT_TYPE
+import com.george.vector.notifications.Constants.Companion.SERVER_KEY
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body

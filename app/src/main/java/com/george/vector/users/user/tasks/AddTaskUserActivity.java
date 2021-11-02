@@ -5,6 +5,7 @@ import static com.george.vector.common.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.consts.Keys.PERMISSION;
 import static com.george.vector.common.consts.Keys.PERMISSION_CAMERA_CODE;
 import static com.george.vector.common.consts.Keys.PERMISSION_GALLERY_CODE;
+import static com.george.vector.common.consts.Keys.TOPIC_NEW_TASKS_CREATE;
 import static com.george.vector.common.consts.Keys.USERS;
 import static com.george.vector.common.consts.Logs.TAG_SAVE_TASK;
 
@@ -41,6 +42,7 @@ import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.TextValidator;
 import com.george.vector.common.utils.Utils;
 import com.george.vector.databinding.ActivityAddTaskUserBinding;
+import com.george.vector.notifications.SendNotification;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -153,6 +155,9 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
         task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, letter, comment,
                 null, null, status, time_create, email, false, name_image, null, full_name_creator);
+
+        SendNotification sendNotification = new SendNotification();
+        sendNotification.sendNotification("Созданна новая заявка", name_task, TOPIC_NEW_TASKS_CREATE);
 
     }
 

@@ -1,4 +1,4 @@
-package com.george.vector.develop.notifications
+package com.george.vector.notifications
 
 data class PushNotification(
     val data: NotificationData,

@@ -30,7 +30,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Palladium">
 
-        <service android:name=".develop.notifications.FirebaseService"
+        <service android:name=".notifications.FirebaseService"
             android:permission="com.google.android.c2dm.permission.SEND"
             android:exported="false">
             <intent-filter>
@@ -44,7 +44,7 @@
             android:name=".develop.DevelopJavaActivity"
             android:exported="false" />
         <activity
-            android:name=".develop.notifications.DevelopKotlinActivity"
+            android:name=".develop.DevelopKotlinActivity"
             android:exported="false" />
         <activity
             android:name=".users.user.main.FolderUserActivity"
