@@ -11,9 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.george.vector.R;
 import com.george.vector.databinding.FragmentBarExecutorBinding;
-import com.google.android.material.card.MaterialCardView;
 
 import org.jetbrains.annotations.NotNull;
 

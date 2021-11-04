@@ -69,7 +69,7 @@ public class ImageTaskActivity extends AppCompatActivity {
 
             if (image == null) {
                 Log.d(TAG, "No image, stop loading");
-                task_image_activity.setImageResource(R.drawable.no_image);
+                task_image_activity.setImageResource(R.drawable.ic_baseline_camera_alt_24);
             } else {
                 GetDataTask getDataTask = new GetDataTask();
                 getDataTask.setImage(image, progress_bar_image_activity, task_image_activity, buffer_size);

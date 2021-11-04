@@ -4,10 +4,12 @@ import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.TOPIC_NEW_TASKS_CREATE;
 
 import android.annotation.SuppressLint;
+import android.app.UiModeManager;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;

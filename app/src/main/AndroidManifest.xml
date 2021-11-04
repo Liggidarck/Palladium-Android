@@ -30,6 +30,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Palladium">
 
+        <meta-data
+            android:name="firebase_performance_logcat_enabled"
+            android:value="true" />
+
         <service android:name=".notifications.FirebaseService"
             android:permission="com.google.android.c2dm.permission.SEND"
             android:exported="false">
@@ -49,13 +53,6 @@
         <activity
             android:name=".users.user.main.FolderUserActivity"
             android:exported="false" />
-        <activity
-            android:name=".users.demo_user.MainDemoUserActivity"
-            android:exported="false" />
-
-        <meta-data
-            android:name="firebase_performance_logcat_enabled"
-            android:value="true" />
 
         <activity
             android:name=".auth.LoadingActivity"

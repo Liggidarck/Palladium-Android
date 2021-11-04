@@ -6,6 +6,7 @@ import static com.george.vector.common.consts.Keys.LOCATION;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.consts.Keys.PERMISSION_CAMERA_CODE;
 import static com.george.vector.common.consts.Keys.PERMISSION_GALLERY_CODE;
+import static com.george.vector.common.consts.Keys.TOPIC_NEW_TASKS_CREATE;
 import static com.george.vector.common.consts.Keys.USERS;
 
 import android.Manifest;
@@ -47,6 +48,7 @@ import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.TextValidator;
 import com.george.vector.common.utils.Utils;
 import com.george.vector.databinding.ActivityAddTaskRootBinding;
+import com.george.vector.notifications.SendNotification;
 import com.google.android.material.chip.Chip;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -136,7 +138,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
         mBuilding.addExecutorRoot.setOnClickListener(v -> showAddExecutorDialog());
 
-        mBuilding.imageTask.setOnClickListener(v -> showDialogImage());
+        mBuilding.cardImage.setOnClickListener(v -> showDialogImage());
 
         mBuilding.doneTaskRoot.setOnClickListener(v -> {
             address = Objects.requireNonNull(mBuilding.textInputLayoutAddressRoot.getEditText()).getText().toString();
@@ -174,7 +176,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
                     builder.setTitle(getText(R.string.warning))
-                            .setMessage("Для того, чтобы загрузить изображение необходимо разрешить Palladium доступ файловому хранилищу")
+                            .setMessage(getString(R.string.permission_gallery))
                             .setPositiveButton("Настройки", (dialog, id) ->
                                     startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                                             Uri.fromParts("package", getPackageName(), null))))
@@ -198,7 +200,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
                     builder.setTitle(getText(R.string.warning))
-                            .setMessage("Для того, чтобы загрузить изображение необходимо разрешить Palladium доступ к камере")
+                            .setMessage(getString(R.string.permission_camera))
                             .setPositiveButton("Настройки", (dialog, id) ->
                                     startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                                             Uri.fromParts("package", getPackageName(), null))))
@@ -262,8 +264,24 @@ public class AddTaskRootActivity extends AppCompatActivity {
         DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String time_create = timeFormat.format(currentDate);
 
+        sendNotification(urgent);
+
         task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, letter, comment,
                 date_complete, email_executor, status, time_create, email, urgent, NAME_IMAGE, full_name_executor, full_name_creator);
+    }
+
+    void sendNotification(boolean urgent) {
+
+        String title;
+
+        if(urgent)
+            title = "Созданна новая срочная заявка";
+        else
+            title = "Созданна новая заявка";
+
+        SendNotification sendNotification = new SendNotification();
+        sendNotification.sendNotification(title, name_task, TOPIC_NEW_TASKS_CREATE);
+
     }
 
     void showAddExecutorDialog() {

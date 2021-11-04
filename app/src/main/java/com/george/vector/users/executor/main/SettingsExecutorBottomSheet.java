@@ -9,14 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.george.vector.R;
 import com.george.vector.common.edit_users.EditDataUserActivity;
 import com.george.vector.common.settings.SettingsActivity;
 import com.george.vector.databinding.SettingsExecutorBottomSheetBinding;
@@ -38,9 +34,6 @@ public class SettingsExecutorBottomSheet extends BottomSheetDialogFragment {
 
         sheetBinding.closeBtnExecutor.setOnClickListener(v -> dismiss());
         sheetBinding.layoutEditPersonExecutor.setOnClickListener(v -> startActivity(new Intent(SettingsExecutorBottomSheet.this.getContext(), EditDataUserActivity.class)));
-        sheetBinding.btnLogoutExecutor.setOnClickListener(v -> {
-
-        });
 
         sheetBinding.layoutSettingsExecutor.setOnClickListener(v -> {
             Intent intent = new Intent(SettingsExecutorBottomSheet.this.getContext(), SettingsActivity.class);

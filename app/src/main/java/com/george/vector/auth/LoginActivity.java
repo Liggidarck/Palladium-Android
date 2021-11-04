@@ -44,8 +44,8 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.LoginActivity);
         super.onCreate(savedInstanceState);
-
         loginBinding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(loginBinding.getRoot());
 
@@ -62,10 +62,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (validateFields()) {
 
                     if(!validateEmail(email)) {
-
                         Log.e(TAG_VALIDATE_FILED, "Email validation failed");
-                        loginBinding.emailLoginTextLayout.setError("Не корректный формат e-mail");
-
+                        loginBinding.emailLoginTextLayout.setError("Некорректный формат e-mail");
                     } else {
 
                         firebase_auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {

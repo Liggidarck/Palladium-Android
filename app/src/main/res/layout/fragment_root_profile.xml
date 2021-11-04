@@ -38,6 +38,7 @@
                             android:id="@+id/develop_activity"
                             android:layout_width="55dp"
                             android:layout_height="55dp"
+                            android:padding="2dp"
                             android:src="@color/blue" />
 
                         <TextView
@@ -45,6 +46,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
+                            android:text="ГФ"
                             android:textColor="@color/white" />
 
                     </RelativeLayout>
@@ -61,13 +63,15 @@
                             android:layout_marginTop="13dp"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:textColor="@color/black"
+                            android:text="Георгий Филатов"
+                            android:textColor="?attr/textColor"
                             android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/text_view_email_fragment"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="api@2122.pro"
                             android:layout_below="@+id/text_view_full_name_fragment" />
 
                     </RelativeLayout>
@@ -79,14 +83,16 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/data_user_layout"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    tools:ignore="ExtraText">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/users_text"
-                        android:textColor="@color/black"
-                        android:textSize="22sp" />
+                        android:textSize="22sp"
+                        android:textColor="?attr/textColor"
+                        />
 
                     <RelativeLayout
                         android:id="@+id/layout_new_person_profile"
@@ -105,6 +111,7 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginBottom="15dp"
                             android:src="@drawable/ic_baseline_person_add_24"
+                            app:tint="?attr/colorControlNormal"
                             tools:ignore="ContentDescription" />
 
                         <TextView
@@ -114,7 +121,7 @@
                             android:layout_marginStart="10dp"
                             android:layout_toEndOf="@id/following_image_sheet"
                             android:text="@string/add_new_user"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/textColor"
                             android:textSize="17sp" />
 
                     </RelativeLayout>
@@ -137,6 +144,7 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginBottom="15dp"
                             android:src="@drawable/ic_baseline_edit_24"
+                            app:tint="?attr/colorControlNormal"
                             tools:ignore="ContentDescription" />
 
                         <TextView
@@ -146,7 +154,7 @@
                             android:layout_marginStart="10dp"
                             android:layout_toEndOf="@id/following_edit_sheet"
                             android:text="@string/edit_data_user"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/textColor"
                             android:textSize="17sp" />
 
                     </RelativeLayout>
@@ -156,7 +164,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:text="@string/app"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/textColor"
                         android:textSize="22sp" />
 
                     <Button
@@ -166,6 +174,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:text="@string/settings" />
+
+                    <TextView
+                        android:id="@+id/versionAppTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp" />
 
                 </LinearLayout>
 
@@ -182,9 +196,9 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@android:color/transparent"
+                android:background="@color/blue_primary"
                 app:layout_collapseMode="pin"
-                app:title="Профиль"
+                app:title="@string/profile"
                 app:titleTextColor="@android:color/white" />
 
         </com.google.android.material.appbar.AppBarLayout>

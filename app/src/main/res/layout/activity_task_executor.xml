@@ -65,7 +65,7 @@
                         android:id="@+id/text_view_name_task_executor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/textColor"
                         android:textSize="22sp" />
 
                     <TextView
@@ -73,7 +73,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="@string/comment"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/textColor"
                         android:textSize="18sp" />
 
                     <TextView
@@ -82,7 +82,6 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/product_sans_light"
                         android:text="@string/no_comment"
-                        android:textColor="#999999"
                         android:textSize="15sp" />
 
                     <ImageView
@@ -97,7 +96,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="@string/address"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/textColor"
                         android:textSize="22sp" />
 
                     <TextView
@@ -105,7 +104,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/textColor"
                         android:textSize="15sp" />
 
                     <TextView
@@ -113,7 +112,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/textColor"
                         android:textSize="15sp" />
 
                     <TextView
@@ -121,7 +120,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/textColor"
                         android:textSize="15sp" />
 
                     <ImageView
@@ -135,7 +134,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/textColor"
                         android:text="@string/tasks_creator"
                         android:textSize="22sp" />
 
@@ -144,14 +143,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/textColor"
                         android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/text_view_email_creator_task_executor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#999999"
                         android:textSize="12sp" />
 
                     <ImageView
@@ -166,7 +164,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="@string/executor"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/textColor"
                         android:textSize="22sp" />
 
                     <TextView
@@ -174,14 +172,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/textColor"
                         android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/text_view_email_executor_task_executor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#999999"
                         android:textSize="12sp" />
 
                     <TextView
@@ -189,7 +186,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/textColor"
                         android:textSize="15sp" />
 
                 </LinearLayout>

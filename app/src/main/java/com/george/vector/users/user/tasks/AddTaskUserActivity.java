@@ -137,7 +137,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
         });
 
-        binding.imageTaskUser.setOnClickListener(v -> showDialogImage());
+        binding.cardImage.setOnClickListener(v -> showDialogImage());
 
         initializeField(permission);
     }
@@ -290,7 +290,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
                     builder.setTitle(getText(R.string.warning))
-                            .setMessage("Для того, чтобы загрузить изображение необходимо разрешить Palladium доступ файловому хранилищу")
+                            .setMessage(getString(R.string.permission_gallery))
                             .setPositiveButton("Настройки", (dialog, id) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
                             .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.cancel());
 
@@ -312,7 +312,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
                     builder.setTitle(getText(R.string.warning))
-                            .setMessage("Для того, чтобы загрузить изображение необходимо разрешить Palladium доступ к камере")
+                            .setMessage(getString(R.string.permission_camera))
                             .setPositiveButton("Настройки", (dialog, id) ->
                                     startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                                             Uri.fromParts("package", getPackageName(), null))))

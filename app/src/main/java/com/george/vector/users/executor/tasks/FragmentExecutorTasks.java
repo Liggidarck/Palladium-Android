@@ -23,14 +23,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.george.vector.common.tasks.ui.TaskAdapter;
 import com.george.vector.common.tasks.ui.TaskUi;
 import com.george.vector.databinding.FragmentExecutorTasksBinding;
-import com.google.android.material.chip.Chip;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;

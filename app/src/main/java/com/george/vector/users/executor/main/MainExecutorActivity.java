@@ -21,8 +21,6 @@ import com.george.vector.R;
 import com.george.vector.databinding.ActivityMainExecutorBinding;
 import com.george.vector.users.executor.main.fragments.fragment_bar;
 import com.george.vector.users.executor.main.fragments.fragment_ost;
-import com.google.android.material.bottomappbar.BottomAppBar;
-import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;

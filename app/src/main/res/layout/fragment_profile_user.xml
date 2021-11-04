@@ -59,7 +59,7 @@
                             android:layout_marginTop="13dp"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/textColor"
                             android:textSize="17sp" />
 
                         <TextView
@@ -84,14 +84,22 @@
 
                 <Button
                     android:id="@+id/settings_user_btn"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/settings"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_below="@+id/edit_data_user_btn"
                     android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
                     android:layout_marginTop="10dp"
-                    android:layout_below="@+id/edit_data_user_btn" />
+                    android:layout_marginEnd="10dp"
+                    android:text="@string/settings" />
+
+                <TextView
+                    android:id="@+id/versionNameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/settings_user_btn"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"/>
 
             </RelativeLayout>
 
@@ -106,7 +114,7 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@android:color/transparent"
+                android:background="@color/blue_primary"
                 app:layout_collapseMode="pin"
                 app:title="@string/profile"
                 app:titleTextColor="@android:color/white" />

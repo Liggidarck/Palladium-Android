@@ -289,6 +289,7 @@
                 android:text="@string/set_executor" />
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_image"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginStart="20dp"
@@ -296,12 +297,20 @@
                 android:layout_marginEnd="20dp"
                 app:cardElevation="3dp">
 
-                <ImageView
-                    android:id="@+id/image_task"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/no_image"
-                    tools:ignore="ContentDescription" />
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/image_task"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_baseline_camera_alt_24"
+                        android:layout_centerInParent="true"
+                        tools:ignore="ContentDescription" />
+
+                </RelativeLayout>
+
 
             </com.google.android.material.card.MaterialCardView>
 

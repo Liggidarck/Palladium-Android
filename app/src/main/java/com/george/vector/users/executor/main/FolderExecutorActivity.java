@@ -14,8 +14,6 @@ import android.os.Bundle;
 
 import com.george.vector.R;
 import com.george.vector.databinding.ActivityFolderExecutorBinding;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.card.MaterialCardView;
 
 public class FolderExecutorActivity extends AppCompatActivity {
 

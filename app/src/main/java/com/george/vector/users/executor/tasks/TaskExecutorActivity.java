@@ -12,7 +12,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -21,14 +20,9 @@ import com.george.vector.R;
 import com.george.vector.common.tasks.images.FragmentImageTask;
 import com.george.vector.common.tasks.FragmentUrgentRequest;
 import com.george.vector.databinding.ActivityTaskExecutorBinding;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TaskExecutorActivity extends AppCompatActivity {
 

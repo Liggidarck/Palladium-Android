@@ -14,9 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.george.vector.BuildConfig;
 import com.george.vector.common.edit_users.EditDataUserActivity;
 import com.george.vector.common.settings.SettingsActivity;
-import com.george.vector.databinding.FragmentRootProfileBinding;
+import com.george.vector.databinding.FragmentProfileUserBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,12 +30,12 @@ public class FragmentProfile extends Fragment {
 
     String user_id, name, last_name, patronymic, email, role;
 
-    FragmentRootProfileBinding profileBinding;
+    FragmentProfileUserBinding profileBinding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        profileBinding = FragmentRootProfileBinding.inflate(inflater, container, false);
+        profileBinding = FragmentProfileUserBinding.inflate(inflater, container, false);
         View view = profileBinding.getRoot();
 
         firebase_auth = FirebaseAuth.getInstance();
@@ -55,20 +56,22 @@ public class FragmentProfile extends Fragment {
             String _last_name = Character.toString(last_name.charAt(0));
             String ava = String.format("%s%s", _last_name, _name);
 
-            profileBinding.textViewFullNameFragment.setText(full_name);
-            profileBinding.textViewNameAvaFragment.setText(ava);
-            profileBinding.textViewEmailFragment.setText(email);
+            profileBinding.textViewFullNameFragmentUser.setText(full_name);
+            profileBinding.textViewNameAvaFragmentUser.setText(ava);
+            profileBinding.textViewEmailFragmentUser.setText(email);
         });
 
-        profileBinding.layoutEditPersonProfile.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getContext(), EditDataUserActivity.class)));
+        profileBinding.editDataUserBtn.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getContext(), EditDataUserActivity.class)));
 
-        profileBinding.settingsProfileBtn.setOnClickListener(v -> {
+        profileBinding.settingsUserBtn.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentProfile.this.getContext(), SettingsActivity.class);
             intent.putExtra(PERMISSION, "user");
             intent.putExtra(EMAIL, "null");
             startActivity(intent);
         });
 
+        String versionName = "Версия: " + BuildConfig.VERSION_NAME;
+        profileBinding.versionNameTextView.setText(versionName);
 
         return view;
     }

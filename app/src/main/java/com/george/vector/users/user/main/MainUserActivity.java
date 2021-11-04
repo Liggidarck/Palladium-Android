@@ -9,9 +9,6 @@ import static com.george.vector.common.consts.Keys.OST_SCHOOL_NEW;
 import static com.george.vector.common.consts.Keys.PERMISSION;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -98,12 +95,6 @@ public class MainUserActivity extends AppCompatActivity {
             return true;
         });
 
-    }
-
-    public boolean isOnline() {
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
     }
 
     @Override

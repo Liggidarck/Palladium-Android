@@ -92,4 +92,7 @@
     <string name="app">Приложение</string>
     <string name="share">Поделиться</string>
 
+    <string name="permission_gallery">Для того, чтобы загрузить изображение необходимо разрешить Palladium доступ файловому хранилищу</string>
+    <string name="permission_camera">Для того, чтобы загрузить изображение необходимо разрешить Palladium доступ к камере</string>
+
 </resources>

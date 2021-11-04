@@ -14,9 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.george.vector.BuildConfig;
 import com.george.vector.R;
 import com.george.vector.common.settings.SettingsActivity;
 import com.george.vector.databinding.FragmentRootProfileBinding;
+import com.george.vector.develop.DevelopJavaActivity;
 import com.george.vector.develop.DevelopKotlinActivity;
 import com.george.vector.users.root.edit_users.ListUsersActivity;
 import com.george.vector.users.root.edit_users.RegisterUserActivity;
@@ -77,7 +79,10 @@ public class FragmentProfile extends Fragment {
         });
 
         CircleImageView develop_activity = view.findViewById(R.id.develop_activity);
-        develop_activity.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getContext(), DevelopKotlinActivity.class)));
+        develop_activity.setOnClickListener(v -> startActivity(new Intent(FragmentProfile.this.getContext(), DevelopJavaActivity.class)));
+
+        String versionName = "Версия: " + BuildConfig.VERSION_NAME;
+        profileBinding.versionAppTextView.setText(versionName);
 
         return view;
     }

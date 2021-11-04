@@ -41,9 +41,9 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
-                android:text="@string/urgent_task"
                 android:layout_toEndOf="@id/urgent_image"
-                android:textColor="@color/black"
+                android:text="@string/urgent_task"
+                android:textColor="?attr/textColor"
                 android:textSize="20sp" />
 
             <TextView
@@ -57,8 +57,7 @@
                 android:layout_toEndOf="@id/urgent_image"
                 android:ellipsize="end"
                 android:maxLines="3"
-                android:text="@string/urgent_task_description"
-                android:textColor="#8E8E8E" />
+                android:text="@string/urgent_task_description" />
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

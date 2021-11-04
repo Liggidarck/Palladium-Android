@@ -1,40 +1,32 @@
 package com.george.vector.develop;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
+import static com.george.vector.common.consts.Keys.TOPIC_NEW_TASKS_CREATE;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.databinding.ActivityDevelopKotlinBinding;
-
-import java.io.File;
+import com.george.vector.notifications.SendNotification;
 
 public class DevelopJavaActivity extends AppCompatActivity {
 
-    Uri tempImageUri;
-
-    ActivityDevelopKotlinBinding activityDevelopJavaBinding;
+    ActivityDevelopKotlinBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        activityDevelopJavaBinding = ActivityDevelopKotlinBinding.inflate(getLayoutInflater());
-        View view = activityDevelopJavaBinding.getRoot();
+        binding = ActivityDevelopKotlinBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
         setContentView(view);
 
+        binding.sendButton.setOnClickListener(v -> {
+            String title = binding.developTitleEditText.getEditText().getText().toString();
+            String message = binding.developMessageEditText.getEditText().getText().toString();
 
+            SendNotification sendNotification = new SendNotification();
+            sendNotification.sendNotification(title, message, TOPIC_NEW_TASKS_CREATE);
+        });
     }
-
-
-
 }
