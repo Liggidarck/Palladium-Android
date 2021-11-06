@@ -77,7 +77,6 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
     ActivityAddTaskRootBinding addTaskRootBinding;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,7 +131,6 @@ public class EditTaskRootActivity extends AppCompatActivity {
             if (image == null) {
                 Log.d(TAG, "No image, stop loading");
                 addTaskRootBinding.progressBarAddTaskRoot.setVisibility(View.INVISIBLE);
-                addTaskRootBinding.imageTask.setImageResource(R.drawable.ic_baseline_camera_alt_24);
             } else {
                 GetDataTask getDataTask = new GetDataTask();
                 getDataTask.setImage(image, addTaskRootBinding.progressBarAddTaskRoot, addTaskRootBinding.imageTask, buffer_size);
@@ -159,7 +157,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 addTaskRootBinding.urgentRequestCheckBox.setChecked(urgent);
 
             } catch (Exception e) {
-                Log.i(TAG, "Error! " + e);
+                e.printStackTrace();
             }
 
             initialize_fields(location);
