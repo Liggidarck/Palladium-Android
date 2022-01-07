@@ -75,8 +75,8 @@
     <string name="all_tasks">Все заявки</string>
     <string name="urgent_tasks">Срочные заявки</string>
 
-    <string name="new_school_full_text">Улица Авиаторов дом 9. Старшая школа</string>
-    <string name="old_school_full_text">Улица Авиаторов дом 9. Начальная школа</string>
+    <string name="new_school_full_text">Авиаторов 9. Старшая школа</string>
+    <string name="old_school_full_text">Авиаторов 9. Начальная школа</string>
 
     <string name="old_school">Начальная школа</string>
     <string name="new_school">Старшая школа</string>

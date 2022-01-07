@@ -144,9 +144,4 @@ public class MainExecutorActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    public void onBackPressed() {
-        Log.i(TAG, "nope!");
-    }
 }

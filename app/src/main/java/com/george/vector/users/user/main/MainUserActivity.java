@@ -97,9 +97,4 @@ public class MainUserActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
-        Log.i(TAG, "nope!");
-    }
-
 }

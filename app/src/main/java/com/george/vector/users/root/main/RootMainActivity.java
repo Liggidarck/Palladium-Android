@@ -82,8 +82,4 @@ public class RootMainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
-
-    }
 }

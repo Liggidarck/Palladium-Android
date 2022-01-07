@@ -105,6 +105,8 @@ public class LoadingActivity extends AppCompatActivity {
             intent.putExtra(EMAIL, email);
             startActivity(intent);
         }
+
+        finish();
     }
 
 }

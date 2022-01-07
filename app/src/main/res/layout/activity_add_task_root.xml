@@ -70,22 +70,23 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_floor_root"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:hint="@string/floor"
-                app:counterEnabled="true"
-                app:counterMaxLength="1"
-                app:endIconMode="clear_text"
+                app:endIconMode="dropdown_menu"
                 app:errorEnabled="true">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/floor_auto_root"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:longClickable="false"  />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -97,7 +98,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/text_input_layout_cabinet_root"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -105,15 +106,16 @@
                     android:layout_marginEnd="20dp"
                     android:layout_weight="1"
                     android:hint="@string/cabinet"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="3"
-                    app:endIconMode="clear_text"
+                    app:endIconMode="dropdown_menu"
                     app:errorEnabled="true">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/cabinet_auto_root"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:longClickable="false"  />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

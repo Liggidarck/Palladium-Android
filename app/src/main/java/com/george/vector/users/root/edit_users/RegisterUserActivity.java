@@ -9,11 +9,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
+import com.george.vector.common.utils.TextValidator;
 import com.george.vector.common.utils.Utils;
 import com.george.vector.databinding.ActivityRegisterUserBinding;
 import com.google.firebase.FirebaseApp;
@@ -148,23 +150,37 @@ public class RegisterUserActivity extends AppCompatActivity {
     void initFields() {
         registerUserBinding.topAppBarRegister.setNavigationOnClickListener(v -> onBackPressed());
 
-        String[] items = getResources().getStringArray(R.array.roles);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+        String[] roles = getResources().getStringArray(R.array.roles);
+        ArrayAdapter<String> arrayRoles = new ArrayAdapter<>(
                 RegisterUserActivity.this,
                 R.layout.dropdown_menu_categories,
-                items
+                roles
         );
 
-        registerUserBinding.autoCompleteTextViewRoleUser.setAdapter(arrayAdapter);
+        registerUserBinding.autoCompleteTextViewRoleUser.setAdapter(arrayRoles);
 
-        String[] permissions = getResources().getStringArray(R.array.permissions);
-        ArrayAdapter<String> arrayAdapterPermissions = new ArrayAdapter<>(
-                RegisterUserActivity.this,
-                R.layout.dropdown_menu_categories,
-                permissions
-        );
+        registerUserBinding.textInputLayoutRoleUser.getEditText().addTextChangedListener(new TextValidator(registerUserBinding.textInputLayoutRoleUser.getEditText()) {
+            @Override
+            public void validate(TextView text_view, String text) {
+                Log.d(TAG_REGISTER_ACTIVITY, "text: " + text);
+                if(text.equals("Root") || text.equals("Исполнитель"))
+                    registerUserBinding.textInputLayoutPermissionUser.getEditText().setText("All");
+                else {
+                    registerUserBinding.textInputLayoutPermissionUser.getEditText().setText("");
 
-        registerUserBinding.autoCompleteTextViewPermissionUser.setAdapter(arrayAdapterPermissions);
+                    String[] permissions = getResources().getStringArray(R.array.permissions);
+                    ArrayAdapter<String> arrayPermissions = new ArrayAdapter<>(
+                            RegisterUserActivity.this,
+                            R.layout.dropdown_menu_categories,
+                            permissions
+                    );
+
+                    registerUserBinding.autoCompleteTextViewPermissionUser.setAdapter(arrayPermissions);
+                }
+            }
+        });
+
+
     }
 
     boolean validateFields() {

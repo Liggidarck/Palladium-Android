@@ -132,6 +132,7 @@ public class LoginActivity extends AppCompatActivity {
             intent.putExtra(EMAIL, email);
             startActivity(intent);
         }
+        finish();
     }
 
     public boolean isOnline() {
