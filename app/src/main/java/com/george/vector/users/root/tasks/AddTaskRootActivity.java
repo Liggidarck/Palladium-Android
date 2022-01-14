@@ -1,13 +1,17 @@
 package com.george.vector.users.root.tasks;
 
 import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
-import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.LOCATION;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.consts.Keys.PERMISSION_CAMERA_CODE;
 import static com.george.vector.common.consts.Keys.PERMISSION_GALLERY_CODE;
 import static com.george.vector.common.consts.Keys.TOPIC_NEW_TASKS_CREATE;
 import static com.george.vector.common.consts.Keys.USERS;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PATRONYMIC;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -16,6 +20,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
@@ -27,7 +32,6 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Window;
 import android.widget.ArrayAdapter;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -43,6 +47,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.george.vector.common.edit_users.User;
 import com.george.vector.common.edit_users.UserAdapter;
+import com.george.vector.common.tasks.ui.BottomSheetAddImage;
 import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.TextValidator;
@@ -50,7 +55,6 @@ import com.george.vector.common.utils.Utils;
 import com.george.vector.databinding.ActivityAddTaskRootBinding;
 import com.george.vector.notifications.SendNotification;
 import com.google.android.material.chip.Chip;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -70,14 +74,15 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
 
-public class AddTaskRootActivity extends AppCompatActivity {
+public class AddTaskRootActivity extends AppCompatActivity implements BottomSheetAddImage.StateListener {
 
-    String location, user_id, email, address, floor, cabinet, letter, name_task, date_complete, status, comment,
-            USER_EMAIL, NAME_IMAGE, full_name_executor, name_executor, last_name_executor, patronymic_executor, email_executor, full_name_creator;
+    String location, email, address, floor, cabinet, letter, name_task, date_complete, status,
+            comment, USER_EMAIL, NAME_IMAGE, full_name_executor, name_executor, last_name_executor,
+            patronymic_executor, full_name_creator, email_executor;
     boolean urgent;
     private static final String TAG = "AddTaskRoot";
 
-    FirebaseAuth firebase_auth;
+    SharedPreferences mDataUser;
     StorageReference storage_reference;
     FirebaseStorage firebase_storage;
 
@@ -103,6 +108,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
                 }
             });
 
+    BottomSheetAddImage addImage = new BottomSheetAddImage();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,33 +117,26 @@ public class AddTaskRootActivity extends AppCompatActivity {
         mBuilding = ActivityAddTaskRootBinding.inflate(getLayoutInflater());
         setContentView(mBuilding.getRoot());
 
-        firebase_auth = FirebaseAuth.getInstance();
         firebase_storage = FirebaseStorage.getInstance();
         storage_reference = firebase_storage.getReference();
 
-        mBuilding.topAppBarNewTaskRoot.setNavigationOnClickListener(v -> onBackPressed());
-
         Bundle arguments = getIntent().getExtras();
         location = arguments.get(LOCATION).toString();
-        USER_EMAIL = arguments.get(EMAIL).toString();
-        Log.d(TAG, location);
+
+        mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        String name_user = mDataUser.getString(USER_PREFERENCES_NAME, "");
+        String last_name_user = mDataUser.getString(USER_PREFERENCES_LAST_NAME, "");
+        String patronymic_user = mDataUser.getString(USER_PREFERENCES_PATRONYMIC, "");
+        USER_EMAIL = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
+        full_name_creator = name_user + " " + last_name_user + " " + patronymic_user;
 
         initFields(location);
 
-        user_id = Objects.requireNonNull(firebase_auth.getCurrentUser()).getUid();
-        DocumentReference documentReferenceUser = firebaseFirestore.collection(USERS).document(user_id);
-        documentReferenceUser.addSnapshotListener(this, (value, error) -> {
-            assert value != null;
-            email = value.getString("email");
-            String name_creator = value.getString("name");
-            String last_name_creator = value.getString("last_name");
-            String patronymic_creator = value.getString("patronymic");
-            full_name_creator = last_name_creator + " " + name_creator + " " + patronymic_creator;
-        });
+        mBuilding.topAppBarNewTaskRoot.setNavigationOnClickListener(v -> onBackPressed());
 
         mBuilding.addExecutorRoot.setOnClickListener(v -> showAddExecutorDialog());
 
-        mBuilding.cardImage.setOnClickListener(v -> showDialogImage());
+        mBuilding.cardImage.setOnClickListener(v -> showBottomSheetImage());
 
         mBuilding.doneTaskRoot.setOnClickListener(v -> {
             address = Objects.requireNonNull(mBuilding.textInputLayoutAddressRoot.getEditText()).getText().toString();
@@ -273,7 +272,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
         String title;
 
-        if(urgent)
+        if (urgent)
             title = "Созданна новая срочная заявка";
         else
             title = "Созданна новая заявка";
@@ -361,38 +360,8 @@ public class AddTaskRootActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    void showDialogImage() {
-        Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_add_image);
-
-        RelativeLayout camera_btn = dialog.findViewById(R.id.layout_new_photo);
-        RelativeLayout gallery_btn = dialog.findViewById(R.id.layout_folder);
-
-        camera_btn.setOnClickListener(v -> {
-            ActivityCompat.requestPermissions(
-                    AddTaskRootActivity.this,
-                    new String[]{
-                            Manifest.permission.CAMERA,
-                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    }, PERMISSION_CAMERA_CODE);
-
-            dialog.dismiss();
-        });
-
-        gallery_btn.setOnClickListener(v -> {
-            ActivityCompat.requestPermissions(
-                    AddTaskRootActivity.this,
-                    new String[]{
-                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    }, PERMISSION_GALLERY_CODE);
-
-            dialog.dismiss();
-        });
-
-        dialog.show();
+    void showBottomSheetImage() {
+        addImage.show(getSupportFragmentManager(), "BottomSheetAddImage");
     }
 
     void showDialogNoInternet() {
@@ -409,6 +378,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
     void initFields(String location) {
 
         if (location.equals(OST_SCHOOL)) {
+
             String[] items = getResources().getStringArray(R.array.addresses_ost_school);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     AddTaskRootActivity.this,
@@ -425,28 +395,25 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
                     switch (address) {
 
-                        case "Улица Авиаторов дом 9. Начальная школа":
+                        case "Авиаторов 9. Начальная школа":
                             String[] floors_basic_school = getResources().getStringArray(R.array.floors_ost_basic_school);
                             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                                     AddTaskRootActivity.this,
                                     R.layout.dropdown_menu_categories,
                                     floors_basic_school
                             );
-
                             mBuilding.floorAutoRoot.setAdapter(adapter);
 
                             break;
 
-                        case "Улица Авиаторов дом 9. Старшая школа":
+                        case "Авиаторов 9. Старшая школа":
                             String[] floors_high_school = getResources().getStringArray(R.array.floors_ost_high_school);
                             ArrayAdapter<String> arrayHighSchool = new ArrayAdapter<>(
                                     AddTaskRootActivity.this,
                                     R.layout.dropdown_menu_categories,
                                     floors_high_school
                             );
-
                             mBuilding.floorAutoRoot.setAdapter(arrayHighSchool);
-
                             setUpHighSchoolCabinets();
 
                             break;
@@ -456,7 +423,6 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
                 }
             });
-
         }
 
         if (location.equals(BAR_SCHOOL))
@@ -503,7 +469,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
                     case "1":
                         Log.d(TAG, "case 1");
-                        String [] fist_floor_cabinets_ost_high_school = getResources().getStringArray(R.array.fist_floor_cabinets_ost_high_school);
+                        String[] fist_floor_cabinets_ost_high_school = getResources().getStringArray(R.array.fist_floor_cabinets_ost_high_school);
                         ArrayAdapter<String> arrayCabinetsFist = new ArrayAdapter<>(
                                 AddTaskRootActivity.this,
                                 R.layout.dropdown_menu_categories,
@@ -515,7 +481,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
                     case "2":
                         Log.d(TAG, "case 2");
-                        String [] second_floor_cabinets_ost_high_school = getResources().getStringArray(R.array.second_floor_cabinets_ost_high_school);
+                        String[] second_floor_cabinets_ost_high_school = getResources().getStringArray(R.array.second_floor_cabinets_ost_high_school);
                         ArrayAdapter<String> arrayCabinetsSecond = new ArrayAdapter<>(
                                 AddTaskRootActivity.this,
                                 R.layout.dropdown_menu_categories,
@@ -526,7 +492,7 @@ public class AddTaskRootActivity extends AppCompatActivity {
 
                     case "3":
                         Log.d(TAG, "case 3");
-                        String [] third_floor_cabinets_ost_high_school = getResources().getStringArray(R.array.third_floor_cabinets_ost_high_school);
+                        String[] third_floor_cabinets_ost_high_school = getResources().getStringArray(R.array.third_floor_cabinets_ost_high_school);
                         ArrayAdapter<String> arrayCabinetsThird = new ArrayAdapter<>(
                                 AddTaskRootActivity.this,
                                 R.layout.dropdown_menu_categories,
@@ -579,4 +545,27 @@ public class AddTaskRootActivity extends AppCompatActivity {
         return (networkInfo != null && networkInfo.isConnected());
     }
 
+    @Override
+    public void getPhotoFromDevice(String button) {
+        if (button.equals("new photo")) {
+            ActivityCompat.requestPermissions(
+                    AddTaskRootActivity.this,
+                    new String[]{
+                            Manifest.permission.CAMERA,
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    }, PERMISSION_CAMERA_CODE);
+            addImage.dismiss();
+        }
+
+        if (button.equals("existing photo")) {
+            ActivityCompat.requestPermissions(
+                    AddTaskRootActivity.this,
+                    new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    }, PERMISSION_GALLERY_CODE);
+            addImage.dismiss();
+        }
+    }
 }

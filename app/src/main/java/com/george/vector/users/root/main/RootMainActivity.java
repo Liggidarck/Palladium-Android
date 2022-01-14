@@ -2,19 +2,26 @@ package com.george.vector.users.root.main;
 
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.TOPIC_NEW_TASKS_CREATE;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PATRONYMIC;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PERMISSION;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_ROLE;
 
 import android.annotation.SuppressLint;
-import android.app.UiModeManager;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
 import com.george.vector.databinding.ActivityRootMainBinding;
-import com.george.vector.users.root.main.fragments.FragmentProfile;
+import com.george.vector.users.root.main.fragments.help.FragmentHelp;
 import com.george.vector.users.root.main.fragments.home.FragmentHome;
 import com.george.vector.users.root.main.fragments.tasks.FragmentTasks;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -26,6 +33,8 @@ public class RootMainActivity extends AppCompatActivity {
 
     ActivityRootMainBinding rootMainBinding;
 
+    SharedPreferences mDataUser;
+
     @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,16 +43,18 @@ public class RootMainActivity extends AppCompatActivity {
         rootMainBinding = ActivityRootMainBinding.inflate(getLayoutInflater());
         setContentView(rootMainBinding.getRoot());
 
-        Bundle arguments = getIntent().getExtras();
-        email = arguments.getString(EMAIL);
+        mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        String name_user = mDataUser.getString(USER_PREFERENCES_NAME, "");
+        String last_name_user = mDataUser.getString(USER_PREFERENCES_LAST_NAME, "");
+        String patronymic_user = mDataUser.getString(USER_PREFERENCES_PATRONYMIC, "");
+        email = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
+        String role_user = mDataUser.getString(USER_PREFERENCES_ROLE, "");
+        String permission_user = mDataUser.getString(USER_PREFERENCES_PERMISSION, "");
 
         FirebaseMessaging.getInstance().subscribeToTopic(TOPIC_NEW_TASKS_CREATE);
 
         if (savedInstanceState == null) {
             Fragment fragmentHome = new FragmentHome();
-            Bundle email = new Bundle();
-            email.putString(EMAIL, this.email);
-            fragmentHome.setArguments(email);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, fragmentHome).commit();
         }
 
@@ -70,9 +81,9 @@ public class RootMainActivity extends AppCompatActivity {
 
                     break;
 
-                case R.id.nav_profile:
+                case R.id.nav_help:
                     Log.d(TAG, "Start profile root fragment");
-                    selectedFragment = new FragmentProfile();
+                    selectedFragment = new FragmentHelp();
                     break;
             }
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, selectedFragment).commit();

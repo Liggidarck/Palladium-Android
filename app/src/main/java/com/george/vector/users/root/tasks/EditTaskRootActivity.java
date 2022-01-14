@@ -39,7 +39,6 @@ import com.george.vector.common.utils.Utils;
 import com.george.vector.databinding.ActivityAddTaskRootBinding;
 import com.george.vector.users.root.main.RootMainActivity;
 import com.google.android.material.chip.Chip;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -58,18 +57,16 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
     String id, collection, address, floor, cabinet, letter, name_task, comment, status, date_create, time_create,
             date_done, email_creator, location, user_email, image, full_name_executor_root, name_creator;
-    boolean urgent;
-
-    FirebaseAuth firebase_auth;
-    FirebaseFirestore firebase_firestore;
-
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference usersRef = db.collection("users");
-
     String name_executor;
     String last_name_executor;
     String patronymic_executor;
     String email_executor;
+    boolean urgent;
+
+    FirebaseFirestore firebase_firestore;
+
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference usersRef = db.collection("users");
 
     Query query;
 
@@ -84,7 +81,6 @@ public class EditTaskRootActivity extends AppCompatActivity {
         addTaskRootBinding = ActivityAddTaskRootBinding.inflate(getLayoutInflater());
         setContentView(addTaskRootBinding.getRoot());
 
-        firebase_auth = FirebaseAuth.getInstance();
         firebase_firestore = FirebaseFirestore.getInstance();
 
         addTaskRootBinding.topAppBarNewTaskRoot.setNavigationOnClickListener(v -> onBackPressed());

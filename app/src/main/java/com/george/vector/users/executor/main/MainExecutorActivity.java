@@ -2,6 +2,8 @@ package com.george.vector.users.executor.main;
 
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.OST;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -30,6 +33,7 @@ public class MainExecutorActivity extends AppCompatActivity {
     private static final String TAG = "ExecutorMain";
     String zone, email;
     ActivityMainExecutorBinding executorBinding;
+    SharedPreferences mDataUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +42,10 @@ public class MainExecutorActivity extends AppCompatActivity {
         executorBinding = ActivityMainExecutorBinding.inflate(getLayoutInflater());
         setContentView(executorBinding.getRoot());
 
-        Bundle arguments = getIntent().getExtras();
-        email = arguments.getString(EMAIL);
+
+        mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+
+        email = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
         zone = PreferenceManager.getDefaultSharedPreferences(this).getString("default_executor_location", OST);
 
         setSupportActionBar(executorBinding.bottomAppBarWorker);

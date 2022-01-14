@@ -59,13 +59,6 @@ public class FragmentTasksRoot extends Fragment {
         executed = args.getString(EXECUTED);
         email = args.getString(EMAIL);
 
-        Log.d(TAG, "-------------------");
-        Log.d(TAG, "location: " + location);
-        Log.d(TAG, "folder: " + folder);
-        Log.d(TAG, "executed: " + executed);
-        Log.d(TAG, "email: " + email);
-        Log.d(TAG, "-------------------");
-
         if (location.equals(OST_SCHOOL) && folder.equals(NEW_TASKS))
             ostSchoolNewTasks();
 

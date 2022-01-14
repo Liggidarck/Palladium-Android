@@ -1,4 +1,4 @@
-package com.george.vector.users.root.edit_users;
+package com.george.vector.users.root.profile;
 
 import static com.george.vector.common.consts.Keys.USERS;
 import static com.george.vector.common.consts.Logs.TAG_REGISTER_ACTIVITY;

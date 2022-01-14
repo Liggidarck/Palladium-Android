@@ -23,26 +23,6 @@ class DevelopKotlinActivity : AppCompatActivity() {
         binding = ActivityDevelopKotlinBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        FirebaseMessaging.getInstance().token.addOnSuccessListener {
-//            binding.developTokenEditText.editText?.setText(it)
-//        }
-
-//        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
-
-        binding.sendButton.setOnClickListener {
-            val title = binding.developTitleEditText.editText?.text.toString()
-            val message = binding.developMessageEditText.editText?.text.toString()
-            val recipientToken = binding.developTokenEditText.editText?.text.toString()
-            if (title.isNotEmpty() && message.isNotEmpty()) {
-                PushNotification(
-                    NotificationData(title, message),
-                    TOPIC
-                ).also {
-                    sendNotification(it)
-                }
-            }
-        }
-
     }
 
     private fun sendNotification(notification: PushNotification) =

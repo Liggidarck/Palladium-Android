@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".users.root.profile.ProfileRootActivity" >
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -18,35 +19,31 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <LinearLayout
                     android:id="@+id/data_user_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:orientation="horizontal">
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="3dp">
+                        android:padding="10dp"
+                        android:layout_marginStart="5dp">
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/develop_activity"
-                            android:layout_width="55dp"
-                            android:layout_height="55dp"
-                            android:padding="2dp"
+                            android:layout_width="65dp"
+                            android:layout_height="65dp"
                             android:src="@color/blue" />
 
                         <TextView
-                            android:id="@+id/text_view_name_ava_fragment"
+                            android:id="@+id/ava_root_profile"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:text="ГФ"
                             android:textColor="@color/white" />
 
                     </RelativeLayout>
@@ -57,22 +54,20 @@
                         android:layout_marginStart="5dp">
 
                         <TextView
-                            android:id="@+id/text_view_full_name_fragment"
+                            android:id="@+id/name_root_profile"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="13dp"
+                            android:layout_marginTop="25dp"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:text="Георгий Филатов"
                             android:textColor="?attr/textColor"
-                            android:textSize="17sp" />
+                            android:textSize="23sp" />
 
                         <TextView
-                            android:id="@+id/text_view_email_fragment"
+                            android:id="@+id/external_data_user"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="api@2122.pro"
-                            android:layout_below="@+id/text_view_full_name_fragment" />
+                            android:layout_below="@+id/name_root_profile" />
 
                     </RelativeLayout>
 
@@ -175,6 +170,23 @@
                         android:layout_marginTop="5dp"
                         android:text="@string/settings" />
 
+                    <Button
+                        android:id="@+id/logout_btn"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/red"
+                        android:text="@string/logout" />
+
+                    <Button
+                        android:id="@+id/dev_btn"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="DEVELOP" />
+
                     <TextView
                         android:id="@+id/versionAppTextView"
                         android:layout_width="wrap_content"
@@ -194,12 +206,14 @@
             app:liftOnScroll="true">
 
             <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbarProfileRoot"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/blue_primary"
                 app:layout_collapseMode="pin"
                 app:title="@string/profile"
-                app:titleTextColor="@android:color/white" />
+                app:titleTextColor="@android:color/white"
+                app:navigationIcon="@drawable/ic_baseline_arrow_back_24"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 

@@ -2,14 +2,13 @@ package com.george.vector.common.consts;
 
 public class Keys {
 
-    public static final String USER_DATA = "user_data";
-
-    public static final String NAME = "name";
-    public static final String LAST_NAME = "last_name";
-    public static final String PATRONYMIC = "patronymic";
-    public static final String USER_DATA_EMAIL = "email";
-    public static final String USER_PERMISSION = "permission";
-    public static final String USER_ROLE = "role";
+    public static final String USER_PREFERENCES = "DATA_USER";
+    public static final String USER_PREFERENCES_NAME = "name_user";
+    public static final String USER_PREFERENCES_LAST_NAME = "last_name_user";
+    public static final String USER_PREFERENCES_PATRONYMIC = "patronymic_user";
+    public static final String USER_PREFERENCES_ROLE = "role_user";
+    public static final String USER_PREFERENCES_EMAIL = "email_user";
+    public static final String USER_PREFERENCES_PERMISSION = "permission_user";
 
     public static final String ID = "id";
     public static final String FOLDER = "folder";

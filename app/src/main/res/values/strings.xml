@@ -12,7 +12,6 @@
     <string name="tasks_creator">Создатель заявки</string>
     <string name="history_text">История</string>
 
-
     <string name="address">Адрес</string>
     <string name="comment">Коментарий</string>
     <string name="no_comment">Нет коментариев к заявке</string>
@@ -52,7 +51,7 @@
 
     <string name="users_text">Пользователи</string>
     <string name="add_new_user">Добавить нового пользователя</string>
-    <string name="edit_data_user">Редактировать данные</string>
+    <string name="edit_data_user">Редактировать данные пользователей</string>
     <string name="logout">выйти из аккаунта</string>
     <string name="profile">Профиль</string>
     <string name="settings">Настройки</string>
@@ -94,5 +93,6 @@
 
     <string name="permission_gallery">Для того, чтобы загрузить изображение необходимо разрешить Palladium доступ файловому хранилищу</string>
     <string name="permission_camera">Для того, чтобы загрузить изображение необходимо разрешить Palladium доступ к камере</string>
+    <string name="text_help">Поддержка</string>
 
 </resources>

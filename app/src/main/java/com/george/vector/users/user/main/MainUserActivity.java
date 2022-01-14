@@ -7,8 +7,17 @@ import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL_NEW;
 import static com.george.vector.common.consts.Keys.PERMISSION;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PATRONYMIC;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PERMISSION;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_ROLE;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -27,6 +36,8 @@ public class MainUserActivity extends AppCompatActivity {
     private static final String TAG = "MainUserActivity";
     String permission, email, collection;
 
+    SharedPreferences mDataUser;
+
     @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +46,13 @@ public class MainUserActivity extends AppCompatActivity {
         mainUserBinding = ActivityMainUserBinding.inflate(getLayoutInflater());
         setContentView(mainUserBinding.getRoot());
 
-        Bundle arguments = getIntent().getExtras();
-        email = arguments.getString(EMAIL);
-        permission = arguments.getString(PERMISSION);
+        mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        String name_user = mDataUser.getString(USER_PREFERENCES_NAME, "");
+        String last_name_user = mDataUser.getString(USER_PREFERENCES_LAST_NAME, "");
+        String patronymic_user = mDataUser.getString(USER_PREFERENCES_PATRONYMIC, "");
+        email = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
+        String role_user = mDataUser.getString(USER_PREFERENCES_ROLE, "");
+        permission = mDataUser.getString(USER_PREFERENCES_PERMISSION, "");
         collection = null;
 
         if (permission.equals(OST_SCHOOL))
