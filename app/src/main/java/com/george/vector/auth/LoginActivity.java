@@ -4,6 +4,7 @@ import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.PERMISSION;
 import static com.george.vector.common.consts.Keys.ROLE;
 import static com.george.vector.common.consts.Keys.USERS;
+import static com.george.vector.common.consts.Keys.USER_NOTIFICATIONS_OPTIONS;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
@@ -102,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                                     editor.putString(USER_PREFERENCES_EMAIL, email);
                                     editor.putString(USER_PREFERENCES_ROLE, role);
                                     editor.putString(USER_PREFERENCES_PERMISSION, permission);
+                                    editor.putBoolean(USER_NOTIFICATIONS_OPTIONS, false);
                                     editor.apply();
 
                                     assert role != null;

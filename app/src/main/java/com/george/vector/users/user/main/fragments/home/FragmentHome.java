@@ -1,4 +1,4 @@
-package com.george.vector.users.user.main.fragments;
+package com.george.vector.users.user.main.fragments.home;
 
 import static com.george.vector.common.consts.Keys.COLLECTION;
 import static com.george.vector.common.consts.Keys.EMAIL;
@@ -54,6 +54,11 @@ public class FragmentHome extends Fragment {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference taskRef = db.collection(collection);
+
+        homeBinding.homeToolbarUser.setNavigationOnClickListener(v -> {
+            BottomSheetProfileUser bottomSheet = new BottomSheetProfileUser();
+            bottomSheet.show(getParentFragmentManager(), "ProfileUserBottomSheet");
+        });
 
         Query query = taskRef.whereEqualTo("email_creator", email);
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()

@@ -2,6 +2,7 @@ package com.george.vector.users.root.profile;
 
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.PERMISSION;
+import static com.george.vector.common.consts.Keys.ROLE;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
@@ -45,6 +46,8 @@ public class ProfileRootActivity extends AppCompatActivity {
         firebase_auth = FirebaseAuth.getInstance();
 
         mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mDataUser.edit();
+
         name = mDataUser.getString(USER_PREFERENCES_NAME, "");
         last_name = mDataUser.getString(USER_PREFERENCES_LAST_NAME, "");
         patronymic = mDataUser.getString(USER_PREFERENCES_PATRONYMIC, "");
@@ -76,6 +79,15 @@ public class ProfileRootActivity extends AppCompatActivity {
                     .setMessage("Вы действительно хотите выйти из аккаунта?")
                     .setPositiveButton("ok", (dialog1, which) -> {
                         firebase_auth.signOut();
+
+                        editor.putString(USER_PREFERENCES_NAME, "");
+                        editor.putString(USER_PREFERENCES_LAST_NAME, "");
+                        editor.putString(USER_PREFERENCES_PATRONYMIC, "");
+                        editor.putString(USER_PREFERENCES_EMAIL, "");
+                        editor.putString(USER_PREFERENCES_ROLE, "");
+                        editor.putString(USER_PREFERENCES_PERMISSION, "");
+                        editor.apply();
+
                         startActivity(new Intent(this, LoginActivity.class));
                         finish();
                     })

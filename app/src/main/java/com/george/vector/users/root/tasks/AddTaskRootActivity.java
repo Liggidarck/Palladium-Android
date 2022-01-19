@@ -136,7 +136,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
         mBuilding.addExecutorRoot.setOnClickListener(v -> showAddExecutorDialog());
 
-        mBuilding.cardImage.setOnClickListener(v -> showBottomSheetImage());
+        mBuilding.cardImage.setOnClickListener(v -> addImage.show(getSupportFragmentManager(), "BottomSheetAddImage"));
 
         mBuilding.doneTaskRoot.setOnClickListener(v -> {
             address = Objects.requireNonNull(mBuilding.textInputLayoutAddressRoot.getEditText()).getText().toString();
@@ -358,10 +358,6 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
         adapter.startListening();
         dialog.show();
-    }
-
-    void showBottomSheetImage() {
-        addImage.show(getSupportFragmentManager(), "BottomSheetAddImage");
     }
 
     void showDialogNoInternet() {

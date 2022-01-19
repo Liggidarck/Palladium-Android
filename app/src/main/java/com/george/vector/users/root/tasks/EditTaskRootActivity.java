@@ -161,8 +161,8 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
         addTaskRootBinding.doneTaskRoot.setOnClickListener(v -> {
 
-            if(validateFields()) {
-                if(!isOnline())
+            if (validateFields()) {
+                if (!isOnline())
                     show_dialog();
                 else
                     updateTask(collection);
@@ -191,7 +191,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
         recycler_view_list_executors.setAdapter(adapter);
 
         chip_root_dialog.setOnCheckedChangeListener((compoundButton, isChecked) -> {
-            if(isChecked){
+            if (isChecked) {
                 Log.i(TAG, "root checked");
 
                 query = usersRef.whereEqualTo("role", "Root");
@@ -205,7 +205,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
         });
 
         chip_executors_dialog.setOnCheckedChangeListener((compoundButton, isChecked) -> {
-            if(isChecked){
+            if (isChecked) {
                 Log.i(TAG, "Executor checked");
 
                 query = usersRef.whereEqualTo("role", "Исполнитель");
@@ -367,9 +367,11 @@ public class EditTaskRootActivity extends AppCompatActivity {
             updateLabel();
         };
 
-        addTaskRootBinding.textInputLayoutDateTaskRoot.setOnClickListener(v -> new DatePickerDialog(EditTaskRootActivity.this, date, date_pick_calendar
-                .get(Calendar.YEAR), date_pick_calendar.get(Calendar.MONTH), date_pick_calendar.get(Calendar.DAY_OF_MONTH)).show());
-
+        addTaskRootBinding.editTextDateTaskRoot.setOnClickListener(v ->
+                new DatePickerDialog(EditTaskRootActivity.this, date, date_pick_calendar
+                        .get(Calendar.YEAR), date_pick_calendar.get(Calendar.MONTH), date_pick_calendar
+                        .get(Calendar.DAY_OF_MONTH))
+                        .show());
 
         addTaskRootBinding.textInputLayoutFloorRoot.getEditText().addTextChangedListener(new TextValidator(addTaskRootBinding.textInputLayoutFloorRoot.getEditText()) {
             @Override

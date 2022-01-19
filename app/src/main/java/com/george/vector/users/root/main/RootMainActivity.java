@@ -2,6 +2,7 @@ package com.george.vector.users.root.main;
 
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.TOPIC_NEW_TASKS_CREATE;
+import static com.george.vector.common.consts.Keys.USER_NOTIFICATIONS_OPTIONS;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
@@ -16,11 +17,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
 import com.george.vector.databinding.ActivityRootMainBinding;
+import com.george.vector.notifications.SendNotification;
 import com.george.vector.users.root.main.fragments.help.FragmentHelp;
 import com.george.vector.users.root.main.fragments.home.FragmentHome;
 import com.george.vector.users.root.main.fragments.tasks.FragmentTasks;
@@ -44,18 +47,44 @@ public class RootMainActivity extends AppCompatActivity {
         setContentView(rootMainBinding.getRoot());
 
         mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mDataUser.edit();
+
         String name_user = mDataUser.getString(USER_PREFERENCES_NAME, "");
         String last_name_user = mDataUser.getString(USER_PREFERENCES_LAST_NAME, "");
         String patronymic_user = mDataUser.getString(USER_PREFERENCES_PATRONYMIC, "");
         email = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
         String role_user = mDataUser.getString(USER_PREFERENCES_ROLE, "");
         String permission_user = mDataUser.getString(USER_PREFERENCES_PERMISSION, "");
+        boolean notifications = mDataUser.getBoolean(USER_NOTIFICATIONS_OPTIONS, false);
 
-        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC_NEW_TASKS_CREATE);
+        Log.d(TAG, "NOTIFICATIONS: " + notifications);
 
         if (savedInstanceState == null) {
             Fragment fragmentHome = new FragmentHome();
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, fragmentHome).commit();
+        }
+
+        if (!notifications) {
+            AlertDialog alertDialog = new AlertDialog.Builder(this)
+                    .setTitle("Подключить уведомления")
+                    .setMessage("Вам необходимо подключить уведомления о созданиии новой заявке.")
+                    .setPositiveButton("Подключить", (dialog, which) -> {
+                        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC_NEW_TASKS_CREATE);
+                        editor.putBoolean(USER_NOTIFICATIONS_OPTIONS, true);
+                        editor.apply();
+                        Log.d(TAG, "NOTIFICATIONS: " + notifications);
+                        recreate();
+                    })
+                    .setCancelable(false)
+                    .create();
+            alertDialog.show();
+        } else {
+            SendNotification sendNotification = new SendNotification();
+            sendNotification.sendNotification(
+                    "Новый пользователь зарегестрирован на получение уведомлений",
+                    name_user + " " + last_name_user,
+                    TOPIC_NEW_TASKS_CREATE
+            );
         }
 
         rootMainBinding.bottomRootNavigation.setOnNavigationItemSelectedListener(item -> {

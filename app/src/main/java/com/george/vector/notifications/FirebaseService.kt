@@ -49,7 +49,7 @@ class FirebaseService : FirebaseMessagingService() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel(notificationManager: NotificationManager) {
+    fun createNotificationChannel(notificationManager: NotificationManager) {
         val channelName = "Новые заявки"
         val channel =
             NotificationChannel(CHANNEL_NEW_TASKS_CREATE_ID, channelName, IMPORTANCE_HIGH).apply {
