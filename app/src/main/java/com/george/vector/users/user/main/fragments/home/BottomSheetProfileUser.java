@@ -6,9 +6,6 @@ import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PATRONYMIC;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PERMISSION;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_ROLE;
 
 import android.content.Context;
 import android.content.Intent;

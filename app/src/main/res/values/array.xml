@@ -175,16 +175,6 @@
         <item>bar_star</item>
     </string-array>
 
-    <string-array name="permissions_user">
-        <item>ОП «Остафьевская» - Школа</item>
-        <item>ОП «Барыши» - Школа</item>
-
-        <item>ОП «Аист»</item>
-        <item>ОП «Ягодка»</item>
-        <item>ОП «Ручеек»</item>
-        <item>ОП «Звездочка»</item>
-    </string-array>
-
     <string-array name="default_root_location">
         <item>ost</item>
         <item>bar</item>

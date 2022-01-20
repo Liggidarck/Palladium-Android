@@ -1,6 +1,5 @@
 package com.george.vector.users.root.main.fragments.home;
 
-import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
 

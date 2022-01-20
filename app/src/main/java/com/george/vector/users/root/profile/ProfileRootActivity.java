@@ -2,7 +2,8 @@ package com.george.vector.users.root.profile;
 
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.PERMISSION;
-import static com.george.vector.common.consts.Keys.ROLE;
+import static com.george.vector.common.consts.Keys.TOPIC_NEW_TASKS_CREATE;
+import static com.george.vector.common.consts.Keys.USER_NOTIFICATIONS_OPTIONS;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
@@ -11,14 +12,13 @@ import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PATRONYMIC;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PERMISSION;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_ROLE;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.BuildConfig;
 import com.george.vector.R;
@@ -27,6 +27,7 @@ import com.george.vector.common.settings.SettingsActivity;
 import com.george.vector.databinding.ActivityProfileRootBinding;
 import com.george.vector.develop.DevelopJavaActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class ProfileRootActivity extends AppCompatActivity {
 
@@ -86,7 +87,10 @@ public class ProfileRootActivity extends AppCompatActivity {
                         editor.putString(USER_PREFERENCES_EMAIL, "");
                         editor.putString(USER_PREFERENCES_ROLE, "");
                         editor.putString(USER_PREFERENCES_PERMISSION, "");
+                        editor.putBoolean(USER_NOTIFICATIONS_OPTIONS, false);
                         editor.apply();
+
+                        FirebaseMessaging.getInstance().unsubscribeFromTopic(TOPIC_NEW_TASKS_CREATE);
 
                         startActivity(new Intent(this, LoginActivity.class));
                         finish();
@@ -101,9 +105,7 @@ public class ProfileRootActivity extends AppCompatActivity {
         String versionName = "Версия: " + BuildConfig.VERSION_NAME;
         profileBinding.versionAppTextView.setText(versionName);
 
-        profileBinding.devBtn.setOnClickListener(v -> {
-            startActivity(new Intent(this, DevelopJavaActivity.class));
-        });
+        profileBinding.devBtn.setOnClickListener(v -> startActivity(new Intent(this, DevelopJavaActivity.class)));
 
     }
 }

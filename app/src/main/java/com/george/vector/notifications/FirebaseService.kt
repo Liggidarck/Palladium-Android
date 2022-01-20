@@ -16,13 +16,8 @@ import kotlin.random.Random
 
 private const val CHANNEL_NEW_TASKS_CREATE_ID = "Новые заявки"
 
+@SuppressLint("MissingFirebaseInstanceTokenRefresh")
 class FirebaseService : FirebaseMessagingService() {
-
-    override fun onNewToken(newToken: String) {
-        super.onNewToken(newToken)
-        val token: String?
-        token = newToken
-    }
 
     @SuppressLint("UnspecifiedImmutableFlag")
     override fun onMessageReceived(message: RemoteMessage) {

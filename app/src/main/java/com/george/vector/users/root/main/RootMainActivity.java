@@ -73,18 +73,17 @@ public class RootMainActivity extends AppCompatActivity {
                         editor.putBoolean(USER_NOTIFICATIONS_OPTIONS, true);
                         editor.apply();
                         Log.d(TAG, "NOTIFICATIONS: " + notifications);
-                        recreate();
+
+                        SendNotification sendNotification = new SendNotification();
+                        sendNotification.sendNotification(
+                                "Новый пользователь зарегестрирован на получение уведомлений",
+                                name_user + " " + last_name_user,
+                                TOPIC_NEW_TASKS_CREATE
+                        );
                     })
                     .setCancelable(false)
                     .create();
             alertDialog.show();
-        } else {
-            SendNotification sendNotification = new SendNotification();
-            sendNotification.sendNotification(
-                    "Новый пользователь зарегестрирован на получение уведомлений",
-                    name_user + " " + last_name_user,
-                    TOPIC_NEW_TASKS_CREATE
-            );
         }
 
         rootMainBinding.bottomRootNavigation.setOnNavigationItemSelectedListener(item -> {
