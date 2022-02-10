@@ -13,11 +13,13 @@ import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
 import com.george.vector.databinding.FragmentRootHelpBinding;
+import com.george.vector.users.root.main.fragments.help.full_help_app.app.FragmentHelpApp;
 
 public class FragmentHelp extends Fragment {
 
     FragmentRootHelpBinding helpBinding;
     Fragment data = new FragmentDataHelp();
+    Bundle bundle = new Bundle();
 
     @Nullable
     @Override
@@ -32,39 +34,42 @@ public class FragmentHelp extends Fragment {
         });
 
         helpBinding.cardHowToCreateTask.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
             bundle.putString("task", "HowToCreateTask");
             data.setArguments(bundle);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, data).commit();
         });
 
         helpBinding.cardHowToEditTask.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
             bundle.putString("task", "cardHowToEditTask");
             data.setArguments(bundle);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, data).commit();
         });
 
         helpBinding.cardHowToDeleteTask.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
             bundle.putString("task", "cardHowToDeleteTask");
             data.setArguments(bundle);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, data).commit();
         });
 
         helpBinding.cardHowToAddUser.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
             bundle.putString("task", "cardHowToAddUser");
             data.setArguments(bundle);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, data).commit();
         });
 
-        helpBinding.cardAppHelp.setOnClickListener(v -> {
+        helpBinding.cardHelpTasks.setOnClickListener(v -> {
+            bundle.putString("task", "full_help_tasks");
 
         });
 
-        helpBinding.cardAboutProject.setOnClickListener(v -> {
+        helpBinding.cardAppHelp.setOnClickListener(v -> {
+            Fragment fragmentHelpApp = new FragmentHelpApp();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, fragmentHelpApp).commit();
+        });
 
+        helpBinding.cardAboutProject.setOnClickListener(v -> {
+            Fragment aboutProject = new FragmentAboutProject();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, aboutProject).commit();
         });
 
 

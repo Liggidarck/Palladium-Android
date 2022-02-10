@@ -8,23 +8,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.george.vector.R;
-import com.google.android.material.appbar.MaterialToolbar;
+import com.george.vector.databinding.SettingsRootActivityBinding;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    MaterialToolbar toolbar_root_toolbar;
+    SettingsRootActivityBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_root_activity);
-
-        toolbar_root_toolbar = findViewById(R.id.toolbar_root_toolbar);
+        binding = SettingsRootActivityBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
         String permission = arguments.getString(PERMISSION);
 
-        toolbar_root_toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        binding.toolbarRootToolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         if (savedInstanceState == null) {
 
