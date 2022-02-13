@@ -42,7 +42,6 @@ public class MainExecutorActivity extends AppCompatActivity {
         executorBinding = ActivityMainExecutorBinding.inflate(getLayoutInflater());
         setContentView(executorBinding.getRoot());
 
-
         mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
 
         email = mDataUser.getString(USER_PREFERENCES_EMAIL, "");

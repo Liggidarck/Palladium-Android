@@ -104,8 +104,5 @@ public class ProfileRootActivity extends AppCompatActivity {
 
         String versionName = "Версия: " + BuildConfig.VERSION_NAME;
         profileBinding.versionAppTextView.setText(versionName);
-
-        profileBinding.devBtn.setOnClickListener(v -> startActivity(new Intent(this, DevelopJavaActivity.class)));
-
     }
 }
