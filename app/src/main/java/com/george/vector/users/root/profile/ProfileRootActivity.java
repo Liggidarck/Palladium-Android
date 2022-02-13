@@ -25,7 +25,6 @@ import com.george.vector.R;
 import com.george.vector.auth.LoginActivity;
 import com.george.vector.common.settings.SettingsActivity;
 import com.george.vector.databinding.ActivityProfileRootBinding;
-import com.george.vector.develop.DevelopJavaActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessaging;
 

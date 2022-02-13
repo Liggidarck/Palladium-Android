@@ -46,9 +46,6 @@
         </service>
 
         <activity
-            android:name=".develop.DevelopJavaActivity"
-            android:exported="false" />
-        <activity
             android:name=".develop.DevelopKotlinActivity"
             android:exported="false" />
         <activity
