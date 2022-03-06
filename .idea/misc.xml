@@ -207,6 +207,16 @@
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/xml/executor_preferences.xml" value="0.3625" />
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/xml/root_preferences.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/xml/user_preferences.xml" value="0.3625" />
+        <entry key="app/src/main/res/layout/activity_main_executor.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/activity_root_main.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/fragment_bar_executor.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/fragment_bar_root.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/fragment_ost_executor.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/fragment_ost_root.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/fragment_profile_user.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/fragment_root_help.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/settings_executor_bottom_sheet.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/xml/executor_preferences.xml" value="0.35104166666666664" />
       </map>
     </option>
   </component>

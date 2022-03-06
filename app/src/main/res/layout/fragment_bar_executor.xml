@@ -17,7 +17,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp">
+            android:padding="20dp"
+            android:background="?attr/grayColor">
 
             <RelativeLayout
                 android:id="@+id/ava_folder_1"
@@ -62,7 +63,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp">
+            android:padding="20dp"
+            android:background="?attr/grayColor">
 
             <RelativeLayout
                 android:id="@+id/ava_folder_2"
@@ -107,7 +109,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp">
+            android:padding="20dp"
+            android:background="?attr/grayColor">
 
             <RelativeLayout
                 android:id="@+id/ava_folder_3"

@@ -55,7 +55,6 @@ public class FragmentTasksUser extends Fragment {
         collection = args.getString(COLLECTION);
         folder = args.getString(FOLDER);
 
-        Log.d(TAG, "-------------------");
         Log.d(TAG, "email: " + email);
         Log.d(TAG, "permission: " + permission);
         Log.d(TAG, "collection: " + collection);
