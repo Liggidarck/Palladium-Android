@@ -28,7 +28,7 @@ public class FragmentHelp extends Fragment {
         View view = helpBinding.getRoot();
 
         helpBinding.technicalSupport.setOnClickListener(v -> {
-            Intent intent = new Intent("android.intent.action.SENDTO", Uri.fromParts("mailto", "liggidarck@gmail.com", null));
+            Intent intent = new Intent("android.intent.action.SENDTO", Uri.fromParts("mailto", "georgyfilatov@yandex.ru", null));
             intent.putExtra("android.intent.extra.SUBJECT", "Помощь с приложением");
             startActivity(Intent.createChooser(intent, "Выберите приложение для отправки электронного письма разработчику приложения"));
         });
@@ -71,8 +71,7 @@ public class FragmentHelp extends Fragment {
             Fragment aboutProject = new FragmentAboutProject();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, aboutProject).commit();
         });
-
-
+        
         return view;
     }
 

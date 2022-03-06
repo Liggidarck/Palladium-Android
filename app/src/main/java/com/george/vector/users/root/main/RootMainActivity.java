@@ -110,7 +110,7 @@ public class RootMainActivity extends AppCompatActivity {
                     break;
 
                 case R.id.nav_help:
-                    Log.d(TAG, "Start profile root fragment");
+                    Log.d(TAG, "Start help root fragment");
                     selectedFragment = new FragmentHelp();
                     break;
             }

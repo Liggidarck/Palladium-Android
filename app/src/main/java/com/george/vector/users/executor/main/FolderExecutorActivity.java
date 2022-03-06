@@ -35,6 +35,7 @@ public class FolderExecutorActivity extends AppCompatActivity {
         switch (location) {
             case "ost_school":
                 text_toolbar = getString(R.string.ost_text);
+                break;
 
             case "bar_school":
                 text_toolbar = getString(R.string.bar_text);

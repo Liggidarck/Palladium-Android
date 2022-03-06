@@ -82,6 +82,8 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
     boolean urgent;
     private static final String TAG = "AddTaskRoot";
 
+    Utils utils = new Utils();
+
     SharedPreferences mDataUser;
     StorageReference storage_reference;
     FirebaseStorage firebase_storage;
@@ -384,41 +386,13 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
             mBuilding.addressAutoCompleteRoot.setAdapter(adapter);
 
-            mBuilding.textInputLayoutAddressRoot.getEditText().addTextChangedListener(new TextValidator(mBuilding.textInputLayoutAddressRoot.getEditText()) {
-                @Override
-                public void validate(TextView text_view, String address) {
-                    Log.d(TAG, "address: " + address);
-
-                    switch (address) {
-
-                        case "Авиаторов 9. Начальная школа":
-                            String[] floors_basic_school = getResources().getStringArray(R.array.floors_ost_basic_school);
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                                    AddTaskRootActivity.this,
-                                    R.layout.dropdown_menu_categories,
-                                    floors_basic_school
-                            );
-                            mBuilding.floorAutoRoot.setAdapter(adapter);
-
-                            break;
-
-                        case "Авиаторов 9. Старшая школа":
-                            String[] floors_high_school = getResources().getStringArray(R.array.floors_ost_high_school);
-                            ArrayAdapter<String> arrayHighSchool = new ArrayAdapter<>(
-                                    AddTaskRootActivity.this,
-                                    R.layout.dropdown_menu_categories,
-                                    floors_high_school
-                            );
-                            mBuilding.floorAutoRoot.setAdapter(arrayHighSchool);
-                            setUpHighSchoolCabinets();
-
-                            break;
-
-
-                    }
-
-                }
-            });
+            String[] floors_basic_school = getResources().getStringArray(R.array.floors_ost_basic_school);
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+                    AddTaskRootActivity.this,
+                    R.layout.dropdown_menu_categories,
+                    floors_basic_school
+            );
+            mBuilding.floorAutoRoot.setAdapter(arrayAdapter);
         }
 
         if (location.equals(BAR_SCHOOL))
@@ -453,55 +427,13 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         mBuilding.editTextDateTaskRoot.setOnClickListener(v -> new DatePickerDialog(AddTaskRootActivity.this, date, datePickCalendar
                 .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
 
-    }
-
-    void setUpHighSchoolCabinets() {
-        mBuilding.textInputLayoutFloorRoot.getEditText().addTextChangedListener(new TextValidator(mBuilding.textInputLayoutFloorRoot.getEditText()) {
+        mBuilding.textInputLayoutCabinetRoot.getEditText().addTextChangedListener(new TextValidator(mBuilding.textInputLayoutCabinetRoot.getEditText()) {
             @Override
-            public void validate(TextView text_view, String floor) {
-                Log.d(TAG, "FLOOR: " + floor);
-
-                switch (floor) {
-
-                    case "1":
-                        Log.d(TAG, "case 1");
-                        String[] fist_floor_cabinets_ost_high_school = getResources().getStringArray(R.array.fist_floor_cabinets_ost_high_school);
-                        ArrayAdapter<String> arrayCabinetsFist = new ArrayAdapter<>(
-                                AddTaskRootActivity.this,
-                                R.layout.dropdown_menu_categories,
-                                fist_floor_cabinets_ost_high_school
-                        );
-                        mBuilding.cabinetAutoRoot.setAdapter(arrayCabinetsFist);
-                        break;
-
-
-                    case "2":
-                        Log.d(TAG, "case 2");
-                        String[] second_floor_cabinets_ost_high_school = getResources().getStringArray(R.array.second_floor_cabinets_ost_high_school);
-                        ArrayAdapter<String> arrayCabinetsSecond = new ArrayAdapter<>(
-                                AddTaskRootActivity.this,
-                                R.layout.dropdown_menu_categories,
-                                second_floor_cabinets_ost_high_school
-                        );
-                        mBuilding.cabinetAutoRoot.setAdapter(arrayCabinetsSecond);
-                        break;
-
-                    case "3":
-                        Log.d(TAG, "case 3");
-                        String[] third_floor_cabinets_ost_high_school = getResources().getStringArray(R.array.third_floor_cabinets_ost_high_school);
-                        ArrayAdapter<String> arrayCabinetsThird = new ArrayAdapter<>(
-                                AddTaskRootActivity.this,
-                                R.layout.dropdown_menu_categories,
-                                third_floor_cabinets_ost_high_school
-                        );
-                        mBuilding.cabinetAutoRoot.setAdapter(arrayCabinetsThird);
-                        break;
-
-                }
-
-
+            public void validate(TextView textView, String text) {
+                utils.validateNumberField(text, mBuilding.textInputLayoutCabinetRoot, mBuilding.doneTaskRoot, 3);
             }
         });
+
     }
 
     void setDate() {

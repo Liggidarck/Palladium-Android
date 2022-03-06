@@ -79,10 +79,11 @@
         <entry key="..\:/Users/George Filatov/StudioProjects/Palladium-Android/app/src/main/res/layout/activity_folder_executor.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/George Filatov/StudioProjects/Palladium-Android/app/src/main/res/layout/activity_folder_root.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/George Filatov/StudioProjects/Palladium-Android/app/src/main/res/layout/activity_list_users.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/George Filatov/StudioProjects/Palladium-Android/app/src/main/res/layout/activity_loading.xml" value="0.15" />
         <entry key="..\:/Users/George Filatov/StudioProjects/Palladium-Android/app/src/main/res/layout/activity_location_folder.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/George Filatov/StudioProjects/Palladium-Android/app/src/main/res/layout/activity_login.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/George Filatov/StudioProjects/Palladium-Android/app/src/main/res/layout/activity_main_demo_user.xml" value="0.20520833333333333" />
-        <entry key="..\:/Users/George Filatov/StudioProjects/Palladium-Android/app/src/main/res/layout/activity_main_executor.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/George Filatov/StudioProjects/Palladium-Android/app/src/main/res/layout/activity_main_executor.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/George Filatov/StudioProjects/Palladium-Android/app/src/main/res/layout/activity_main_user.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/George Filatov/StudioProjects/Palladium-Android/app/src/main/res/layout/activity_profile_root.xml" value="0.1" />
         <entry key="..\:/Users/George Filatov/StudioProjects/Palladium-Android/app/src/main/res/layout/activity_register_user.xml" value="0.20520833333333333" />
@@ -209,7 +210,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
