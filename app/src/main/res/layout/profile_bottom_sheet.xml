@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="16dp" >
+    android:padding="16dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/profile"
-            android:textColor="@color/black"
+            android:textColor="?attr/textColor"
             android:textSize="22sp"
             tools:ignore="RelativeOverlap" />
 
@@ -25,6 +25,7 @@
             android:layout_height="25dp"
             android:src="@drawable/ic_baseline_close_24"
             android:layout_alignParentEnd="true"
+            app:tint="?attr/colorControlNormal"
             tools:ignore="ContentDescription" />
 
     </RelativeLayout>
@@ -75,7 +76,7 @@
                 android:layout_marginTop="13dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/black"
+                android:textColor="?attr/textColor"
                 android:textSize="17sp" />
 
             <TextView
@@ -93,7 +94,7 @@
         android:id="@+id/text_view_role"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:textColor="?attr/textColor"
         android:textSize="18sp"
         android:layout_marginTop="5dp"/>
 

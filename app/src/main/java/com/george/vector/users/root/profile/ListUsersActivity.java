@@ -1,4 +1,4 @@
-package com.george.vector.users.root.edit_users;
+package com.george.vector.users.root.profile;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;

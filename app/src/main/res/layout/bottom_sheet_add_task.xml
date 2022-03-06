@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/new_task"
-            android:textColor="@color/black"
+            android:textColor="?attr/textColor"
             android:textSize="22sp"
             tools:ignore="RelativeOverlap" />
 
@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/ost_text"
-        android:textColor="@color/black"
+        android:textColor="?attr/textColor"
         android:textSize="20sp"
         android:layout_marginTop="15dp" />
 
@@ -72,7 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/bar_text"
-        android:textColor="@color/black"
+        android:textColor="?attr/textColor"
         android:textSize="20sp"
         android:layout_marginTop="15dp" />
 

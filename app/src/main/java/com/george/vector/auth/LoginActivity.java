@@ -4,12 +4,21 @@ import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.PERMISSION;
 import static com.george.vector.common.consts.Keys.ROLE;
 import static com.george.vector.common.consts.Keys.USERS;
+import static com.george.vector.common.consts.Keys.USER_NOTIFICATIONS_OPTIONS;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PATRONYMIC;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PERMISSION;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_ROLE;
 import static com.george.vector.common.consts.Logs.TAG_LOGIN_ACTIVITY;
 import static com.george.vector.common.consts.Logs.TAG_VALIDATE_FILED;
 import static com.george.vector.common.utils.Utils.validateEmail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -42,12 +51,16 @@ public class LoginActivity extends AppCompatActivity {
 
     ActivityLoginBinding loginBinding;
 
+    SharedPreferences mDataUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         loginBinding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(loginBinding.getRoot());
+
+        mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mDataUser.edit();
 
         firebase_auth = FirebaseAuth.getInstance();
         firebase_firestore = FirebaseFirestore.getInstance();
@@ -62,10 +75,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (validateFields()) {
 
                     if(!validateEmail(email)) {
-
                         Log.e(TAG_VALIDATE_FILED, "Email validation failed");
-                        loginBinding.emailLoginTextLayout.setError("Не корректный формат e-mail");
-
+                        loginBinding.emailLoginTextLayout.setError("Некорректный формат e-mail");
                     } else {
 
                         firebase_auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
@@ -85,12 +96,18 @@ public class LoginActivity extends AppCompatActivity {
                                     String role = value.getString(ROLE);
                                     String email = value.getString(EMAIL);
                                     String permission = value.getString(PERMISSION);
-                                    Log.d(TAG_LOGIN_ACTIVITY, String.format("permission - %s", permission));
-                                    Log.d(TAG_LOGIN_ACTIVITY, String.format("role - %s", role));
-                                    Log.d(TAG_LOGIN_ACTIVITY, String.format("email - %s", email));
+
+                                    editor.putString(USER_PREFERENCES_NAME, name);
+                                    editor.putString(USER_PREFERENCES_LAST_NAME, last_name);
+                                    editor.putString(USER_PREFERENCES_PATRONYMIC, patronymic);
+                                    editor.putString(USER_PREFERENCES_EMAIL, email);
+                                    editor.putString(USER_PREFERENCES_ROLE, role);
+                                    editor.putString(USER_PREFERENCES_PERMISSION, permission);
+                                    editor.putBoolean(USER_NOTIFICATIONS_OPTIONS, false);
+                                    editor.apply();
 
                                     assert role != null;
-                                    startApp(name, last_name, patronymic, role, email, permission);
+                                    startApp(role);
                                     loginBinding.progressBarAuth.setVisibility(View.INVISIBLE);
                                 });
 
@@ -115,25 +132,17 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    void startApp(@NotNull String name, String last_name, String patronymic, String role, String email, String permission) {
-        if (role.equals("Root")) {
-            Intent intent = new Intent(this, RootMainActivity.class);
-            intent.putExtra(EMAIL, email);
-            startActivity(intent);
-        }
+    void startApp(@NotNull String role) {
+        if (role.equals("Root"))
+            startActivity(new Intent(this, RootMainActivity.class));
 
-        if (role.equals("Пользователь")) {
-            Intent intent = new Intent(this, MainUserActivity.class);
-            intent.putExtra(EMAIL, email);
-            intent.putExtra(PERMISSION, permission);
-            startActivity(intent);
-        }
+        if (role.equals("Пользователь"))
+            startActivity(new Intent(this, MainUserActivity.class));
 
-        if (role.equals("Исполнитель")) {
-            Intent intent = new Intent(this, MainExecutorActivity.class);
-            intent.putExtra(EMAIL, email);
-            startActivity(intent);
-        }
+        if (role.equals("Исполнитель"))
+            startActivity(new Intent(this, MainExecutorActivity.class));
+
+        finish();
     }
 
     public boolean isOnline() {

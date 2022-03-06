@@ -6,15 +6,18 @@ import static com.george.vector.common.consts.Keys.PERMISSION;
 import static com.george.vector.common.consts.Keys.PERMISSION_CAMERA_CODE;
 import static com.george.vector.common.consts.Keys.PERMISSION_GALLERY_CODE;
 import static com.george.vector.common.consts.Keys.TOPIC_NEW_TASKS_CREATE;
-import static com.george.vector.common.consts.Keys.USERS;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PATRONYMIC;
 import static com.george.vector.common.consts.Logs.TAG_SAVE_TASK;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
@@ -24,9 +27,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.Window;
 import android.widget.ArrayAdapter;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -37,14 +38,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
 import com.george.vector.R;
+import com.george.vector.common.tasks.ui.BottomSheetAddImage;
 import com.george.vector.common.tasks.utils.SaveTask;
 import com.george.vector.common.tasks.utils.Task;
 import com.george.vector.common.utils.TextValidator;
 import com.george.vector.common.utils.Utils;
 import com.george.vector.databinding.ActivityAddTaskUserBinding;
 import com.george.vector.notifications.SendNotification;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -61,14 +61,15 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
 
-public class AddTaskUserActivity extends AppCompatActivity {
+public class AddTaskUserActivity extends AppCompatActivity implements BottomSheetAddImage.StateListener {
 
     private static final String TAG = "AddTaskUser";
 
-    String address, floor, cabinet, letter, name_task, comment, userID, email, permission, name_image, full_name_creator;
+    String address, floor, cabinet, letter, name_task, comment, email, permission, name_image, full_name_creator;
     String status = "Новая заявка";
 
-    FirebaseAuth firebaseAuth;
+    SharedPreferences mDataUser;
+
     FirebaseFirestore firebaseFirestore;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
@@ -92,13 +93,14 @@ public class AddTaskUserActivity extends AppCompatActivity {
                 }
             });
 
+    BottomSheetAddImage addImage = new BottomSheetAddImage();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityAddTaskUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
@@ -107,18 +109,13 @@ public class AddTaskUserActivity extends AppCompatActivity {
         permission = arguments.getString(PERMISSION);
         Log.i(TAG_SAVE_TASK, String.format("permission: %s", permission));
 
-        binding.topAppBarNewTaskUser.setNavigationOnClickListener(v -> onBackPressed());
+        mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        String name_user = mDataUser.getString(USER_PREFERENCES_NAME, "");
+        String last_name_user = mDataUser.getString(USER_PREFERENCES_LAST_NAME, "");
+        String patronymic_user = mDataUser.getString(USER_PREFERENCES_PATRONYMIC, "");
+        full_name_creator = name_user + " " + last_name_user + " " + patronymic_user;
 
-        userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReferenceUser = firebaseFirestore.collection(USERS).document(userID);
-        documentReferenceUser.addSnapshotListener(this, (value, error) -> {
-            assert value != null;
-            email = value.getString("email");
-            String name_creator = value.getString("name");
-            String last_name_creator = value.getString("last_name");
-            String patronymic_creator = value.getString("patronymic");
-            full_name_creator = last_name_creator + " " + name_creator + " " + patronymic_creator;
-        });
+        binding.topAppBarNewTaskUser.setNavigationOnClickListener(v -> onBackPressed());
 
         binding.crateTask.setOnClickListener(v -> {
             address = Objects.requireNonNull(binding.textInputLayoutAddress.getEditText()).getText().toString();
@@ -137,7 +134,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
 
         });
 
-        binding.imageTaskUser.setOnClickListener(v -> showDialogImage());
+        binding.cardImage.setOnClickListener(v -> showDialogImage());
 
         initializeField(permission);
     }
@@ -244,37 +241,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
     }
 
     void showDialogImage() {
-        Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_add_image);
-
-        RelativeLayout camera_btn = dialog.findViewById(R.id.layout_new_photo);
-        RelativeLayout gallery_btn = dialog.findViewById(R.id.layout_folder);
-
-        camera_btn.setOnClickListener(v -> {
-            ActivityCompat.requestPermissions(
-                    AddTaskUserActivity.this,
-                    new String[]{
-                            Manifest.permission.CAMERA,
-                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    }, PERMISSION_CAMERA_CODE);
-
-            dialog.dismiss();
-        });
-
-        gallery_btn.setOnClickListener(v -> {
-            ActivityCompat.requestPermissions(
-                    AddTaskUserActivity.this,
-                    new String[]{
-                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    }, PERMISSION_GALLERY_CODE);
-
-            dialog.dismiss();
-        });
-
-        dialog.show();
+        addImage.show(getSupportFragmentManager(), "BottomSheetAddImage");
     }
 
     @Override
@@ -290,7 +257,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
                     builder.setTitle(getText(R.string.warning))
-                            .setMessage("Для того, чтобы загрузить изображение необходимо разрешить Palladium доступ файловому хранилищу")
+                            .setMessage(getString(R.string.permission_gallery))
                             .setPositiveButton("Настройки", (dialog, id) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
                             .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.cancel());
 
@@ -312,7 +279,7 @@ public class AddTaskUserActivity extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
                     builder.setTitle(getText(R.string.warning))
-                            .setMessage("Для того, чтобы загрузить изображение необходимо разрешить Palladium доступ к камере")
+                            .setMessage(getString(R.string.permission_camera))
                             .setPositiveButton("Настройки", (dialog, id) ->
                                     startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                                             Uri.fromParts("package", getPackageName(), null))))
@@ -357,5 +324,31 @@ public class AddTaskUserActivity extends AppCompatActivity {
         boolean check_name_task = utils.validate_field(name_task, binding.textInputLayoutNameTask);
 
         return check_address & check_floor & check_cabinet & check_name_task;
+    }
+
+    @Override
+    public void getPhotoFromDevice(String button) {
+        if (button.equals("new photo")) {
+            ActivityCompat.requestPermissions(
+                    AddTaskUserActivity.this,
+                    new String[]{
+                            Manifest.permission.CAMERA,
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    }, PERMISSION_CAMERA_CODE);
+
+            addImage.dismiss();
+        }
+
+        if (button.equals("existing photo")) {
+            ActivityCompat.requestPermissions(
+                    AddTaskUserActivity.this,
+                    new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    }, PERMISSION_GALLERY_CODE);
+
+            addImage.dismiss();
+        }
     }
 }

@@ -4,6 +4,7 @@ import static com.george.vector.common.consts.Keys.COLLECTION;
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.ID;
 import static com.george.vector.common.consts.Keys.LOCATION;
+import static com.george.vector.common.consts.Keys.TOPIC_NEW_TASKS_CREATE;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -26,6 +27,7 @@ import com.george.vector.common.tasks.FragmentUrgentRequest;
 import com.george.vector.common.tasks.images.FragmentImageTask;
 import com.george.vector.common.tasks.utils.DeleteTask;
 import com.george.vector.databinding.ActivityTaskRootBinding;
+import com.george.vector.notifications.SendNotification;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -254,6 +256,12 @@ public class TaskRootActivity extends AppCompatActivity {
             storageReference.delete();
         }
 
+        SendNotification sendNotification = new SendNotification();
+        sendNotification.sendNotification(
+                "Изменения по заявке",
+                "Заявка " + name_task + " удалена",
+                TOPIC_NEW_TASKS_CREATE
+        );
         onBackPressed();
     }
 

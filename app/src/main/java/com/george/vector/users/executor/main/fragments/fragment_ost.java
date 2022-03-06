@@ -14,10 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.george.vector.R;
 import com.george.vector.databinding.FragmentOstExecutorBinding;
 import com.george.vector.users.executor.main.FolderExecutorActivity;
-import com.google.android.material.card.MaterialCardView;
 
 public class fragment_ost extends Fragment {
 

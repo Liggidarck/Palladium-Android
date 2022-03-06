@@ -1,4 +1,4 @@
-package com.george.vector.users.root.edit_users;
+package com.george.vector.users.root.profile;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -8,13 +8,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
 import com.george.vector.common.utils.Utils;
 import com.george.vector.databinding.EditUserActivityBinding;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -31,7 +31,6 @@ public class EditUserActivity extends AppCompatActivity {
     private static final String TAG = "EditUserActivity";
 
     EditUserActivityBinding editUserActivityBinding;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +71,7 @@ public class EditUserActivity extends AppCompatActivity {
             Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditPermissionUser.getEditText()).setText(permission_user);
 
             if (email_user.equals("api@2122.pro"))
-                editUserActivityBinding.textInputLayoutPasswordUser.getEditText().setText("Я не знаю никаких паролей ¯\\_(ツ)_/¯");
+                editUserActivityBinding.textInputLayoutPasswordUser.getEditText().setText("Пароль? Какой пароль? ¯\\_(ツ)_/¯");
             else
                 editUserActivityBinding.textInputLayoutPasswordUser.getEditText().setText(password);
 
@@ -143,7 +142,7 @@ public class EditUserActivity extends AppCompatActivity {
             ClipData clip = ClipData.newPlainText(null,email + " " + password);
             clipboard.setPrimaryClip(clip);
 
-            Toast.makeText(getApplicationContext(),"Логин и пароль пользователя скопированы",Toast.LENGTH_SHORT).show();
+            Snackbar.make(editUserActivityBinding.baseLayout, "Логин и пароль пользователя скопированы", Snackbar.LENGTH_SHORT).show();
         });
 
     }

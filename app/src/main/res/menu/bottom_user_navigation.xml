@@ -13,7 +13,7 @@
 
     <item
         android:id="@+id/item_profile_user"
-        android:icon="@drawable/ic_baseline_account_circle_24"
-        android:title="@string/profile" />
+        android:icon="@drawable/ic_baseline_help_24"
+        android:title="@string/text_help" />
 
 </menu>

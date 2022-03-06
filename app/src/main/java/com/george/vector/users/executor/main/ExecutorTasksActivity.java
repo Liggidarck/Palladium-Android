@@ -4,15 +4,14 @@ import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.FOLDER;
 import static com.george.vector.common.consts.Keys.LOCATION;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
-import android.os.Bundle;
 
 import com.george.vector.R;
 import com.george.vector.databinding.ActivityExecutorTasksBinding;
 import com.george.vector.users.executor.tasks.FragmentExecutorTasks;
-import com.google.android.material.appbar.MaterialToolbar;
 
 public class ExecutorTasksActivity extends AppCompatActivity {
 
@@ -35,6 +34,7 @@ public class ExecutorTasksActivity extends AppCompatActivity {
         switch (location) {
             case "ost_school":
                 text_toolbar = getString(R.string.ost_text);
+                break;
 
             case "bar_school":
                 text_toolbar = getString(R.string.bar_text);

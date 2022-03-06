@@ -3,8 +3,12 @@ package com.george.vector.users.root.tasks;
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.LOCATION;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 public class BottomSheetAddTask extends BottomSheetDialogFragment {
 
     String email;
+    SharedPreferences mDataUser;
 
     BottomSheetAddTaskBinding taskBinding;
 
@@ -26,9 +31,8 @@ public class BottomSheetAddTask extends BottomSheetDialogFragment {
         taskBinding = BottomSheetAddTaskBinding.inflate(inflater, container, false);
         View view = taskBinding.getRoot();
 
-        Bundle args = getArguments();
-        assert args != null;
-        email = args.getString(EMAIL);
+        mDataUser = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        email = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
 
         taskBinding.ostSchoolNewTask.setOnClickListener(v-> {
             Intent intent = new Intent(BottomSheetAddTask.this.getContext(), AddTaskRootActivity.class);

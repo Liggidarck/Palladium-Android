@@ -39,7 +39,6 @@ import com.george.vector.common.utils.Utils;
 import com.george.vector.databinding.ActivityAddTaskRootBinding;
 import com.george.vector.users.root.main.RootMainActivity;
 import com.google.android.material.chip.Chip;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -58,25 +57,22 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
     String id, collection, address, floor, cabinet, letter, name_task, comment, status, date_create, time_create,
             date_done, email_creator, location, user_email, image, full_name_executor_root, name_creator;
-    boolean urgent;
-
-    FirebaseAuth firebase_auth;
-    FirebaseFirestore firebase_firestore;
-
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference usersRef = db.collection("users");
-
     String name_executor;
     String last_name_executor;
     String patronymic_executor;
     String email_executor;
+    boolean urgent;
+
+    FirebaseFirestore firebase_firestore;
+
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference usersRef = db.collection("users");
 
     Query query;
 
     Utils utils = new Utils();
 
     ActivityAddTaskRootBinding addTaskRootBinding;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +81,6 @@ public class EditTaskRootActivity extends AppCompatActivity {
         addTaskRootBinding = ActivityAddTaskRootBinding.inflate(getLayoutInflater());
         setContentView(addTaskRootBinding.getRoot());
 
-        firebase_auth = FirebaseAuth.getInstance();
         firebase_firestore = FirebaseFirestore.getInstance();
 
         addTaskRootBinding.topAppBarNewTaskRoot.setNavigationOnClickListener(v -> onBackPressed());
@@ -132,7 +127,6 @@ public class EditTaskRootActivity extends AppCompatActivity {
             if (image == null) {
                 Log.d(TAG, "No image, stop loading");
                 addTaskRootBinding.progressBarAddTaskRoot.setVisibility(View.INVISIBLE);
-                addTaskRootBinding.imageTask.setImageResource(R.drawable.no_image);
             } else {
                 GetDataTask getDataTask = new GetDataTask();
                 getDataTask.setImage(image, addTaskRootBinding.progressBarAddTaskRoot, addTaskRootBinding.imageTask, buffer_size);
@@ -159,7 +153,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 addTaskRootBinding.urgentRequestCheckBox.setChecked(urgent);
 
             } catch (Exception e) {
-                Log.i(TAG, "Error! " + e);
+                e.printStackTrace();
             }
 
             initialize_fields(location);
@@ -167,8 +161,8 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
         addTaskRootBinding.doneTaskRoot.setOnClickListener(v -> {
 
-            if(validateFields()) {
-                if(!isOnline())
+            if (validateFields()) {
+                if (!isOnline())
                     show_dialog();
                 else
                     updateTask(collection);
@@ -197,7 +191,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
         recycler_view_list_executors.setAdapter(adapter);
 
         chip_root_dialog.setOnCheckedChangeListener((compoundButton, isChecked) -> {
-            if(isChecked){
+            if (isChecked) {
                 Log.i(TAG, "root checked");
 
                 query = usersRef.whereEqualTo("role", "Root");
@@ -211,7 +205,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
         });
 
         chip_executors_dialog.setOnCheckedChangeListener((compoundButton, isChecked) -> {
-            if(isChecked){
+            if (isChecked) {
                 Log.i(TAG, "Executor checked");
 
                 query = usersRef.whereEqualTo("role", "Исполнитель");
@@ -373,9 +367,11 @@ public class EditTaskRootActivity extends AppCompatActivity {
             updateLabel();
         };
 
-        addTaskRootBinding.textInputLayoutDateTaskRoot.setOnClickListener(v -> new DatePickerDialog(EditTaskRootActivity.this, date, date_pick_calendar
-                .get(Calendar.YEAR), date_pick_calendar.get(Calendar.MONTH), date_pick_calendar.get(Calendar.DAY_OF_MONTH)).show());
-
+        addTaskRootBinding.editTextDateTaskRoot.setOnClickListener(v ->
+                new DatePickerDialog(EditTaskRootActivity.this, date, date_pick_calendar
+                        .get(Calendar.YEAR), date_pick_calendar.get(Calendar.MONTH), date_pick_calendar
+                        .get(Calendar.DAY_OF_MONTH))
+                        .show());
 
         addTaskRootBinding.textInputLayoutFloorRoot.getEditText().addTextChangedListener(new TextValidator(addTaskRootBinding.textInputLayoutFloorRoot.getEditText()) {
             @Override

@@ -4,6 +4,20 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/technical_support"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="25dp"
+        android:text="помощь"
+        android:textColor="@color/white"
+        app:icon="@drawable/ic_baseline_help_24"
+        app:iconTint="@color/white" />
+
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -19,79 +33,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
 
-                <LinearLayout
-                    android:id="@+id/data_user_layout"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="3dp">
-
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:layout_width="55dp"
-                            android:layout_height="55dp"
-                            android:src="@color/blue" />
-
-                        <TextView
-                            android:id="@+id/text_view_name_ava_fragment_user"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:textColor="@color/white" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="5dp">
-
-                        <TextView
-                            android:id="@+id/text_view_full_name_fragment_user"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="13dp"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:textColor="@color/black"
-                            android:textSize="17sp" />
-
-                        <TextView
-                            android:id="@+id/text_view_email_fragment_user"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/text_view_full_name_fragment_user" />
-
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/edit_data_user_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/data_user_layout"
-                    android:text="@string/edit_data_user"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"/>
-
-                <Button
-                    android:id="@+id/settings_user_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/settings"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_below="@+id/edit_data_user_btn" />
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="80dp"
+                    android:text="Скоро здесь появится страница\nподдержки."
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
 
             </RelativeLayout>
 
@@ -106,9 +56,9 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@android:color/transparent"
+                android:background="@color/blue_primary"
                 app:layout_collapseMode="pin"
-                app:title="@string/profile"
+                app:title="@string/text_help"
                 app:titleTextColor="@android:color/white" />
 
         </com.google.android.material.appbar.AppBarLayout>

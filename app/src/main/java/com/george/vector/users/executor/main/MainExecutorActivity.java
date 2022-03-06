@@ -2,6 +2,8 @@ package com.george.vector.users.executor.main;
 
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.OST;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,8 +11,11 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,8 +26,6 @@ import com.george.vector.R;
 import com.george.vector.databinding.ActivityMainExecutorBinding;
 import com.george.vector.users.executor.main.fragments.fragment_bar;
 import com.george.vector.users.executor.main.fragments.fragment_ost;
-import com.google.android.material.bottomappbar.BottomAppBar;
-import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +35,7 @@ public class MainExecutorActivity extends AppCompatActivity {
     private static final String TAG = "ExecutorMain";
     String zone, email;
     ActivityMainExecutorBinding executorBinding;
+    SharedPreferences mDataUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +44,16 @@ public class MainExecutorActivity extends AppCompatActivity {
         executorBinding = ActivityMainExecutorBinding.inflate(getLayoutInflater());
         setContentView(executorBinding.getRoot());
 
-        Bundle arguments = getIntent().getExtras();
-        email = arguments.getString(EMAIL);
+        mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+
+        email = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
         zone = PreferenceManager.getDefaultSharedPreferences(this).getString("default_executor_location", OST);
+
+        executorBinding.technicalSupportExecutor.setOnClickListener(v -> {
+            Intent intent = new Intent("android.intent.action.SENDTO", Uri.fromParts("mailto", "georgyfilatov@yandex.ru", null));
+            intent.putExtra("android.intent.extra.SUBJECT", "Помощь с приложением");
+            startActivity(Intent.createChooser(intent, "Выберите приложение для отправки электронного письма разработчику приложения"));
+        });
 
         setSupportActionBar(executorBinding.bottomAppBarWorker);
         executorBinding.bottomAppBarWorker.setNavigationOnClickListener(v -> {
@@ -145,10 +156,5 @@ public class MainExecutorActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        Log.i(TAG, "nope!");
     }
 }

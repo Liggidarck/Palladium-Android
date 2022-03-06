@@ -1,19 +1,15 @@
 package com.george.vector.common.edit_users;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 
-import com.george.vector.R;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.george.vector.common.utils.Utils;
+import com.george.vector.databinding.ActivityEditDataUserBinding;
 import com.george.vector.users.user.main.MainUserActivity;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -25,39 +21,24 @@ import java.util.Objects;
 public class EditDataUserActivity extends AppCompatActivity {
 
     private static final String TAG = "EditDataUserActivity";
-    MaterialToolbar toolbar;
-    LinearProgressIndicator progress_bar_edit_data_user;
-
-    TextInputLayout text_input_layout_name_user_edit, text_input_layout_last_name_user_edit,
-            text_input_layout_patronymic_user_edit, text_input_layout_email_user_edit,
-            text_input_layout_role_user_edit, text_input_layout_password_user_edit;
-
-    Button btn_save_edit_data_user;
 
     String name_user, last_name_user, patronymic_user, email_user, role_user, user_id, password;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 
+    ActivityEditDataUserBinding editDataUserBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_data_user);
-
-        toolbar = findViewById(R.id.topAppBar_edit_data_user);
-        progress_bar_edit_data_user = findViewById(R.id.progress_bar_edit_data_user);
-        text_input_layout_name_user_edit = findViewById(R.id.text_input_layout_name_user_edit);
-        text_input_layout_last_name_user_edit = findViewById(R.id.text_input_layout_last_name_user_edit);
-        text_input_layout_patronymic_user_edit = findViewById(R.id.text_input_layout_patronymic_user_edit);
-        text_input_layout_email_user_edit = findViewById(R.id.text_input_layout_email_user_edit);
-        btn_save_edit_data_user = findViewById(R.id.btn_save_edit_data_user);
-        text_input_layout_role_user_edit = findViewById(R.id.text_input_layout_role_user_edit);
-        text_input_layout_password_user_edit = findViewById(R.id.text_input_layout_password_user_edit);
+        editDataUserBinding = ActivityEditDataUserBinding.inflate(getLayoutInflater());
+        setContentView(editDataUserBinding.getRoot());
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        editDataUserBinding.topAppBarEditDataUser.setNavigationOnClickListener(v -> onBackPressed());
 
         user_id = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         DocumentReference documentReference = firebaseFirestore.collection("users").document(user_id);
@@ -71,24 +52,24 @@ public class EditDataUserActivity extends AppCompatActivity {
             password = value.getString("password");
             Log.i(TAG, String.format("name: %s last_name: %s patronymic: %s email: %s", name_user, last_name_user, patronymic_user, email_user));
 
-            Objects.requireNonNull(text_input_layout_name_user_edit.getEditText()).setText(name_user);
-            Objects.requireNonNull(text_input_layout_last_name_user_edit.getEditText()).setText(last_name_user);
-            Objects.requireNonNull(text_input_layout_patronymic_user_edit.getEditText()).setText(patronymic_user);
-            Objects.requireNonNull(text_input_layout_email_user_edit.getEditText()).setText(email_user);
-            Objects.requireNonNull(text_input_layout_role_user_edit.getEditText()).setText(role_user);
-            text_input_layout_password_user_edit.getEditText().setText(password);
+            Objects.requireNonNull(editDataUserBinding.textInputLayoutNameUserEdit.getEditText()).setText(name_user);
+            Objects.requireNonNull(editDataUserBinding.textInputLayoutLastNameUserEdit.getEditText()).setText(last_name_user);
+            Objects.requireNonNull(editDataUserBinding.textInputLayoutPatronymicUserEdit.getEditText()).setText(patronymic_user);
+            Objects.requireNonNull(editDataUserBinding.textInputLayoutEmailUserEdit.getEditText()).setText(email_user);
+            Objects.requireNonNull(editDataUserBinding.textInputLayoutRoleUserEdit.getEditText()).setText(role_user);
+            Objects.requireNonNull(editDataUserBinding.textInputLayoutPasswordUserEdit.getEditText()).setText(password);
         });
 
-        btn_save_edit_data_user.setOnClickListener(v -> {
-            name_user = Objects.requireNonNull(text_input_layout_name_user_edit.getEditText()).getText().toString();
-            last_name_user = Objects.requireNonNull(text_input_layout_last_name_user_edit.getEditText()).getText().toString();
-            patronymic_user = Objects.requireNonNull(text_input_layout_patronymic_user_edit.getEditText()).getText().toString();
-            email_user = Objects.requireNonNull(text_input_layout_email_user_edit.getEditText()).getText().toString();
-            role_user = Objects.requireNonNull(text_input_layout_role_user_edit.getEditText()).getText().toString();
-            password = text_input_layout_password_user_edit.getEditText().getText().toString();
+        editDataUserBinding.btnSaveEditDataUser.setOnClickListener(v -> {
+            name_user = Objects.requireNonNull(editDataUserBinding.textInputLayoutNameUserEdit.getEditText()).getText().toString();
+            last_name_user = Objects.requireNonNull(editDataUserBinding.textInputLayoutLastNameUserEdit.getEditText()).getText().toString();
+            patronymic_user = Objects.requireNonNull(editDataUserBinding.textInputLayoutPatronymicUserEdit.getEditText()).getText().toString();
+            email_user = Objects.requireNonNull(editDataUserBinding.textInputLayoutEmailUserEdit.getEditText()).getText().toString();
+            role_user = Objects.requireNonNull(editDataUserBinding.textInputLayoutRoleUserEdit.getEditText()).getText().toString();
+            password = Objects.requireNonNull(editDataUserBinding.textInputLayoutPasswordUserEdit.getEditText()).getText().toString();
 
             if(validateFields()) {
-                progress_bar_edit_data_user.setVisibility(View.VISIBLE);
+                editDataUserBinding.progressBarEditDataUser.setVisibility(View.VISIBLE);
 
                 Map<String, Object> user = new HashMap<>();
                 user.put("name", name_user);
@@ -101,7 +82,7 @@ public class EditDataUserActivity extends AppCompatActivity {
                 documentReference.get().addOnCompleteListener(task -> {
                     if(task.isSuccessful()) {
                         Log.i(TAG, "update completed!");
-                        progress_bar_edit_data_user.setVisibility(View.INVISIBLE);
+                        editDataUserBinding.progressBarEditDataUser.setVisibility(View.INVISIBLE);
                         Intent intent = new Intent(this, MainUserActivity.class);
                         intent.putExtra("email", email_user);
                         startActivity(intent);
@@ -120,15 +101,15 @@ public class EditDataUserActivity extends AppCompatActivity {
     boolean validateFields(){
         Utils utils = new Utils();
 
-        utils.clear_error(text_input_layout_name_user_edit);
-        utils.clear_error(text_input_layout_last_name_user_edit);
-        utils.clear_error(text_input_layout_patronymic_user_edit);
-        utils.clear_error(text_input_layout_email_user_edit);
+        utils.clear_error(editDataUserBinding.textInputLayoutNameUserEdit);
+        utils.clear_error(editDataUserBinding.textInputLayoutLastNameUserEdit);
+        utils.clear_error(editDataUserBinding.textInputLayoutPatronymicUserEdit);
+        utils.clear_error(editDataUserBinding.textInputLayoutEmailUserEdit);
 
-        boolean checkName = utils.validate_field(name_user, text_input_layout_name_user_edit);
-        boolean checkLastName = utils.validate_field(last_name_user, text_input_layout_last_name_user_edit);
-        boolean checkPatronymic = utils.validate_field(patronymic_user, text_input_layout_patronymic_user_edit);
-        boolean checkEmail = utils.validate_field(email_user, text_input_layout_email_user_edit);
+        boolean checkName = utils.validate_field(name_user, editDataUserBinding.textInputLayoutNameUserEdit);
+        boolean checkLastName = utils.validate_field(last_name_user, editDataUserBinding.textInputLayoutLastNameUserEdit);
+        boolean checkPatronymic = utils.validate_field(patronymic_user, editDataUserBinding.textInputLayoutPatronymicUserEdit);
+        boolean checkEmail = utils.validate_field(email_user, editDataUserBinding.textInputLayoutEmailUserEdit);
 
         return checkName & checkLastName & checkPatronymic & checkEmail;
     }

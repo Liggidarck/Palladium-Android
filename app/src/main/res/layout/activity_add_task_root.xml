@@ -70,22 +70,23 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_floor_root"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:hint="@string/floor"
-                app:counterEnabled="true"
-                app:counterMaxLength="1"
-                app:endIconMode="clear_text"
+                app:endIconMode="dropdown_menu"
                 app:errorEnabled="true">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/floor_auto_root"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:longClickable="false"  />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -105,9 +106,6 @@
                     android:layout_marginEnd="20dp"
                     android:layout_weight="1"
                     android:hint="@string/cabinet"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="3"
-                    app:endIconMode="clear_text"
                     app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -141,7 +139,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
-
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_name_task_root"
@@ -289,6 +286,7 @@
                 android:text="@string/set_executor" />
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_image"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginStart="20dp"
@@ -296,12 +294,25 @@
                 android:layout_marginEnd="20dp"
                 app:cardElevation="3dp">
 
-                <ImageView
-                    android:id="@+id/image_task"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/no_image"
-                    tools:ignore="ContentDescription" />
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_baseline_camera_alt_24"
+                        tools:ignore="ContentDescription" />
+
+                    <ImageView
+                        android:id="@+id/image_task"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:ignore="ContentDescription"/>
+
+                </RelativeLayout>
+
 
             </com.google.android.material.card.MaterialCardView>
 

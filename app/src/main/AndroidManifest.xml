@@ -30,9 +30,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Palladium">
 
-        <service android:name=".notifications.FirebaseService"
-            android:permission="com.google.android.c2dm.permission.SEND"
-            android:exported="false">
+        <meta-data
+            android:name="firebase_performance_logcat_enabled"
+            android:value="true" />
+
+        <service
+            android:name=".notifications.FirebaseService"
+            android:exported="false"
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -49,13 +54,6 @@
         <activity
             android:name=".users.user.main.FolderUserActivity"
             android:exported="false" />
-        <activity
-            android:name=".users.demo_user.MainDemoUserActivity"
-            android:exported="false" />
-
-        <meta-data
-            android:name="firebase_performance_logcat_enabled"
-            android:value="true" />
 
         <activity
             android:name=".auth.LoadingActivity"
@@ -79,14 +77,15 @@
         <activity android:name=".users.root.folders.FolderRootActivity" />
         <activity android:name=".users.root.folders.LocationFolderActivity" />
         <activity android:name=".common.edit_users.EditDataUserActivity" />
-        <activity android:name=".users.root.edit_users.EditUserActivity" />
-        <activity android:name=".users.root.edit_users.ListUsersActivity" />
+        <activity android:name=".users.root.profile.EditUserActivity" />
+        <activity android:name=".users.root.profile.ListUsersActivity" />
         <activity android:name=".users.user.tasks.TaskUserActivity" />
         <activity android:name=".users.user.tasks.AddTaskUserActivity" />
         <activity android:name=".users.executor.main.MainExecutorActivity" />
         <activity android:name=".users.user.main.MainUserActivity" />
-        <activity android:name=".users.root.edit_users.RegisterUserActivity" />
+        <activity android:name=".users.root.profile.RegisterUserActivity" />
         <activity android:name=".auth.LoginActivity" />
+        <activity android:name=".users.root.profile.ProfileRootActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -1,8 +1,14 @@
 package com.george.vector.users.root.main.fragments.home;
 
-import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.OST;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +22,7 @@ import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
 import com.george.vector.databinding.FragmentRootHomeBinding;
+import com.george.vector.users.root.profile.ProfileRootActivity;
 import com.george.vector.users.root.tasks.BottomSheetAddTask;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -25,6 +32,7 @@ public class FragmentHome extends Fragment {
 
     private static final String TAG = "FragmentHomeRoot";
     String zone, email;
+    SharedPreferences mDataUser;
 
     FirebaseFirestore firebase_firestore;
 
@@ -38,22 +46,25 @@ public class FragmentHome extends Fragment {
 
         firebase_firestore = FirebaseFirestore.getInstance();
 
-        Bundle args = getArguments();
-        assert args != null;
-        email = args.getString(EMAIL);
-
         zone = PreferenceManager
                 .getDefaultSharedPreferences(FragmentHome.this.getContext())
                 .getString("default_root_location", OST);
-        Log.d(TAG, "Zone: " + zone);
+
+        mDataUser = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        String name_user = mDataUser.getString(USER_PREFERENCES_NAME, "");
+        String last_name_user = mDataUser.getString(USER_PREFERENCES_LAST_NAME, "");
+        email = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
+
+        String _name = Character.toString(name_user.charAt(0));
+        String _last_name = Character.toString(last_name_user.charAt(0));
+        String ava = String.format("%s%s", _name, _last_name);
+
+        homeBinding.textNameRoot.setText(String.format("%s %s", name_user, last_name_user));
+        homeBinding.textEmailRoot.setText(email);
+        homeBinding.textViewNameAva.setText(ava);
 
         homeBinding.createTaskRoot.setOnClickListener(v -> {
             BottomSheetAddTask bottomSheet = new BottomSheetAddTask();
-
-            Bundle email = new Bundle();
-            email.putString(EMAIL, this.email);
-            bottomSheet.setArguments(email);
-
             bottomSheet.show(getParentFragmentManager(), "BottomSheetAddTask");
         });
 
@@ -79,6 +90,8 @@ public class FragmentHome extends Fragment {
                 updateZones(zone);
             }
         });
+
+        homeBinding.profileLayout.setOnClickListener(v -> startActivity(new Intent(FragmentHome.this.getActivity(), ProfileRootActivity.class)));
 
         updateZones(zone);
         return view;
@@ -107,18 +120,10 @@ public class FragmentHome extends Fragment {
                 Log.i(TAG, "Запуск фрагмента Осафьево");
                 currentFragment = new FragmentOst();
 
-                Bundle email = new Bundle();
-                email.putString(EMAIL, this.email);
-                currentFragment.setArguments(email);
-
                 break;
             case "bar":
                 Log.i(TAG, "Запуск фрагмента Барыши");
                 currentFragment = new FragmentBar();
-
-                Bundle bundle = new Bundle();
-                bundle.putString(EMAIL, this.email);
-                currentFragment.setArguments(bundle);
 
                 break;
         }

@@ -7,7 +7,6 @@
     android:orientation="vertical">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/bar_school_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -19,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"
-            android:background="#e3e3e3">
+            android:background="?attr/grayColor">
 
             <RelativeLayout
                 android:id="@+id/ava_folder_1"
@@ -54,7 +53,6 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/bar_kids_one_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -66,7 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"
-            android:background="#e3e3e3">
+            android:background="?attr/grayColor">
 
             <RelativeLayout
                 android:id="@+id/ava_folder_2"
@@ -101,7 +99,6 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/bar_kids_two_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -113,7 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"
-            android:background="#e3e3e3">
+            android:background="?attr/grayColor">
 
             <RelativeLayout
                 android:id="@+id/ava_folder_3"

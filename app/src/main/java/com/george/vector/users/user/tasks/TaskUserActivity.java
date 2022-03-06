@@ -27,10 +27,10 @@ public class TaskUserActivity extends AppCompatActivity {
 
     private static final String TAG = "TaskUserActivity";
     String id, collection, address, floor, cabinet, letter, name_task,
-            comment, status, date_create, time_create, image, email_creator, full_name_creator, email_user;
+            comment, status, dateCreate, timeCreate, image, emailCreator, fullNameCreator, emailUser;
 
-    FirebaseFirestore firebase_firestore;
-    FirebaseStorage firebase_storage;
+    FirebaseFirestore firebaseFirestore;
+    FirebaseStorage firebaseStorage;
 
     ActivityTaskUserBinding userBinding;
 
@@ -43,15 +43,15 @@ public class TaskUserActivity extends AppCompatActivity {
         Bundle arguments = getIntent().getExtras();
         id = arguments.getString(ID);
         collection = arguments.getString(COLLECTION);
-        email_user = arguments.getString(EMAIL);
+        emailUser = arguments.getString(EMAIL);
 
-        firebase_firestore = FirebaseFirestore.getInstance();
-        firebase_storage = FirebaseStorage.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
 
         setSupportActionBar(userBinding.topAppBarTaskUser);
         userBinding.topAppBarTaskUser.setNavigationOnClickListener(v -> onBackPressed());
 
-        DocumentReference documentReference = firebase_firestore.collection(collection).document(id);
+        DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
 
         documentReference.addSnapshotListener(this, (value, error) -> {
             assert value != null;
@@ -62,11 +62,11 @@ public class TaskUserActivity extends AppCompatActivity {
             name_task = value.getString("name_task");
             comment = value.getString("comment");
             status = value.getString("status");
-            date_create = value.getString("date_create");
-            time_create = value.getString("time_create");
+            dateCreate = value.getString("date_create");
+            timeCreate = value.getString("time_create");
             image = value.getString("image");
-            email_creator = value.getString("email_creator");
-            full_name_creator = value.getString("nameCreator");
+            emailCreator = value.getString("email_creator");
+            fullNameCreator = value.getString("nameCreator");
 
             if (!letter.equals("-") && !letter.isEmpty())
                 cabinet = String.format("%s%s", cabinet, letter);
@@ -77,10 +77,10 @@ public class TaskUserActivity extends AppCompatActivity {
             userBinding.textViewNameTaskUser.setText(name_task);
             userBinding.textViewCommentTaskUser.setText(comment);
             userBinding.textViewStatusTaskUser.setText(status);
-            userBinding.textViewEmailCreatorTaskUser.setText(email_creator);
-            userBinding.textViewFullNameCreatorUser.setText(full_name_creator);
+            userBinding.textViewEmailCreatorTaskUser.setText(emailCreator);
+            userBinding.textViewFullNameCreatorUser.setText(fullNameCreator);
 
-            String date_create_text = "Созданно: " + date_create + " " + time_create;
+            String date_create_text = "Созданно: " + dateCreate + " " + timeCreate;
             userBinding.textViewDateCreateTaskUser.setText(date_create_text);
 
             if (image == null) {

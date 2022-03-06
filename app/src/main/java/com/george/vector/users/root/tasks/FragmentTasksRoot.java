@@ -59,13 +59,6 @@ public class FragmentTasksRoot extends Fragment {
         executed = args.getString(EXECUTED);
         email = args.getString(EMAIL);
 
-        Log.d(TAG, "-------------------");
-        Log.d(TAG, "location: " + location);
-        Log.d(TAG, "folder: " + folder);
-        Log.d(TAG, "executed: " + executed);
-        Log.d(TAG, "email: " + email);
-        Log.d(TAG, "-------------------");
-
         if (location.equals(OST_SCHOOL) && folder.equals(NEW_TASKS))
             ostSchoolNewTasks();
 
@@ -85,28 +78,6 @@ public class FragmentTasksRoot extends Fragment {
         binding.recyclerviewSchoolOstNewTasks.setHasFixedSize(true);
         binding.recyclerviewSchoolOstNewTasks.setLayoutManager(new LinearLayoutManager(FragmentTasksRoot.this.getContext()));
         binding.recyclerviewSchoolOstNewTasks.setAdapter(adapter);
-
-        //Удаление по свайпу
-//        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-//            @Override
-//            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-//                return false;
-//            }
-//
-//            @Override
-//            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-//
-//                AlertDialog.Builder builder = new AlertDialog.Builder(FragmentTasksRoot.this.getContext());
-//
-//                builder.setTitle(getText(R.string.warning))
-//                        .setMessage(getText(R.string.warning_delete_task))
-//                        .setPositiveButton(getText(R.string.delete), (dialog, id) -> Toast.makeText(FragmentTasksRoot.this.getContext(), "start demo deleting...", Toast.LENGTH_SHORT).show())
-//                        .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.dismiss());
-//
-//                AlertDialog dialog = builder.create();
-//                dialog.show();
-//            }
-//        }).attachToRecyclerView(recyclerview_tasks_root);
     }
 
     void ostSchoolNewTasks() {

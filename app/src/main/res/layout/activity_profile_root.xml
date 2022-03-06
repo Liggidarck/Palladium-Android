@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".users.root.profile.ProfileRootActivity" >
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -18,30 +19,28 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <LinearLayout
                     android:id="@+id/data_user_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:orientation="horizontal">
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="3dp">
+                        android:padding="10dp"
+                        android:layout_marginStart="5dp">
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/develop_activity"
-                            android:layout_width="55dp"
-                            android:layout_height="55dp"
+                            android:layout_width="65dp"
+                            android:layout_height="65dp"
                             android:src="@color/blue" />
 
                         <TextView
-                            android:id="@+id/text_view_name_ava_fragment"
+                            android:id="@+id/ava_root_profile"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
@@ -55,20 +54,20 @@
                         android:layout_marginStart="5dp">
 
                         <TextView
-                            android:id="@+id/text_view_full_name_fragment"
+                            android:id="@+id/name_root_profile"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="13dp"
+                            android:layout_marginTop="25dp"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:textColor="@color/black"
-                            android:textSize="17sp" />
+                            android:textColor="?attr/textColor"
+                            android:textSize="23sp" />
 
                         <TextView
-                            android:id="@+id/text_view_email_fragment"
+                            android:id="@+id/external_data_user"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/text_view_full_name_fragment" />
+                            android:layout_below="@+id/name_root_profile" />
 
                     </RelativeLayout>
 
@@ -79,14 +78,16 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/data_user_layout"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    tools:ignore="ExtraText">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/users_text"
-                        android:textColor="@color/black"
-                        android:textSize="22sp" />
+                        android:textSize="22sp"
+                        android:textColor="?attr/textColor"
+                        />
 
                     <RelativeLayout
                         android:id="@+id/layout_new_person_profile"
@@ -105,6 +106,7 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginBottom="15dp"
                             android:src="@drawable/ic_baseline_person_add_24"
+                            app:tint="?attr/colorControlNormal"
                             tools:ignore="ContentDescription" />
 
                         <TextView
@@ -114,7 +116,7 @@
                             android:layout_marginStart="10dp"
                             android:layout_toEndOf="@id/following_image_sheet"
                             android:text="@string/add_new_user"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/textColor"
                             android:textSize="17sp" />
 
                     </RelativeLayout>
@@ -137,6 +139,7 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginBottom="15dp"
                             android:src="@drawable/ic_baseline_edit_24"
+                            app:tint="?attr/colorControlNormal"
                             tools:ignore="ContentDescription" />
 
                         <TextView
@@ -146,7 +149,7 @@
                             android:layout_marginStart="10dp"
                             android:layout_toEndOf="@id/following_edit_sheet"
                             android:text="@string/edit_data_user"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/textColor"
                             android:textSize="17sp" />
 
                     </RelativeLayout>
@@ -156,7 +159,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:text="@string/app"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/textColor"
                         android:textSize="22sp" />
 
                     <Button
@@ -166,6 +169,22 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:text="@string/settings" />
+
+                    <Button
+                        android:id="@+id/logout_btn"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/red"
+                        android:text="@string/logout" />
+
+
+                    <TextView
+                        android:id="@+id/versionAppTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp" />
 
                 </LinearLayout>
 
@@ -180,12 +199,14 @@
             app:liftOnScroll="true">
 
             <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbarProfileRoot"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@android:color/transparent"
+                android:background="@color/blue_primary"
                 app:layout_collapseMode="pin"
-                app:title="Профиль"
-                app:titleTextColor="@android:color/white" />
+                app:title="@string/profile"
+                app:titleTextColor="@android:color/white"
+                app:navigationIcon="@drawable/ic_baseline_arrow_back_24"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 

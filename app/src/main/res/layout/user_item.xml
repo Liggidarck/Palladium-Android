@@ -15,7 +15,7 @@
         android:textSize="18sp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/black"/>
+        android:textColor="?attr/textColor"/>
 
     <TextView
         android:id="@+id/text_view_email_user"

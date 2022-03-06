@@ -1,40 +1,40 @@
 package com.george.vector.develop;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
-
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.net.Uri;
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.george.vector.common.tasks.ui.BottomSheetAddImage;
 import com.george.vector.databinding.ActivityDevelopKotlinBinding;
 
-import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
-public class DevelopJavaActivity extends AppCompatActivity {
+public class DevelopJavaActivity extends AppCompatActivity implements BottomSheetAddImage.StateListener{
 
-    Uri tempImageUri;
+    private static final String TAG = "DevelopJavaActivity";
+    ActivityDevelopKotlinBinding binding;
 
-    ActivityDevelopKotlinBinding activityDevelopJavaBinding;
+    private static final int REQUEST_CODE_PICTURE= 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        activityDevelopJavaBinding = ActivityDevelopKotlinBinding.inflate(getLayoutInflater());
-        View view = activityDevelopJavaBinding.getRoot();
+        binding = ActivityDevelopKotlinBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
         setContentView(view);
 
 
     }
 
-
-
+    @Override
+    public void getPhotoFromDevice(String button) {
+        Log.d(TAG, "DATA: " + button);
+    }
 }
