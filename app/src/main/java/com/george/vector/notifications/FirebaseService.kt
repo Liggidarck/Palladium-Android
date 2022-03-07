@@ -34,7 +34,7 @@ class FirebaseService : FirebaseMessagingService() {
         val notification = NotificationCompat.Builder(this, CHANNEL_NEW_TASKS_CREATE_ID)
             .setContentTitle(message.data["title"])
             .setContentText(message.data["message"])
-            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setSmallIcon(R.drawable.ic_logo_notification)
             .setAutoCancel(true)
             .build()

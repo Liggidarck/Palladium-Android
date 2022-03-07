@@ -51,6 +51,16 @@ public class FragmentDataHelp extends Fragment {
             binding.bodyHelp.setText(getString(R.string.how_to_add_user_body));
         }
 
+        if (task.equals("fullHelpTasks")) {
+            binding.titleHelp.setText(getString(R.string.tasks));
+            binding.bodyHelp.setText(getString(R.string.task_help));
+        }
+
+        if (task.equals("fullHelpUsers")) {
+            binding.titleHelp.setText(getString(R.string.users_text));
+            binding.bodyHelp.setText(getString(R.string.user_help));
+        }
+
         return view;
     }
 

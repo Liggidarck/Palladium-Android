@@ -31,7 +31,7 @@ import com.george.vector.auth.LoginActivity;
 import com.george.vector.databinding.ActivityMainUserBinding;
 import com.george.vector.users.user.main.fragments.FragmentHistory;
 import com.george.vector.users.user.main.fragments.home.FragmentHome;
-import com.george.vector.users.user.main.fragments.FragmentHelp;
+import com.george.vector.users.user.main.fragments.help.FragmentHelp;
 import com.george.vector.users.user.main.fragments.home.BottomSheetProfileUser;
 import com.google.firebase.auth.FirebaseAuth;
 

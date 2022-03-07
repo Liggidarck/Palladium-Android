@@ -1,4 +1,4 @@
-package com.george.vector.users.root.main.fragments.help;
+package com.george.vector.users.user.main.fragments.help;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
 import com.george.vector.databinding.FragmentAboutProjectBinding;
+import com.george.vector.users.root.main.fragments.help.FragmentDescriptionProject;
 import com.george.vector.users.root.main.fragments.help.develop_app.FragmentDevelopApp;
 
 public class FragmentAboutProject extends Fragment {
@@ -28,19 +29,21 @@ public class FragmentAboutProject extends Fragment {
 
         aboutProject.toolbarAboutProject.setNavigationOnClickListener(v -> {
             Fragment data = new FragmentHelp();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, data).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_user, data).commit();
         });
 
         aboutProject.cardDescriptionProject.setOnClickListener(v -> {
             Fragment descriptionProject = new FragmentDescriptionProject();
-            bundle.putString("user", "root");
+            bundle.putString("user", "user");
             descriptionProject.setArguments(bundle);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, descriptionProject).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_user, descriptionProject).commit();
         });
 
         aboutProject.cardDevelopApp.setOnClickListener(v -> {
             Fragment developFragment = new FragmentDevelopApp();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, developFragment).commit();
+            bundle.putString("user", "user");
+            developFragment.setArguments(bundle);
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_user, developFragment).commit();
         });
 
         aboutProject.cardPrivacyPolicy.setOnClickListener(v -> {
@@ -65,4 +68,5 @@ public class FragmentAboutProject extends Fragment {
         super.onDestroyView();
         aboutProject = null;
     }
+
 }

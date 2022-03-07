@@ -41,6 +41,9 @@ public class FragmentFullHelpData extends Fragment {
                 selectedFragment = new FragmentTextRoot();
                 binding.toolbarFullHelpDataApp.setTitle("Суперпользователи");
                 break;
+            case "executor":
+                selectedFragment = new FragmentTextExecutor();
+                binding.toolbarFullHelpDataApp.setTitle("Исполнитель");
         }
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_full_help_data, selectedFragment).commit();
 

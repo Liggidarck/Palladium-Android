@@ -58,8 +58,15 @@ public class FragmentHelp extends Fragment {
         });
 
         helpBinding.cardHelpTasks.setOnClickListener(v -> {
-            bundle.putString("task", "full_help_tasks");
+            bundle.putString("task", "fullHelpTasks");
+            data.setArguments(bundle);
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, data).commit();
+        });
 
+        helpBinding.cardHelpUsers.setOnClickListener(v -> {
+            bundle.putString("task", "fullHelpUsers");
+            data.setArguments(bundle);
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, data).commit();
         });
 
         helpBinding.cardAppHelp.setOnClickListener(v -> {

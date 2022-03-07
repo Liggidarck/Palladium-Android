@@ -26,6 +26,10 @@ public class FragmentDevelopApp extends Fragment {
         binding = FragmentDevelopAppBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
+        Bundle args = getArguments();
+        assert args != null;
+        String user = args.getString("user");
+
         releases.add(new Release("Palladium alfa.1", "13 июня 2021", "Основные изменения\n" +
                 "\n" +
                 "- Добавлен логин пользователя.\n" +
@@ -169,8 +173,15 @@ public class FragmentDevelopApp extends Fragment {
         binding.developRecycler.setAdapter(adapter);
 
         binding.developToolbar.setNavigationOnClickListener(v -> {
-            Fragment aboutProject = new FragmentAboutProject();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, aboutProject).commit();
+            if (user.equals("root")) {
+                Fragment aboutProject = new FragmentAboutProject();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, aboutProject).commit();
+            }
+
+            if (user.equals("user")) {
+                Fragment about = new com.george.vector.users.user.main.fragments.help.FragmentAboutProject();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_user, about).commit();
+            }
         });
 
         return view;
