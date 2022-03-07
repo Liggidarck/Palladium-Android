@@ -46,8 +46,8 @@ public class LoginActivity extends AppCompatActivity {
 
     String email, password, user_id;
 
-    FirebaseAuth firebase_auth;
-    FirebaseFirestore firebase_firestore;
+    FirebaseAuth firebaseAuth;
+    FirebaseFirestore firebaseFirestore;
 
     ActivityLoginBinding loginBinding;
 
@@ -59,69 +59,28 @@ public class LoginActivity extends AppCompatActivity {
         loginBinding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(loginBinding.getRoot());
 
-        mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = mDataUser.edit();
-
-        firebase_auth = FirebaseAuth.getInstance();
-        firebase_firestore = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
         loginBinding.btnLogin.setOnClickListener(v -> {
             email = Objects.requireNonNull(loginBinding.emailLoginTextLayout.getEditText()).getText().toString();
             password = Objects.requireNonNull(loginBinding.passwordLoginTextLayout.getEditText()).getText().toString();
-            loginBinding.progressBarAuth.setVisibility(View.VISIBLE);
 
-            if(isOnline()) {
+            if (isOnline()) {
 
                 if (validateFields()) {
+                    Log.d(TAG_LOGIN_ACTIVITY, "Fields validate");
 
                     if(!validateEmail(email)) {
                         Log.e(TAG_VALIDATE_FILED, "Email validation failed");
                         loginBinding.emailLoginTextLayout.setError("Некорректный формат e-mail");
                     } else {
-
-                        firebase_auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-
-                            if (task.isSuccessful()) {
-                                Log.d(TAG_LOGIN_ACTIVITY, "Login success");
-
-                                user_id = Objects.requireNonNull(firebase_auth.getCurrentUser()).getUid();
-
-                                DocumentReference documentReference = firebase_firestore.collection(USERS).document(user_id);
-                                documentReference.addSnapshotListener(this, (value, error) -> {
-                                    assert value != null;
-
-                                    String name = value.getString("name");
-                                    String last_name = value.getString("last_name");
-                                    String patronymic = value.getString("patronymic");
-                                    String role = value.getString(ROLE);
-                                    String email = value.getString(EMAIL);
-                                    String permission = value.getString(PERMISSION);
-
-                                    editor.putString(USER_PREFERENCES_NAME, name);
-                                    editor.putString(USER_PREFERENCES_LAST_NAME, last_name);
-                                    editor.putString(USER_PREFERENCES_PATRONYMIC, patronymic);
-                                    editor.putString(USER_PREFERENCES_EMAIL, email);
-                                    editor.putString(USER_PREFERENCES_ROLE, role);
-                                    editor.putString(USER_PREFERENCES_PERMISSION, permission);
-                                    editor.putBoolean(USER_NOTIFICATIONS_OPTIONS, false);
-                                    editor.apply();
-
-                                    assert role != null;
-                                    startApp(role);
-                                    loginBinding.progressBarAuth.setVisibility(View.INVISIBLE);
-                                });
-
-                            }
-
-                        }).addOnFailureListener(e -> {
-                            loginBinding.progressBarAuth.setVisibility(View.INVISIBLE);
-                            Snackbar.make(loginBinding.coordinatorLoginActivity, e.toString(), Snackbar.LENGTH_LONG).show();
-                        });
-
-
+                        Log.i(TAG_VALIDATE_FILED, "Email validation OK");
+                        login(email, password);
                     }
 
-
+                } else {
+                    Log.d(TAG_LOGIN_ACTIVITY, "Fields not validate");
                 }
 
             } else
@@ -130,6 +89,51 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    void login(String login, String password) {
+        loginBinding.progressBarAuth.setVisibility(View.VISIBLE);
+        mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mDataUser.edit();
+
+        firebaseAuth.signInWithEmailAndPassword(login, password).addOnCompleteListener(task -> {
+
+            if (task.isSuccessful()) {
+                Log.d(TAG_LOGIN_ACTIVITY, "Login success");
+
+                user_id = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+
+                DocumentReference documentReference = firebaseFirestore.collection(USERS).document(user_id);
+                documentReference.addSnapshotListener(this, (value, error) -> {
+                    assert value != null;
+
+                    String name = value.getString("name");
+                    String last_name = value.getString("last_name");
+                    String patronymic = value.getString("patronymic");
+                    String role = value.getString(ROLE);
+                    String email = value.getString(EMAIL);
+                    String permission = value.getString(PERMISSION);
+
+                    editor.putString(USER_PREFERENCES_NAME, name);
+                    editor.putString(USER_PREFERENCES_LAST_NAME, last_name);
+                    editor.putString(USER_PREFERENCES_PATRONYMIC, patronymic);
+                    editor.putString(USER_PREFERENCES_EMAIL, email);
+                    editor.putString(USER_PREFERENCES_ROLE, role);
+                    editor.putString(USER_PREFERENCES_PERMISSION, permission);
+                    editor.putBoolean(USER_NOTIFICATIONS_OPTIONS, false);
+                    editor.apply();
+
+                    assert role != null;
+                    startApp(role);
+                    loginBinding.progressBarAuth.setVisibility(View.INVISIBLE);
+                });
+
+            }
+
+        }).addOnFailureListener(e -> {
+            loginBinding.progressBarAuth.setVisibility(View.INVISIBLE);
+            Snackbar.make(loginBinding.coordinatorLoginActivity, e.toString(), Snackbar.LENGTH_LONG).show();
+        });
     }
 
     void startApp(@NotNull String role) {
@@ -155,9 +159,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        if(!isOnline())
+        if (!isOnline())
             Snackbar.make(findViewById(R.id.coordinator_login_activity), getString(R.string.error_no_connection), Snackbar.LENGTH_LONG)
-                    .setAction("Повторить", v ->  {
+                    .setAction("Повторить", v -> {
                         Log.i(TAG_LOGIN_ACTIVITY, "Update status: " + isOnline());
                         onStart();
                     }).show();
