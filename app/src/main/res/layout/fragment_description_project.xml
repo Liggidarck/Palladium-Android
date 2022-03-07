@@ -22,6 +22,7 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/download_full_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -60,8 +61,8 @@
                             android:layout_marginStart="20dp"
                             android:layout_toEndOf="@+id/about_app_layout"
                             android:text="Скачать полный текст работы"
-                            android:textSize="20sp"
-                            android:textColor="@color/black"/>
+                            android:textColor="@color/black"
+                            android:textSize="20sp" />
 
                     </RelativeLayout>
 

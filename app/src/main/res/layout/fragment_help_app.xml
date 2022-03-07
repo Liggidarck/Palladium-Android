@@ -138,6 +138,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/card_full_help_executor"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_rowWeight="1"
@@ -185,7 +186,7 @@
                                 android:layout_marginStart="10dp"
                                 android:layout_marginEnd="10dp"
                                 android:layout_marginBottom="9dp"
-                                android:text="IN DEVELOP PAGE Здесь вопрос о , пользователях или приложении."
+                                android:text="Подробная техническая поддержка исполнителя. Приложение имеет множество разных настроек, для удобной работы."
                                 android:textColor="@color/white"
                                 android:textSize="11sp" />
 
@@ -195,6 +196,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_download_text_help"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="12dp"
@@ -241,7 +243,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="100dp" />
+                    android:layout_height="50dp" />
 
             </LinearLayout>
 

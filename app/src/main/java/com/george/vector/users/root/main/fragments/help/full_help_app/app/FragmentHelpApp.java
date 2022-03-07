@@ -1,5 +1,7 @@
 package com.george.vector.users.root.main.fragments.help.full_help_app.app;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import com.george.vector.R;
 import com.george.vector.databinding.FragmentHelpAppBinding;
 import com.george.vector.users.root.main.fragments.help.FragmentHelp;
+import com.george.vector.users.user.main.fragments.help.FragmentDataHelp;
 
 public class FragmentHelpApp extends Fragment {
 
@@ -25,9 +28,17 @@ public class FragmentHelpApp extends Fragment {
         appBinding = FragmentHelpAppBinding.inflate(inflater, container, false);
         View view = appBinding.getRoot();
 
+
         appBinding.toolbarHelpApp.setNavigationOnClickListener(v -> {
             Fragment fragmentHelp = new FragmentHelp();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, fragmentHelp).commit();
+        });
+
+        appBinding.cardDownloadTextHelp.setOnClickListener(v -> {
+            String url = "https://docs.google.com/document/d/1jP6xACZYv3jYBoPE7f2TmiBpjqu8xRNC/edit?usp=sharing&ouid=107837366117826648347&rtpof=true&sd=true";
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
         });
 
         appBinding.cardFullHelpUsers.setOnClickListener(v -> {
@@ -42,6 +53,11 @@ public class FragmentHelpApp extends Fragment {
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, data).commit();
         });
 
+        appBinding.cardFullHelpExecutor.setOnClickListener(v -> {
+            bundle.putString("user", "executor");
+            data.setArguments(bundle);
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, data).commit();
+        });
 
 
         return view;
