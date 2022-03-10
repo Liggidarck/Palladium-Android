@@ -20,10 +20,10 @@ public class ProfileBottomSheet extends BottomSheetDialogFragment {
 
     private static final String TAG = "ProfileBottomSheet";
 
-    FirebaseAuth firebase_auth;
-    FirebaseFirestore firebase_firestore;
+    FirebaseAuth firebaseAuth;
+    FirebaseFirestore firebaseFirestore;
 
-    String user_id, name, last_name, patronymic, email, role;
+    String userId, name, lastName, patronymic, email, role;
 
     ProfileBottomSheetBinding sheetBinding;
 
@@ -33,24 +33,24 @@ public class ProfileBottomSheet extends BottomSheetDialogFragment {
         sheetBinding = ProfileBottomSheetBinding.inflate(inflater, container, false);
         View view = sheetBinding.getRoot();
 
-        firebase_auth = FirebaseAuth.getInstance();
-        firebase_firestore = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
         sheetBinding.closeBtn.setOnClickListener(v -> dismiss());
 
-        user_id = Objects.requireNonNull(firebase_auth.getCurrentUser()).getUid();
-        DocumentReference documentReference = firebase_firestore.collection("users").document(user_id);
+        userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        DocumentReference documentReference = firebaseFirestore.collection("users").document(userId);
         documentReference.addSnapshotListener((value, error) -> {
             assert value != null;
             name = value.getString("name");
-            last_name = value.getString("last_name");
+            lastName = value.getString("last_name");
             patronymic = value.getString("patronymic");
             email = value.getString("email");
             role = value.getString("role");
 
-            String full_name = String.format("%s %s %s", last_name, name, patronymic);
+            String full_name = String.format("%s %s %s", lastName, name, patronymic);
             String _name = Character.toString(name.charAt(0));
-            String _last_name = Character.toString(last_name.charAt(0));
+            String _last_name = Character.toString(lastName.charAt(0));
             String ava = String.format("%s%s", _name, _last_name);
 
             sheetBinding.textViewFullName.setText(full_name);

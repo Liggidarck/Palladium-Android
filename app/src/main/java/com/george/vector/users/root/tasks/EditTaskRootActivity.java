@@ -53,20 +53,16 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
     private static final String TAG = "EditTaskRoot";
 
-    Calendar date_pick_calendar;
+    Calendar datePickCalendar;
 
-    String id, collection, address, floor, cabinet, letter, name_task, comment, status, date_create, time_create,
-            date_done, email_creator, location, user_email, image, full_name_executor_root, name_creator;
-    String name_executor;
-    String last_name_executor;
-    String patronymic_executor;
-    String email_executor;
+    String id, collection, address, floor, cabinet, letter, nameTask, comment, status, dateCreate, timeCreate,
+            dateDone, emailCreator, location, userEmail, image, fullNameExecutorRoot, nameCreator, nameExecutor,
+            lastNameExecutor, patronymicExecutor, emailExecutor;
+
     boolean urgent;
 
-    FirebaseFirestore firebase_firestore;
-
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference usersRef = db.collection("users");
+    private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    private final CollectionReference collectionReference = firebaseFirestore.collection("users");
 
     Query query;
 
@@ -81,15 +77,13 @@ public class EditTaskRootActivity extends AppCompatActivity {
         addTaskRootBinding = ActivityAddTaskRootBinding.inflate(getLayoutInflater());
         setContentView(addTaskRootBinding.getRoot());
 
-        firebase_firestore = FirebaseFirestore.getInstance();
-
         addTaskRootBinding.topAppBarNewTaskRoot.setNavigationOnClickListener(v -> onBackPressed());
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.getString(ID);
         collection = arguments.getString(COLLECTION);
         location = arguments.getString(LOCATION);
-        user_email = arguments.getString(EMAIL);
+        userEmail = arguments.getString(EMAIL);
 
         String buffer_size_preference = PreferenceManager
                 .getDefaultSharedPreferences(EditTaskRootActivity.this)
@@ -100,7 +94,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
         addTaskRootBinding.addExecutorRoot.setOnClickListener(v -> show_add_executor_dialog());
 
-        DocumentReference documentReference = firebase_firestore.collection(collection).document(id);
+        DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
             addTaskRootBinding.progressBarAddTaskRoot.setVisibility(View.VISIBLE);
 
@@ -109,18 +103,18 @@ public class EditTaskRootActivity extends AppCompatActivity {
             floor = value.getString("floor");
             cabinet = value.getString("cabinet");
             letter = value.getString("litera");
-            name_task = value.getString("name_task");
+            nameTask = value.getString("name_task");
             comment = value.getString("comment");
             status = value.getString("status");
 
-            date_done = value.getString("date_done");
-            email_executor = value.getString("executor");
-            full_name_executor_root = value.getString("fullNameExecutor");
+            dateDone = value.getString("date_done");
+            emailExecutor = value.getString("executor");
+            fullNameExecutorRoot = value.getString("fullNameExecutor");
 
-            date_create = value.getString("date_create");
-            time_create = value.getString("time_create");
-            email_creator = value.getString("email_creator");
-            name_creator = value.getString("nameCreator");
+            dateCreate = value.getString("date_create");
+            timeCreate = value.getString("time_create");
+            emailCreator = value.getString("email_creator");
+            nameCreator = value.getString("nameCreator");
 
             image = value.getString("image");
 
@@ -139,11 +133,11 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 Objects.requireNonNull(addTaskRootBinding.textInputLayoutFloorRoot.getEditText()).setText(floor);
                 Objects.requireNonNull(addTaskRootBinding.textInputLayoutCabinetRoot.getEditText()).setText(cabinet);
                 Objects.requireNonNull(addTaskRootBinding.textInputLayoutCabinetLiterRoot.getEditText()).setText(letter);
-                Objects.requireNonNull(addTaskRootBinding.textInputLayoutNameTaskRoot.getEditText()).setText(name_task);
-                Objects.requireNonNull(addTaskRootBinding.textInputLayoutDateTaskRoot.getEditText()).setText(date_done);
-                Objects.requireNonNull(addTaskRootBinding.textInputLayoutExecutorRoot.getEditText()).setText(email_executor);
+                Objects.requireNonNull(addTaskRootBinding.textInputLayoutNameTaskRoot.getEditText()).setText(nameTask);
+                Objects.requireNonNull(addTaskRootBinding.textInputLayoutDateTaskRoot.getEditText()).setText(dateDone);
+                Objects.requireNonNull(addTaskRootBinding.textInputLayoutExecutorRoot.getEditText()).setText(emailExecutor);
                 Objects.requireNonNull(addTaskRootBinding.textInputLayoutStatusRoot.getEditText()).setText(status);
-                Objects.requireNonNull(addTaskRootBinding.textInputLayoutFullNameExecutorRoot.getEditText()).setText(full_name_executor_root);
+                Objects.requireNonNull(addTaskRootBinding.textInputLayoutFullNameExecutorRoot.getEditText()).setText(fullNameExecutorRoot);
 
                 if (comment.equals("Нет коментария к заявке"))
                     Objects.requireNonNull(addTaskRootBinding.textInputLayoutCommentRoot.getEditText()).setText("");
@@ -180,7 +174,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
         Chip chip_root_dialog = dialog.findViewById(R.id.chip_root_dialog);
         Chip chip_executors_dialog = dialog.findViewById(R.id.chip_executors_dialog);
 
-        query = usersRef.whereEqualTo("role", "Root");
+        query = collectionReference.whereEqualTo("role", "Root");
         FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
                 .setQuery(query, User.class)
                 .build();
@@ -194,7 +188,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
             if (isChecked) {
                 Log.i(TAG, "root checked");
 
-                query = usersRef.whereEqualTo("role", "Root");
+                query = collectionReference.whereEqualTo("role", "Root");
 
                 FirestoreRecyclerOptions<User> UserOptions = new FirestoreRecyclerOptions.Builder<User>()
                         .setQuery(query, User.class)
@@ -208,7 +202,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
             if (isChecked) {
                 Log.i(TAG, "Executor checked");
 
-                query = usersRef.whereEqualTo("role", "Исполнитель");
+                query = collectionReference.whereEqualTo("role", "Исполнитель");
 
                 FirestoreRecyclerOptions<User> UserOptions = new FirestoreRecyclerOptions.Builder<User>()
                         .setQuery(query, User.class)
@@ -221,21 +215,21 @@ public class EditTaskRootActivity extends AppCompatActivity {
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
 
-            DocumentReference documentReference = firebase_firestore.collection(USERS).document(id);
+            DocumentReference documentReference = firebaseFirestore.collection(USERS).document(id);
             documentReference.addSnapshotListener((value, error) -> {
                 assert value != null;
-                name_executor = value.getString("name");
-                last_name_executor = value.getString("last_name");
-                patronymic_executor = value.getString("patronymic");
-                email_executor = value.getString("email");
-                String full_name_executor = last_name_executor + " " + name_executor + " " + patronymic_executor;
+                nameExecutor = value.getString("name");
+                lastNameExecutor = value.getString("last_name");
+                patronymicExecutor = value.getString("patronymic");
+                emailExecutor = value.getString("email");
+                String full_name_executor = lastNameExecutor + " " + nameExecutor + " " + patronymicExecutor;
 
-                Log.i(TAG, String.format("name: %s", name_executor));
-                Log.i(TAG, String.format("last_name: %s", last_name_executor));
-                Log.i(TAG, String.format("patronymic: %s", patronymic_executor));
-                Log.i(TAG, String.format("email: %s", email_executor));
+                Log.i(TAG, String.format("name: %s", nameExecutor));
+                Log.i(TAG, String.format("last_name: %s", lastNameExecutor));
+                Log.i(TAG, String.format("patronymic: %s", patronymicExecutor));
+                Log.i(TAG, String.format("email: %s", emailExecutor));
 
-                Objects.requireNonNull(addTaskRootBinding.textInputLayoutExecutorRoot.getEditText()).setText(email_executor);
+                Objects.requireNonNull(addTaskRootBinding.textInputLayoutExecutorRoot.getEditText()).setText(emailExecutor);
                 Objects.requireNonNull(addTaskRootBinding.textInputLayoutFullNameExecutorRoot.getEditText()).setText(full_name_executor);
                 dialog.dismiss();
             });
@@ -267,12 +261,12 @@ public class EditTaskRootActivity extends AppCompatActivity {
         String update_status = Objects.requireNonNull(addTaskRootBinding.textInputLayoutStatusRoot.getEditText()).getText().toString();
         boolean update_urgent = addTaskRootBinding.urgentRequestCheckBox.isChecked();
 
-        task.save(new SaveTask(), location, update_name, update_address, date_create, update_floor,
+        task.save(new SaveTask(), location, update_name, update_address, dateCreate, update_floor,
                 update_cabinet, update_letter, update_comment, update_date_task,
-                update_executor, update_status, time_create, email_creator, update_urgent, update_image, update_name_executor, name_creator);
+                update_executor, update_status, timeCreate, emailCreator, update_urgent, update_image, update_name_executor, nameCreator);
 
         Intent intent = new Intent(this, RootMainActivity.class);
-        intent.putExtra(EMAIL, user_email);
+        intent.putExtra(EMAIL, userEmail);
         startActivity(intent);
     }
 
@@ -284,7 +278,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 .setPositiveButton(getText(R.string.save), (dialog, id) -> updateTask(collection))
                 .setNegativeButton(android.R.string.cancel, (dialog, id) -> {
                     Intent intent = new Intent(this, RootMainActivity.class);
-                    intent.putExtra(EMAIL, user_email);
+                    intent.putExtra(EMAIL, userEmail);
                     startActivity(intent);
                 });
 
@@ -306,20 +300,20 @@ public class EditTaskRootActivity extends AppCompatActivity {
         address = Objects.requireNonNull(addTaskRootBinding.textInputLayoutAddressRoot.getEditText()).getText().toString();
         floor = Objects.requireNonNull(addTaskRootBinding.textInputLayoutFloorRoot.getEditText()).getText().toString();
         cabinet = Objects.requireNonNull(addTaskRootBinding.textInputLayoutCabinetRoot.getEditText()).getText().toString();
-        name_task = Objects.requireNonNull(addTaskRootBinding.textInputLayoutNameTaskRoot.getEditText()).getText().toString();
+        nameTask = Objects.requireNonNull(addTaskRootBinding.textInputLayoutNameTaskRoot.getEditText()).getText().toString();
         String date_task = Objects.requireNonNull(addTaskRootBinding.textInputLayoutDateTaskRoot.getEditText()).getText().toString();
-        email_executor = Objects.requireNonNull(addTaskRootBinding.textInputLayoutExecutorRoot.getEditText()).getText().toString();
+        emailExecutor = Objects.requireNonNull(addTaskRootBinding.textInputLayoutExecutorRoot.getEditText()).getText().toString();
         status = Objects.requireNonNull(addTaskRootBinding.textInputLayoutStatusRoot.getEditText()).getText().toString();
-        full_name_executor_root = addTaskRootBinding.textInputLayoutFullNameExecutorRoot.getEditText().getText().toString();
+        fullNameExecutorRoot = addTaskRootBinding.textInputLayoutFullNameExecutorRoot.getEditText().getText().toString();
 
         boolean check_address = utils.validate_field(address, addTaskRootBinding.textInputLayoutAddressRoot);
         boolean check_floor = utils.validate_field(floor, addTaskRootBinding.textInputLayoutFloorRoot);
         boolean check_cabinet = utils.validate_field(cabinet, addTaskRootBinding.textInputLayoutCabinetRoot);
-        boolean check_name_task = utils.validate_field(name_task, addTaskRootBinding.textInputLayoutNameTaskRoot);
+        boolean check_name_task = utils.validate_field(nameTask, addTaskRootBinding.textInputLayoutNameTaskRoot);
         boolean check_date_task = utils.validate_field(date_task, addTaskRootBinding.textInputLayoutDateTaskRoot);
-        boolean check_executor = utils.validate_field(email_executor, addTaskRootBinding.textInputLayoutExecutorRoot);
+        boolean check_executor = utils.validate_field(emailExecutor, addTaskRootBinding.textInputLayoutExecutorRoot);
         boolean check_status = utils.validate_field(status, addTaskRootBinding.textInputLayoutStatusRoot);
-        boolean check_name_executor = utils.validate_field(full_name_executor_root, addTaskRootBinding.textInputLayoutFullNameExecutorRoot);
+        boolean check_name_executor = utils.validate_field(fullNameExecutorRoot, addTaskRootBinding.textInputLayoutFullNameExecutorRoot);
 
         return check_address & check_floor & check_cabinet & check_name_task & check_date_task & check_executor & check_status & check_name_executor;
     }
@@ -359,17 +353,17 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
         addTaskRootBinding.literAutoCompleteRoot.setAdapter(adapter_letter);
 
-        date_pick_calendar = Calendar.getInstance();
+        datePickCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
-            date_pick_calendar.set(Calendar.YEAR, year);
-            date_pick_calendar.set(Calendar.MONTH, month);
-            date_pick_calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            datePickCalendar.set(Calendar.YEAR, year);
+            datePickCalendar.set(Calendar.MONTH, month);
+            datePickCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             updateLabel();
         };
 
         addTaskRootBinding.editTextDateTaskRoot.setOnClickListener(v ->
-                new DatePickerDialog(EditTaskRootActivity.this, date, date_pick_calendar
-                        .get(Calendar.YEAR), date_pick_calendar.get(Calendar.MONTH), date_pick_calendar
+                new DatePickerDialog(EditTaskRootActivity.this, date, datePickCalendar
+                        .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar
                         .get(Calendar.DAY_OF_MONTH))
                         .show());
 
@@ -393,6 +387,6 @@ public class EditTaskRootActivity extends AppCompatActivity {
         String date_text = "dd.MM.yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(date_text, Locale.US);
 
-        Objects.requireNonNull(addTaskRootBinding.textInputLayoutDateTaskRoot.getEditText()).setText(sdf.format(date_pick_calendar.getTime()));
+        Objects.requireNonNull(addTaskRootBinding.textInputLayoutDateTaskRoot.getEditText()).setText(sdf.format(datePickCalendar.getTime()));
     }
 }

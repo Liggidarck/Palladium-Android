@@ -34,7 +34,7 @@ public class FragmentHome extends Fragment {
     String zone, email;
     SharedPreferences mDataUser;
 
-    FirebaseFirestore firebase_firestore;
+    FirebaseFirestore firebaseFirestore;
 
     FragmentRootHomeBinding homeBinding;
 
@@ -44,7 +44,7 @@ public class FragmentHome extends Fragment {
         homeBinding = FragmentRootHomeBinding.inflate(inflater, container, false);
         View view = homeBinding.getRoot();
 
-        firebase_firestore = FirebaseFirestore.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
         zone = PreferenceManager
                 .getDefaultSharedPreferences(FragmentHome.this.getContext())

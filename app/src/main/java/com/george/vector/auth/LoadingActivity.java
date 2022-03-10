@@ -27,10 +27,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoadingActivity extends AppCompatActivity {
 
-    FirebaseAuth firebase_auth;
-    FirebaseFirestore firebase_firestore;
+    FirebaseAuth firebaseAuth;
+    FirebaseFirestore firebaseFirestore;
 
-    String name, last_name, patronymic, email, permission, role;
+    String name, lastName, patronymic, email, permission, role;
     private static final String TAG = "LoadingActivity";
 
     ActivityLoadingBinding loadingBinding;
@@ -42,24 +42,24 @@ public class LoadingActivity extends AppCompatActivity {
         loadingBinding = ActivityLoadingBinding.inflate(getLayoutInflater());
         setContentView(loadingBinding.getRoot());
 
-        firebase_auth = FirebaseAuth.getInstance();
-        firebase_firestore = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
         SharedPreferences mDataUser;
         mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
 
         name = mDataUser.getString(USER_PREFERENCES_NAME, "");
-        last_name = mDataUser.getString(USER_PREFERENCES_LAST_NAME, "");
+        lastName = mDataUser.getString(USER_PREFERENCES_LAST_NAME, "");
         patronymic = mDataUser.getString(USER_PREFERENCES_PATRONYMIC, "");
         email = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
         permission = mDataUser.getString(USER_PREFERENCES_PERMISSION, "");
         role = mDataUser.getString(USER_PREFERENCES_ROLE, "");
 
-        Log.d(TAG, "Auth id: " + firebase_auth.getUid());
+        Log.d(TAG, "Auth id: " + firebaseAuth.getUid());
         Log.d(TAG, "name: " + name);
 
-        if(firebase_auth.getCurrentUser() != null &
-                (name.equals("") || last_name.equals("") || patronymic.equals("") ||
+        if(firebaseAuth.getCurrentUser() != null &
+                (name.equals("") || lastName.equals("") || patronymic.equals("") ||
                         email.equals("") || permission.equals("") || role.equals(""))) {
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle("Внимание!")
@@ -72,18 +72,18 @@ public class LoadingActivity extends AppCompatActivity {
 
                     })
                     .setPositiveButton("ок", (dialog12, which) -> {
-                        firebase_auth.signOut();
+                        firebaseAuth.signOut();
                         startActivity(new Intent(this, LoginActivity.class));
                     })
                     .create();
             dialog.show();
         }
 
-        if (firebase_auth.getCurrentUser() != null & !role.equals("")) {
+        if (firebaseAuth.getCurrentUser() != null & !role.equals("")) {
             startApp(role);
         }
 
-        if(firebase_auth.getCurrentUser() == null & role.equals("")) {
+        if(firebaseAuth.getCurrentUser() == null & role.equals("")) {
             startActivity(new Intent(this, LoginActivity.class));
         }
 

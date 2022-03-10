@@ -65,7 +65,7 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
 
     private static final String TAG = "AddTaskUser";
 
-    String address, floor, cabinet, letter, name_task, comment, email, permission, name_image, full_name_creator;
+    String address, floor, cabinet, letter, name_task, comment, email, permission, nameImage, fullNameCreator;
     String status = "Новая заявка";
 
     SharedPreferences mDataUser;
@@ -113,7 +113,7 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
         String name_user = mDataUser.getString(USER_PREFERENCES_NAME, "");
         String last_name_user = mDataUser.getString(USER_PREFERENCES_LAST_NAME, "");
         String patronymic_user = mDataUser.getString(USER_PREFERENCES_PATRONYMIC, "");
-        full_name_creator = name_user + " " + last_name_user + " " + patronymic_user;
+        fullNameCreator = name_user + " " + last_name_user + " " + patronymic_user;
 
         binding.topAppBarNewTaskUser.setNavigationOnClickListener(v -> onBackPressed());
 
@@ -151,7 +151,7 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
         String time_create = timeFormat.format(currentDate);
 
         task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, letter, comment,
-                null, null, status, time_create, email, false, name_image, null, full_name_creator);
+                null, null, status, time_create, email, false, nameImage, null, fullNameCreator);
 
         SendNotification sendNotification = new SendNotification();
         sendNotification.sendNotification("Созданна новая заявка", name_task, TOPIC_NEW_TASKS_CREATE);
@@ -175,9 +175,9 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
                 progressDialog.setTitle("Загрузка...");
                 progressDialog.show();
 
-                name_image = UUID.randomUUID().toString();
+                nameImage = UUID.randomUUID().toString();
 
-                StorageReference ref = storageReference.child("images/" + name_image);
+                StorageReference ref = storageReference.child("images/" + nameImage);
                 ref.putBytes(data)
                         .addOnSuccessListener(taskSnapshot -> {
                             progressDialog.dismiss();

@@ -44,7 +44,7 @@ import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
-    String email, password, user_id;
+    String email, password, userId;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -101,9 +101,9 @@ public class LoginActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 Log.d(TAG_LOGIN_ACTIVITY, "Login success");
 
-                user_id = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+                userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
 
-                DocumentReference documentReference = firebaseFirestore.collection(USERS).document(user_id);
+                DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userId);
                 documentReference.addSnapshotListener(this, (value, error) -> {
                     assert value != null;
 

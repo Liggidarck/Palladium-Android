@@ -18,36 +18,36 @@ import java.util.regex.Pattern;
 
 public class Utils {
 
-    public boolean validate_field(@NonNull String text, TextInputLayout text_input_layout) {
+    public boolean validate_field(@NonNull String text, TextInputLayout inputLayout) {
         if (text.isEmpty()) {
-            text_input_layout.setError("Это поле не может быть пустым");
-            text_input_layout.setErrorEnabled(true);
+            inputLayout.setError("Это поле не может быть пустым");
+            inputLayout.setErrorEnabled(true);
             return false;
         } else {
-            text_input_layout.setErrorEnabled(false);
+            inputLayout.setErrorEnabled(false);
             return true;
         }
     }
 
-    public void validateNumberField(String text, TextInputLayout text_input_layout, ExtendedFloatingActionButton floating_action_button, int length) {
+    public void validateNumberField(String text, TextInputLayout inputLayout, ExtendedFloatingActionButton actionButton, int length) {
         if (!validateNumberText(text)) {
-            text_input_layout.setError("Ошибка! Проверьте правильность написания");
-            floating_action_button.setClickable(false);
-            text_input_layout.setErrorEnabled(true);
+            inputLayout.setError("Ошибка! Проверьте правильность написания");
+            actionButton.setClickable(false);
+            inputLayout.setErrorEnabled(true);
         } else if (text.length() > length) {
-            floating_action_button.setClickable(false);
-            text_input_layout.setErrorEnabled(true);
+            actionButton.setClickable(false);
+            inputLayout.setErrorEnabled(true);
         } else {
-            floating_action_button.setClickable(true);
-            text_input_layout.setErrorEnabled(false);
+            actionButton.setClickable(true);
+            inputLayout.setErrorEnabled(false);
         }
     }
 
-    public void clear_error(@NonNull TextInputLayout textInputLayout) {
-        Objects.requireNonNull(textInputLayout.getEditText()).addTextChangedListener(new TextWatcher() {
+    public void clear_error(@NonNull TextInputLayout inputLayout) {
+        Objects.requireNonNull(inputLayout.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                textInputLayout.setError(null);
+                inputLayout.setError(null);
             }
 
             @Override
@@ -65,8 +65,8 @@ public class Utils {
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
-    public static boolean validateEmail(String emailStr) {
-        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+    public static boolean validateEmail(String email) {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
         return matcher.find();
     }
 

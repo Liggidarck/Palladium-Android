@@ -76,17 +76,17 @@ import java.util.UUID;
 
 public class AddTaskRootActivity extends AppCompatActivity implements BottomSheetAddImage.StateListener {
 
-    String location, email, address, floor, cabinet, letter, name_task, date_complete, status,
-            comment, USER_EMAIL, NAME_IMAGE, full_name_executor, name_executor, last_name_executor,
-            patronymic_executor, full_name_creator, email_executor;
+    String location, email, address, floor, cabinet, letter, nameTask, dateComplete, status,
+            comment, userEmail, nameImage, fullNameExecutor, nameExecutor, lastNameExecutor,
+            patronymicExecutor, fullNameCreator, emailExecutor;
     boolean urgent;
     private static final String TAG = "AddTaskRoot";
 
     Utils utils = new Utils();
 
     SharedPreferences mDataUser;
-    StorageReference storage_reference;
-    FirebaseStorage firebase_storage;
+    StorageReference storageReference;
+    FirebaseStorage firebaseStorage;
 
     private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private final CollectionReference usersRef = firebaseFirestore.collection(USERS);
@@ -119,8 +119,8 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         mBuilding = ActivityAddTaskRootBinding.inflate(getLayoutInflater());
         setContentView(mBuilding.getRoot());
 
-        firebase_storage = FirebaseStorage.getInstance();
-        storage_reference = firebase_storage.getReference();
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
 
         Bundle arguments = getIntent().getExtras();
         location = arguments.get(LOCATION).toString();
@@ -129,8 +129,8 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         String name_user = mDataUser.getString(USER_PREFERENCES_NAME, "");
         String last_name_user = mDataUser.getString(USER_PREFERENCES_LAST_NAME, "");
         String patronymic_user = mDataUser.getString(USER_PREFERENCES_PATRONYMIC, "");
-        USER_EMAIL = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
-        full_name_creator = name_user + " " + last_name_user + " " + patronymic_user;
+        userEmail = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
+        fullNameCreator = name_user + " " + last_name_user + " " + patronymic_user;
 
         initFields(location);
 
@@ -145,13 +145,13 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
             floor = Objects.requireNonNull(mBuilding.textInputLayoutFloorRoot.getEditText()).getText().toString();
             cabinet = Objects.requireNonNull(mBuilding.textInputLayoutCabinetRoot.getEditText()).getText().toString();
             letter = Objects.requireNonNull(mBuilding.textInputLayoutCabinetLiterRoot.getEditText()).getText().toString();
-            name_task = Objects.requireNonNull(mBuilding.textInputLayoutNameTaskRoot.getEditText()).getText().toString();
+            nameTask = Objects.requireNonNull(mBuilding.textInputLayoutNameTaskRoot.getEditText()).getText().toString();
             comment = Objects.requireNonNull(mBuilding.textInputLayoutCommentRoot.getEditText()).getText().toString();
-            date_complete = Objects.requireNonNull(mBuilding.textInputLayoutDateTaskRoot.getEditText()).getText().toString();
-            email_executor = Objects.requireNonNull(mBuilding.textInputLayoutExecutorRoot.getEditText()).getText().toString();
+            dateComplete = Objects.requireNonNull(mBuilding.textInputLayoutDateTaskRoot.getEditText()).getText().toString();
+            emailExecutor = Objects.requireNonNull(mBuilding.textInputLayoutExecutorRoot.getEditText()).getText().toString();
             status = Objects.requireNonNull(mBuilding.textInputLayoutStatusRoot.getEditText()).getText().toString();
             urgent = mBuilding.urgentRequestCheckBox.isChecked();
-            full_name_executor = mBuilding.textInputLayoutFullNameExecutorRoot.getEditText().getText().toString();
+            fullNameExecutor = mBuilding.textInputLayoutFullNameExecutorRoot.getEditText().getText().toString();
 
             if (validateFields()) {
                 if (!isOnline())
@@ -234,9 +234,9 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
             progressDialog.setTitle("Загрузка...");
             progressDialog.show();
 
-            NAME_IMAGE = UUID.randomUUID().toString();
+            nameImage = UUID.randomUUID().toString();
 
-            StorageReference ref = storage_reference.child("images/" + NAME_IMAGE);
+            StorageReference ref = storageReference.child("images/" + nameImage);
             ref.putBytes(data)
                     .addOnSuccessListener(taskSnapshot -> {
                         progressDialog.dismiss();
@@ -248,7 +248,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
                         progressDialog.setMessage("Прогресс: " + (int) progress + "%");
                     });
         } else {
-            NAME_IMAGE = null;
+            nameImage = null;
             onBackPressed();
         }
     }
@@ -266,8 +266,8 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
         sendNotification(urgent);
 
-        task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, letter, comment,
-                date_complete, email_executor, status, time_create, email, urgent, NAME_IMAGE, full_name_executor, full_name_creator);
+        task.save(new SaveTask(), location, nameTask, address, date_create, floor, cabinet, letter, comment,
+                dateComplete, emailExecutor, status, time_create, email, urgent, nameImage, fullNameExecutor, fullNameCreator);
     }
 
     void sendNotification(boolean urgent) {
@@ -280,7 +280,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
             title = "Созданна новая заявка";
 
         SendNotification sendNotification = new SendNotification();
-        sendNotification.sendNotification(title, name_task, TOPIC_NEW_TASKS_CREATE);
+        sendNotification.sendNotification(title, nameTask, TOPIC_NEW_TASKS_CREATE);
 
     }
 
@@ -337,19 +337,19 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
             DocumentReference documentReference = firebaseFirestore.collection("users").document(id);
             documentReference.addSnapshotListener((value, error) -> {
                 assert value != null;
-                name_executor = value.getString("name");
-                last_name_executor = value.getString("last_name");
-                patronymic_executor = value.getString("patronymic");
-                email_executor = value.getString("email");
-                full_name_executor = String.format("%s %s %s", last_name_executor, name_executor, patronymic_executor);
+                nameExecutor = value.getString("name");
+                lastNameExecutor = value.getString("last_name");
+                patronymicExecutor = value.getString("patronymic");
+                emailExecutor = value.getString("email");
+                fullNameExecutor = String.format("%s %s %s", lastNameExecutor, nameExecutor, patronymicExecutor);
 
-                Log.i(TAG, String.format("name: %s", name_executor));
-                Log.i(TAG, String.format("last_name: %s", last_name_executor));
-                Log.i(TAG, String.format("patronymic: %s", patronymic_executor));
-                Log.i(TAG, String.format("email: %s", email_executor));
+                Log.i(TAG, String.format("name: %s", nameExecutor));
+                Log.i(TAG, String.format("last_name: %s", lastNameExecutor));
+                Log.i(TAG, String.format("patronymic: %s", patronymicExecutor));
+                Log.i(TAG, String.format("email: %s", emailExecutor));
 
-                Objects.requireNonNull(mBuilding.textInputLayoutExecutorRoot.getEditText()).setText(email_executor);
-                Objects.requireNonNull(mBuilding.textInputLayoutFullNameExecutorRoot.getEditText()).setText(full_name_executor);
+                Objects.requireNonNull(mBuilding.textInputLayoutExecutorRoot.getEditText()).setText(emailExecutor);
+                Objects.requireNonNull(mBuilding.textInputLayoutFullNameExecutorRoot.getEditText()).setText(fullNameExecutor);
 
                 adapter.stopListening();
                 dialog.dismiss();
@@ -456,13 +456,13 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         utils.clear_error(mBuilding.textInputLayoutFullNameExecutorRoot);
 
         boolean check_address = utils.validate_field(address, mBuilding.textInputLayoutAddressRoot);
-        boolean check_name_task = utils.validate_field(name_task, mBuilding.textInputLayoutNameTaskRoot);
+        boolean check_name_task = utils.validate_field(nameTask, mBuilding.textInputLayoutNameTaskRoot);
         boolean check_floor = utils.validate_field(floor, mBuilding.textInputLayoutFloorRoot);
         boolean check_cabinet = utils.validate_field(cabinet, mBuilding.textInputLayoutCabinetRoot);
-        boolean check_date_task = utils.validate_field(date_complete, mBuilding.textInputLayoutDateTaskRoot);
-        boolean check_executor = utils.validate_field(email_executor, mBuilding.textInputLayoutExecutorRoot);
+        boolean check_date_task = utils.validate_field(dateComplete, mBuilding.textInputLayoutDateTaskRoot);
+        boolean check_executor = utils.validate_field(emailExecutor, mBuilding.textInputLayoutExecutorRoot);
         boolean check_status = utils.validate_field(status, mBuilding.textInputLayoutStatusRoot);
-        boolean check_name_executor = utils.validate_field(full_name_executor, mBuilding.textInputLayoutFullNameExecutorRoot);
+        boolean check_name_executor = utils.validate_field(fullNameExecutor, mBuilding.textInputLayoutFullNameExecutorRoot);
 
         return check_address & check_floor & check_cabinet & check_name_task & check_date_task & check_executor & check_status & check_name_executor;
     }

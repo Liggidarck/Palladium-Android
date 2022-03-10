@@ -25,7 +25,6 @@ public class LocationFolderActivity extends AppCompatActivity {
     private static final String TAG = "LocationFolderAct";
     ActivityLocationFolderBinding folderBinding;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

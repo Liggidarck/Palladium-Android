@@ -22,7 +22,7 @@ import com.george.vector.users.user.tasks.FragmentTasksUser;
 public class FolderUserActivity extends AppCompatActivity {
 
     private static final String TAG = "FolderUserActivity";
-    String email, permission, collection, folder, text_toolbar;
+    String email, permission, collection, folder, textToolbar;
     ActivityFolderUserBinding folderUserBinding;
 
     @Override
@@ -43,19 +43,19 @@ public class FolderUserActivity extends AppCompatActivity {
         Log.d(TAG, "folder: " + folder);
 
         if(folder.equals(NEW_TASKS))
-            text_toolbar = getString(R.string.new_tasks_text);
+            textToolbar = getString(R.string.new_tasks_text);
 
         if(folder.equals(IN_PROGRESS_TASKS))
-            text_toolbar = getString(R.string.progress_tasks);
+            textToolbar = getString(R.string.progress_tasks);
 
         if(folder.equals(ARCHIVE_TASKS))
-            text_toolbar = getString(R.string.archive_tasks_text);
+            textToolbar = getString(R.string.archive_tasks_text);
 
         if(folder.equals(COMPLETED_TASKS))
-            text_toolbar = "Завершенные";
+            textToolbar = "Завершенные";
 
         folderUserBinding.toolbarFolderUserActivity.setNavigationOnClickListener(v -> onBackPressed());
-        folderUserBinding.toolbarFolderUserActivity.setTitle(text_toolbar);
+        folderUserBinding.toolbarFolderUserActivity.setTitle(textToolbar);
 
         Fragment fragment_user_tasks = new FragmentTasksUser();
         Bundle data_user_tasks = new Bundle();

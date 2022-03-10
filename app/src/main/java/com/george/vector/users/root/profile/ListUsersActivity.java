@@ -19,8 +19,8 @@ public class ListUsersActivity extends AppCompatActivity {
 
     private static final String TAG = "ListUserActivity";
 
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference usersRef = db.collection("users");
+    private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    private final CollectionReference collectionReference = firebaseFirestore.collection("users");
 
     private UserAdapter adapter;
     private Query query;
@@ -42,7 +42,7 @@ public class ListUsersActivity extends AppCompatActivity {
             if(isChecked){
                 Log.i(TAG, "Root checked");
 
-                query = usersRef.whereEqualTo("role", "Root");
+                query = collectionReference.whereEqualTo("role", "Root");
 
                 FirestoreRecyclerOptions<User> AdminOptions = new FirestoreRecyclerOptions.Builder<User>()
                         .setQuery(query, User.class)
@@ -57,7 +57,7 @@ public class ListUsersActivity extends AppCompatActivity {
             if(isChecked){
                 Log.i(TAG, "user checked");
 
-                query = usersRef.whereEqualTo("role", "Пользователь");
+                query = collectionReference.whereEqualTo("role", "Пользователь");
 
                 FirestoreRecyclerOptions<User> UserOptions = new FirestoreRecyclerOptions.Builder<User>()
                         .setQuery(query, User.class)
@@ -72,7 +72,7 @@ public class ListUsersActivity extends AppCompatActivity {
             if(isChecked){
                 Log.i(TAG, "executor checked");
 
-                query = usersRef.whereEqualTo("role", "Исполнитель");
+                query = collectionReference.whereEqualTo("role", "Исполнитель");
 
                 FirestoreRecyclerOptions<User> ExecutorOptions = new FirestoreRecyclerOptions.Builder<User>()
                         .setQuery(query, User.class)
@@ -85,7 +85,7 @@ public class ListUsersActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerView() {
-        query = usersRef.whereEqualTo("role", "Root");
+        query = collectionReference.whereEqualTo("role", "Root");
 
         FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
                 .setQuery(query, User.class)

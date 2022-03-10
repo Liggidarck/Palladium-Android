@@ -37,7 +37,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MainUserActivity extends AppCompatActivity implements BottomSheetProfileUser.StateListener {
 
-    FirebaseAuth firebase_auth;
+    FirebaseAuth firebaseAuth;
 
     ActivityMainUserBinding mainUserBinding;
     private static final String TAG = "MainUserActivity";
@@ -53,7 +53,7 @@ public class MainUserActivity extends AppCompatActivity implements BottomSheetPr
         mainUserBinding = ActivityMainUserBinding.inflate(getLayoutInflater());
         setContentView(mainUserBinding.getRoot());
 
-        firebase_auth = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 
         mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
         String name_user = mDataUser.getString(USER_PREFERENCES_NAME, "");
@@ -131,7 +131,7 @@ public class MainUserActivity extends AppCompatActivity implements BottomSheetPr
                     .setTitle(getString(R.string.warning))
                     .setMessage("Вы действительно хотите выйти из аккаунта?")
                     .setPositiveButton("ok", (dialog1, which) -> {
-                        firebase_auth.signOut();
+                        firebaseAuth.signOut();
 
                         editor.putString(USER_PREFERENCES_NAME, "");
                         editor.putString(USER_PREFERENCES_LAST_NAME, "");

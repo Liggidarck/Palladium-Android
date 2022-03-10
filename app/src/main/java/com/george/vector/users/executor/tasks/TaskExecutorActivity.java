@@ -27,8 +27,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class TaskExecutorActivity extends AppCompatActivity {
 
     private static final String TAG = "TaskExecutor";
-    String id, collection, location, address, floor, cabinet, letter, name_task, comment, status, date_create, time_create,
-            email_executor, email_creator, date_done, image, full_name_creator, full_name_executor, email_main_activity;
+    String id, collection, location, address, floor, cabinet, letter, nameTask, comment, status, dateCreate , timeCreate,
+            emailExecutor, emailCreator, dateDone, image, fullNameCreator, fullNameExecutor, emailMainActivity;
     boolean urgent;
 
     FirebaseFirestore firebaseFirestore;
@@ -44,7 +44,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
         id = arguments.getString(ID);
         collection = arguments.getString(COLLECTION);
         location = arguments.getString(LOCATION);
-        email_main_activity = arguments.getString(EMAIL);
+        emailMainActivity = arguments.getString(EMAIL);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         taskExecutorBinding.topAppBarTaskExecutor.setNavigationOnClickListener(v -> onBackPressed());
@@ -54,7 +54,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
             intent.putExtra(ID, id);
             intent.putExtra(COLLECTION, collection);
             intent.putExtra(LOCATION, location);
-            intent.putExtra(EMAIL, email_main_activity);
+            intent.putExtra(EMAIL, emailMainActivity);
             startActivity(intent);
         });
 
@@ -67,19 +67,19 @@ public class TaskExecutorActivity extends AppCompatActivity {
                 floor = value.getString("floor");
                 cabinet = value.getString("cabinet");
                 letter = value.getString("litera");
-                name_task = value.getString("name_task");
+                nameTask = value.getString("name_task");
                 comment = value.getString("comment");
                 status = value.getString("status");
-                date_create = value.getString("date_create");
-                time_create = value.getString("time_create");
-                email_executor = value.getString("executor");
-                date_done = value.getString("date_done");
+                dateCreate = value.getString("date_create");
+                timeCreate = value.getString("time_create");
+                emailExecutor = value.getString("executor");
+                dateDone = value.getString("date_done");
                 image = value.getString("image");
 
-                full_name_creator = value.getString("nameCreator");
-                email_creator = value.getString("email_creator");
+                fullNameCreator = value.getString("nameCreator");
+                emailCreator = value.getString("email_creator");
 
-                full_name_executor = value.getString("fullNameExecutor");
+                fullNameExecutor = value.getString("fullNameExecutor");
                 urgent = value.getBoolean("urgent");
 
                 Log.d(TAG, "address: " + address);
@@ -87,11 +87,11 @@ public class TaskExecutorActivity extends AppCompatActivity {
                 Log.d(TAG, "litera: " + letter);
                 Log.d(TAG, "comment: " + comment);
                 Log.d(TAG, "status: " + status);
-                Log.d(TAG, "date_create: " + date_create);
-                Log.d(TAG, "time_create: " + time_create);
-                Log.d(TAG, "email_executor: " + email_executor);
-                Log.d(TAG, "email_creator: " + email_creator);
-                Log.d(TAG, "date_done: " + date_done);
+                Log.d(TAG, "date_create: " + dateCreate);
+                Log.d(TAG, "time_create: " + timeCreate);
+                Log.d(TAG, "email_executor: " + emailExecutor);
+                Log.d(TAG, "email_creator: " + emailCreator);
+                Log.d(TAG, "date_done: " + dateDone);
                 Log.d(TAG, "image: " + image);
 
                 if (status.equals("Новая заявка"))
@@ -142,23 +142,23 @@ public class TaskExecutorActivity extends AppCompatActivity {
             taskExecutorBinding.textViewAddressTaskExecutor.setText(address);
             taskExecutorBinding.textViewFloorTaskExecutor.setText(String.format("%s %s", getText(R.string.floor), floor));
             taskExecutorBinding.textViewCabinetTaskExecutor.setText(String.format("%s %s", getText(R.string.cabinet), cabinet));
-            taskExecutorBinding.textViewNameTaskExecutor.setText(name_task);
+            taskExecutorBinding.textViewNameTaskExecutor.setText(nameTask);
             taskExecutorBinding.textViewCommentTaskExecutor.setText(comment);
             taskExecutorBinding.textViewStatusTaskExecutor.setText(status);
 
-            String date_create_text = String.format("Созданно: %s %s", date_create, time_create);
+            String date_create_text = String.format("Созданно: %s %s", dateCreate, timeCreate);
             taskExecutorBinding.textViewDateCreateTaskExecutor.setText(date_create_text);
 
-            taskExecutorBinding.textViewFullNameCreatorExecutor.setText(full_name_creator);
-            taskExecutorBinding.textViewEmailCreatorTaskExecutor.setText(email_creator);
+            taskExecutorBinding.textViewFullNameCreatorExecutor.setText(fullNameCreator);
+            taskExecutorBinding.textViewEmailCreatorTaskExecutor.setText(emailCreator);
 
-            taskExecutorBinding.textViewFullNameExecutorEX.setText(full_name_executor);
-            taskExecutorBinding.textViewEmailExecutorTaskExecutor.setText(email_executor);
+            taskExecutorBinding.textViewFullNameExecutorEX.setText(fullNameExecutor);
+            taskExecutorBinding.textViewEmailExecutorTaskExecutor.setText(emailExecutor);
 
-            if (date_done == null)
+            if (dateDone == null)
                 taskExecutorBinding.textViewDateDoneTaskExecutor.setText("Дата выполнения не назначена");
             else {
-                String date_done_text = "Дата выполнения: " + date_done;
+                String date_done_text = "Дата выполнения: " + dateDone;
                 taskExecutorBinding.textViewDateDoneTaskExecutor.setText(date_done_text);
             }
 

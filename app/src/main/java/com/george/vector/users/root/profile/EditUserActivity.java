@@ -24,7 +24,7 @@ import java.util.Objects;
 
 public class EditUserActivity extends AppCompatActivity {
 
-    String name_user, last_name_user, patronymic_user, email_user, role_user, permission_user, userID, password;
+    String nameUser, lastNameUser, patronymicUser, emailUser, roleUser, permissionUser, userID, password;
 
     FirebaseFirestore firebaseFirestore;
 
@@ -49,28 +49,28 @@ public class EditUserActivity extends AppCompatActivity {
         DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
         documentReference.addSnapshotListener(this, (value, error) -> {
             assert value != null;
-            name_user = value.getString("name");
-            last_name_user = value.getString("last_name");
-            patronymic_user = value.getString("patronymic");
-            email_user = value.getString("email");
-            role_user = value.getString("role");
-            permission_user = value.getString("permission");
+            nameUser = value.getString("name");
+            lastNameUser = value.getString("last_name");
+            patronymicUser = value.getString("patronymic");
+            emailUser = value.getString("email");
+            roleUser = value.getString("role");
+            permissionUser = value.getString("permission");
             password = value.getString("password");
 
-            Log.i(TAG, "name: " + name_user);
-            Log.i(TAG, "last_name: " + last_name_user);
-            Log.i(TAG, "patronymic: " + patronymic_user);
-            Log.i(TAG, "email: " + email_user);
-            Log.i(TAG, "role: " + role_user);
+            Log.i(TAG, "name: " + nameUser);
+            Log.i(TAG, "last_name: " + lastNameUser);
+            Log.i(TAG, "patronymic: " + patronymicUser);
+            Log.i(TAG, "email: " + emailUser);
+            Log.i(TAG, "role: " + roleUser);
 
-            Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditNameUser.getEditText()).setText(name_user);
-            Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditLastNameUser.getEditText()).setText(last_name_user);
-            Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditPatronymicUser.getEditText()).setText(patronymic_user);
-            Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditEmailUser.getEditText()).setText(email_user);
-            Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditRoleUser.getEditText()).setText(role_user);
-            Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditPermissionUser.getEditText()).setText(permission_user);
+            Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditNameUser.getEditText()).setText(nameUser);
+            Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditLastNameUser.getEditText()).setText(lastNameUser);
+            Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditPatronymicUser.getEditText()).setText(patronymicUser);
+            Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditEmailUser.getEditText()).setText(emailUser);
+            Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditRoleUser.getEditText()).setText(roleUser);
+            Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditPermissionUser.getEditText()).setText(permissionUser);
 
-            if (email_user.equals("api@2122.pro"))
+            if (emailUser.equals("api@2122.pro"))
                 editUserActivityBinding.textInputLayoutPasswordUser.getEditText().setText("Пароль? Какой пароль? ¯\\_(ツ)_/¯");
             else
                 editUserActivityBinding.textInputLayoutPasswordUser.getEditText().setText(password);
@@ -96,24 +96,24 @@ public class EditUserActivity extends AppCompatActivity {
         });
 
         editUserActivityBinding.updateUserBtn.setOnClickListener(v -> {
-            name_user = Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditNameUser.getEditText()).getText().toString();
-            last_name_user = Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditLastNameUser.getEditText()).getText().toString();
-            patronymic_user = Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditPatronymicUser.getEditText()).getText().toString();
-            email_user = Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditEmailUser.getEditText()).getText().toString();
-            role_user = Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditRoleUser.getEditText()).getText().toString();
-            permission_user = Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditPermissionUser.getEditText()).getText().toString();
+            nameUser = Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditNameUser.getEditText()).getText().toString();
+            lastNameUser = Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditLastNameUser.getEditText()).getText().toString();
+            patronymicUser = Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditPatronymicUser.getEditText()).getText().toString();
+            emailUser = Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditEmailUser.getEditText()).getText().toString();
+            roleUser = Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditRoleUser.getEditText()).getText().toString();
+            permissionUser = Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditPermissionUser.getEditText()).getText().toString();
             password = Objects.requireNonNull(editUserActivityBinding.textInputLayoutPasswordUser.getEditText()).getText().toString();
 
             if (validateFields()) {
                 editUserActivityBinding.progressBarEditUser.setVisibility(View.VISIBLE);
 
                 Map<String, Object> user = new HashMap<>();
-                user.put("name", name_user);
-                user.put("last_name", last_name_user);
-                user.put("patronymic", patronymic_user);
-                user.put("email", email_user);
-                user.put("role", role_user);
-                user.put("permission", permission_user);
+                user.put("name", nameUser);
+                user.put("last_name", lastNameUser);
+                user.put("patronymic", patronymicUser);
+                user.put("email", emailUser);
+                user.put("role", roleUser);
+                user.put("permission", permissionUser);
                 user.put("password", password);
 
                 documentReference.get().addOnCompleteListener(task -> {
@@ -156,11 +156,11 @@ public class EditUserActivity extends AppCompatActivity {
         utils.clear_error(editUserActivityBinding.textInputLayoutEditEmailUser);
         utils.clear_error(editUserActivityBinding.textInputLayoutEditRoleUser);
 
-        boolean checkName = utils.validate_field(name_user, editUserActivityBinding.textInputLayoutEditNameUser);
-        boolean checkLastName = utils.validate_field(last_name_user, editUserActivityBinding.textInputLayoutEditLastNameUser);
-        boolean checkPatronymic = utils.validate_field(patronymic_user, editUserActivityBinding.textInputLayoutEditPatronymicUser);
-        boolean checkEmail = utils.validate_field(email_user, editUserActivityBinding.textInputLayoutEditEmailUser);
-        boolean checkRole = utils.validate_field(role_user, editUserActivityBinding.textInputLayoutEditRoleUser);
+        boolean checkName = utils.validate_field(nameUser, editUserActivityBinding.textInputLayoutEditNameUser);
+        boolean checkLastName = utils.validate_field(lastNameUser, editUserActivityBinding.textInputLayoutEditLastNameUser);
+        boolean checkPatronymic = utils.validate_field(patronymicUser, editUserActivityBinding.textInputLayoutEditPatronymicUser);
+        boolean checkEmail = utils.validate_field(emailUser, editUserActivityBinding.textInputLayoutEditEmailUser);
+        boolean checkRole = utils.validate_field(roleUser, editUserActivityBinding.textInputLayoutEditRoleUser);
 
         return checkName & checkLastName & checkPatronymic & checkEmail & checkRole;
     }
