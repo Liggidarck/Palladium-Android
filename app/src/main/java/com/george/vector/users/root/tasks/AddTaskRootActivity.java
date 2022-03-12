@@ -378,17 +378,18 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
             mBuilding.addressAutoCompleteRoot.setAdapter(adapter);
 
-            String[] floors_basic_school = getResources().getStringArray(R.array.floors);
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
-                    AddTaskRootActivity.this,
-                    R.layout.dropdown_menu_categories,
-                    floors_basic_school
-            );
-            mBuilding.floorAutoRoot.setAdapter(arrayAdapter);
         }
 
         if (location.equals(BAR_SCHOOL))
             Objects.requireNonNull(mBuilding.textInputLayoutAddressRoot.getEditText()).setText(getText(R.string.bar_school_address));
+
+        String[] floors_basic_school = getResources().getStringArray(R.array.floors);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+                AddTaskRootActivity.this,
+                R.layout.dropdown_menu_categories,
+                floors_basic_school
+        );
+        mBuilding.floorAutoRoot.setAdapter(arrayAdapter);
 
         String[] items_status = getResources().getStringArray(R.array.status);
         ArrayAdapter<String> adapter_status = new ArrayAdapter<>(
@@ -400,13 +401,13 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         mBuilding.statusAutoCompleteRoot.setAdapter(adapter_status);
 
         String[] itemsLetter = getResources().getStringArray(R.array.letter);
-        ArrayAdapter<String> adapter_letter = new ArrayAdapter<>(
+        ArrayAdapter<String> adapterLetter = new ArrayAdapter<>(
                 AddTaskRootActivity.this,
                 R.layout.dropdown_menu_categories,
                 itemsLetter
         );
 
-        mBuilding.literAutoCompleteRoot.setAdapter(adapter_letter);
+        mBuilding.literAutoCompleteRoot.setAdapter(adapterLetter);
 
         datePickCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {

@@ -5,6 +5,7 @@ import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.ID;
 import static com.george.vector.common.consts.Keys.LOCATION;
 import static com.george.vector.common.consts.Keys.TOPIC_NEW_TASKS_CREATE;
+import static com.george.vector.common.consts.Logs.TAG_TASK_ROOT_ACTIVITY;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -36,7 +37,6 @@ import com.google.firebase.storage.StorageReference;
 
 public class TaskRootActivity extends AppCompatActivity {
 
-    private static final String TAG = "TaskActivityRoot";
     String id, collection, address, floor, cabinet, letter, nameTask, comment, status,
             dateCreate, timeCreate, location, email, image, emailCreator, emailExecutor,
             dateDone, fullNameExecutor, fullNameCreator;
@@ -91,9 +91,6 @@ public class TaskRootActivity extends AppCompatActivity {
             dateCreate = value.getString("date_create");
             timeCreate = value.getString("time_create");
             image = value.getString("image");
-
-            Log.d(TAG, "image: " + image);
-
             emailCreator = value.getString("email_creator");
             emailExecutor = value.getString("executor");
             dateDone = value.getString("date_done");
@@ -115,7 +112,7 @@ public class TaskRootActivity extends AppCompatActivity {
                     cabinet = String.format("%s%s", cabinet, letter);
 
                 if (image == null) {
-                    Log.d(TAG, "No image, stop loading");
+                    Log.d(TAG_TASK_ROOT_ACTIVITY, "No image, stop loading");
                 } else {
                     Fragment image_fragment = new FragmentImageTask();
 
@@ -135,7 +132,7 @@ public class TaskRootActivity extends AppCompatActivity {
                 }
 
                 if (urgent) {
-                    Log.d(TAG, "Срочная заявка");
+                    Log.d(TAG_TASK_ROOT_ACTIVITY, "Срочная заявка");
 
                     Fragment urgent_fragment = new FragmentUrgentRequest();
                     getSupportFragmentManager()
@@ -278,7 +275,7 @@ public class TaskRootActivity extends AppCompatActivity {
         if (!isOnline())
             Snackbar.make(findViewById(R.id.task_root_coordinator), getString(R.string.error_no_connection), Snackbar.LENGTH_LONG)
                     .setAction("Повторить", v -> {
-                        Log.i(TAG, "Update status: " + isOnline());
+                        Log.i(TAG_TASK_ROOT_ACTIVITY, "Update status: " + isOnline());
                         onStart();
                     }).show();
     }

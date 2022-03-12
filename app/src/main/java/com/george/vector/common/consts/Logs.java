@@ -25,6 +25,7 @@ public class Logs {
     public static final String TAG_MAIN_ROOT_ACTIVITY = "MAIN_ROOT_ACTIVITY";
     public static final String TAG_HOME_ROOT_FRAGMENT = "HOME_ROOT_FRAGMENT";
     public static final String TAG_TASK_ROOT_FRAGMENT = "TASK_ROOT_FRAGMENT";
+    public static final String TAG_TASK_ROOT_ACTIVITY = "TASK_ROOT_ACTIVITY";
     public static final String TAG_EDIT_USER_ACTIVITY = "EDIT_USER_ACTIVITY";
     public static final String TAG_ADD_TASK_ROOT_ACTIVITY = "ADD_TASK_ROOT_ACTIVITY";
     public static final String TAG_EDIT_TASK_ROOT_ACTIVITY = "EDIT_TASK_ROOT_ACTIVITY";

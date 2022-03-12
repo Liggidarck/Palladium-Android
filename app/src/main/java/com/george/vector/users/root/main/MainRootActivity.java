@@ -49,12 +49,12 @@ public class MainRootActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        String name_user = sharedPreferences.getString(USER_PREFERENCES_NAME, "");
-        String last_name_user = sharedPreferences.getString(USER_PREFERENCES_LAST_NAME, "");
-        String patronymic_user = sharedPreferences.getString(USER_PREFERENCES_PATRONYMIC, "");
+        String nameUser = sharedPreferences.getString(USER_PREFERENCES_NAME, "");
+        String lastNameUser = sharedPreferences.getString(USER_PREFERENCES_LAST_NAME, "");
+        String patronymicUser = sharedPreferences.getString(USER_PREFERENCES_PATRONYMIC, "");
         email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
-        String role_user = sharedPreferences.getString(USER_PREFERENCES_ROLE, "");
-        String permission_user = sharedPreferences.getString(USER_PREFERENCES_PERMISSION, "");
+        String roleUser = sharedPreferences.getString(USER_PREFERENCES_ROLE, "");
+        String permissionUser = sharedPreferences.getString(USER_PREFERENCES_PERMISSION, "");
         boolean notifications = sharedPreferences.getBoolean(USER_NOTIFICATIONS_OPTIONS, false);
 
         Log.d(TAG_MAIN_ROOT_ACTIVITY, "NOTIFICATIONS: " + notifications);
@@ -77,7 +77,7 @@ public class MainRootActivity extends AppCompatActivity {
                         SendNotification sendNotification = new SendNotification();
                         sendNotification.sendNotification(
                                 "Новый пользователь зарегестрирован на получение уведомлений",
-                                name_user + " " + last_name_user,
+                                nameUser + " " + lastNameUser,
                                 TOPIC_NEW_TASKS_CREATE
                         );
                     })

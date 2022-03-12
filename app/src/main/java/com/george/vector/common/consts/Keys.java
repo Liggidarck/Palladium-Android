@@ -37,6 +37,8 @@ public class Keys {
     public static final String USERS = "users";
     public static final String BAR_SCHOOL_NEW = "bar_school_new";
     public static final String BAR_SCHOOL_PROGRESS = "bar_school_progress";
+    public static final String BAR_SCHOOL_COMPLETED = "bar_school_completed";
+    public static final String BAR_SCHOOL_ARCHIVE = "bar_school_archive";
 
     public static final int PERMISSION_GALLERY_CODE = 1;
     public static final int PERMISSION_CAMERA_CODE = 2;

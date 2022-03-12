@@ -55,7 +55,7 @@ public class SaveTask implements TaskBehavior{
                             date_create, floor, cabinet, letter, comment, date_complete, executor, status,
                             time_create, email, urgent, image, full_name_executor, name_creator);
                     break;
-                case "Завершенные":
+                case "Завершенная заявка":
                     save("bar_school_completed", name_task, address,
                             date_create, floor, cabinet, letter, comment, date_complete, executor, status,
                             time_create, email, urgent, image, full_name_executor, name_creator);

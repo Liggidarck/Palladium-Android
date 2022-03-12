@@ -1,5 +1,6 @@
 package com.george.vector.users.root.tasks;
 
+import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.LOCATION;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL;
@@ -37,6 +38,13 @@ public class BottomSheetAddTask extends BottomSheetDialogFragment {
         taskBinding.ostSchoolNewTask.setOnClickListener(v-> {
             Intent intent = new Intent(BottomSheetAddTask.this.getContext(), AddTaskRootActivity.class);
             intent.putExtra(LOCATION, OST_SCHOOL);
+            intent.putExtra(EMAIL, email);
+            startActivity(intent);
+        });
+
+        taskBinding.barSchoolNewTask.setOnClickListener(v -> {
+            Intent intent = new Intent(BottomSheetAddTask.this.getContext(), AddTaskRootActivity.class);
+            intent.putExtra(LOCATION, BAR_SCHOOL);
             intent.putExtra(EMAIL, email);
             startActivity(intent);
         });
