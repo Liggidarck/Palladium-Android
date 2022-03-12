@@ -18,7 +18,6 @@ import com.george.vector.databinding.ActivityFolderExecutorBinding;
 public class FolderExecutorActivity extends AppCompatActivity {
 
     String location, email;
-    private static final String TAG = "FolderExecutorActivity";
     ActivityFolderExecutorBinding executorBinding;
 
     @Override

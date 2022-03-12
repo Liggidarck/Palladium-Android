@@ -101,15 +101,15 @@ public class EditDataUserActivity extends AppCompatActivity {
     boolean validateFields(){
         Utils utils = new Utils();
 
-        utils.clear_error(editDataUserBinding.textInputLayoutNameUserEdit);
-        utils.clear_error(editDataUserBinding.textInputLayoutLastNameUserEdit);
-        utils.clear_error(editDataUserBinding.textInputLayoutPatronymicUserEdit);
-        utils.clear_error(editDataUserBinding.textInputLayoutEmailUserEdit);
+        utils.clearError(editDataUserBinding.textInputLayoutNameUserEdit);
+        utils.clearError(editDataUserBinding.textInputLayoutLastNameUserEdit);
+        utils.clearError(editDataUserBinding.textInputLayoutPatronymicUserEdit);
+        utils.clearError(editDataUserBinding.textInputLayoutEmailUserEdit);
 
-        boolean checkName = utils.validate_field(nameUser, editDataUserBinding.textInputLayoutNameUserEdit);
-        boolean checkLastName = utils.validate_field(lastNameUser, editDataUserBinding.textInputLayoutLastNameUserEdit);
-        boolean checkPatronymic = utils.validate_field(patronymicUser, editDataUserBinding.textInputLayoutPatronymicUserEdit);
-        boolean checkEmail = utils.validate_field(emailUser, editDataUserBinding.textInputLayoutEmailUserEdit);
+        boolean checkName = utils.validateField(nameUser, editDataUserBinding.textInputLayoutNameUserEdit);
+        boolean checkLastName = utils.validateField(lastNameUser, editDataUserBinding.textInputLayoutLastNameUserEdit);
+        boolean checkPatronymic = utils.validateField(patronymicUser, editDataUserBinding.textInputLayoutPatronymicUserEdit);
+        boolean checkEmail = utils.validateField(emailUser, editDataUserBinding.textInputLayoutEmailUserEdit);
 
         return checkName & checkLastName & checkPatronymic & checkEmail;
     }

@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 public class Utils {
 
-    public boolean validate_field(@NonNull String text, TextInputLayout inputLayout) {
+    public boolean validateField(@NonNull String text, TextInputLayout inputLayout) {
         if (text.isEmpty()) {
             inputLayout.setError("Это поле не может быть пустым");
             inputLayout.setErrorEnabled(true);
@@ -43,7 +43,7 @@ public class Utils {
         }
     }
 
-    public void clear_error(@NonNull TextInputLayout inputLayout) {
+    public void clearError(@NonNull TextInputLayout inputLayout) {
         Objects.requireNonNull(inputLayout.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

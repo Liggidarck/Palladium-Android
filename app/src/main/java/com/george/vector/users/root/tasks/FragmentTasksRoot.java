@@ -15,6 +15,7 @@ import static com.george.vector.common.consts.Keys.OST_SCHOOL_ARCHIVE;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL_COMPLETED;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL_NEW;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL_PROGRESS;
+import static com.george.vector.common.consts.Logs.TAG_TASK_ROOT_FRAGMENT;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,11 +40,9 @@ import com.google.firebase.firestore.Query;
 
 public class FragmentTasksRoot extends Fragment {
 
-    private static final String TAG = "fragmentTasksRoot";
     String location, folder, executed, email;
 
-    TaskAdapter adapter;
-
+    TaskAdapter taskAdapter;
     FragmentTasksRootBinding binding;
 
     @Nullable
@@ -77,7 +76,7 @@ public class FragmentTasksRoot extends Fragment {
     void setUpRecyclerView() {
         binding.recyclerviewSchoolOstNewTasks.setHasFixedSize(true);
         binding.recyclerviewSchoolOstNewTasks.setLayoutManager(new LinearLayoutManager(FragmentTasksRoot.this.getContext()));
-        binding.recyclerviewSchoolOstNewTasks.setAdapter(adapter);
+        binding.recyclerviewSchoolOstNewTasks.setAdapter(taskAdapter);
     }
 
     void ostSchoolNewTasks() {
@@ -85,10 +84,10 @@ public class FragmentTasksRoot extends Fragment {
 
         setUpRecyclerView();
 
-        adapter.setOnItemClickListener((documentSnapshot, position) -> {
+        taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
 
-            Log.d(TAG, String.format("position: %d id: %s", position, id));
+            Log.d(TAG_TASK_ROOT_FRAGMENT, String.format("position: %d id: %s", position, id));
 
             Intent intent = new Intent(FragmentTasksRoot.this.getContext(), TaskRootActivity.class);
             intent.putExtra(ID, id);
@@ -108,22 +107,22 @@ public class FragmentTasksRoot extends Fragment {
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
                 .build();
-        adapter = new TaskAdapter(options);
+        taskAdapter = new TaskAdapter(options);
 
         if (executed.equals("root")) {
-            Log.d(TAG, "All Tasks");
+            Log.d(TAG_TASK_ROOT_FRAGMENT, "All Tasks");
 
             binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
-                    Log.d(TAG, "Default Query");
+                    Log.d(TAG_TASK_ROOT_FRAGMENT, "Default Query");
 
                     Query query_all = taskRef.whereEqualTo("status", "Новая заявка");
                     FirestoreRecyclerOptions<TaskUi> all_tasks = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_all, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(all_tasks);
+                    taskAdapter.updateOptions(all_tasks);
                 }
 
             });
@@ -131,14 +130,14 @@ public class FragmentTasksRoot extends Fragment {
             binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
-                    Log.i(TAG, "urgent checked");
+                    Log.i(TAG_TASK_ROOT_FRAGMENT, "urgent checked");
                     Query query_urgent = taskRef.whereEqualTo("urgent", true);
 
                     FirestoreRecyclerOptions<TaskUi> urgent_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_urgent, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(urgent_options);
+                    taskAdapter.updateOptions(urgent_options);
                 }
 
             });
@@ -152,7 +151,7 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_address, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(address_options);
+                    taskAdapter.updateOptions(address_options);
                 }
 
             });
@@ -165,21 +164,21 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_address, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(address_options);
+                    taskAdapter.updateOptions(address_options);
                 }
             });
 
         }
 
         if (executed.equals("work")) {
-            Log.d(TAG, "All Executed Tasks");
+            Log.d(TAG_TASK_ROOT_FRAGMENT, "All Executed Tasks");
 
             Query query_all_default = taskRef.whereEqualTo("executor", email);
             FirestoreRecyclerOptions<TaskUi> executor_options_default = new FirestoreRecyclerOptions.Builder<TaskUi>()
                     .setQuery(query_all_default, TaskUi.class)
                     .build();
 
-            adapter.updateOptions(executor_options_default);
+            taskAdapter.updateOptions(executor_options_default);
 
             binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
@@ -189,7 +188,7 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_all, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(executor_options);
+                    taskAdapter.updateOptions(executor_options);
                 }
 
             });
@@ -197,14 +196,14 @@ public class FragmentTasksRoot extends Fragment {
             binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
-                    Log.i(TAG, "urgent checked");
+                    Log.i(TAG_TASK_ROOT_FRAGMENT, "urgent checked");
                     Query query_urgent = taskRef.whereEqualTo("urgent", true).whereEqualTo("executor", email);
 
                     FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_urgent, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(search_options);
+                    taskAdapter.updateOptions(search_options);
                 }
 
             });
@@ -218,7 +217,7 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_address, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(search_options);
+                    taskAdapter.updateOptions(search_options);
                 }
 
             });
@@ -231,7 +230,7 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_address, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(search_options);
+                    taskAdapter.updateOptions(search_options);
                 }
             });
 
@@ -244,10 +243,10 @@ public class FragmentTasksRoot extends Fragment {
 
         setUpRecyclerView();
 
-        adapter.setOnItemClickListener((documentSnapshot, position) -> {
+        taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
 
-            Log.d(TAG, String.format("position: %d id: %s", position, id));
+            Log.d(TAG_TASK_ROOT_FRAGMENT, String.format("position: %d id: %s", position, id));
 
             Intent intent = new Intent(FragmentTasksRoot.this.getContext(), TaskRootActivity.class);
             intent.putExtra(ID, id);
@@ -267,10 +266,10 @@ public class FragmentTasksRoot extends Fragment {
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
                 .build();
-        adapter = new TaskAdapter(options);
+        taskAdapter = new TaskAdapter(options);
 
         if (executed.equals("root")) {
-            Log.d(TAG, "All Tasks");
+            Log.d(TAG_TASK_ROOT_FRAGMENT, "All Tasks");
 
             binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
@@ -280,7 +279,7 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_all, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(all_tasks);
+                    taskAdapter.updateOptions(all_tasks);
                 }
 
             });
@@ -288,14 +287,14 @@ public class FragmentTasksRoot extends Fragment {
             binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
-                    Log.i(TAG, "urgent checked");
+                    Log.i(TAG_TASK_ROOT_FRAGMENT, "urgent checked");
                     Query query_urgent = taskRef.whereEqualTo("urgent", true);
 
                     FirestoreRecyclerOptions<TaskUi> urgent_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_urgent, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(urgent_options);
+                    taskAdapter.updateOptions(urgent_options);
                 }
 
             });
@@ -309,7 +308,7 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_address, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(address_options);
+                    taskAdapter.updateOptions(address_options);
                 }
 
             });
@@ -322,21 +321,21 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_address, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(address_options);
+                    taskAdapter.updateOptions(address_options);
                 }
             });
 
         }
 
         if (executed.equals("work")) {
-            Log.d(TAG, "All Executed Tasks");
+            Log.d(TAG_TASK_ROOT_FRAGMENT, "All Executed Tasks");
 
             Query query_all_default = taskRef.whereEqualTo("executor", email);
             FirestoreRecyclerOptions<TaskUi> executor_options_default = new FirestoreRecyclerOptions.Builder<TaskUi>()
                     .setQuery(query_all_default, TaskUi.class)
                     .build();
 
-            adapter.updateOptions(executor_options_default);
+            taskAdapter.updateOptions(executor_options_default);
 
             binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
@@ -346,7 +345,7 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_all, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(executor_options);
+                    taskAdapter.updateOptions(executor_options);
                 }
 
             });
@@ -354,14 +353,14 @@ public class FragmentTasksRoot extends Fragment {
             binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
-                    Log.i(TAG, "urgent checked");
+                    Log.i(TAG_TASK_ROOT_FRAGMENT, "urgent checked");
                     Query query_urgent = taskRef.whereEqualTo("urgent", true).whereEqualTo("executor", email);
 
                     FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_urgent, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(search_options);
+                    taskAdapter.updateOptions(search_options);
                 }
 
             });
@@ -375,7 +374,7 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_address, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(search_options);
+                    taskAdapter.updateOptions(search_options);
                 }
 
             });
@@ -388,7 +387,7 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_address, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(search_options);
+                    taskAdapter.updateOptions(search_options);
                 }
             });
 
@@ -402,10 +401,10 @@ public class FragmentTasksRoot extends Fragment {
 
         setUpRecyclerView();
 
-        adapter.setOnItemClickListener((documentSnapshot, position) -> {
+        taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
 
-            Log.d(TAG, String.format("position: %d id: %s", position, id));
+            Log.d(TAG_TASK_ROOT_FRAGMENT, String.format("position: %d id: %s", position, id));
 
             Intent intent = new Intent(FragmentTasksRoot.this.getContext(), TaskRootActivity.class);
             intent.putExtra(ID, id);
@@ -425,22 +424,22 @@ public class FragmentTasksRoot extends Fragment {
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
                 .build();
-        adapter = new TaskAdapter(options);
+        taskAdapter = new TaskAdapter(options);
 
         if (executed.equals("root")) {
-            Log.d(TAG, "All Tasks");
+            Log.d(TAG_TASK_ROOT_FRAGMENT, "All Tasks");
 
             binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
-                    Log.d(TAG, "Default Query");
+                    Log.d(TAG_TASK_ROOT_FRAGMENT, "Default Query");
 
                     Query query_all = taskRef.whereEqualTo("status", "Завершенная заявка");
                     FirestoreRecyclerOptions<TaskUi> all_tasks = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_all, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(all_tasks);
+                    taskAdapter.updateOptions(all_tasks);
                 }
 
             });
@@ -448,14 +447,14 @@ public class FragmentTasksRoot extends Fragment {
             binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
-                    Log.i(TAG, "urgent checked");
+                    Log.i(TAG_TASK_ROOT_FRAGMENT, "urgent checked");
                     Query query_urgent = taskRef.whereEqualTo("urgent", true);
 
                     FirestoreRecyclerOptions<TaskUi> urgent_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_urgent, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(urgent_options);
+                    taskAdapter.updateOptions(urgent_options);
                 }
 
             });
@@ -469,7 +468,7 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_address, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(address_options);
+                    taskAdapter.updateOptions(address_options);
                 }
 
             });
@@ -482,21 +481,21 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_address, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(address_options);
+                    taskAdapter.updateOptions(address_options);
                 }
             });
 
         }
 
         if (executed.equals("work")) {
-            Log.d(TAG, "All Executed Tasks");
+            Log.d(TAG_TASK_ROOT_FRAGMENT, "All Executed Tasks");
 
             Query query_all_default = taskRef.whereEqualTo("executor", email);
             FirestoreRecyclerOptions<TaskUi> executor_options_default = new FirestoreRecyclerOptions.Builder<TaskUi>()
                     .setQuery(query_all_default, TaskUi.class)
                     .build();
 
-            adapter.updateOptions(executor_options_default);
+            taskAdapter.updateOptions(executor_options_default);
 
             binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
@@ -506,7 +505,7 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_all, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(executor_options);
+                    taskAdapter.updateOptions(executor_options);
                 }
 
             });
@@ -514,14 +513,14 @@ public class FragmentTasksRoot extends Fragment {
             binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
-                    Log.i(TAG, "urgent checked");
+                    Log.i(TAG_TASK_ROOT_FRAGMENT, "urgent checked");
                     Query query_urgent = taskRef.whereEqualTo("urgent", true).whereEqualTo("executor", email);
 
                     FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_urgent, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(search_options);
+                    taskAdapter.updateOptions(search_options);
                 }
 
             });
@@ -535,7 +534,7 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_address, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(search_options);
+                    taskAdapter.updateOptions(search_options);
                 }
 
             });
@@ -548,7 +547,7 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_address, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(search_options);
+                    taskAdapter.updateOptions(search_options);
                 }
             });
 
@@ -560,10 +559,10 @@ public class FragmentTasksRoot extends Fragment {
 
         setUpRecyclerView();
 
-        adapter.setOnItemClickListener((documentSnapshot, position) -> {
+        taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
 
-            Log.d(TAG, String.format("position: %d id: %s", position, id));
+            Log.d(TAG_TASK_ROOT_FRAGMENT, String.format("position: %d id: %s", position, id));
 
             Intent intent = new Intent(FragmentTasksRoot.this.getContext(), TaskRootActivity.class);
             intent.putExtra(ID, id);
@@ -583,10 +582,10 @@ public class FragmentTasksRoot extends Fragment {
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
                 .build();
-        adapter = new TaskAdapter(options);
+        taskAdapter = new TaskAdapter(options);
 
         if (executed.equals("root")) {
-            Log.d(TAG, "All Tasks");
+            Log.d(TAG_TASK_ROOT_FRAGMENT, "All Tasks");
 
             binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
@@ -596,7 +595,7 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_all, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(all_tasks);
+                    taskAdapter.updateOptions(all_tasks);
                 }
 
             });
@@ -604,14 +603,14 @@ public class FragmentTasksRoot extends Fragment {
             binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
-                    Log.i(TAG, "urgent checked");
+                    Log.i(TAG_TASK_ROOT_FRAGMENT, "urgent checked");
                     Query query_urgent = taskRef.whereEqualTo("urgent", true);
 
                     FirestoreRecyclerOptions<TaskUi> urgent_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_urgent, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(urgent_options);
+                    taskAdapter.updateOptions(urgent_options);
                 }
 
             });
@@ -625,7 +624,7 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_address, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(address_options);
+                    taskAdapter.updateOptions(address_options);
                 }
 
             });
@@ -638,21 +637,21 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_address, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(address_options);
+                    taskAdapter.updateOptions(address_options);
                 }
             });
 
         }
 
         if (executed.equals("work")) {
-            Log.d(TAG, "All Executed Archive Tasks");
+            Log.d(TAG_TASK_ROOT_FRAGMENT, "All Executed Archive Tasks");
 
             Query query_all_default = taskRef.whereEqualTo("executor", email);
             FirestoreRecyclerOptions<TaskUi> executor_options_default = new FirestoreRecyclerOptions.Builder<TaskUi>()
                     .setQuery(query_all_default, TaskUi.class)
                     .build();
 
-            adapter.updateOptions(executor_options_default);
+            taskAdapter.updateOptions(executor_options_default);
 
             binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
@@ -662,9 +661,9 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_all, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(executor_options);
+                    taskAdapter.updateOptions(executor_options);
 
-                    Log.d(TAG, "Query updated");
+                    Log.d(TAG_TASK_ROOT_FRAGMENT, "Query updated");
                 }
 
             });
@@ -672,14 +671,14 @@ public class FragmentTasksRoot extends Fragment {
             binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
                 if (isChecked) {
-                    Log.i(TAG, "urgent checked");
+                    Log.i(TAG_TASK_ROOT_FRAGMENT, "urgent checked");
                     Query query_urgent = taskRef.whereEqualTo("urgent", true).whereEqualTo("executor", email);
 
                     FirestoreRecyclerOptions<TaskUi> search_options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                             .setQuery(query_urgent, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(search_options);
+                    taskAdapter.updateOptions(search_options);
                 }
 
             });
@@ -693,7 +692,7 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_address, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(search_options);
+                    taskAdapter.updateOptions(search_options);
                 }
 
             });
@@ -706,7 +705,7 @@ public class FragmentTasksRoot extends Fragment {
                             .setQuery(query_address, TaskUi.class)
                             .build();
 
-                    adapter.updateOptions(search_options);
+                    taskAdapter.updateOptions(search_options);
                 }
             });
 
@@ -717,13 +716,13 @@ public class FragmentTasksRoot extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        adapter.startListening();
+        taskAdapter.startListening();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        adapter.stopListening();
+        taskAdapter.stopListening();
     }
 
     @Override

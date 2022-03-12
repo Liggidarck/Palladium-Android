@@ -5,6 +5,7 @@ import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.ID;
 import static com.george.vector.common.consts.Keys.LOCATION;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL;
+import static com.george.vector.common.consts.Logs.TAG_EDIT_TASK_EXECUTOR_ACTIVITY;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -31,8 +32,6 @@ import java.util.Objects;
 
 public class EditTaskExecutorActivity extends AppCompatActivity {
 
-    private static final String TAG = "EditTaskExecutor";
-
     FirebaseFirestore firebaseFirestore;
 
     String id, collection, location, address, floor, cabinet, letter, nameTask, comment, status, dateCreate, timeCreate,
@@ -53,6 +52,11 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         collection = arguments.getString(COLLECTION);
         location = arguments.getString(LOCATION);
         emailMailActivity = arguments.getString(EMAIL);
+
+        Log.i(TAG_EDIT_TASK_EXECUTOR_ACTIVITY, "id: " + id);
+        Log.i(TAG_EDIT_TASK_EXECUTOR_ACTIVITY, "collection: " + collection);
+        Log.i(TAG_EDIT_TASK_EXECUTOR_ACTIVITY, "location: " + location);
+        Log.i(TAG_EDIT_TASK_EXECUTOR_ACTIVITY, "emailMailActivity: " + emailMailActivity);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -99,7 +103,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
                     Objects.requireNonNull(executorBinding.textInputLayoutCommentExecutor.getEditText()).setText(comment);
 
             } catch (Exception e) {
-                Log.i(TAG, "Error! " + e);
+                Log.e(TAG_EDIT_TASK_EXECUTOR_ACTIVITY, "Error! " + e);
             }
 
             initialize_fields(location);
@@ -121,7 +125,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
 
         Task task = new Task();
         DeleteTask deleteTask = new DeleteTask();
-        deleteTask.delete_task(collection, id);
+        deleteTask.deleteTask(collection, id);
 
         String update_address = Objects.requireNonNull(executorBinding.textInputLayoutAddressExecutor.getEditText()).getText().toString();
         String update_floor = Objects.requireNonNull(executorBinding.textInputLayoutFloorExecutor.getEditText()).getText().toString();

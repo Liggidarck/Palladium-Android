@@ -25,10 +25,9 @@ import com.george.vector.users.root.folders.LocationFolderActivity;
 
 public class FragmentOst extends Fragment {
 
-    private static final String TAG = "FragmentOst";
     FragmentOstRootBinding ostRootBinding;
 
-    SharedPreferences mDataUser;
+    SharedPreferences sharedPreferences;
 
     @Nullable
     @Override
@@ -36,9 +35,8 @@ public class FragmentOst extends Fragment {
         ostRootBinding = FragmentOstRootBinding.inflate(inflater, container, false);
         View view = ostRootBinding.getRoot();
 
-        mDataUser = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-        String email = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
-        Log.d(TAG, "email: " + email);
+        sharedPreferences = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        String email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
 
         ostRootBinding.ostSchoolRoot.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentOst.this.getContext(), LocationFolderActivity.class);

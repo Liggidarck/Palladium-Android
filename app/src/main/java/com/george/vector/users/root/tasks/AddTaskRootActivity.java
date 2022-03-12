@@ -12,6 +12,7 @@ import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PATRONYMIC;
+import static com.george.vector.common.consts.Logs.TAG_ADD_TASK_ROOT_ACTIVITY;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -67,7 +68,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -76,11 +76,10 @@ import java.util.UUID;
 
 public class AddTaskRootActivity extends AppCompatActivity implements BottomSheetAddImage.StateListener {
 
-    String location, email, address, floor, cabinet, letter, nameTask, dateComplete, status,
+    public String location, email, address, floor, cabinet, letter, nameTask, dateComplete, status,
             comment, userEmail, nameImage, fullNameExecutor, nameExecutor, lastNameExecutor,
             patronymicExecutor, fullNameCreator, emailExecutor;
-    boolean urgent;
-    private static final String TAG = "AddTaskRoot";
+    public boolean urgent;
 
     Utils utils = new Utils();
 
@@ -220,15 +219,12 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
             Bitmap bmp = null;
             try {
                 bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), fileUri);
-                Log.d(TAG, "Bitmap: " + bmp);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bmp.compress(Bitmap.CompressFormat.JPEG, 25, byteArrayOutputStream);
-            Log.d(TAG, "Bitmap: " + bmp);
             byte[] data = byteArrayOutputStream.toByteArray();
-            Log.d(TAG, "Data: " + Arrays.toString(data));
 
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Загрузка...");
@@ -305,8 +301,6 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
         chip_root_dialog.setOnCheckedChangeListener((compoundButton, isChecked) -> {
             if (isChecked) {
-                Log.i(TAG, "root checked");
-
                 query = usersRef.whereEqualTo("role", "Root");
 
                 FirestoreRecyclerOptions<User> UserOptions = new FirestoreRecyclerOptions.Builder<User>()
@@ -319,8 +313,6 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
         chip_executors_dialog.setOnCheckedChangeListener((compoundButton, isChecked) -> {
             if (isChecked) {
-                Log.i(TAG, "Executor checked");
-
                 query = usersRef.whereEqualTo("role", "Исполнитель");
 
                 FirestoreRecyclerOptions<User> UserOptions = new FirestoreRecyclerOptions.Builder<User>()
@@ -343,10 +335,10 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
                 emailExecutor = value.getString("email");
                 fullNameExecutor = String.format("%s %s %s", lastNameExecutor, nameExecutor, patronymicExecutor);
 
-                Log.i(TAG, String.format("name: %s", nameExecutor));
-                Log.i(TAG, String.format("last_name: %s", lastNameExecutor));
-                Log.i(TAG, String.format("patronymic: %s", patronymicExecutor));
-                Log.i(TAG, String.format("email: %s", emailExecutor));
+                Log.i(TAG_ADD_TASK_ROOT_ACTIVITY, String.format("name: %s", nameExecutor));
+                Log.i(TAG_ADD_TASK_ROOT_ACTIVITY, String.format("last_name: %s", lastNameExecutor));
+                Log.i(TAG_ADD_TASK_ROOT_ACTIVITY, String.format("patronymic: %s", patronymicExecutor));
+                Log.i(TAG_ADD_TASK_ROOT_ACTIVITY, String.format("email: %s", emailExecutor));
 
                 Objects.requireNonNull(mBuilding.textInputLayoutExecutorRoot.getEditText()).setText(emailExecutor);
                 Objects.requireNonNull(mBuilding.textInputLayoutFullNameExecutorRoot.getEditText()).setText(fullNameExecutor);
@@ -386,7 +378,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
             mBuilding.addressAutoCompleteRoot.setAdapter(adapter);
 
-            String[] floors_basic_school = getResources().getStringArray(R.array.floors_ost_basic_school);
+            String[] floors_basic_school = getResources().getStringArray(R.array.floors);
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
                     AddTaskRootActivity.this,
                     R.layout.dropdown_menu_categories,
@@ -446,23 +438,23 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
     boolean validateFields() {
         Utils utils = new Utils();
 
-        utils.clear_error(mBuilding.textInputLayoutAddressRoot);
-        utils.clear_error(mBuilding.textInputLayoutFloorRoot);
-        utils.clear_error(mBuilding.textInputLayoutCabinetRoot);
-        utils.clear_error(mBuilding.textInputLayoutNameTaskRoot);
-        utils.clear_error(mBuilding.textInputLayoutDateTaskRoot);
-        utils.clear_error(mBuilding.textInputLayoutExecutorRoot);
-        utils.clear_error(mBuilding.textInputLayoutStatusRoot);
-        utils.clear_error(mBuilding.textInputLayoutFullNameExecutorRoot);
+        utils.clearError(mBuilding.textInputLayoutAddressRoot);
+        utils.clearError(mBuilding.textInputLayoutFloorRoot);
+        utils.clearError(mBuilding.textInputLayoutCabinetRoot);
+        utils.clearError(mBuilding.textInputLayoutNameTaskRoot);
+        utils.clearError(mBuilding.textInputLayoutDateTaskRoot);
+        utils.clearError(mBuilding.textInputLayoutExecutorRoot);
+        utils.clearError(mBuilding.textInputLayoutStatusRoot);
+        utils.clearError(mBuilding.textInputLayoutFullNameExecutorRoot);
 
-        boolean check_address = utils.validate_field(address, mBuilding.textInputLayoutAddressRoot);
-        boolean check_name_task = utils.validate_field(nameTask, mBuilding.textInputLayoutNameTaskRoot);
-        boolean check_floor = utils.validate_field(floor, mBuilding.textInputLayoutFloorRoot);
-        boolean check_cabinet = utils.validate_field(cabinet, mBuilding.textInputLayoutCabinetRoot);
-        boolean check_date_task = utils.validate_field(dateComplete, mBuilding.textInputLayoutDateTaskRoot);
-        boolean check_executor = utils.validate_field(emailExecutor, mBuilding.textInputLayoutExecutorRoot);
-        boolean check_status = utils.validate_field(status, mBuilding.textInputLayoutStatusRoot);
-        boolean check_name_executor = utils.validate_field(fullNameExecutor, mBuilding.textInputLayoutFullNameExecutorRoot);
+        boolean check_address = utils.validateField(address, mBuilding.textInputLayoutAddressRoot);
+        boolean check_name_task = utils.validateField(nameTask, mBuilding.textInputLayoutNameTaskRoot);
+        boolean check_floor = utils.validateField(floor, mBuilding.textInputLayoutFloorRoot);
+        boolean check_cabinet = utils.validateField(cabinet, mBuilding.textInputLayoutCabinetRoot);
+        boolean check_date_task = utils.validateField(dateComplete, mBuilding.textInputLayoutDateTaskRoot);
+        boolean check_executor = utils.validateField(emailExecutor, mBuilding.textInputLayoutExecutorRoot);
+        boolean check_status = utils.validateField(status, mBuilding.textInputLayoutStatusRoot);
+        boolean check_name_executor = utils.validateField(fullNameExecutor, mBuilding.textInputLayoutFullNameExecutorRoot);
 
         return check_address & check_floor & check_cabinet & check_name_task & check_date_task & check_executor & check_status & check_name_executor;
     }

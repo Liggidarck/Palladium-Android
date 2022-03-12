@@ -17,8 +17,6 @@ import com.google.firebase.firestore.Query;
 
 public class ListUsersActivity extends AppCompatActivity {
 
-    private static final String TAG = "ListUserActivity";
-
     private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private final CollectionReference collectionReference = firebaseFirestore.collection("users");
 
@@ -40,8 +38,6 @@ public class ListUsersActivity extends AppCompatActivity {
         usersBinding.chipRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             if(isChecked){
-                Log.i(TAG, "Root checked");
-
                 query = collectionReference.whereEqualTo("role", "Root");
 
                 FirestoreRecyclerOptions<User> AdminOptions = new FirestoreRecyclerOptions.Builder<User>()
@@ -55,8 +51,6 @@ public class ListUsersActivity extends AppCompatActivity {
 
         usersBinding.chipUser.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked){
-                Log.i(TAG, "user checked");
-
                 query = collectionReference.whereEqualTo("role", "Пользователь");
 
                 FirestoreRecyclerOptions<User> UserOptions = new FirestoreRecyclerOptions.Builder<User>()
@@ -70,8 +64,6 @@ public class ListUsersActivity extends AppCompatActivity {
 
         usersBinding.chipWorker.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked){
-                Log.i(TAG, "executor checked");
-
                 query = collectionReference.whereEqualTo("role", "Исполнитель");
 
                 FirestoreRecyclerOptions<User> ExecutorOptions = new FirestoreRecyclerOptions.Builder<User>()

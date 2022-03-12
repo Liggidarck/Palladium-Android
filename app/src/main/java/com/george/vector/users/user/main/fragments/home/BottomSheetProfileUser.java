@@ -25,10 +25,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 public class BottomSheetProfileUser extends BottomSheetDialogFragment {
 
     ProfileUserBottomSheetBinding binding;
+    SharedPreferences sharedPreferences;
 
-    StateListener listener;
-
-    SharedPreferences mDataUser;
+    stateBtnListener listener;
 
     @Nullable
     @Override
@@ -36,10 +35,10 @@ public class BottomSheetProfileUser extends BottomSheetDialogFragment {
         binding = ProfileUserBottomSheetBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        mDataUser = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-        String name_user = mDataUser.getString(USER_PREFERENCES_NAME, "");
-        String last_name_user = mDataUser.getString(USER_PREFERENCES_LAST_NAME, "");
-        String email = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
+        sharedPreferences = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        String name_user = sharedPreferences.getString(USER_PREFERENCES_NAME, "");
+        String last_name_user = sharedPreferences.getString(USER_PREFERENCES_LAST_NAME, "");
+        String email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
 
         String _name = Character.toString(name_user.charAt(0));
         String _last_name = Character.toString(last_name_user.charAt(0));
@@ -66,7 +65,7 @@ public class BottomSheetProfileUser extends BottomSheetDialogFragment {
         binding = null;
     }
 
-    public interface StateListener {
+    public interface stateBtnListener {
         void getButton(String button);
     }
 
@@ -74,10 +73,9 @@ public class BottomSheetProfileUser extends BottomSheetDialogFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         try {
-            listener = (BottomSheetProfileUser.StateListener) context;
+            listener = (stateBtnListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement BottomSheetListener");
+            throw new ClassCastException(context + " must implement BottomSheetListener");
         }
     }
 

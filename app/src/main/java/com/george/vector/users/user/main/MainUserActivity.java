@@ -14,6 +14,7 @@ import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PATRONYMIC;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PERMISSION;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_ROLE;
+import static com.george.vector.common.consts.Logs.TAG_MAIN_USER_ACTIVITY;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -35,15 +36,14 @@ import com.george.vector.users.user.main.fragments.help.FragmentHelp;
 import com.george.vector.users.user.main.fragments.home.BottomSheetProfileUser;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainUserActivity extends AppCompatActivity implements BottomSheetProfileUser.StateListener {
+public class MainUserActivity extends AppCompatActivity implements BottomSheetProfileUser.stateBtnListener {
 
     FirebaseAuth firebaseAuth;
 
     ActivityMainUserBinding mainUserBinding;
-    private static final String TAG = "MainUserActivity";
     String permission, email, collection;
 
-    SharedPreferences mDataUser;
+    SharedPreferences sharedPreferences;
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -55,13 +55,9 @@ public class MainUserActivity extends AppCompatActivity implements BottomSheetPr
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-        String name_user = mDataUser.getString(USER_PREFERENCES_NAME, "");
-        String last_name_user = mDataUser.getString(USER_PREFERENCES_LAST_NAME, "");
-        String patronymic_user = mDataUser.getString(USER_PREFERENCES_PATRONYMIC, "");
-        email = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
-        String role_user = mDataUser.getString(USER_PREFERENCES_ROLE, "");
-        permission = mDataUser.getString(USER_PREFERENCES_PERMISSION, "");
+        sharedPreferences = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
+        permission = sharedPreferences.getString(USER_PREFERENCES_PERMISSION, "");
         collection = null;
 
         if (permission.equals(OST_SCHOOL))
@@ -70,7 +66,7 @@ public class MainUserActivity extends AppCompatActivity implements BottomSheetPr
         if (permission.equals(BAR_SCHOOL))
             collection = BAR_SCHOOL_NEW;
 
-        Log.d(TAG, "email: " + email);
+        Log.d(TAG_MAIN_USER_ACTIVITY, "email: " + email);
 
         if (savedInstanceState == null) {
             Fragment fragmentHome = new FragmentHome();
@@ -86,7 +82,7 @@ public class MainUserActivity extends AppCompatActivity implements BottomSheetPr
             Fragment selectedFragment = null;
             switch (item.getItemId()) {
                 case R.id.item_home_user:
-                    Log.d(TAG, "Start home user fragment");
+                    Log.d(TAG_MAIN_USER_ACTIVITY, "Start home user fragment");
                     selectedFragment = new FragmentHome();
 
                     Bundle data_home_fragment = new Bundle();
@@ -98,7 +94,7 @@ public class MainUserActivity extends AppCompatActivity implements BottomSheetPr
                     break;
 
                 case R.id.item_history_user:
-                    Log.d(TAG, "Start history user fragment");
+                    Log.d(TAG_MAIN_USER_ACTIVITY, "Start history user fragment");
                     selectedFragment = new FragmentHistory();
 
                     Bundle data_history_fragment = new Bundle();
@@ -109,7 +105,7 @@ public class MainUserActivity extends AppCompatActivity implements BottomSheetPr
                     break;
 
                 case R.id.item_profile_user:
-                    Log.d(TAG, "Start profile user fragment");
+                    Log.d(TAG_MAIN_USER_ACTIVITY, "Start profile user fragment");
                     selectedFragment = new FragmentHelp();
 
                     break;
@@ -123,8 +119,8 @@ public class MainUserActivity extends AppCompatActivity implements BottomSheetPr
 
     @Override
     public void getButton(String button) {
-        mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = mDataUser.edit();
+        sharedPreferences = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
         if (button.equals("logoutBtnUser")) {
             AlertDialog dialog = new AlertDialog.Builder(this)

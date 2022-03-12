@@ -31,7 +31,7 @@ import com.george.vector.R;
 import com.george.vector.common.utils.Utils;
 import com.george.vector.databinding.ActivityLoginBinding;
 import com.george.vector.users.executor.main.MainExecutorActivity;
-import com.george.vector.users.root.main.RootMainActivity;
+import com.george.vector.users.root.main.MainRootActivity;
 import com.george.vector.users.user.main.MainUserActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,14 +44,13 @@ import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
-    String email, password, userId;
+    ActivityLoginBinding loginBinding;
+    SharedPreferences sharedPreferences;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 
-    ActivityLoginBinding loginBinding;
-
-    SharedPreferences mDataUser;
+    String email, password, userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,18 +68,18 @@ public class LoginActivity extends AppCompatActivity {
             if (isOnline()) {
 
                 if (validateFields()) {
-                    Log.d(TAG_LOGIN_ACTIVITY, "Fields validate");
+                    Log.d(TAG_VALIDATE_FILED, "Fields validate");
 
                     if(!validateEmail(email)) {
                         Log.e(TAG_VALIDATE_FILED, "Email validation failed");
                         loginBinding.emailLoginTextLayout.setError("Некорректный формат e-mail");
                     } else {
-                        Log.i(TAG_VALIDATE_FILED, "Email validation OK");
+                        Log.d(TAG_VALIDATE_FILED, "Email validation - OK");
                         login(email, password);
                     }
 
                 } else {
-                    Log.d(TAG_LOGIN_ACTIVITY, "Fields not validate");
+                    Log.d(TAG_VALIDATE_FILED, "Fields empty");
                 }
 
             } else
@@ -93,8 +92,8 @@ public class LoginActivity extends AppCompatActivity {
 
     void login(String login, String password) {
         loginBinding.progressBarAuth.setVisibility(View.VISIBLE);
-        mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = mDataUser.edit();
+        sharedPreferences = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
         firebaseAuth.signInWithEmailAndPassword(login, password).addOnCompleteListener(task -> {
 
@@ -138,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
 
     void startApp(@NotNull String role) {
         if (role.equals("Root"))
-            startActivity(new Intent(this, RootMainActivity.class));
+            startActivity(new Intent(this, MainRootActivity.class));
 
         if (role.equals("Пользователь"))
             startActivity(new Intent(this, MainUserActivity.class));
@@ -170,11 +169,11 @@ public class LoginActivity extends AppCompatActivity {
     boolean validateFields() {
         Utils utils = new Utils();
 
-        utils.clear_error(loginBinding.emailLoginTextLayout);
-        utils.clear_error(loginBinding.passwordLoginTextLayout);
+        utils.clearError(loginBinding.emailLoginTextLayout);
+        utils.clearError(loginBinding.passwordLoginTextLayout);
 
-        boolean checkEmail = utils.validate_field(email, loginBinding.emailLoginTextLayout);
-        boolean checkPassword = utils.validate_field(password, loginBinding.passwordLoginTextLayout);
+        boolean checkEmail = utils.validateField(email, loginBinding.emailLoginTextLayout);
+        boolean checkPassword = utils.validateField(password, loginBinding.passwordLoginTextLayout);
         return checkEmail & checkPassword;
     }
 

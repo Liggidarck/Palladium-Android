@@ -4,6 +4,7 @@ import static com.george.vector.common.consts.Keys.COLLECTION;
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.ID;
 import static com.george.vector.common.consts.Keys.LOCATION;
+import static com.george.vector.common.consts.Logs.TAG_TASK_EXECUTOR_FRAGMENT;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,7 +27,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class TaskExecutorActivity extends AppCompatActivity {
 
-    private static final String TAG = "TaskExecutor";
     String id, collection, location, address, floor, cabinet, letter, nameTask, comment, status, dateCreate , timeCreate,
             emailExecutor, emailCreator, dateDone, image, fullNameCreator, fullNameExecutor, emailMainActivity;
     boolean urgent;
@@ -82,17 +82,17 @@ public class TaskExecutorActivity extends AppCompatActivity {
                 fullNameExecutor = value.getString("fullNameExecutor");
                 urgent = value.getBoolean("urgent");
 
-                Log.d(TAG, "address: " + address);
-                Log.d(TAG, "floor: " + floor);
-                Log.d(TAG, "litera: " + letter);
-                Log.d(TAG, "comment: " + comment);
-                Log.d(TAG, "status: " + status);
-                Log.d(TAG, "date_create: " + dateCreate);
-                Log.d(TAG, "time_create: " + timeCreate);
-                Log.d(TAG, "email_executor: " + emailExecutor);
-                Log.d(TAG, "email_creator: " + emailCreator);
-                Log.d(TAG, "date_done: " + dateDone);
-                Log.d(TAG, "image: " + image);
+                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "address: " + address);
+                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "floor: " + floor);
+                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "litera: " + letter);
+                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "comment: " + comment);
+                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "status: " + status);
+                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "date_create: " + dateCreate);
+                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "time_create: " + timeCreate);
+                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "email_executor: " + emailExecutor);
+                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "email_creator: " + emailCreator);
+                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "date_done: " + dateDone);
+                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "image: " + image);
 
                 if (status.equals("Новая заявка"))
                     taskExecutorBinding.circleStatusExecutor.setImageResource(R.color.red);
@@ -107,7 +107,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
                     cabinet = String.format("%s%s", cabinet, letter);
 
                 if (urgent) {
-                    Log.d(TAG, "Срочная заявка");
+                    Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "Срочная заявка");
 
                     Fragment urgent_fragment = new FragmentUrgentRequest();
                     getSupportFragmentManager()
@@ -136,7 +136,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
                 }
 
             } catch (Exception e) {
-                Log.e(TAG, "Error! " + e);
+                Log.e(TAG_TASK_EXECUTOR_FRAGMENT, "Error! " + e);
             }
 
             taskExecutorBinding.textViewAddressTaskExecutor.setText(address);
@@ -181,7 +181,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
         if (!isOnline())
             Snackbar.make(findViewById(R.id.coordinator_task_executor), getString(R.string.error_no_connection), Snackbar.LENGTH_LONG)
                     .setAction("Повторить", v -> {
-                        Log.i(TAG, "Update status: " + isOnline());
+                        Log.i(TAG_TASK_EXECUTOR_FRAGMENT, "Update status: " + isOnline());
                         onStart();
                     }).show();
     }

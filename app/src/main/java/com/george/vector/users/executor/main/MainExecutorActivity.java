@@ -4,6 +4,7 @@ import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.OST;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
+import static com.george.vector.common.consts.Logs.TAG_MAIN_EXECUTOR_ACTIVITY;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,10 +33,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class MainExecutorActivity extends AppCompatActivity {
 
-    private static final String TAG = "ExecutorMain";
     String zone, email;
     ActivityMainExecutorBinding executorBinding;
-    SharedPreferences mDataUser;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +44,9 @@ public class MainExecutorActivity extends AppCompatActivity {
         executorBinding = ActivityMainExecutorBinding.inflate(getLayoutInflater());
         setContentView(executorBinding.getRoot());
 
-        mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
 
-        email = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
+        email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
         zone = PreferenceManager.getDefaultSharedPreferences(this).getString("default_executor_location", OST);
 
         executorBinding.technicalSupportExecutor.setOnClickListener(v -> {
@@ -75,7 +75,7 @@ public class MainExecutorActivity extends AppCompatActivity {
         executorBinding.chipExecutorOst.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             if(isChecked){
-                Log.i(TAG, "Остафьево checked");
+                Log.i(TAG_MAIN_EXECUTOR_ACTIVITY, "Остафьево checked");
                 zone = "ost";
                 updateZones(zone);
             }
@@ -84,7 +84,7 @@ public class MainExecutorActivity extends AppCompatActivity {
 
         executorBinding.chipExecutorBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked){
-                Log.i(TAG, "Барыши checked");
+                Log.i(TAG_MAIN_EXECUTOR_ACTIVITY, "Барыши checked");
                 zone = "bar";
                 updateZones(zone);
             }
@@ -98,7 +98,7 @@ public class MainExecutorActivity extends AppCompatActivity {
         Fragment currentFragment = null;
         switch (zone_update) {
             case "ost":
-                Log.i(TAG, "Запуск фрагмента Осафьево");
+                Log.i(TAG_MAIN_EXECUTOR_ACTIVITY, "Запуск фрагмента Осафьево");
                 currentFragment = new fragment_ost();
 
                 Bundle email = new Bundle();
@@ -107,7 +107,7 @@ public class MainExecutorActivity extends AppCompatActivity {
 
                 break;
             case "bar":
-                Log.i(TAG, "Запуск фрагмента Барыши");
+                Log.i(TAG_MAIN_EXECUTOR_ACTIVITY, "Запуск фрагмента Барыши");
                 currentFragment = new fragment_bar();
 
                 Bundle email_bar = new Bundle();
@@ -136,7 +136,7 @@ public class MainExecutorActivity extends AppCompatActivity {
         if(!isOnline())
             Snackbar.make(findViewById(R.id.coordinator_main_executor), getString(R.string.error_no_connection), Snackbar.LENGTH_LONG)
                     .setAction("Повторить", v ->  {
-                        Log.i(TAG, "Update status: " + isOnline());
+                        Log.i(TAG_MAIN_EXECUTOR_ACTIVITY, "Update status: " + isOnline());
                         onStart();
                     }).show();
     }

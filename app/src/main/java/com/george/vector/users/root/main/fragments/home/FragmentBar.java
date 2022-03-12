@@ -6,7 +6,6 @@ import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +18,9 @@ import com.george.vector.databinding.FragmentBarRootBinding;
 
 public class FragmentBar extends Fragment {
 
-    private static final String TAG = "FragmentBar";
     FragmentBarRootBinding barRootBinding;
 
-    SharedPreferences mDataUser;
+    SharedPreferences sharedPreferences;
 
     @Nullable
     @Override
@@ -30,9 +28,8 @@ public class FragmentBar extends Fragment {
         barRootBinding = FragmentBarRootBinding.inflate(inflater, container, false);
         View view = barRootBinding.getRoot();
 
-        mDataUser = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-        String email = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
-        Log.d(TAG, "email: " + email);
+        sharedPreferences = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        String email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
 
         return view;
     }

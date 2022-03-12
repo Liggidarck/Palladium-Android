@@ -73,8 +73,8 @@ public class RegisterUserActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Error! " + e.toString(), Toast.LENGTH_SHORT).show();
-            Log.e(TAG_REGISTER_ACTIVITY, "Error! " + e.toString());
+            Toast.makeText(this, "Error! " + e, Toast.LENGTH_SHORT).show();
+            Log.e(TAG_REGISTER_ACTIVITY, "Error! " + e);
         }
 
 
@@ -112,7 +112,7 @@ public class RegisterUserActivity extends AppCompatActivity {
 
                                 documentReference.set(user)
                                         .addOnSuccessListener(unused -> Log.d(TAG_REGISTER_ACTIVITY, "Success register user - " + userID))
-                                        .addOnFailureListener(e -> Log.e(TAG_REGISTER_ACTIVITY, "Failure register user - " + e.toString()));
+                                        .addOnFailureListener(e -> Log.e(TAG_REGISTER_ACTIVITY, "Failure register user - " + e));
 
                                 onBackPressed();
 
@@ -127,14 +127,14 @@ public class RegisterUserActivity extends AppCompatActivity {
 
                         }).addOnFailureListener(e -> {
                             registerUserBinding.progressBarRegister.setVisibility(View.INVISIBLE);
-                            Log.e(TAG_REGISTER_ACTIVITY, "Error: " + e.toString());
-                            Toast.makeText(this, "Error: " + e.toString(), Toast.LENGTH_SHORT).show();
+                            Log.e(TAG_REGISTER_ACTIVITY, "Error: " + e);
+                            Toast.makeText(this, "Error: " + e, Toast.LENGTH_SHORT).show();
                         });
 
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Log.e(TAG_REGISTER_ACTIVITY, "Error! " + e.toString());
-                        Toast.makeText(this, "Error: " + e.toString(), Toast.LENGTH_SHORT).show();
+                        Log.e(TAG_REGISTER_ACTIVITY, "Error! " + e);
+                        Toast.makeText(this, "Error: " + e, Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -186,21 +186,21 @@ public class RegisterUserActivity extends AppCompatActivity {
     boolean validateFields() {
         Utils utils = new Utils();
 
-        utils.clear_error(registerUserBinding.textInputLayoutNameUser);
-        utils.clear_error(registerUserBinding.textInputLayoutLastNameUser);
-        utils.clear_error(registerUserBinding.textInputLayoutPatronymicUser);
-        utils.clear_error(registerUserBinding.textInputLayoutEmailUser);
-        utils.clear_error(registerUserBinding.textInputLayoutPasswordUser);
-        utils.clear_error(registerUserBinding.textInputLayoutRoleUser);
-        utils.clear_error(registerUserBinding.textInputLayoutPermissionUser);
+        utils.clearError(registerUserBinding.textInputLayoutNameUser);
+        utils.clearError(registerUserBinding.textInputLayoutLastNameUser);
+        utils.clearError(registerUserBinding.textInputLayoutPatronymicUser);
+        utils.clearError(registerUserBinding.textInputLayoutEmailUser);
+        utils.clearError(registerUserBinding.textInputLayoutPasswordUser);
+        utils.clearError(registerUserBinding.textInputLayoutRoleUser);
+        utils.clearError(registerUserBinding.textInputLayoutPermissionUser);
 
-        boolean checkName = utils.validate_field(nameUser, registerUserBinding.textInputLayoutNameUser);
-        boolean checkLastName = utils.validate_field(lastNameUser, registerUserBinding.textInputLayoutLastNameUser);
-        boolean checkPatronymic = utils.validate_field(patronymicUser, registerUserBinding.textInputLayoutPatronymicUser);
-        boolean checkEmail = utils.validate_field(emailUser, registerUserBinding.textInputLayoutEmailUser);
-        boolean checkPassword = utils.validate_field(passwordUser, registerUserBinding.textInputLayoutPasswordUser);
-        boolean checkRole = utils.validate_field(roleUser, registerUserBinding.textInputLayoutRoleUser);
-        boolean checkPermission = utils.validate_field(permissionUser, registerUserBinding.textInputLayoutPermissionUser);
+        boolean checkName = utils.validateField(nameUser, registerUserBinding.textInputLayoutNameUser);
+        boolean checkLastName = utils.validateField(lastNameUser, registerUserBinding.textInputLayoutLastNameUser);
+        boolean checkPatronymic = utils.validateField(patronymicUser, registerUserBinding.textInputLayoutPatronymicUser);
+        boolean checkEmail = utils.validateField(emailUser, registerUserBinding.textInputLayoutEmailUser);
+        boolean checkPassword = utils.validateField(passwordUser, registerUserBinding.textInputLayoutPasswordUser);
+        boolean checkRole = utils.validateField(roleUser, registerUserBinding.textInputLayoutRoleUser);
+        boolean checkPermission = utils.validateField(permissionUser, registerUserBinding.textInputLayoutPermissionUser);
 
         return checkName & checkLastName & checkPatronymic & checkEmail & checkPassword & checkRole & checkPermission;
     }

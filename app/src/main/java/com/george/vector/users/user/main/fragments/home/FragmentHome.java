@@ -4,6 +4,7 @@ import static com.george.vector.common.consts.Keys.COLLECTION;
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.ID;
 import static com.george.vector.common.consts.Keys.PERMISSION;
+import static com.george.vector.common.consts.Logs.TAG_HOME_USER_FRAGMENT;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,12 +30,10 @@ import com.google.firebase.firestore.Query;
 
 public class FragmentHome extends Fragment {
 
-    private static final String TAG = "MainUserFragment";
+    FragmentUserHomeBinding homeBinding;
     String permission, collection, email;
 
     TaskAdapter adapter;
-
-    FragmentUserHomeBinding homeBinding;
 
     @Nullable
     @Override
@@ -48,9 +47,9 @@ public class FragmentHome extends Fragment {
         permission = args.getString(PERMISSION);
         collection = args.getString(COLLECTION);
 
-        Log.d(TAG, "email: " + email);
-        Log.d(TAG, "permission: " + permission);
-        Log.d(TAG, "collection: " + collection);
+        Log.d(TAG_HOME_USER_FRAGMENT, "email: " + email);
+        Log.d(TAG_HOME_USER_FRAGMENT, "permission: " + permission);
+        Log.d(TAG_HOME_USER_FRAGMENT, "collection: " + collection);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference taskRef = db.collection(collection);
@@ -73,14 +72,13 @@ public class FragmentHome extends Fragment {
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
 
-            Log.d(TAG, String.format("position: %d id: %s", position, id));
+            Log.d(TAG_HOME_USER_FRAGMENT, String.format("Position: %d ID: %s", position, id));
 
             Intent intent = new Intent(FragmentHome.this.getContext(), TaskUserActivity.class);
             intent.putExtra(ID, id);
             intent.putExtra(COLLECTION, collection);
             intent.putExtra(EMAIL, email);
             startActivity(intent);
-
         });
 
         homeBinding.createTaskUser.setOnClickListener(v -> {

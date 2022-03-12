@@ -7,6 +7,7 @@ import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PATRONYMIC;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PERMISSION;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_ROLE;
+import static com.george.vector.common.consts.Logs.TAG_LOADING_ACTIVITY;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.databinding.ActivityLoadingBinding;
 import com.george.vector.users.executor.main.MainExecutorActivity;
-import com.george.vector.users.root.main.RootMainActivity;
+import com.george.vector.users.root.main.MainRootActivity;
 import com.george.vector.users.user.main.MainUserActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,7 +32,6 @@ public class LoadingActivity extends AppCompatActivity {
     FirebaseFirestore firebaseFirestore;
 
     String name, lastName, patronymic, email, permission, role;
-    private static final String TAG = "LoadingActivity";
 
     ActivityLoadingBinding loadingBinding;
 
@@ -55,18 +55,18 @@ public class LoadingActivity extends AppCompatActivity {
         permission = mDataUser.getString(USER_PREFERENCES_PERMISSION, "");
         role = mDataUser.getString(USER_PREFERENCES_ROLE, "");
 
-        Log.d(TAG, "Auth id: " + firebaseAuth.getUid());
-        Log.d(TAG, "name: " + name);
+        Log.d(TAG_LOADING_ACTIVITY, "firebaseAuth id: " + firebaseAuth.getUid());
+        Log.d(TAG_LOADING_ACTIVITY, "name_user: " + name);
 
         if(firebaseAuth.getCurrentUser() != null &
-                (name.equals("") || lastName.equals("") || patronymic.equals("") ||
-                        email.equals("") || permission.equals("") || role.equals(""))) {
+                (name.equals("") || lastName.equals("") || patronymic.equals("") || email.equals("")
+                        || permission.equals("") || role.equals(""))) {
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle("Внимание!")
                     .setMessage("Необходимо войти в аккаунт снова. Если вы не помните совой логин, обратитесь в техническую поддрежку")
                     .setNegativeButton("Помощь", (dialog1, which) -> {
 
-                        Intent intent = new Intent("android.intent.action.SENDTO", Uri.fromParts("mailto", "liggidarck@gmail.com", null));
+                        Intent intent = new Intent("android.intent.action.SENDTO", Uri.fromParts("mailto", "georgyfilatov@yandex.ru", null));
                         intent.putExtra("android.intent.extra.SUBJECT", "Помощь с восстановлением доступа к приложению");
                         startActivity(Intent.createChooser(intent, "Выберите приложение для отправки электронного письма разработчику приложения"));
 
@@ -91,7 +91,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     void startApp(String role) {
         if (role.equals("Root"))
-            startActivity(new Intent(this, RootMainActivity.class));
+            startActivity(new Intent(this, MainRootActivity.class));
 
         if (role.equals("Пользователь"))
             startActivity(new Intent(this, MainUserActivity.class));

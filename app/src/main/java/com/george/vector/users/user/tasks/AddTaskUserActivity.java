@@ -10,7 +10,9 @@ import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PATRONYMIC;
-import static com.george.vector.common.consts.Logs.TAG_SAVE_TASK;
+import static com.george.vector.common.consts.Logs.TAG_ADD_TASK_USER_ACTIVITY;
+import static com.george.vector.common.consts.Logs.TAG_NOTIFICATIONS;
+import static com.george.vector.common.consts.Logs.TAG_STATE_TASK;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -63,12 +65,10 @@ import java.util.UUID;
 
 public class AddTaskUserActivity extends AppCompatActivity implements BottomSheetAddImage.StateListener {
 
-    private static final String TAG = "AddTaskUser";
-
     String address, floor, cabinet, letter, name_task, comment, email, permission, nameImage, fullNameCreator;
     String status = "Новая заявка";
 
-    SharedPreferences mDataUser;
+    SharedPreferences sharedPreferences;
 
     FirebaseFirestore firebaseFirestore;
     FirebaseStorage firebaseStorage;
@@ -107,12 +107,12 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
 
         Bundle arguments = getIntent().getExtras();
         permission = arguments.getString(PERMISSION);
-        Log.i(TAG_SAVE_TASK, String.format("permission: %s", permission));
+        Log.i(TAG_ADD_TASK_USER_ACTIVITY, String.format("permission: %s", permission));
 
-        mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-        String name_user = mDataUser.getString(USER_PREFERENCES_NAME, "");
-        String last_name_user = mDataUser.getString(USER_PREFERENCES_LAST_NAME, "");
-        String patronymic_user = mDataUser.getString(USER_PREFERENCES_PATRONYMIC, "");
+        sharedPreferences = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        String name_user = sharedPreferences.getString(USER_PREFERENCES_NAME, "");
+        String last_name_user = sharedPreferences.getString(USER_PREFERENCES_LAST_NAME, "");
+        String patronymic_user = sharedPreferences.getString(USER_PREFERENCES_PATRONYMIC, "");
         fullNameCreator = name_user + " " + last_name_user + " " + patronymic_user;
 
         binding.topAppBarNewTaskUser.setNavigationOnClickListener(v -> onBackPressed());
@@ -155,6 +155,7 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
 
         SendNotification sendNotification = new SendNotification();
         sendNotification.sendNotification("Созданна новая заявка", name_task, TOPIC_NEW_TASKS_CREATE);
+        Log.d(TAG_NOTIFICATIONS, "Notification sent");
 
     }
 
@@ -181,12 +182,12 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
                 ref.putBytes(data)
                         .addOnSuccessListener(taskSnapshot -> {
                             progressDialog.dismiss();
-                            Log.d(TAG, "Изображение успешно загружено");
+                            Log.d(TAG_STATE_TASK, "Изображение успешно загружено");
                             onBackPressed();
                         })
                         .addOnFailureListener(e -> {
                             progressDialog.dismiss();
-                            Log.e(TAG, "Failed: " + e.getMessage());
+                            Log.e(TAG_STATE_TASK, "Failed: " + e.getMessage());
                         })
                         .addOnProgressListener(taskSnapshot -> {
                             double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
@@ -313,15 +314,15 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
     }
 
     boolean validateFields() {
-        utils.clear_error(binding.textInputLayoutAddress);
-        utils.clear_error(binding.textInputLayoutFloor);
-        utils.clear_error(binding.textInputLayoutCabinet);
-        utils.clear_error(binding.textInputLayoutNameTask);
+        utils.clearError(binding.textInputLayoutAddress);
+        utils.clearError(binding.textInputLayoutFloor);
+        utils.clearError(binding.textInputLayoutCabinet);
+        utils.clearError(binding.textInputLayoutNameTask);
 
-        boolean check_address = utils.validate_field(address, binding.textInputLayoutAddress);
-        boolean check_floor = utils.validate_field(floor, binding.textInputLayoutFloor);
-        boolean check_cabinet = utils.validate_field(cabinet, binding.textInputLayoutCabinet);
-        boolean check_name_task = utils.validate_field(name_task, binding.textInputLayoutNameTask);
+        boolean check_address = utils.validateField(address, binding.textInputLayoutAddress);
+        boolean check_floor = utils.validateField(floor, binding.textInputLayoutFloor);
+        boolean check_cabinet = utils.validateField(cabinet, binding.textInputLayoutCabinet);
+        boolean check_name_task = utils.validateField(name_task, binding.textInputLayoutNameTask);
 
         return check_address & check_floor & check_cabinet & check_name_task;
     }

@@ -22,7 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 public class BottomSheetAddTask extends BottomSheetDialogFragment {
 
     String email;
-    SharedPreferences mDataUser;
+    SharedPreferences sharedPreferences;
 
     BottomSheetAddTaskBinding taskBinding;
 
@@ -31,8 +31,8 @@ public class BottomSheetAddTask extends BottomSheetDialogFragment {
         taskBinding = BottomSheetAddTaskBinding.inflate(inflater, container, false);
         View view = taskBinding.getRoot();
 
-        mDataUser = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-        email = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
+        sharedPreferences = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
 
         taskBinding.ostSchoolNewTask.setOnClickListener(v-> {
             Intent intent = new Intent(BottomSheetAddTask.this.getContext(), AddTaskRootActivity.class);

@@ -11,6 +11,7 @@ import static com.george.vector.common.consts.Keys.NEW_TASKS;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL_NEW;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL_PROGRESS;
+import static com.george.vector.common.consts.Logs.TAG_TASK_EXECUTOR_FRAGMENT;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,11 +36,9 @@ import com.google.firebase.firestore.Query;
 
 public class FragmentExecutorTasks extends Fragment {
 
-    private static final String TAG = "fragmentTasksExecutor";
-    TaskAdapter adapter;
-
     String location, folder, email;
 
+    TaskAdapter adapter;
     FragmentExecutorTasksBinding tasksBinding;
 
     @Nullable
@@ -53,9 +52,10 @@ public class FragmentExecutorTasks extends Fragment {
         location = args.getString(LOCATION);
         folder = args.getString(FOLDER);
         email = args.getString(EMAIL);
-        Log.d(TAG, "location: " + location);
-        Log.d(TAG, "folder: " + folder);
-        Log.d(TAG, "email: " + email);
+
+        Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "location: " + location);
+        Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "folder: " + folder);
+        Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "email: " + email);
 
         if(location.equals(OST_SCHOOL) && folder.equals(NEW_TASKS))
             ostSchoolNewTasks();
@@ -83,7 +83,7 @@ public class FragmentExecutorTasks extends Fragment {
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
 
-            Log.d(TAG, String.format("position: %d id: %s", position, id));
+            Log.d(TAG_TASK_EXECUTOR_FRAGMENT, String.format("position: %d id: %s", position, id));
 
             Intent intent = new Intent(FragmentExecutorTasks.this.getContext(), TaskExecutorActivity.class);
             intent.putExtra(ID, id);
@@ -99,7 +99,7 @@ public class FragmentExecutorTasks extends Fragment {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         final CollectionReference taskRef = db.collection("ost_school_new");
 
-        Log.d(TAG, "Query email: " + email);
+        Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "Query email: " + email);
         Query query = taskRef.whereEqualTo("executor", email);
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
@@ -110,7 +110,7 @@ public class FragmentExecutorTasks extends Fragment {
 
             if(isChecked) {
 
-                Log.d(TAG, "All Tasks");
+                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "All Tasks");
 
                 Query query_all = taskRef.whereEqualTo("executor", email);
                 FirestoreRecyclerOptions<TaskUi> options_all = new FirestoreRecyclerOptions.Builder<TaskUi>()
@@ -124,7 +124,7 @@ public class FragmentExecutorTasks extends Fragment {
         tasksBinding.chipUrgentTasksExecutor.setOnCheckedChangeListener(((compoundButton, b) -> {
 
             if(b) {
-                Log.i(TAG, "urgent checked");
+                Log.i(TAG_TASK_EXECUTOR_FRAGMENT, "urgent checked");
                 Query query_urgent = taskRef
                         .whereEqualTo("urgent", true)
                         .whereEqualTo("executor", email);
@@ -176,7 +176,7 @@ public class FragmentExecutorTasks extends Fragment {
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
 
-            Log.d(TAG, String.format("position: %d id: %s", position, id));
+            Log.d(TAG_TASK_EXECUTOR_FRAGMENT, String.format("position: %d id: %s", position, id));
 
             Intent intent = new Intent(FragmentExecutorTasks.this.getContext(), TaskExecutorActivity.class);
             intent.putExtra(ID, id);
@@ -203,7 +203,7 @@ public class FragmentExecutorTasks extends Fragment {
 
             if(isChecked) {
 
-                Log.d(TAG, "All Tasks");
+                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "All Tasks");
 
                 Query query_all = taskRef.whereEqualTo("executor", email);
                 FirestoreRecyclerOptions<TaskUi> options_all = new FirestoreRecyclerOptions.Builder<TaskUi>()
@@ -217,7 +217,7 @@ public class FragmentExecutorTasks extends Fragment {
         tasksBinding.chipUrgentTasksExecutor.setOnCheckedChangeListener(((compoundButton, b) -> {
 
             if(b) {
-                Log.i(TAG, "urgent checked");
+                Log.i(TAG_TASK_EXECUTOR_FRAGMENT, "urgent checked");
                 Query query_urgent = taskRef
                         .whereEqualTo("urgent", true)
                         .whereEqualTo("executor", email);
@@ -269,7 +269,7 @@ public class FragmentExecutorTasks extends Fragment {
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
 
-            Log.d(TAG, String.format("position: %d id: %s", position, id));
+            Log.d(TAG_TASK_EXECUTOR_FRAGMENT, String.format("position: %d id: %s", position, id));
 
             Intent intent = new Intent(FragmentExecutorTasks.this.getContext(), TaskExecutorActivity.class);
             intent.putExtra(ID, id);
@@ -285,7 +285,7 @@ public class FragmentExecutorTasks extends Fragment {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         final CollectionReference taskRef = db.collection(COMPLETED_TASKS);
 
-        Log.d(TAG, "Query email: " + email);
+        Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "Query email: " + email);
         Query query = taskRef.whereEqualTo("executor", email);
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
@@ -296,7 +296,7 @@ public class FragmentExecutorTasks extends Fragment {
 
             if(isChecked) {
 
-                Log.d(TAG, "All Tasks");
+                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "All Tasks");
 
                 Query query_all = taskRef.whereEqualTo("executor", email);
                 FirestoreRecyclerOptions<TaskUi> options_all = new FirestoreRecyclerOptions.Builder<TaskUi>()
@@ -310,7 +310,7 @@ public class FragmentExecutorTasks extends Fragment {
         tasksBinding.chipUrgentTasksExecutor.setOnCheckedChangeListener(((compoundButton, b) -> {
 
             if(b) {
-                Log.i(TAG, "urgent checked");
+                Log.i(TAG_TASK_EXECUTOR_FRAGMENT, "urgent checked");
                 Query query_urgent = taskRef
                         .whereEqualTo("urgent", true)
                         .whereEqualTo("executor", email);

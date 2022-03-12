@@ -18,8 +18,6 @@ import java.util.Objects;
 
 public class ProfileBottomSheet extends BottomSheetDialogFragment {
 
-    private static final String TAG = "ProfileBottomSheet";
-
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 
@@ -48,12 +46,12 @@ public class ProfileBottomSheet extends BottomSheetDialogFragment {
             email = value.getString("email");
             role = value.getString("role");
 
-            String full_name = String.format("%s %s %s", lastName, name, patronymic);
-            String _name = Character.toString(name.charAt(0));
-            String _last_name = Character.toString(lastName.charAt(0));
-            String ava = String.format("%s%s", _name, _last_name);
+            String fullName = String.format("%s %s %s", lastName, name, patronymic);
+            String name = Character.toString(this.name.charAt(0));
+            String lastName = Character.toString(this.lastName.charAt(0));
+            String ava = String.format("%s%s", name, lastName);
 
-            sheetBinding.textViewFullName.setText(full_name);
+            sheetBinding.textViewFullName.setText(fullName);
             sheetBinding.textViewNameAva.setText(ava);
             sheetBinding.textViewEmail.setText(email);
             sheetBinding.textViewRole.setText(role);

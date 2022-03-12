@@ -248,7 +248,7 @@ public class TaskRootActivity extends AppCompatActivity {
 
     void delete_task() {
         DeleteTask deleteTask = new DeleteTask();
-        deleteTask.delete_task(collection, id);
+        deleteTask.deleteTask(collection, id);
 
         if (image != null) {
             String storageUrl = "images/" + image;
