@@ -1,6 +1,7 @@
 package com.george.vector.users.user.tasks;
 
 import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
+import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.consts.Keys.PERMISSION;
 import static com.george.vector.common.consts.Keys.PERMISSION_CAMERA_CODE;
@@ -107,7 +108,10 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
 
         Bundle arguments = getIntent().getExtras();
         permission = arguments.getString(PERMISSION);
-        Log.i(TAG_ADD_TASK_USER_ACTIVITY, String.format("permission: %s", permission));
+        email = arguments.getString(EMAIL);
+
+        Log.i(TAG_ADD_TASK_USER_ACTIVITY, "permission: " + permission);
+        Log.d(TAG_ADD_TASK_USER_ACTIVITY, "email: " + email);
 
         sharedPreferences = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
         String name_user = sharedPreferences.getString(USER_PREFERENCES_NAME, "");

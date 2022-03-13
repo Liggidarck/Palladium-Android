@@ -84,6 +84,7 @@ public class FragmentHome extends Fragment {
         homeBinding.createTaskUser.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentHome.this.getContext(), AddTaskUserActivity.class);
             intent.putExtra(PERMISSION, permission);
+            intent.putExtra(EMAIL, email);
             startActivity(intent);
         });
 

@@ -20,6 +20,9 @@ public class FragmentDevelopApp extends Fragment {
     FragmentDevelopAppBinding binding;
     ArrayList<Release> releases = new ArrayList<>();
 
+    /**
+     * Без тебя ничего бы не получилось. @ksenia._.fox 🧡🧡🧡🧡🧡
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

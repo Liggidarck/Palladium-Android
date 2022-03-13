@@ -26,15 +26,6 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="Без тебя ничего бы не получилось. @ksenia._.fox 🧡🧡🧡🧡"
-                    android:textColor="@color/black"
-                    android:textSize="10sp"
-                    tools:ignore="SmallSp" />
-
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
