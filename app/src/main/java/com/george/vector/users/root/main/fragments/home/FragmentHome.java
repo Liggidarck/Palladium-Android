@@ -5,6 +5,7 @@ import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
+import static com.george.vector.common.consts.Logs.TAG_HOME_ROOT_FRAGMENT;
 
 import android.content.Context;
 import android.content.Intent;
@@ -30,12 +31,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class FragmentHome extends Fragment {
 
-    private static final String TAG = "FragmentHomeRoot";
     String zone, email;
-    SharedPreferences mDataUser;
 
-    FirebaseFirestore firebase_firestore;
+    FirebaseFirestore firebaseFirestore;
 
+    SharedPreferences sharedPreferences;
     FragmentRootHomeBinding homeBinding;
 
     @Nullable
@@ -44,16 +44,16 @@ public class FragmentHome extends Fragment {
         homeBinding = FragmentRootHomeBinding.inflate(inflater, container, false);
         View view = homeBinding.getRoot();
 
-        firebase_firestore = FirebaseFirestore.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
         zone = PreferenceManager
                 .getDefaultSharedPreferences(FragmentHome.this.getContext())
                 .getString("default_root_location", OST);
 
-        mDataUser = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-        String name_user = mDataUser.getString(USER_PREFERENCES_NAME, "");
-        String last_name_user = mDataUser.getString(USER_PREFERENCES_LAST_NAME, "");
-        email = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
+        sharedPreferences = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        String name_user = sharedPreferences.getString(USER_PREFERENCES_NAME, "");
+        String last_name_user = sharedPreferences.getString(USER_PREFERENCES_LAST_NAME, "");
+        email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
 
         String _name = Character.toString(name_user.charAt(0));
         String _last_name = Character.toString(last_name_user.charAt(0));
@@ -77,7 +77,7 @@ public class FragmentHome extends Fragment {
         homeBinding.chipRootOst.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             if (isChecked) {
-                Log.i(TAG, "Остафьево checked");
+                Log.i(TAG_HOME_ROOT_FRAGMENT, "Остафьево checked");
                 zone = "ost";
                 updateZones(zone);
             }
@@ -85,7 +85,7 @@ public class FragmentHome extends Fragment {
         });
         homeBinding.chipRootBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                Log.i(TAG, "Барыши checked");
+                Log.i(TAG_HOME_ROOT_FRAGMENT, "Барыши checked");
                 zone = "bar";
                 updateZones(zone);
             }
@@ -104,7 +104,7 @@ public class FragmentHome extends Fragment {
         zone = PreferenceManager
                 .getDefaultSharedPreferences(FragmentHome.this.getContext())
                 .getString("default_root_location", OST);
-        Log.d(TAG, "Zone: " + zone);
+        Log.d(TAG_HOME_ROOT_FRAGMENT, "Zone: " + zone);
     }
 
     @Override
@@ -117,12 +117,12 @@ public class FragmentHome extends Fragment {
         Fragment currentFragment = null;
         switch (zone_update) {
             case "ost":
-                Log.i(TAG, "Запуск фрагмента Осафьево");
+                Log.i(TAG_HOME_ROOT_FRAGMENT, "Запуск фрагмента Осафьево");
                 currentFragment = new FragmentOst();
 
                 break;
             case "bar":
-                Log.i(TAG, "Запуск фрагмента Барыши");
+                Log.i(TAG_HOME_ROOT_FRAGMENT, "Запуск фрагмента Барыши");
                 currentFragment = new FragmentBar();
 
                 break;

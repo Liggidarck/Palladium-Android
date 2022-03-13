@@ -13,7 +13,6 @@ import static com.george.vector.common.consts.Keys.OST_SCHOOL;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,9 +21,7 @@ import com.george.vector.databinding.ActivityLocationFolderBinding;
 
 public class LocationFolderActivity extends AppCompatActivity {
 
-    private static final String TAG = "LocationFolderAct";
     ActivityLocationFolderBinding folderBinding;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +33,6 @@ public class LocationFolderActivity extends AppCompatActivity {
         String location = arguments.get(LOCATION).toString();
         String executed = arguments.get(EXECUTED).toString();
         String email = arguments.get(EMAIL).toString();
-        Log.d(TAG , "email: " + email);
 
         if(location.equals(OST_SCHOOL))
             folderBinding.toolbarLocationFolderRoot.setTitle(getText(R.string.ost_text));

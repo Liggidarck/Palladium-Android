@@ -32,8 +32,8 @@ import java.util.UUID;
 
 public class RegisterUserActivity extends AppCompatActivity {
 
-    String name_user, last_name_user, patronymic_user, email_user,
-            password_user, role_user, permission_user, userID;
+    String nameUser, lastNameUser, patronymicUser, emailUser,
+            passwordUser, roleUser, permissionUser, userID;
 
     FirebaseAuth mAuth1, mAuth2;
     FirebaseFirestore firebaseFirestore;
@@ -73,46 +73,46 @@ public class RegisterUserActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Error! " + e.toString(), Toast.LENGTH_SHORT).show();
-            Log.e(TAG_REGISTER_ACTIVITY, "Error! " + e.toString());
+            Toast.makeText(this, "Error! " + e, Toast.LENGTH_SHORT).show();
+            Log.e(TAG_REGISTER_ACTIVITY, "Error! " + e);
         }
 
 
         registerUserBinding.registerUserBtn.setOnClickListener(v -> {
 
-            name_user = Objects.requireNonNull(registerUserBinding.textInputLayoutNameUser.getEditText()).getText().toString();
-            last_name_user = Objects.requireNonNull(registerUserBinding.textInputLayoutLastNameUser.getEditText()).getText().toString();
-            patronymic_user = Objects.requireNonNull(registerUserBinding.textInputLayoutPatronymicUser.getEditText()).getText().toString();
-            email_user = Objects.requireNonNull(registerUserBinding.textInputLayoutEmailUser.getEditText()).getText().toString();
-            password_user = Objects.requireNonNull(registerUserBinding.textInputLayoutPasswordUser.getEditText()).getText().toString();
-            role_user = Objects.requireNonNull(registerUserBinding.textInputLayoutRoleUser.getEditText()).getText().toString();
-            permission_user = Objects.requireNonNull(registerUserBinding.textInputLayoutPermissionUser.getEditText()).getText().toString();
+            nameUser = Objects.requireNonNull(registerUserBinding.textInputLayoutNameUser.getEditText()).getText().toString();
+            lastNameUser = Objects.requireNonNull(registerUserBinding.textInputLayoutLastNameUser.getEditText()).getText().toString();
+            patronymicUser = Objects.requireNonNull(registerUserBinding.textInputLayoutPatronymicUser.getEditText()).getText().toString();
+            emailUser = Objects.requireNonNull(registerUserBinding.textInputLayoutEmailUser.getEditText()).getText().toString();
+            passwordUser = Objects.requireNonNull(registerUserBinding.textInputLayoutPasswordUser.getEditText()).getText().toString();
+            roleUser = Objects.requireNonNull(registerUserBinding.textInputLayoutRoleUser.getEditText()).getText().toString();
+            permissionUser = Objects.requireNonNull(registerUserBinding.textInputLayoutPermissionUser.getEditText()).getText().toString();
 
             if (validateFields()) {
-                if (!validateEmail(email_user)) {
+                if (!validateEmail(emailUser)) {
                     Log.e(TAG_VALIDATE_FILED, "Email validation failed");
                     registerUserBinding.textInputLayoutEmailUser.setError("Некорректный формат e-mail");
                 } else {
                     registerUserBinding.progressBarRegister.setVisibility(View.VISIBLE);
 
                     try {
-                        mAuth2.createUserWithEmailAndPassword(email_user, password_user).addOnCompleteListener(task -> {
+                        mAuth2.createUserWithEmailAndPassword(emailUser, passwordUser).addOnCompleteListener(task -> {
 
                             if (task.isSuccessful()) {
                                 userID = Objects.requireNonNull(mAuth2.getCurrentUser()).getUid();
                                 DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userID);
                                 Map<String, Object> user = new HashMap<>();
-                                user.put("name", name_user);
-                                user.put("last_name", last_name_user);
-                                user.put("patronymic", patronymic_user);
-                                user.put("email", email_user);
-                                user.put("role", role_user);
-                                user.put("permission", permission_user);
-                                user.put("password", password_user);
+                                user.put("name", nameUser);
+                                user.put("last_name", lastNameUser);
+                                user.put("patronymic", patronymicUser);
+                                user.put("email", emailUser);
+                                user.put("role", roleUser);
+                                user.put("permission", permissionUser);
+                                user.put("password", passwordUser);
 
                                 documentReference.set(user)
                                         .addOnSuccessListener(unused -> Log.d(TAG_REGISTER_ACTIVITY, "Success register user - " + userID))
-                                        .addOnFailureListener(e -> Log.e(TAG_REGISTER_ACTIVITY, "Failure register user - " + e.toString()));
+                                        .addOnFailureListener(e -> Log.e(TAG_REGISTER_ACTIVITY, "Failure register user - " + e));
 
                                 onBackPressed();
 
@@ -127,14 +127,14 @@ public class RegisterUserActivity extends AppCompatActivity {
 
                         }).addOnFailureListener(e -> {
                             registerUserBinding.progressBarRegister.setVisibility(View.INVISIBLE);
-                            Log.e(TAG_REGISTER_ACTIVITY, "Error: " + e.toString());
-                            Toast.makeText(this, "Error: " + e.toString(), Toast.LENGTH_SHORT).show();
+                            Log.e(TAG_REGISTER_ACTIVITY, "Error: " + e);
+                            Toast.makeText(this, "Error: " + e, Toast.LENGTH_SHORT).show();
                         });
 
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Log.e(TAG_REGISTER_ACTIVITY, "Error! " + e.toString());
-                        Toast.makeText(this, "Error: " + e.toString(), Toast.LENGTH_SHORT).show();
+                        Log.e(TAG_REGISTER_ACTIVITY, "Error! " + e);
+                        Toast.makeText(this, "Error: " + e, Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -186,21 +186,21 @@ public class RegisterUserActivity extends AppCompatActivity {
     boolean validateFields() {
         Utils utils = new Utils();
 
-        utils.clear_error(registerUserBinding.textInputLayoutNameUser);
-        utils.clear_error(registerUserBinding.textInputLayoutLastNameUser);
-        utils.clear_error(registerUserBinding.textInputLayoutPatronymicUser);
-        utils.clear_error(registerUserBinding.textInputLayoutEmailUser);
-        utils.clear_error(registerUserBinding.textInputLayoutPasswordUser);
-        utils.clear_error(registerUserBinding.textInputLayoutRoleUser);
-        utils.clear_error(registerUserBinding.textInputLayoutPermissionUser);
+        utils.clearError(registerUserBinding.textInputLayoutNameUser);
+        utils.clearError(registerUserBinding.textInputLayoutLastNameUser);
+        utils.clearError(registerUserBinding.textInputLayoutPatronymicUser);
+        utils.clearError(registerUserBinding.textInputLayoutEmailUser);
+        utils.clearError(registerUserBinding.textInputLayoutPasswordUser);
+        utils.clearError(registerUserBinding.textInputLayoutRoleUser);
+        utils.clearError(registerUserBinding.textInputLayoutPermissionUser);
 
-        boolean checkName = utils.validate_field(name_user, registerUserBinding.textInputLayoutNameUser);
-        boolean checkLastName = utils.validate_field(last_name_user, registerUserBinding.textInputLayoutLastNameUser);
-        boolean checkPatronymic = utils.validate_field(patronymic_user, registerUserBinding.textInputLayoutPatronymicUser);
-        boolean checkEmail = utils.validate_field(email_user, registerUserBinding.textInputLayoutEmailUser);
-        boolean checkPassword = utils.validate_field(password_user, registerUserBinding.textInputLayoutPasswordUser);
-        boolean checkRole = utils.validate_field(role_user, registerUserBinding.textInputLayoutRoleUser);
-        boolean checkPermission = utils.validate_field(permission_user, registerUserBinding.textInputLayoutPermissionUser);
+        boolean checkName = utils.validateField(nameUser, registerUserBinding.textInputLayoutNameUser);
+        boolean checkLastName = utils.validateField(lastNameUser, registerUserBinding.textInputLayoutLastNameUser);
+        boolean checkPatronymic = utils.validateField(patronymicUser, registerUserBinding.textInputLayoutPatronymicUser);
+        boolean checkEmail = utils.validateField(emailUser, registerUserBinding.textInputLayoutEmailUser);
+        boolean checkPassword = utils.validateField(passwordUser, registerUserBinding.textInputLayoutPasswordUser);
+        boolean checkRole = utils.validateField(roleUser, registerUserBinding.textInputLayoutRoleUser);
+        boolean checkPermission = utils.validateField(permissionUser, registerUserBinding.textInputLayoutPermissionUser);
 
         return checkName & checkLastName & checkPatronymic & checkEmail & checkPassword & checkRole & checkPermission;
     }

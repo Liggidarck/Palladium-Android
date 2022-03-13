@@ -4,6 +4,7 @@ import static com.george.vector.common.consts.Keys.COLLECTION;
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.ID;
 import static com.george.vector.common.consts.Keys.LOCATION;
+import static com.george.vector.common.consts.Logs.TAG_TASK_USER_ACTIVITY;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -25,8 +26,7 @@ import com.google.firebase.storage.FirebaseStorage;
 
 public class TaskUserActivity extends AppCompatActivity {
 
-    private static final String TAG = "TaskUserActivity";
-    String id, collection, address, floor, cabinet, letter, name_task,
+    String id, collection, address, floor, cabinet, letter, nameTask,
             comment, status, dateCreate, timeCreate, image, emailCreator, fullNameCreator, emailUser;
 
     FirebaseFirestore firebaseFirestore;
@@ -59,7 +59,7 @@ public class TaskUserActivity extends AppCompatActivity {
             floor = String.format("Этаж: %s", value.getString("floor"));
             cabinet = String.format("Кабинет: %s", value.getString("cabinet"));
             letter = value.getString("litera");
-            name_task = value.getString("name_task");
+            nameTask = value.getString("name_task");
             comment = value.getString("comment");
             status = value.getString("status");
             dateCreate = value.getString("date_create");
@@ -74,7 +74,7 @@ public class TaskUserActivity extends AppCompatActivity {
             userBinding.textViewAddressTaskUser.setText(address);
             userBinding.textViewFloorTaskUser.setText(floor);
             userBinding.textViewCabinetTaskUser.setText(cabinet);
-            userBinding.textViewNameTaskUser.setText(name_task);
+            userBinding.textViewNameTaskUser.setText(nameTask);
             userBinding.textViewCommentTaskUser.setText(comment);
             userBinding.textViewStatusTaskUser.setText(status);
             userBinding.textViewEmailCreatorTaskUser.setText(emailCreator);
@@ -84,7 +84,7 @@ public class TaskUserActivity extends AppCompatActivity {
             userBinding.textViewDateCreateTaskUser.setText(date_create_text);
 
             if (image == null) {
-                Log.d(TAG, "No image, stop loading");
+                Log.d(TAG_TASK_USER_ACTIVITY, "NO IMAGE FOUND");
             } else {
                 Fragment image_fragment = new FragmentImageTask();
 
@@ -122,7 +122,7 @@ public class TaskUserActivity extends AppCompatActivity {
         if (!isOnline())
             Snackbar.make(findViewById(R.id.coordinator_task_user), getString(R.string.error_no_connection), Snackbar.LENGTH_LONG)
                     .setAction("Повторить", v -> {
-                        Log.i(TAG, "Update status: " + isOnline());
+                        Log.i(TAG_TASK_USER_ACTIVITY, "Update status: " + isOnline());
                         onStart();
                     }).show();
     }

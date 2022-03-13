@@ -21,7 +21,6 @@ import com.george.vector.users.root.folders.LocationFolderActivity;
 
 public class FragmentOstWork extends Fragment {
 
-    private static final String TAG = "FragmentWorkOst";
     FragmentOstRootBinding ostRootBinding;
 
     @Nullable
@@ -33,7 +32,6 @@ public class FragmentOstWork extends Fragment {
         Bundle args = getArguments();
         assert args != null;
         String email = args.getString(EMAIL);
-        Log.d(TAG, "Email: " + email);
 
         ostRootBinding.ostSchoolRoot.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentOstWork.this.getContext(), LocationFolderActivity.class);

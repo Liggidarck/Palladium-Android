@@ -12,6 +12,7 @@ import static com.george.vector.common.consts.Keys.OST_SCHOOL_ARCHIVE;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL_COMPLETED;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL_PROGRESS;
 import static com.george.vector.common.consts.Keys.PERMISSION;
+import static com.george.vector.common.consts.Logs.TAG_TASK_USER_ACTIVITY;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,12 +36,10 @@ import com.google.firebase.firestore.Query;
 
 public class FragmentTasksUser extends Fragment {
 
-    private static final String TAG = "FragmentTasksUser";
-    String folder, email, permission, collection;
-
-    TaskAdapter adapter;
-
+    TaskAdapter taskAdapter;
     FragmentTasksUserBinding userBinding;
+
+    String folder, email, permission, collection;
 
     @Nullable
     @Override
@@ -55,10 +54,10 @@ public class FragmentTasksUser extends Fragment {
         collection = args.getString(COLLECTION);
         folder = args.getString(FOLDER);
 
-        Log.d(TAG, "email: " + email);
-        Log.d(TAG, "permission: " + permission);
-        Log.d(TAG, "collection: " + collection);
-        Log.d(TAG, "folder: " + folder);
+        Log.d(TAG_TASK_USER_ACTIVITY, "email: " + email);
+        Log.d(TAG_TASK_USER_ACTIVITY, "permission: " + permission);
+        Log.d(TAG_TASK_USER_ACTIVITY, "collection: " + collection);
+        Log.d(TAG_TASK_USER_ACTIVITY, "folder: " + folder);
 
         if (permission.equals(OST_SCHOOL) && folder.equals(IN_PROGRESS_TASKS))
             ProgressTasks();
@@ -75,7 +74,7 @@ public class FragmentTasksUser extends Fragment {
     void setUpRecyclerView() {
         userBinding.recyclerviewUserTasks.setHasFixedSize(true);
         userBinding.recyclerviewUserTasks.setLayoutManager(new LinearLayoutManager(FragmentTasksUser.this.getContext()));
-        userBinding.recyclerviewUserTasks.setAdapter(adapter);
+        userBinding.recyclerviewUserTasks.setAdapter(taskAdapter);
     }
 
     private void ArchiveTasks() {
@@ -86,14 +85,14 @@ public class FragmentTasksUser extends Fragment {
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
                 .build();
-        adapter = new TaskAdapter(options);
+        taskAdapter = new TaskAdapter(options);
 
         setUpRecyclerView();
 
-        adapter.setOnItemClickListener((documentSnapshot, position) -> {
+        taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
 
-            Log.d(TAG, String.format("position: %d id: %s", position, id));
+            Log.d(TAG_TASK_USER_ACTIVITY, String.format("position: %d id: %s", position, id));
 
             Intent intent = new Intent(FragmentTasksUser.this.getContext(), TaskUserActivity.class);
             intent.putExtra(ID, id);
@@ -112,14 +111,14 @@ public class FragmentTasksUser extends Fragment {
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
                 .build();
-        adapter = new TaskAdapter(options);
+        taskAdapter = new TaskAdapter(options);
 
         setUpRecyclerView();
 
-        adapter.setOnItemClickListener((documentSnapshot, position) -> {
+        taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
 
-            Log.d(TAG, String.format("position: %d id: %s", position, id));
+            Log.d(TAG_TASK_USER_ACTIVITY, String.format("position: %d id: %s", position, id));
 
             Intent intent = new Intent(FragmentTasksUser.this.getContext(), TaskUserActivity.class);
             intent.putExtra(ID, id);
@@ -138,14 +137,14 @@ public class FragmentTasksUser extends Fragment {
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
                 .setQuery(query, TaskUi.class)
                 .build();
-        adapter = new TaskAdapter(options);
+        taskAdapter = new TaskAdapter(options);
 
         setUpRecyclerView();
 
-        adapter.setOnItemClickListener((documentSnapshot, position) -> {
+        taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
 
-            Log.d(TAG, String.format("position: %d id: %s", position, id));
+            Log.d(TAG_TASK_USER_ACTIVITY, String.format("position: %d id: %s", position, id));
 
             Intent intent = new Intent(FragmentTasksUser.this.getContext(), TaskUserActivity.class);
             intent.putExtra(ID, id);
@@ -159,13 +158,13 @@ public class FragmentTasksUser extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        adapter.startListening();
+        taskAdapter.startListening();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        adapter.stopListening();
+        taskAdapter.stopListening();
     }
 
     @Override

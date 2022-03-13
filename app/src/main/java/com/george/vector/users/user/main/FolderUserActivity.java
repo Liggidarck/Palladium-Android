@@ -8,6 +8,7 @@ import static com.george.vector.common.consts.Keys.FOLDER;
 import static com.george.vector.common.consts.Keys.IN_PROGRESS_TASKS;
 import static com.george.vector.common.consts.Keys.NEW_TASKS;
 import static com.george.vector.common.consts.Keys.PERMISSION;
+import static com.george.vector.common.consts.Logs.TAG_FOLDER_USER_ACTIVITY;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -21,8 +22,7 @@ import com.george.vector.users.user.tasks.FragmentTasksUser;
 
 public class FolderUserActivity extends AppCompatActivity {
 
-    private static final String TAG = "FolderUserActivity";
-    String email, permission, collection, folder, text_toolbar;
+    String email, permission, collection, folder, textToolbar;
     ActivityFolderUserBinding folderUserBinding;
 
     @Override
@@ -37,25 +37,25 @@ public class FolderUserActivity extends AppCompatActivity {
         collection = arguments.getString(COLLECTION);
         folder = arguments.getString(FOLDER);
 
-        Log.d(TAG, "email: " + email);
-        Log.d(TAG, "permission: " + permission);
-        Log.d(TAG, "collection: " + collection);
-        Log.d(TAG, "folder: " + folder);
+        Log.d(TAG_FOLDER_USER_ACTIVITY, "email: " + email);
+        Log.d(TAG_FOLDER_USER_ACTIVITY, "permission: " + permission);
+        Log.d(TAG_FOLDER_USER_ACTIVITY, "collection: " + collection);
+        Log.d(TAG_FOLDER_USER_ACTIVITY, "folder: " + folder);
 
         if(folder.equals(NEW_TASKS))
-            text_toolbar = getString(R.string.new_tasks_text);
+            textToolbar = getString(R.string.new_tasks_text);
 
         if(folder.equals(IN_PROGRESS_TASKS))
-            text_toolbar = getString(R.string.progress_tasks);
+            textToolbar = getString(R.string.progress_tasks);
 
         if(folder.equals(ARCHIVE_TASKS))
-            text_toolbar = getString(R.string.archive_tasks_text);
+            textToolbar = getString(R.string.archive_tasks_text);
 
         if(folder.equals(COMPLETED_TASKS))
-            text_toolbar = "Завершенные";
+            textToolbar = getString(R.string.completed_tasks_text);
 
         folderUserBinding.toolbarFolderUserActivity.setNavigationOnClickListener(v -> onBackPressed());
-        folderUserBinding.toolbarFolderUserActivity.setTitle(text_toolbar);
+        folderUserBinding.toolbarFolderUserActivity.setTitle(textToolbar);
 
         Fragment fragment_user_tasks = new FragmentTasksUser();
         Bundle data_user_tasks = new Bundle();

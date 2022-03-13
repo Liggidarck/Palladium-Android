@@ -25,16 +25,15 @@ import com.george.vector.R;
 import com.george.vector.auth.LoginActivity;
 import com.george.vector.common.settings.SettingsActivity;
 import com.george.vector.databinding.ActivityProfileRootBinding;
-import com.george.vector.develop.DevelopJavaActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class ProfileRootActivity extends AppCompatActivity {
 
-    FirebaseAuth firebase_auth;
+    FirebaseAuth firebaseAuth;
 
     SharedPreferences mDataUser;
-    String name, last_name, patronymic, email, role, permission;
+    String name, lastName, patronymic, email, role, permission;
 
     ActivityProfileRootBinding profileBinding;
 
@@ -44,22 +43,22 @@ public class ProfileRootActivity extends AppCompatActivity {
         profileBinding = ActivityProfileRootBinding.inflate(getLayoutInflater());
         setContentView(profileBinding.getRoot());
 
-        firebase_auth = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 
         mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = mDataUser.edit();
 
         name = mDataUser.getString(USER_PREFERENCES_NAME, "");
-        last_name = mDataUser.getString(USER_PREFERENCES_LAST_NAME, "");
+        lastName = mDataUser.getString(USER_PREFERENCES_LAST_NAME, "");
         patronymic = mDataUser.getString(USER_PREFERENCES_PATRONYMIC, "");
         email = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
         role = mDataUser.getString(USER_PREFERENCES_ROLE, "");
         permission = mDataUser.getString(USER_PREFERENCES_PERMISSION, "");
 
         String _name = Character.toString(name.charAt(0));
-        String _last_name = Character.toString(last_name.charAt(0));
+        String _last_name = Character.toString(lastName.charAt(0));
 
-        profileBinding.nameRootProfile.setText(String.format("%s %s", name, last_name));
+        profileBinding.nameRootProfile.setText(String.format("%s %s", name, lastName));
         profileBinding.avaRootProfile.setText(String.format("%s%s", _name, _last_name));
         profileBinding.externalDataUser.setText(String.format("%s %s", email, role));
 
@@ -79,7 +78,7 @@ public class ProfileRootActivity extends AppCompatActivity {
                     .setTitle(getString(R.string.warning))
                     .setMessage("Вы действительно хотите выйти из аккаунта?")
                     .setPositiveButton("ok", (dialog1, which) -> {
-                        firebase_auth.signOut();
+                        firebaseAuth.signOut();
 
                         editor.putString(USER_PREFERENCES_NAME, "");
                         editor.putString(USER_PREFERENCES_LAST_NAME, "");

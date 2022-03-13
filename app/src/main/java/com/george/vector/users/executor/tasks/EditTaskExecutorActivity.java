@@ -5,6 +5,7 @@ import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.ID;
 import static com.george.vector.common.consts.Keys.LOCATION;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL;
+import static com.george.vector.common.consts.Logs.TAG_EDIT_TASK_EXECUTOR_ACTIVITY;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -31,13 +32,11 @@ import java.util.Objects;
 
 public class EditTaskExecutorActivity extends AppCompatActivity {
 
-    private static final String TAG = "EditTaskExecutor";
-
     FirebaseFirestore firebaseFirestore;
 
-    String id, collection, location, address, floor, cabinet, letter, name_task, comment, status, date_create, time_create,
-            date_done, email, email_executor, image, full_name_executor, email_creator, name_creator,
-            email_mail_activity;
+    String id, collection, location, address, floor, cabinet, letter, nameTask, comment, status, dateCreate, timeCreate,
+            dateDone, email, emailExecutor, image, fullNameExecutor, emailCreator, nameCreator,
+            emailMailActivity;
     boolean urgent;
 
     ActivityEditTaskExecutorBinding executorBinding;
@@ -52,7 +51,12 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         id = arguments.getString(ID);
         collection = arguments.getString(COLLECTION);
         location = arguments.getString(LOCATION);
-        email_mail_activity = arguments.getString(EMAIL);
+        emailMailActivity = arguments.getString(EMAIL);
+
+        Log.i(TAG_EDIT_TASK_EXECUTOR_ACTIVITY, "id: " + id);
+        Log.i(TAG_EDIT_TASK_EXECUTOR_ACTIVITY, "collection: " + collection);
+        Log.i(TAG_EDIT_TASK_EXECUTOR_ACTIVITY, "location: " + location);
+        Log.i(TAG_EDIT_TASK_EXECUTOR_ACTIVITY, "emailMailActivity: " + emailMailActivity);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -67,20 +71,20 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
                 floor = value.getString("floor");
                 cabinet = value.getString("cabinet");
                 letter = value.getString("litera");
-                name_task = value.getString("name_task");
+                nameTask = value.getString("name_task");
                 comment = value.getString("comment");
                 status = value.getString("status");
 
-                date_done = value.getString("date_done");
-                email_executor = value.getString("executor");
+                dateDone = value.getString("date_done");
+                emailExecutor = value.getString("executor");
 
-                date_create = value.getString("date_create");
-                time_create = value.getString("time_create");
+                dateCreate = value.getString("date_create");
+                timeCreate = value.getString("time_create");
                 email = value.getString("email_creator");
 
-                full_name_executor = value.getString("fullNameExecutor");
-                email_creator = value.getString("email_creator");
-                name_creator = value.getString("nameCreator");
+                fullNameExecutor = value.getString("fullNameExecutor");
+                emailCreator = value.getString("email_creator");
+                nameCreator = value.getString("nameCreator");
                 urgent = value.getBoolean("urgent");
 
                 image = value.getString("image");
@@ -88,10 +92,10 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
                 Objects.requireNonNull(executorBinding.textInputLayoutFloorExecutor.getEditText()).setText(floor);
                 Objects.requireNonNull(executorBinding.textInputLayoutCabinetExecutor.getEditText()).setText(cabinet);
                 Objects.requireNonNull(executorBinding.textInputLayoutCabinetLiterExecutor.getEditText()).setText(letter);
-                Objects.requireNonNull(executorBinding.textInputLayoutNameTaskExecutor.getEditText()).setText(name_task);
+                Objects.requireNonNull(executorBinding.textInputLayoutNameTaskExecutor.getEditText()).setText(nameTask);
                 Objects.requireNonNull(executorBinding.textInputLayoutStatusExecutor.getEditText()).setText(status);
-                Objects.requireNonNull(executorBinding.textInputLayoutDateTaskExecutor.getEditText()).setText(date_done);
-                Objects.requireNonNull(executorBinding.textInputLayoutEmailExecutor.getEditText()).setText(email_executor);
+                Objects.requireNonNull(executorBinding.textInputLayoutDateTaskExecutor.getEditText()).setText(dateDone);
+                Objects.requireNonNull(executorBinding.textInputLayoutEmailExecutor.getEditText()).setText(emailExecutor);
 
                 if (comment.equals("Нет коментария к заявке"))
                     Objects.requireNonNull(executorBinding.textInputLayoutCommentExecutor.getEditText()).setText("");
@@ -99,7 +103,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
                     Objects.requireNonNull(executorBinding.textInputLayoutCommentExecutor.getEditText()).setText(comment);
 
             } catch (Exception e) {
-                Log.i(TAG, "Error! " + e);
+                Log.e(TAG_EDIT_TASK_EXECUTOR_ACTIVITY, "Error! " + e);
             }
 
             initialize_fields(location);
@@ -121,7 +125,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
 
         Task task = new Task();
         DeleteTask deleteTask = new DeleteTask();
-        deleteTask.delete_task(collection, id);
+        deleteTask.deleteTask(collection, id);
 
         String update_address = Objects.requireNonNull(executorBinding.textInputLayoutAddressExecutor.getEditText()).getText().toString();
         String update_floor = Objects.requireNonNull(executorBinding.textInputLayoutFloorExecutor.getEditText()).getText().toString();
@@ -133,12 +137,12 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         String update_executor = Objects.requireNonNull(executorBinding.textInputLayoutEmailExecutor.getEditText()).getText().toString();
         String update_status = Objects.requireNonNull(executorBinding.textInputLayoutStatusExecutor.getEditText()).getText().toString();
 
-        task.save(new SaveTask(), location, update_name, update_address, date_create, update_floor,
+        task.save(new SaveTask(), location, update_name, update_address, dateCreate, update_floor,
                 update_cabinet, update_letter, update_comment, update_date_task,
-                update_executor, update_status, time_create, email, urgent, update_image, full_name_executor, name_creator);
+                update_executor, update_status, timeCreate, email, urgent, update_image, fullNameExecutor, nameCreator);
 
         Intent intent = new Intent(this, MainExecutorActivity.class);
-        intent.putExtra(EMAIL, email_mail_activity);
+        intent.putExtra(EMAIL, emailMailActivity);
         startActivity(intent);
     }
 
@@ -156,7 +160,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
 
     void initialize_fields(String location) {
         if (location.equals(OST_SCHOOL)) {
-            String[] items = getResources().getStringArray(R.array.addresses_ost_school);
+            String[] items = getResources().getStringArray(R.array.addressesOstSchool);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     EditTaskExecutorActivity.this,
                     R.layout.dropdown_menu_categories,

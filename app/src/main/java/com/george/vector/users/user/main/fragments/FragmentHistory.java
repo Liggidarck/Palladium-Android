@@ -35,7 +35,6 @@ public class FragmentHistory extends Fragment {
         historyUserBinding = FragmentHistoryUserBinding.inflate(inflater, container, false);
         View view = historyUserBinding.getRoot();
 
-
         Bundle args = getArguments();
         assert args != null;
         email = args.getString(EMAIL);

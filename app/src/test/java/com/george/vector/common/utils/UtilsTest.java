@@ -10,8 +10,8 @@ public class UtilsTest {
     public void validate_field() {
         Utils utils = new Utils();
 
-        assertTrue(utils.validate_field("String", null));
-        assertFalse(utils.validate_field("", null));
+        assertTrue(utils.validateField("String", null));
+        assertFalse(utils.validateField("", null));
     }
 
 }

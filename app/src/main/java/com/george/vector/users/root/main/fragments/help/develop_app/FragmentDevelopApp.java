@@ -20,15 +20,14 @@ public class FragmentDevelopApp extends Fragment {
     FragmentDevelopAppBinding binding;
     ArrayList<Release> releases = new ArrayList<>();
 
+    /**
+     * Без тебя ничего бы не получилось. @ksenia._.fox 🧡🧡🧡🧡🧡
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentDevelopAppBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-
-        Bundle args = getArguments();
-        assert args != null;
-        String user = args.getString("user");
 
         releases.add(new Release("Palladium alfa.1", "13 июня 2021", "Основные изменения\n" +
                 "\n" +
@@ -169,19 +168,14 @@ public class FragmentDevelopApp extends Fragment {
                 "- Добавлена возможность сделать фотографию внутри приложения\n" +
                 "- Добавлены уведомления суперпользователю о новой созданной заявке"));
 
+        releases.add(new Release("Palladium 1.3", "9 марта 2022", "Основные изменения\n" + " - Испрвлены ошибки на странице авторизации. \n - Добавлена техническая поддержка для всех пользоватлей. \n - Добавлена страница о проекте"));
+
         ReleaseAdapter adapter = new ReleaseAdapter(FragmentDevelopApp.this.getActivity(), releases);
         binding.developRecycler.setAdapter(adapter);
 
         binding.developToolbar.setNavigationOnClickListener(v -> {
-            if (user.equals("root")) {
-                Fragment aboutProject = new FragmentAboutProject();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, aboutProject).commit();
-            }
-
-            if (user.equals("user")) {
-                Fragment about = new com.george.vector.users.user.main.fragments.help.FragmentAboutProject();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_user, about).commit();
-            }
+            Fragment aboutProject = new FragmentAboutProject();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, aboutProject).commit();
         });
 
         return view;

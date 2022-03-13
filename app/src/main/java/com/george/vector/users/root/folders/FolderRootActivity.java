@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import com.george.vector.R;
 import com.george.vector.databinding.ActivityFolderRootBinding;
@@ -23,8 +22,7 @@ public class FolderRootActivity extends AppCompatActivity {
 
     ActivityFolderRootBinding folderRootBinding;
 
-    private static final String TAG = "FolderRootActivity";
-    String text_toolbar;
+    String textToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,24 +35,21 @@ public class FolderRootActivity extends AppCompatActivity {
         String folder = arguments.getString(FOLDER);
         String executed = arguments.getString(EXECUTED);
         String email = arguments.getString(EMAIL);
-        Log.d(TAG, "email: " + email);
 
         if(folder.equals(NEW_TASKS))
-            text_toolbar = getString(R.string.new_tasks_text);
+            textToolbar = getString(R.string.new_tasks_text);
 
         if(folder.equals(IN_PROGRESS_TASKS))
-            text_toolbar = getString(R.string.progress_tasks);
+            textToolbar = getString(R.string.progress_tasks);
 
         if(folder.equals(ARCHIVE_TASKS))
-            text_toolbar = getString(R.string.archive_tasks_text);
+            textToolbar = getString(R.string.archive_tasks_text);
 
         if(folder.equals(COMPLETED_TASKS))
-            text_toolbar = "Завершенные";
+            textToolbar = getString(R.string.completed_tasks_text);
 
         folderRootBinding.toolbarFolderRootActivity.setNavigationOnClickListener(v -> onBackPressed());
-        folderRootBinding.toolbarFolderRootActivity.setTitle(text_toolbar);
-        Log.d(TAG, String.format("location: %s", location));
-        Log.d(TAG, String.format("folder: %s", folder));
+        folderRootBinding.toolbarFolderRootActivity.setTitle(textToolbar);
 
         Fragment currentFragment = new FragmentTasksRoot();
         Bundle bundle = new Bundle();

@@ -5,6 +5,7 @@ import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.ID;
 import static com.george.vector.common.consts.Keys.LOCATION;
 import static com.george.vector.common.consts.Keys.TOPIC_NEW_TASKS_CREATE;
+import static com.george.vector.common.consts.Logs.TAG_TASK_ROOT_ACTIVITY;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -36,31 +37,37 @@ import com.google.firebase.storage.StorageReference;
 
 public class TaskRootActivity extends AppCompatActivity {
 
-    private static final String TAG = "TaskActivityRoot";
-    String id, collection, address, floor, cabinet, letter, name_task, comment, status,
-            date_create, time_create, location, email, image, email_creator, email_executor,
-            date_done, full_name_executor, full_name_creator;
-    boolean confirm_delete, urgent;
+    String id, collection, address, floor, cabinet, letter, nameTask, comment, status,
+            dateCreate, timeCreate, location, email, imageId, emailCreator, emailExecutor,
+            dateDone, fullNameExecutor, fullNameCreator;
+    boolean confirmDelete, urgent;
 
-    FirebaseFirestore firebase_firestore;
+    FirebaseFirestore firebaseFirestore;
 
     ActivityTaskRootBinding taskRootBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         taskRootBinding = ActivityTaskRootBinding.inflate(getLayoutInflater());
         setContentView(taskRootBinding.getRoot());
 
-        Bundle arguments = getIntent().getExtras();
-        id = arguments.get(ID).toString();
-        collection = arguments.get(COLLECTION).toString();
-        location = arguments.get(LOCATION).toString();
-        email = arguments.get(EMAIL).toString();
-        confirm_delete = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("confirm_before_deleting_root", true);
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
-        firebase_firestore = FirebaseFirestore.getInstance();
+        Bundle arguments = getIntent().getExtras();
+        id = arguments.getString(ID);
+        collection = arguments.getString(COLLECTION);
+        location = arguments.getString(LOCATION);
+        email = arguments.getString(EMAIL);
+        confirmDelete = PreferenceManager
+                .getDefaultSharedPreferences(this)
+                .getBoolean("confirm_before_deleting_root", true);
+
+        Log.d(TAG_TASK_ROOT_ACTIVITY, "id: " + id);
+        Log.d(TAG_TASK_ROOT_ACTIVITY, "collection: " + collection);
+        Log.d(TAG_TASK_ROOT_ACTIVITY, "location: " + location);
+        Log.d(TAG_TASK_ROOT_ACTIVITY, "email: " + email);
+        Log.d(TAG_TASK_ROOT_ACTIVITY, "confirmDelete: " + confirmDelete);
 
         setSupportActionBar(taskRootBinding.topAppBarTasksRoot);
         taskRootBinding.topAppBarTasksRoot.setNavigationOnClickListener(v -> onBackPressed());
@@ -78,27 +85,40 @@ public class TaskRootActivity extends AppCompatActivity {
     }
 
     void load_data(String collection, String id) {
-        DocumentReference documentReference = firebase_firestore.collection(collection).document(id);
+        DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
             assert value != null;
             address = value.getString("address");
             floor = String.format("Этаж: %s", value.getString("floor"));
             cabinet = String.format("Кабинет: %s", value.getString("cabinet"));
             letter = value.getString("litera");
-            name_task = value.getString("name_task");
+            nameTask = value.getString("name_task");
             comment = value.getString("comment");
             status = value.getString("status");
-            date_create = value.getString("date_create");
-            time_create = value.getString("time_create");
-            image = value.getString("image");
+            dateCreate = value.getString("date_create");
+            timeCreate = value.getString("time_create");
+            imageId = value.getString("image");
+            emailCreator = value.getString("email_creator");
+            emailExecutor = value.getString("executor");
+            dateDone = value.getString("date_done");
+            fullNameExecutor = value.getString("fullNameExecutor");
+            fullNameCreator = value.getString("nameCreator");
 
-            Log.d(TAG, "image: " + image);
-
-            email_creator = value.getString("email_creator");
-            email_executor = value.getString("executor");
-            date_done = value.getString("date_done");
-            full_name_executor = value.getString("fullNameExecutor");
-            full_name_creator = value.getString("nameCreator");
+            Log.d(TAG_TASK_ROOT_ACTIVITY, "address: " + address);
+            Log.d(TAG_TASK_ROOT_ACTIVITY, "floor: " + floor);
+            Log.d(TAG_TASK_ROOT_ACTIVITY, "cabinet: " + cabinet);
+            Log.d(TAG_TASK_ROOT_ACTIVITY, "letter: " + letter);
+            Log.d(TAG_TASK_ROOT_ACTIVITY, "nameTask: " + nameTask);
+            Log.d(TAG_TASK_ROOT_ACTIVITY, "comment: " + comment);
+            Log.d(TAG_TASK_ROOT_ACTIVITY, "status: " + status);
+            Log.d(TAG_TASK_ROOT_ACTIVITY, "dateCreate: " + dateCreate);
+            Log.d(TAG_TASK_ROOT_ACTIVITY, "timeCreate: " + timeCreate);
+            Log.d(TAG_TASK_ROOT_ACTIVITY, "imageId: " + imageId);
+            Log.d(TAG_TASK_ROOT_ACTIVITY, "emailCreator: " + emailCreator);
+            Log.d(TAG_TASK_ROOT_ACTIVITY, "emailExecutor: " + emailExecutor);
+            Log.d(TAG_TASK_ROOT_ACTIVITY, "dateDone: " + dateDone);
+            Log.d(TAG_TASK_ROOT_ACTIVITY, "fullNameExecutor: " + fullNameExecutor);
+            Log.d(TAG_TASK_ROOT_ACTIVITY, "fullNameCreator: " + fullNameCreator);
 
             try {
                 urgent = value.getBoolean("urgent");
@@ -114,13 +134,13 @@ public class TaskRootActivity extends AppCompatActivity {
                 if (!letter.equals("-") && !letter.isEmpty())
                     cabinet = String.format("%s%s", cabinet, letter);
 
-                if (image == null) {
-                    Log.d(TAG, "No image, stop loading");
+                if (imageId == null) {
+                    Log.d(TAG_TASK_ROOT_ACTIVITY, "No image, stop loading");
                 } else {
                     Fragment image_fragment = new FragmentImageTask();
 
                     Bundle bundle = new Bundle();
-                    bundle.putString("image_id", image);
+                    bundle.putString("image_id", imageId);
                     bundle.putString(ID, id);
                     bundle.putString(COLLECTION, collection);
                     bundle.putString(LOCATION, location);
@@ -135,7 +155,7 @@ public class TaskRootActivity extends AppCompatActivity {
                 }
 
                 if (urgent) {
-                    Log.d(TAG, "Срочная заявка");
+                    Log.d(TAG_TASK_ROOT_ACTIVITY, "Срочная заявка");
 
                     Fragment urgent_fragment = new FragmentUrgentRequest();
                     getSupportFragmentManager()
@@ -152,34 +172,34 @@ public class TaskRootActivity extends AppCompatActivity {
             taskRootBinding.textViewAddressTaskRoot.setText(address);
             taskRootBinding.textViewFloorTaskRoot.setText(floor);
             taskRootBinding.textViewCabinetTaskRoot.setText(cabinet);
-            taskRootBinding.textViewNameTaskRoot.setText(name_task);
+            taskRootBinding.textViewNameTaskRoot.setText(nameTask);
             taskRootBinding.textViewCommentTaskRoot.setText(comment);
             taskRootBinding.textViewStatusTaskRoot.setText(status);
 
-            String date_create_text = "Созданно: " + date_create + " " + time_create;
+            String date_create_text = "Созданно: " + dateCreate + " " + timeCreate;
             taskRootBinding.textViewDateCreateTaskRoot.setText(date_create_text);
 
-            taskRootBinding.textViewEmailCreatorTaskRoot.setText(email_creator);
+            taskRootBinding.textViewEmailCreatorTaskRoot.setText(emailCreator);
 
-            if (full_name_creator == null)
+            if (fullNameCreator == null)
                 taskRootBinding.textViewFullNameCreator.setText("Нет данных об этом пользователе");
             else
-                taskRootBinding.textViewFullNameCreator.setText(full_name_creator);
+                taskRootBinding.textViewFullNameCreator.setText(fullNameCreator);
 
-            if (full_name_executor == null)
+            if (fullNameExecutor == null)
                 taskRootBinding.textViewFullNameExecutor.setText("Нет назначенного исполнителя");
             else
-                taskRootBinding.textViewFullNameExecutor.setText(full_name_executor);
+                taskRootBinding.textViewFullNameExecutor.setText(fullNameExecutor);
 
-            if (email_executor == null)
+            if (emailExecutor == null)
                 taskRootBinding.textViewEmailExecutorTaskRoot.setText("Нет данных");
             else
-                taskRootBinding.textViewEmailExecutorTaskRoot.setText(email_executor);
+                taskRootBinding.textViewEmailExecutorTaskRoot.setText(emailExecutor);
 
-            if (date_done == null)
+            if (dateDone == null)
                 taskRootBinding.textViewDateDoneTaskRoot.setText("Дата выполнения не назначена");
             else {
-                String date_done_text = "Дата выполнения: " + date_done;
+                String date_done_text = "Дата выполнения: " + dateDone;
                 taskRootBinding.textViewDateDoneTaskRoot.setText(date_done_text);
             }
 
@@ -199,7 +219,7 @@ public class TaskRootActivity extends AppCompatActivity {
 
         if (item.getItemId() == R.id.root_delete_task) {
 
-            if (confirm_delete)
+            if (confirmDelete)
                 show_dialog_delete();
             else
                 delete_task();
@@ -207,19 +227,19 @@ public class TaskRootActivity extends AppCompatActivity {
         }
 
         if (item.getItemId() == R.id.root_share_task) {
-            String IMAGE_URL;
+            String imageUrl;
 
-            if (image == null)
-                IMAGE_URL = "К заявке не прикреплено изображение";
+            if (imageId == null)
+                imageUrl = "К заявке не прикреплено изображение";
             else
-                IMAGE_URL = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", image);
+                imageUrl = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", imageId);
 
-            String sharing_data = name_task + "\n" + comment + "\n \n" +
+            String sharing_data = nameTask + "\n" + comment + "\n \n" +
                     address + "\n" + "Этаж: " + floor + "\n" + "Кабинет: " + cabinet + "\n \n" +
-                    "Создатель заявки" + "\n" + full_name_creator + "\n" + email_creator + "\n \n" +
-                    "Исполнитель" + "\n" + full_name_executor + "\n" + email_executor + "\n" + "Дата выполнения: " + date_done + "\n \n" +
-                    "Статус" + "\n" + status + "\n" + "Созданно: " + date_create + " " + time_create + "\n \n" +
-                    "Изображение" + "\n" + IMAGE_URL;
+                    "Создатель заявки" + "\n" + fullNameCreator + "\n" + emailCreator + "\n \n" +
+                    "Исполнитель" + "\n" + fullNameExecutor + "\n" + emailExecutor + "\n" + "Дата выполнения: " + dateDone + "\n \n" +
+                    "Статус" + "\n" + status + "\n" + "Созданно: " + dateCreate + " " + timeCreate + "\n \n" +
+                    "Изображение" + "\n" + imageUrl;
 
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
@@ -248,10 +268,10 @@ public class TaskRootActivity extends AppCompatActivity {
 
     void delete_task() {
         DeleteTask deleteTask = new DeleteTask();
-        deleteTask.delete_task(collection, id);
+        deleteTask.deleteTask(collection, id);
 
-        if (image != null) {
-            String storageUrl = "images/" + image;
+        if (imageId != null) {
+            String storageUrl = "images/" + imageId;
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(storageUrl);
             storageReference.delete();
         }
@@ -259,7 +279,7 @@ public class TaskRootActivity extends AppCompatActivity {
         SendNotification sendNotification = new SendNotification();
         sendNotification.sendNotification(
                 "Изменения по заявке",
-                "Заявка " + name_task + " удалена",
+                "Заявка " + nameTask + " удалена",
                 TOPIC_NEW_TASKS_CREATE
         );
         onBackPressed();
@@ -278,7 +298,7 @@ public class TaskRootActivity extends AppCompatActivity {
         if (!isOnline())
             Snackbar.make(findViewById(R.id.task_root_coordinator), getString(R.string.error_no_connection), Snackbar.LENGTH_LONG)
                     .setAction("Повторить", v -> {
-                        Log.i(TAG, "Update status: " + isOnline());
+                        Log.i(TAG_TASK_ROOT_ACTIVITY, "Update status: " + isOnline());
                         onStart();
                     }).show();
     }

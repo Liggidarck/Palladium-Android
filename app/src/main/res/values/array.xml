@@ -1,149 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="addresses_ost_school">
+    <string-array name="addressesOstSchool">
         <item>Авиаторов 9. Начальная школа</item>
         <item>Авиаторов 9. Старшая школа</item>
     </string-array>
 
-    <string-array name="floors_ost_high_school">
+    <string-array name="floors">
         <item>1</item>
         <item>2</item>
         <item>3</item>
     </string-array>
-
-    <string-array name="floors_ost_basic_school">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="fist_floor_cabinets_ost_high_school">
-
-        <item>100</item>
-        <item>101</item>
-        <item>102</item>
-        <item>103</item>
-        <item>104</item>
-        <item>105</item>
-        <item>106</item>
-        <item>107</item>
-        <item>107.1</item>
-        <item>108</item>
-        <item>108.1</item>
-        <item>109.1</item>
-        <item>109.2</item>
-        <item>109.3</item>
-        <item>109.4</item>
-        <item>109.5</item>
-        <item>109</item>
-        <item>110</item>
-        <item>111</item>
-        <item>112</item>
-        <item>113</item>
-        <item>114</item>
-        <item>115</item>
-        <item>116</item>
-        <item>117</item>
-        <item>118</item>
-        <item>119</item>
-        <item>120</item>
-        <item>121</item>
-        <item>125</item>
-        <item>125.1</item>
-        <item>125.2</item>
-        <item>125.3</item>
-        <item>126</item>
-        <item>127</item>
-        <item>128</item>
-        <item>129</item>
-        <item>130</item>
-        <item>130.1</item>
-        <item>131</item>
-        <item>132</item>
-        <item>133</item>
-        <item>134</item>
-        <item>135</item>
-
-    </string-array>
-
-    <string-array name="second_floor_cabinets_ost_high_school">
-
-        <item>200.2</item>
-        <item>200.3</item>
-        <item>201</item>
-        <item>202</item>
-        <item>203</item>
-        <item>204</item>
-        <item>205</item>
-        <item>206</item>
-        <item>207</item>
-        <item>208</item>
-        <item>209</item>
-        <item>210</item>
-        <item>211</item>
-        <item>212</item>
-        <item>212.1</item>
-        <item>212.2</item>
-        <item>212.3</item>
-        <item>212.4</item>
-        <item>212.5</item>
-        <item>213</item>
-        <item>214</item>
-        <item>215</item>
-        <item>216</item>
-        <item>217</item>
-        <item>218</item>
-        <item>219</item>
-        <item>220</item>
-        <item>221</item>
-        <item>222</item>
-        <item>223</item>
-        <item>224</item>
-        <item>225</item>
-        <item>226</item>
-
-    </string-array>
-
-    <string-array name="third_floor_cabinets_ost_high_school" >
-
-        <item>300</item>
-        <item>300.1</item>
-        <item>300.2</item>
-        <item>300.3</item>
-        <item>301</item>
-        <item>302</item>
-        <item>303</item>
-        <item>304</item>
-        <item>305</item>
-        <item>306</item>
-
-        <item>308</item>
-        <item>309</item>
-        <item>310</item>
-        <item>311</item>
-        <item>312</item>
-        <item>313</item>
-        <item>313.1</item>
-        <item>313.2</item>
-        <item>313.3</item>
-        <item>313.4</item>
-        <item>313.5</item>
-        <item>314</item>
-        <item>315</item>
-        <item>316</item>
-        <item>317</item>
-        <item>318</item>
-        <item>319</item>
-        <item>320</item>
-        <item>321</item>
-
-        <item>323</item>
-        <item>324</item>
-        <item>325</item>
-
-    </string-array>
-
 
     <string-array name="status">
         <item>Новая заявка</item>
@@ -175,17 +42,17 @@
         <item>bar_star</item>
     </string-array>
 
-    <string-array name="default_root_location">
+    <string-array name="defaultRootLocation">
         <item>ost</item>
         <item>bar</item>
     </string-array>
 
-    <string-array name="default_root_location_text">
+    <string-array name="defaultRootLocationText">
         <item>ОП «Остафьевская»</item>
         <item>ОП «Барыши»</item>
     </string-array>
 
-    <string-array name="maximum_buffer_size_values">
+    <string-array name="maximumBufferSizeValues">
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -193,7 +60,7 @@
         <item>5</item>
     </string-array>
 
-    <string-array name="maximum_buffer_size_text">
+    <string-array name="maximumBufferSizeText">
         <item>1 Мегабайт</item>
         <item>2 Мегабайт</item>
         <item>3 Мегабайт</item>

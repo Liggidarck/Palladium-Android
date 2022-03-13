@@ -15,7 +15,6 @@ import com.george.vector.users.executor.tasks.FragmentExecutorTasks;
 
 public class ExecutorTasksActivity extends AppCompatActivity {
 
-    private static final String TAG = "ExecutorTasks";
     String location, folder, email;
     ActivityExecutorTasksBinding tasksBinding;
 
