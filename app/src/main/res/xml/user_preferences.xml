@@ -14,8 +14,8 @@
 
         <ListPreference
             android:defaultValue="2"
-            android:entries="@array/maximum_buffer_size_text"
-            android:entryValues="@array/maximum_buffer_size_values"
+            android:entries="@array/maximumBufferSizeText"
+            android:entryValues="@array/maximumBufferSizeValues"
             android:key="buffer_size"
             android:title="Буфер изображения"
             android:summary="Максимально допустимый размер буфера изображения"/>

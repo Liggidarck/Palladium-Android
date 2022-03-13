@@ -160,7 +160,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
 
     void initialize_fields(String location) {
         if (location.equals(OST_SCHOOL)) {
-            String[] items = getResources().getStringArray(R.array.addresses_ost_school);
+            String[] items = getResources().getStringArray(R.array.addressesOstSchool);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     EditTaskExecutorActivity.this,
                     R.layout.dropdown_menu_categories,

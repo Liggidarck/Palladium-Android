@@ -324,7 +324,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
     void initializeFields(String location) {
         if (location.equals(OST_SCHOOL)) {
-            String[] items = getResources().getStringArray(R.array.addresses_ost_school);
+            String[] items = getResources().getStringArray(R.array.addressesOstSchool);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     EditTaskRootActivity.this,
                     R.layout.dropdown_menu_categories,

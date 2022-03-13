@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="addresses_ost_school">
+    <string-array name="addressesOstSchool">
         <item>Авиаторов 9. Начальная школа</item>
         <item>Авиаторов 9. Старшая школа</item>
     </string-array>
@@ -42,17 +42,17 @@
         <item>bar_star</item>
     </string-array>
 
-    <string-array name="default_root_location">
+    <string-array name="defaultRootLocation">
         <item>ost</item>
         <item>bar</item>
     </string-array>
 
-    <string-array name="default_root_location_text">
+    <string-array name="defaultRootLocationText">
         <item>ОП «Остафьевская»</item>
         <item>ОП «Барыши»</item>
     </string-array>
 
-    <string-array name="maximum_buffer_size_values">
+    <string-array name="maximumBufferSizeValues">
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -60,7 +60,7 @@
         <item>5</item>
     </string-array>
 
-    <string-array name="maximum_buffer_size_text">
+    <string-array name="maximumBufferSizeText">
         <item>1 Мегабайт</item>
         <item>2 Мегабайт</item>
         <item>3 Мегабайт</item>

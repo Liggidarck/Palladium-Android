@@ -105,7 +105,7 @@ public class MainUserActivity extends AppCompatActivity implements BottomSheetPr
                     break;
 
                 case R.id.item_profile_user:
-                    Log.d(TAG_MAIN_USER_ACTIVITY, "Start profile user fragment");
+                    Log.d(TAG_MAIN_USER_ACTIVITY, "Start help user fragment");
                     selectedFragment = new FragmentHelp();
 
                     break;

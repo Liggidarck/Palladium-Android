@@ -207,7 +207,7 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
 
     void initializeField(String permission) {
         if (permission.equals(OST_SCHOOL)) {
-            String[] items = getResources().getStringArray(R.array.addresses_ost_school);
+            String[] items = getResources().getStringArray(R.array.addressesOstSchool);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     AddTaskUserActivity.this,
                     R.layout.dropdown_menu_categories,

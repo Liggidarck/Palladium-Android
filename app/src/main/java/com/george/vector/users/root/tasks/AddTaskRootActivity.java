@@ -369,7 +369,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
         if (location.equals(OST_SCHOOL)) {
 
-            String[] items = getResources().getStringArray(R.array.addresses_ost_school);
+            String[] items = getResources().getStringArray(R.array.addressesOstSchool);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     AddTaskRootActivity.this,
                     R.layout.dropdown_menu_categories,
