@@ -100,6 +100,7 @@ public class MainUserActivity extends AppCompatActivity implements BottomSheetPr
                     Bundle data_history_fragment = new Bundle();
                     data_history_fragment.putString(EMAIL, email);
                     data_history_fragment.putString(PERMISSION, permission);
+
                     selectedFragment.setArguments(data_history_fragment);
 
                     break;

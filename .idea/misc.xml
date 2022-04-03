@@ -207,7 +207,13 @@
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/xml/executor_preferences.xml" value="0.3625" />
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/xml/root_preferences.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/xml/user_preferences.xml" value="0.3625" />
+        <entry key="app/src/main/res/layout/activity_add_task_root.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/activity_add_task_user.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/activity_folder_executor.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/activity_folder_root.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/activity_folder_user.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/activity_loading.xml" value="0.153125" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/activity_main_executor.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/activity_main_user.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/activity_root_main.xml" value="0.35104166666666664" />
@@ -227,9 +233,13 @@
         <entry key="app/src/main/res/layout/fragment_ost_root.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_profile_user.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_root_help.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/fragment_root_home.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/fragment_tasks_root.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/fragment_tasks_user.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_text_executor.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_text_root.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_user_home.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/profile_bottom_sheet.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/settings_executor_bottom_sheet.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/xml/executor_preferences.xml" value="0.35104166666666664" />
       </map>

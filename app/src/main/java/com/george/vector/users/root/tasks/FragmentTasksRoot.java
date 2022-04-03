@@ -87,6 +87,11 @@ public class FragmentTasksRoot extends Fragment {
         if (location.equals(BAR_SCHOOL) && folder.equals(ARCHIVE_TASKS))
             barSchoolArchiveTasks();
 
+        if(location.equals(BAR_SCHOOL)) {
+            binding.chipNewSchoolTasksRoot.setVisibility(View.INVISIBLE);
+            binding.chipOldSchoolTasksRoot.setVisibility(View.INVISIBLE);
+        }
+
         return view;
     }
 
@@ -318,9 +323,6 @@ public class FragmentTasksRoot extends Fragment {
         queryTasks(executed, BAR_SCHOOL_NEW, "Новая заявка");
 
         setUpRecyclerView();
-
-        binding.chipNewSchoolTasksRoot.setVisibility(View.INVISIBLE);
-        binding.chipOldSchoolTasksRoot.setVisibility(View.INVISIBLE);
 
         taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();

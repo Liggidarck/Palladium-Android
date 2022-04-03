@@ -40,6 +40,8 @@ public class FragmentAboutProject extends Fragment {
 
         aboutProject.cardDevelopApp.setOnClickListener(v -> {
             Fragment developFragment = new FragmentDevelopApp();
+            bundle.putString("user", "root");
+            developFragment.setArguments(bundle);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, developFragment).commit();
         });
 
