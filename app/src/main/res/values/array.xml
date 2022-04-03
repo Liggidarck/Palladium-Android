@@ -33,13 +33,13 @@
     </string-array>
 
     <string-array name="permissions">
-        <item>ost_school</item>
-        <item>ost_aist</item>
-        <item>ost_yagodka</item>
+        <item>ОП Остафьево</item>
+        <item>ОП Аист</item>
+        <item>ОП Ягодка</item>
 
-        <item>bar_school</item>
-        <item>bar_rucheek</item>
-        <item>bar_star</item>
+        <item>ОП Барыши</item>
+        <item>ОП Ручеек</item>
+        <item>ОП Звездочка</item>
     </string-array>
 
     <string-array name="defaultRootLocation">

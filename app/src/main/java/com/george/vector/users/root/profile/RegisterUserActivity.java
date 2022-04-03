@@ -99,6 +99,28 @@ public class RegisterUserActivity extends AppCompatActivity {
                         mAuth2.createUserWithEmailAndPassword(emailUser, passwordUser).addOnCompleteListener(task -> {
 
                             if (task.isSuccessful()) {
+                                if (permissionUser.equals("ОП Остафьево"))
+                                    permissionUser = "ost_school";
+
+                                if(permissionUser.equals("ОП Аист"))
+                                    permissionUser = "ost_aist";
+
+                                if(permissionUser.equals("ОП Ягодка"))
+                                    permissionUser = "ost_yagodka";
+
+
+                                if(permissionUser.equals("ОП Барыши"))
+                                    permissionUser = "bar_school";
+
+                                if(permissionUser.equals("ОП Ручеек"))
+                                    permissionUser = "bar_rucheek";
+
+                                if(permissionUser.equals("ОП Звездочка"))
+                                    permissionUser = "bar_star";
+
+                                Log.d(TAG_REGISTER_ACTIVITY, "permission: " + permissionUser);
+
+
                                 userID = Objects.requireNonNull(mAuth2.getCurrentUser()).getUid();
                                 DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userID);
                                 Map<String, Object> user = new HashMap<>();

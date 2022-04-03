@@ -36,7 +36,7 @@ class FirebaseService : FirebaseMessagingService() {
             .setContentText(message.data["message"])
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setSmallIcon(R.drawable.ic_logo_notification)
-            .setAutoCancel(true)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(message.data["title"]))
             .build()
 
         notificationManager.notify(notificationID, notification)

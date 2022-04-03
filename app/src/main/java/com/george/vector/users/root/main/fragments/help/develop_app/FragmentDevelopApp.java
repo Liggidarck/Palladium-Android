@@ -1,6 +1,7 @@
 package com.george.vector.users.root.main.fragments.help.develop_app;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ public class FragmentDevelopApp extends Fragment {
 
     FragmentDevelopAppBinding binding;
     ArrayList<Release> releases = new ArrayList<>();
+    public static final String TAG = "FragmentDevelopApp";
 
     /**
      * Без тебя ничего бы не получилось. @ksenia._.fox 🧡🧡🧡🧡🧡
@@ -170,12 +172,30 @@ public class FragmentDevelopApp extends Fragment {
 
         releases.add(new Release("Palladium 1.3", "9 марта 2022", "Основные изменения\n" + " - Испрвлены ошибки на странице авторизации. \n - Добавлена техническая поддержка для всех пользоватлей. \n - Добавлена страница о проекте"));
 
+        releases.add(new Release("Palladium 1.3.2", "13 марта 2022", "Основные изменения\n" + " - Приложение больше не собирает статискику использования. \n" + " - Полностью активированна барышевская школа."));
+
+        releases.add(new Release("Palladium 1.4.0", "3 апреля 2022", "Основные изменения\n" + " - Более удобно отображаются входящие уведомления. \n" + " - Регистраци нового пользователя стала более удобной."));
+
         ReleaseAdapter adapter = new ReleaseAdapter(FragmentDevelopApp.this.getActivity(), releases);
         binding.developRecycler.setAdapter(adapter);
 
+        Bundle args = getArguments();
+        assert args != null;
+        String user = args.getString("user");
+
         binding.developToolbar.setNavigationOnClickListener(v -> {
-            Fragment aboutProject = new FragmentAboutProject();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, aboutProject).commit();
+            Log.d(TAG, "onCreateView: user: " + user);
+
+            if(user.equals("user")) {
+                Fragment about = new com.george.vector.users.user.main.fragments.help.FragmentAboutProject();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_user, about).commit();
+            }
+
+            if(user.equals("root")) {
+                Fragment aboutProject = new FragmentAboutProject();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, aboutProject).commit();
+            }
+
         });
 
         return view;

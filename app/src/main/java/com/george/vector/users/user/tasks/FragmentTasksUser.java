@@ -1,16 +1,10 @@
 package com.george.vector.users.user.tasks;
 
-import static com.george.vector.common.consts.Keys.ARCHIVE_TASKS;
+import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
 import static com.george.vector.common.consts.Keys.COLLECTION;
-import static com.george.vector.common.consts.Keys.COMPLETED_TASKS;
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.FOLDER;
 import static com.george.vector.common.consts.Keys.ID;
-import static com.george.vector.common.consts.Keys.IN_PROGRESS_TASKS;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL_ARCHIVE;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL_COMPLETED;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL_PROGRESS;
 import static com.george.vector.common.consts.Keys.PERMISSION;
 import static com.george.vector.common.consts.Logs.TAG_TASK_USER_ACTIVITY;
 
@@ -59,14 +53,12 @@ public class FragmentTasksUser extends Fragment {
         Log.d(TAG_TASK_USER_ACTIVITY, "collection: " + collection);
         Log.d(TAG_TASK_USER_ACTIVITY, "folder: " + folder);
 
-        if (permission.equals(OST_SCHOOL) && folder.equals(IN_PROGRESS_TASKS))
-            ProgressTasks();
+        if(permission.equals(BAR_SCHOOL)) {
+            userBinding.chipNewSchoolTasksUser.setVisibility(View.INVISIBLE);
+            userBinding.chipOldSchoolTasksUser.setVisibility(View.INVISIBLE);
+        }
 
-        if (permission.equals(OST_SCHOOL) && folder.equals(COMPLETED_TASKS))
-            CompletedTasks();
-
-        if (permission.equals(OST_SCHOOL) && folder.equals(ARCHIVE_TASKS))
-            ArchiveTasks();
+        setUpTasks(collection, email);
 
         return view;
     }
@@ -77,9 +69,9 @@ public class FragmentTasksUser extends Fragment {
         userBinding.recyclerviewUserTasks.setAdapter(taskAdapter);
     }
 
-    private void ArchiveTasks() {
+    void setUpTasks(String collection, String email) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference taskRef = db.collection(OST_SCHOOL_ARCHIVE);
+        CollectionReference taskRef = db.collection(collection);
 
         Query query = taskRef.whereEqualTo("email_creator", email);
         FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
@@ -96,59 +88,7 @@ public class FragmentTasksUser extends Fragment {
 
             Intent intent = new Intent(FragmentTasksUser.this.getContext(), TaskUserActivity.class);
             intent.putExtra(ID, id);
-            intent.putExtra(COLLECTION, OST_SCHOOL_ARCHIVE);
-            intent.putExtra(EMAIL, email);
-            startActivity(intent);
-
-        });
-    }
-
-    private void CompletedTasks() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference taskRef = db.collection(OST_SCHOOL_COMPLETED);
-
-        Query query = taskRef.whereEqualTo("email_creator", email);
-        FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
-                .setQuery(query, TaskUi.class)
-                .build();
-        taskAdapter = new TaskAdapter(options);
-
-        setUpRecyclerView();
-
-        taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
-            String id = documentSnapshot.getId();
-
-            Log.d(TAG_TASK_USER_ACTIVITY, String.format("position: %d id: %s", position, id));
-
-            Intent intent = new Intent(FragmentTasksUser.this.getContext(), TaskUserActivity.class);
-            intent.putExtra(ID, id);
-            intent.putExtra(COLLECTION, OST_SCHOOL_COMPLETED);
-            intent.putExtra(EMAIL, email);
-            startActivity(intent);
-
-        });
-    }
-
-    private void ProgressTasks() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference taskRef = db.collection(OST_SCHOOL_PROGRESS);
-
-        Query query = taskRef.whereEqualTo("email_creator", email);
-        FirestoreRecyclerOptions<TaskUi> options = new FirestoreRecyclerOptions.Builder<TaskUi>()
-                .setQuery(query, TaskUi.class)
-                .build();
-        taskAdapter = new TaskAdapter(options);
-
-        setUpRecyclerView();
-
-        taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
-            String id = documentSnapshot.getId();
-
-            Log.d(TAG_TASK_USER_ACTIVITY, String.format("position: %d id: %s", position, id));
-
-            Intent intent = new Intent(FragmentTasksUser.this.getContext(), TaskUserActivity.class);
-            intent.putExtra(ID, id);
-            intent.putExtra(COLLECTION, OST_SCHOOL_PROGRESS);
+            intent.putExtra(COLLECTION, collection);
             intent.putExtra(EMAIL, email);
             startActivity(intent);
 
