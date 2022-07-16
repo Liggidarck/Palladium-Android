@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.user.main.fragments.help;
+package com.george.vector.ui.help.user;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,11 +25,6 @@ public class FragmentDataHelp extends Fragment {
         Bundle args = getArguments();
         assert args != null;
         String task = args.getString("task");
-
-        binding.toolbarQaUser.setNavigationOnClickListener(v -> {
-            Fragment fragmentHelp = new FragmentHelp();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_user, fragmentHelp).commit();
-        });
 
         if (task.equals("HowToCreateTask")) {
             binding.titleHelp.setText(getString(R.string.how_to_create_task_title));

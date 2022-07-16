@@ -142,9 +142,9 @@ public class MainExecutorActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.bottom_app_bar, menu);
+        inflater.inflate(R.menu.bottom_executor_navigation, menu);
         return true;
     }
 

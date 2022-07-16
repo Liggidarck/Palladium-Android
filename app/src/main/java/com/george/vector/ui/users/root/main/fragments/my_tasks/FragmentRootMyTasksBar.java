@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.main.fragments.tasks;
+package com.george.vector.ui.users.root.main.fragments.my_tasks;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.george.vector.databinding.FragmentBarRootBinding;
 
-public class FragmentBarWork extends Fragment {
+public class FragmentRootMyTasksBar extends Fragment {
 
     FragmentBarRootBinding barRootBinding;
 
@@ -19,9 +19,8 @@ public class FragmentBarWork extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         barRootBinding = FragmentBarRootBinding.inflate(inflater, container, false);
-        View view = barRootBinding.getRoot();
 
-        return view;
+        return barRootBinding.getRoot();
     }
 
     @Override

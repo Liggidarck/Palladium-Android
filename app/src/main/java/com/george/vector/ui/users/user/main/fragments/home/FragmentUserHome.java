@@ -4,9 +4,15 @@ import static com.george.vector.common.consts.Keys.COLLECTION;
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.ID;
 import static com.george.vector.common.consts.Keys.PERMISSION;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_COLLECTION;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PERMISSION;
 import static com.george.vector.common.consts.Logs.TAG_HOME_USER_FRAGMENT;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,12 +34,13 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-public class FragmentHome extends Fragment {
+public class FragmentUserHome extends Fragment {
 
     FragmentUserHomeBinding homeBinding;
     String permission, collection, email;
 
     TaskAdapter adapter;
+    SharedPreferences sharedPreferences;
 
     @Nullable
     @Override
@@ -41,11 +48,10 @@ public class FragmentHome extends Fragment {
         homeBinding = FragmentUserHomeBinding.inflate(inflater, container, false);
         View view = homeBinding.getRoot();
 
-        Bundle args = getArguments();
-        assert args != null;
-        email = args.getString(EMAIL);
-        permission = args.getString(PERMISSION);
-        collection = args.getString(COLLECTION);
+        sharedPreferences = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
+        permission = sharedPreferences.getString(USER_PREFERENCES_PERMISSION, "");
+        collection = sharedPreferences.getString(USER_PREFERENCES_COLLECTION, "");
 
         Log.d(TAG_HOME_USER_FRAGMENT, "email: " + email);
         Log.d(TAG_HOME_USER_FRAGMENT, "permission: " + permission);
@@ -66,7 +72,7 @@ public class FragmentHome extends Fragment {
         adapter = new TaskAdapter(options);
 
         homeBinding.recyclerviewViewUser.setHasFixedSize(true);
-        homeBinding.recyclerviewViewUser.setLayoutManager(new LinearLayoutManager(FragmentHome.this.getContext()));
+        homeBinding.recyclerviewViewUser.setLayoutManager(new LinearLayoutManager(FragmentUserHome.this.getContext()));
         homeBinding.recyclerviewViewUser.setAdapter(adapter);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
@@ -74,7 +80,7 @@ public class FragmentHome extends Fragment {
 
             Log.d(TAG_HOME_USER_FRAGMENT, String.format("Position: %d ID: %s", position, id));
 
-            Intent intent = new Intent(FragmentHome.this.getContext(), TaskUserActivity.class);
+            Intent intent = new Intent(FragmentUserHome.this.getContext(), TaskUserActivity.class);
             intent.putExtra(ID, id);
             intent.putExtra(COLLECTION, collection);
             intent.putExtra(EMAIL, email);
@@ -82,7 +88,7 @@ public class FragmentHome extends Fragment {
         });
 
         homeBinding.createTaskUser.setOnClickListener(v -> {
-            Intent intent = new Intent(FragmentHome.this.getContext(), AddTaskUserActivity.class);
+            Intent intent = new Intent(FragmentUserHome.this.getContext(), AddTaskUserActivity.class);
             intent.putExtra(PERMISSION, permission);
             intent.putExtra(EMAIL, email);
             startActivity(intent);

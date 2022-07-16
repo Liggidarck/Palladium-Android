@@ -15,10 +15,15 @@ import static com.george.vector.common.consts.Keys.OST_SCHOOL_ARCHIVE;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL_COMPLETED;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL_PROGRESS;
 import static com.george.vector.common.consts.Keys.PERMISSION;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_COLLECTION;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PERMISSION;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,12 +35,12 @@ import androidx.fragment.app.Fragment;
 import com.george.vector.databinding.FragmentHistoryUserBinding;
 import com.george.vector.ui.users.user.main.FolderUserActivity;
 
-public class FragmentHistory extends Fragment {
+public class FragmentUserHistory extends Fragment {
 
     String email, permission, collection;
     FragmentHistoryUserBinding historyUserBinding;
 
-    public static final String TAG = "FragmentHistory";
+    SharedPreferences sharedPreferences;
 
     @Nullable
     @Override
@@ -43,14 +48,13 @@ public class FragmentHistory extends Fragment {
         historyUserBinding = FragmentHistoryUserBinding.inflate(inflater, container, false);
         View view = historyUserBinding.getRoot();
 
-        Bundle args = getArguments();
-        assert args != null;
-        email = args.getString(EMAIL);
-        permission = args.getString(PERMISSION);
-        Log.d(TAG, "onCreateView: " + permission);
+        sharedPreferences = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
+        permission = sharedPreferences.getString(USER_PREFERENCES_PERMISSION, "");
+        collection = sharedPreferences.getString(USER_PREFERENCES_COLLECTION, "");
 
         historyUserBinding.taskInProgressUser.setOnClickListener(v -> {
-            Intent intent = new Intent(FragmentHistory.this.getContext(), FolderUserActivity.class);
+            Intent intent = new Intent(FragmentUserHistory.this.getContext(), FolderUserActivity.class);
             intent.putExtra(FOLDER, IN_PROGRESS_TASKS);
             intent.putExtra(EMAIL, email);
             intent.putExtra(PERMISSION, permission);
@@ -68,7 +72,7 @@ public class FragmentHistory extends Fragment {
         });
 
         historyUserBinding.taskCompletedUser.setOnClickListener(v -> {
-            Intent intent = new Intent(FragmentHistory.this.getContext(), FolderUserActivity.class);
+            Intent intent = new Intent(FragmentUserHistory.this.getContext(), FolderUserActivity.class);
             intent.putExtra(FOLDER, COMPLETED_TASKS);
             intent.putExtra(EMAIL, email);
             intent.putExtra(PERMISSION, permission);
@@ -86,7 +90,7 @@ public class FragmentHistory extends Fragment {
         });
 
         historyUserBinding.taskArchiveUser.setOnClickListener(v -> {
-            Intent intent = new Intent(FragmentHistory.this.getContext(), FolderUserActivity.class);
+            Intent intent = new Intent(FragmentUserHistory.this.getContext(), FolderUserActivity.class);
             intent.putExtra(FOLDER, ARCHIVE_TASKS);
             intent.putExtra(EMAIL, email);
             intent.putExtra(PERMISSION, permission);

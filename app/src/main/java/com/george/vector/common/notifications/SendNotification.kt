@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 
 class SendNotification {
 
-    val tag = "SendNotification"
+    private val tag = "SendNotification"
 
     fun sendNotification(title: String, message: String, TOPIC: String) {
         PushNotification(

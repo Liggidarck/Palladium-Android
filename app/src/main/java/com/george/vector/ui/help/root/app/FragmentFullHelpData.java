@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.main.fragments.help.full_help_app.app;
+package com.george.vector.ui.help.root.app;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,11 +26,6 @@ public class FragmentFullHelpData extends Fragment {
         Bundle args = getArguments();
         assert args != null;
         String user = args.getString("user");
-
-        binding.toolbarFullHelpDataApp.setNavigationOnClickListener(v -> {
-            Fragment helpApp = new FragmentHelpApp();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, helpApp).commit();
-        });
 
         switch (user) {
             case "user":

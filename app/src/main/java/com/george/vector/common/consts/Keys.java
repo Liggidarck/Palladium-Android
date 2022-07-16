@@ -9,6 +9,7 @@ public class Keys {
     public static final String USER_PREFERENCES_ROLE = "role_user";
     public static final String USER_PREFERENCES_EMAIL = "email_user";
     public static final String USER_PREFERENCES_PERMISSION = "permission_user";
+    public static final String USER_PREFERENCES_COLLECTION = "collection_user";
     public static final String USER_NOTIFICATIONS_OPTIONS = "root_notifications";
 
     public static final String ID = "id";

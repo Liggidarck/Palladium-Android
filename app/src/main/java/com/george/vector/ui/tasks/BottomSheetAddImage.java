@@ -48,7 +48,7 @@ public class BottomSheetAddImage extends BottomSheetDialogFragment {
         try {
             listener = (StateListener) context;
         } catch (ClassCastException e){
-            throw new ClassCastException(context.toString()
+            throw new ClassCastException(context
                     + " must implement BottomSheetListener");
         }
     }

@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.main.fragments.help.full_help_app.app;
+package com.george.vector.ui.help.root.app;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,19 +9,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.george.vector.databinding.FragmentTextHelpUserBinding;
+import com.george.vector.databinding.FragmentTextRootBinding;
 
-public class FragmentTextHelpUser extends Fragment {
+public class FragmentTextRoot extends Fragment {
 
-    FragmentTextHelpUserBinding binding;
+    FragmentTextRootBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentTextHelpUserBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
+        binding = FragmentTextRootBinding.inflate(inflater, container, false);
 
-        return view;
+        return binding.getRoot();
     }
 
     @Override

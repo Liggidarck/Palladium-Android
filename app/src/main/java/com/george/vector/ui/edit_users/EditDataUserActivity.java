@@ -93,7 +93,7 @@ public class EditDataUserActivity extends AppCompatActivity {
 
                 documentReference.set(user)
                         .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user - " + userId))
-                        .addOnFailureListener(e -> Log.d("TAG", "Failure - " + e.toString()));
+                        .addOnFailureListener(e -> Log.d("TAG", "Failure - " + e));
             }
         });
     }

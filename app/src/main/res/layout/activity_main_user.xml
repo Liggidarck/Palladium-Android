@@ -6,11 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.users.user.main.MainUserActivity">
 
-    <FrameLayout
-        android:id="@+id/frame_main_user"
+    <fragment
+        android:id="@+id/navHostFragmentActivityUserMain"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottom_user_navigation" />
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/user_navigation"
+        android:layout_above="@id/bottom_user_navigation"
+        tools:ignore="FragmentTagUsage" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_user_navigation"

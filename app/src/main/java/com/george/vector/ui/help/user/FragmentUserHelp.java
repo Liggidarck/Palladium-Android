@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.user.main.fragments.help;
+package com.george.vector.ui.help.user;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -11,10 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.george.vector.R;
 import com.george.vector.databinding.FragmentHelpUserBinding;
 
-public class FragmentHelp extends Fragment {
+public class FragmentUserHelp extends Fragment {
 
     FragmentHelpUserBinding binding;
     Bundle bundle = new Bundle();
@@ -30,29 +29,6 @@ public class FragmentHelp extends Fragment {
             Intent intent = new Intent("android.intent.action.SENDTO", Uri.fromParts("mailto", "georgyfilatov@yandex.ru", null));
             intent.putExtra("android.intent.extra.SUBJECT", "Помощь с приложением");
             startActivity(Intent.createChooser(intent, "Выберите приложение для отправки электронного письма разработчику приложения"));
-        });
-
-        binding.cardHowToCreateTaskUser.setOnClickListener(v -> {
-            bundle.putString("task", "HowToCreateTask");
-            data.setArguments(bundle);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_user, data).commit();
-        });
-
-        binding.cardHowToAddImageTask.setOnClickListener(v -> {
-            bundle.putString("task", "HowToAddImageTask");
-            data.setArguments(bundle);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_user, data).commit();
-        });
-
-        binding.cardStatusTasks.setOnClickListener(v -> {
-            bundle.putString("task", "StatusTasks");
-            data.setArguments(bundle);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_user, data).commit();
-        });
-
-        binding.cardAboutProject.setOnClickListener(v -> {
-            Fragment aboutProject = new FragmentAboutProject();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_user, aboutProject).commit();
         });
 
         return view;

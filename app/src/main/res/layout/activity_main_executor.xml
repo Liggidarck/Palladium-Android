@@ -122,7 +122,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:menu="@menu/bottom_app_bar"
+            app:menu="@menu/bottom_executor_navigation"
             app:navigationIcon="@drawable/ic_baseline_menu_24" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

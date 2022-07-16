@@ -209,7 +209,7 @@ public class TaskRootActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         getMenuInflater().inflate(R.menu.task_root_menu, menu);
         return true;
     }

@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.main.fragments.help;
+package com.george.vector.ui.help.root;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -11,9 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.george.vector.R;
 import com.george.vector.databinding.FragmentAboutProjectBinding;
-import com.george.vector.ui.users.root.main.fragments.help.develop_app.FragmentDevelopApp;
 
 public class FragmentAboutProject extends Fragment {
 
@@ -25,25 +23,6 @@ public class FragmentAboutProject extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         aboutProject = FragmentAboutProjectBinding.inflate(inflater, container, false);
         View view = aboutProject.getRoot();
-
-        aboutProject.toolbarAboutProject.setNavigationOnClickListener(v -> {
-            Fragment data = new FragmentHelp();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, data).commit();
-        });
-
-        aboutProject.cardDescriptionProject.setOnClickListener(v -> {
-            Fragment descriptionProject = new FragmentDescriptionProject();
-            bundle.putString("user", "root");
-            descriptionProject.setArguments(bundle);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, descriptionProject).commit();
-        });
-
-        aboutProject.cardDevelopApp.setOnClickListener(v -> {
-            Fragment developFragment = new FragmentDevelopApp();
-            bundle.putString("user", "root");
-            developFragment.setArguments(bundle);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, developFragment).commit();
-        });
 
         aboutProject.cardPrivacyPolicy.setOnClickListener(v -> {
             String url = "https://drive.google.com/file/d/1g0l1gDULwpHrEWLNo2-d8QQE0LvydXpR/view?usp=sharing";

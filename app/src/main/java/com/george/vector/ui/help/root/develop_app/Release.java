@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.main.fragments.help.develop_app;
+package com.george.vector.ui.help.root.develop_app;
 
 public class Release {
 

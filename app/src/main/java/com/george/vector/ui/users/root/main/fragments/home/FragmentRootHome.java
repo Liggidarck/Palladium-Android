@@ -29,7 +29,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
 
-public class FragmentHome extends Fragment {
+public class FragmentRootHome extends Fragment {
 
     String zone, email;
 
@@ -47,7 +47,7 @@ public class FragmentHome extends Fragment {
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         zone = PreferenceManager
-                .getDefaultSharedPreferences(FragmentHome.this.getContext())
+                .getDefaultSharedPreferences(FragmentRootHome.this.getContext())
                 .getString("default_root_location", OST);
 
         sharedPreferences = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
@@ -91,7 +91,7 @@ public class FragmentHome extends Fragment {
             }
         });
 
-        homeBinding.profileLayout.setOnClickListener(v -> startActivity(new Intent(FragmentHome.this.getActivity(), ProfileRootActivity.class)));
+        homeBinding.profileLayout.setOnClickListener(v -> startActivity(new Intent(FragmentRootHome.this.getActivity(), ProfileRootActivity.class)));
 
         updateZones(zone);
         return view;
@@ -102,7 +102,7 @@ public class FragmentHome extends Fragment {
         super.onStart();
 
         zone = PreferenceManager
-                .getDefaultSharedPreferences(FragmentHome.this.getContext())
+                .getDefaultSharedPreferences(FragmentRootHome.this.getContext())
                 .getString("default_root_location", OST);
         Log.d(TAG_HOME_ROOT_FRAGMENT, "Zone: " + zone);
     }
@@ -118,12 +118,12 @@ public class FragmentHome extends Fragment {
         switch (zone_update) {
             case "ost":
                 Log.i(TAG_HOME_ROOT_FRAGMENT, "Запуск фрагмента Осафьево");
-                currentFragment = new FragmentOst();
+                currentFragment = new FragmentRootOst();
 
                 break;
             case "bar":
                 Log.i(TAG_HOME_ROOT_FRAGMENT, "Запуск фрагмента Барыши");
-                currentFragment = new FragmentBar();
+                currentFragment = new FragmentRootBar();
 
                 break;
         }

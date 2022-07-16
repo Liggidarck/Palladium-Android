@@ -1,7 +1,6 @@
-package com.george.vector.ui.users.root.main.fragments.help.develop_app;
+package com.george.vector.ui.help.root.develop_app;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.george.vector.R;
 import com.george.vector.databinding.FragmentDevelopAppBinding;
-import com.george.vector.ui.users.root.main.fragments.help.FragmentAboutProject;
 
 import java.util.ArrayList;
 
@@ -182,21 +179,6 @@ public class FragmentDevelopApp extends Fragment {
         Bundle args = getArguments();
         assert args != null;
         String user = args.getString("user");
-
-        binding.developToolbar.setNavigationOnClickListener(v -> {
-            Log.d(TAG, "onCreateView: user: " + user);
-
-            if(user.equals("user")) {
-                Fragment about = new com.george.vector.ui.users.user.main.fragments.help.FragmentAboutProject();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_user, about).commit();
-            }
-
-            if(user.equals("root")) {
-                Fragment aboutProject = new FragmentAboutProject();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_main_root, aboutProject).commit();
-            }
-
-        });
 
         return view;
     }

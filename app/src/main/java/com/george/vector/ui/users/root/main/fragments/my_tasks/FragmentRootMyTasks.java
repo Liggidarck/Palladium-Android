@@ -1,9 +1,13 @@
-package com.george.vector.ui.users.root.main.fragments.tasks;
+package com.george.vector.ui.users.root.main.fragments.my_tasks;
 
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.OST;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
+import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
 import static com.george.vector.common.consts.Logs.TAG_TASK_ROOT_FRAGMENT;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,10 +24,11 @@ import com.george.vector.databinding.FragmentRootTasksBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-public class FragmentTasks extends Fragment {
+public class FragmentRootMyTasks extends Fragment {
 
     String zone, email;
     FragmentRootTasksBinding rootTasksBinding;
+    SharedPreferences sharedPreferences;
 
     @Nullable
     @Override
@@ -31,12 +36,10 @@ public class FragmentTasks extends Fragment {
         rootTasksBinding = FragmentRootTasksBinding.inflate(inflater, container, false);
         View view = rootTasksBinding.getRoot();
 
-        Bundle args = getArguments();
-        assert args != null;
-        email = args.getString(EMAIL);
-        Log.d(TAG_TASK_ROOT_FRAGMENT, "email: " + email);
+        sharedPreferences = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
 
-        zone = PreferenceManager.getDefaultSharedPreferences(FragmentTasks.this.getContext()).getString("default_root_location", OST);
+        zone = PreferenceManager.getDefaultSharedPreferences(FragmentRootMyTasks.this.getContext()).getString("default_root_location", OST);
 
         if(zone.equals("ost"))
             rootTasksBinding.chipOstTasks.setChecked(true);
@@ -71,7 +74,7 @@ public class FragmentTasks extends Fragment {
         switch (zone_update) {
             case "ost":
                 Log.i(TAG_TASK_ROOT_FRAGMENT, "Запуск фрагмента Осафьево");
-                currentFragment = new FragmentOstWork();
+                currentFragment = new FragmentRootMyTasksOst();
 
                 Bundle email = new Bundle();
                 email.putString(EMAIL, this.email);
@@ -80,7 +83,7 @@ public class FragmentTasks extends Fragment {
                 break;
             case "bar":
                 Log.i(TAG_TASK_ROOT_FRAGMENT, "Запуск фрагмента Барыши");
-                currentFragment = new FragmentBarWork();
+                currentFragment = new FragmentRootMyTasksBar();
                 break;
         }
         assert currentFragment != null;

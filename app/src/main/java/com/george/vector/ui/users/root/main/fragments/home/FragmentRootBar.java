@@ -22,7 +22,7 @@ import androidx.fragment.app.Fragment;
 import com.george.vector.databinding.FragmentBarRootBinding;
 import com.george.vector.ui.users.root.folders.LocationFolderActivity;
 
-public class FragmentBar extends Fragment {
+public class FragmentRootBar extends Fragment {
 
     FragmentBarRootBinding barRootBinding;
 
@@ -38,7 +38,7 @@ public class FragmentBar extends Fragment {
         String email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
 
         barRootBinding.barSchoolRoot.setOnClickListener(v -> {
-            Intent intent = new Intent(FragmentBar.this.getContext(), LocationFolderActivity.class);
+            Intent intent = new Intent(FragmentRootBar.this.getContext(), LocationFolderActivity.class);
             intent.putExtra(LOCATION, BAR_SCHOOL);
             intent.putExtra(EXECUTED, "root");
             intent.putExtra(EMAIL, email);

@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.main.fragments.help.full_help_app.app;
+package com.george.vector.ui.help.root.app;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,9 +19,8 @@ public class FragmentTextExecutor extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentTextExecutorBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
 
-        return view;
+        return binding.getRoot();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.main.fragments.help.develop_app;
+package com.george.vector.ui.help.root.develop_app;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -27,9 +27,8 @@ public class ReleaseAdapter extends RecyclerView.Adapter<ReleaseAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.develop_item, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
 
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     @Override
@@ -45,8 +44,10 @@ public class ReleaseAdapter extends RecyclerView.Adapter<ReleaseAdapter.ViewHold
         return releaseList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView title_version, date_release, description_release;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        final TextView title_version;
+        final TextView date_release;
+        final TextView description_release;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             title_version = itemView.findViewById(R.id.title_version);
