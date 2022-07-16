@@ -31,7 +31,7 @@
         android:dataExtractionRules="@xml/data_extraction_rules">
 
         <service
-            android:name=".notifications.FirebaseService"
+            android:name="com.george.vector.common.notifications.FirebaseService"
             android:exported="false"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
@@ -42,17 +42,11 @@
         </service>
 
         <activity
-            android:name=".develop.DevelopJavaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".develop.DevelopKotlinActivity"
-            android:exported="false" />
-        <activity
-            android:name=".users.user.main.FolderUserActivity"
+            android:name=".ui.users.user.main.FolderUserActivity"
             android:exported="false" />
 
         <activity
-            android:name=".auth.LoadingActivity"
+            android:name=".ui.auth.LoadingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -60,28 +54,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".common.tasks.images.ImageTaskActivity" />
-        <activity android:name=".users.root.main.MainRootActivity" />
-        <activity android:name=".users.executor.tasks.EditTaskExecutorActivity" />
-        <activity android:name=".common.settings.SettingsActivity" />
-        <activity android:name=".users.executor.tasks.TaskExecutorActivity" />
-        <activity android:name=".users.executor.main.ExecutorTasksActivity" />
-        <activity android:name=".users.executor.main.FolderExecutorActivity" />
-        <activity android:name=".users.root.tasks.EditTaskRootActivity" />
-        <activity android:name=".users.root.tasks.TaskRootActivity" />
-        <activity android:name=".users.root.tasks.AddTaskRootActivity" />
-        <activity android:name=".users.root.folders.FolderRootActivity" />
-        <activity android:name=".users.root.folders.LocationFolderActivity" />
-        <activity android:name=".common.edit_users.EditDataUserActivity" />
-        <activity android:name=".users.root.profile.EditUserActivity" />
-        <activity android:name=".users.root.profile.ListUsersActivity" />
-        <activity android:name=".users.user.tasks.TaskUserActivity" />
-        <activity android:name=".users.user.tasks.AddTaskUserActivity" />
-        <activity android:name=".users.executor.main.MainExecutorActivity" />
-        <activity android:name=".users.user.main.MainUserActivity" />
-        <activity android:name=".users.root.profile.RegisterUserActivity" />
-        <activity android:name=".auth.LoginActivity" />
-        <activity android:name=".users.root.profile.ProfileRootActivity" />
+        <activity android:name=".ui.tasks.ImageTaskActivity" />
+        <activity android:name=".ui.users.root.main.MainRootActivity" />
+        <activity android:name=".ui.users.executor.tasks.EditTaskExecutorActivity" />
+        <activity android:name=".ui.settings.SettingsActivity" />
+        <activity android:name=".ui.users.executor.tasks.TaskExecutorActivity" />
+        <activity android:name=".ui.users.executor.main.ExecutorTasksActivity" />
+        <activity android:name=".ui.users.executor.main.FolderExecutorActivity" />
+        <activity android:name=".ui.users.root.tasks.EditTaskRootActivity" />
+        <activity android:name=".ui.users.root.tasks.TaskRootActivity" />
+        <activity android:name=".ui.users.root.tasks.AddTaskRootActivity" />
+        <activity android:name=".ui.users.root.folders.FolderRootActivity" />
+        <activity android:name=".ui.users.root.folders.LocationFolderActivity" />
+        <activity android:name=".ui.edit_users.EditDataUserActivity" />
+        <activity android:name=".ui.users.root.profile.EditUserActivity" />
+        <activity android:name=".ui.users.root.profile.ListUsersActivity" />
+        <activity android:name=".ui.users.user.tasks.TaskUserActivity" />
+        <activity android:name=".ui.users.user.tasks.AddTaskUserActivity" />
+        <activity android:name=".ui.users.executor.main.MainExecutorActivity" />
+        <activity android:name=".ui.users.user.main.MainUserActivity" />
+        <activity android:name=".ui.users.root.profile.RegisterUserActivity" />
+        <activity android:name=".ui.auth.LoginActivity" />
+        <activity android:name=".ui.users.root.profile.ProfileRootActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
