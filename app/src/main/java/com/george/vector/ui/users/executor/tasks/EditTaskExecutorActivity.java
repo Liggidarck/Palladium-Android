@@ -116,14 +116,12 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
             if (!isOnline())
                 show_dialog();
             else
-                updateTask(collection);
+                updateTask();
         });
     }
 
-    void updateTask(String collection) {
+    void updateTask() {
         String update_image = image;
-//        DeleteTaskLegacy deleteTaskLegacy = new DeleteTaskLegacy();
-//        deleteTaskLegacy.deleteTask(collection, id);
 
         String update_address = Objects.requireNonNull(executorBinding.textInputLayoutAddressExecutor.getEditText()).getText().toString();
         String update_floor = Objects.requireNonNull(executorBinding.textInputLayoutFloorExecutor.getEditText()).getText().toString();
@@ -155,7 +153,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
 
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_no_connection))
-                .setPositiveButton(getText(R.string.save), (dialog, id) -> updateTask(collection))
+                .setPositiveButton(getText(R.string.save), (dialog, id) -> updateTask())
                 .setNegativeButton(android.R.string.cancel, (dialog, id) -> startActivity(new Intent(this, MainExecutorActivity.class)));
 
         AlertDialog dialog = builder.create();

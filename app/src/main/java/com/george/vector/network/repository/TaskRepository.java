@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class TaskRepository {
 
-    CollectionReference collectionReference;
+    final CollectionReference collectionReference;
 
     public TaskRepository(String collection) {
         collectionReference = FirebaseFirestore.getInstance().collection(collection);

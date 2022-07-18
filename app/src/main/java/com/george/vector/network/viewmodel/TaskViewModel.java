@@ -28,9 +28,9 @@ import java.util.UUID;
 
 public class TaskViewModel extends AndroidViewModel {
 
-    TaskRepository repository;
-    FirebaseStorage firebaseStorage;
-    StorageReference storageReference;
+    final TaskRepository repository;
+    final FirebaseStorage firebaseStorage;
+    final StorageReference storageReference;
 
 
     public TaskViewModel(@NonNull Application application, String collection) {

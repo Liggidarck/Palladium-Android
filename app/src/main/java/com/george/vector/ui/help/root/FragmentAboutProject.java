@@ -46,13 +46,9 @@ public class FragmentAboutProject extends Fragment {
             startActivity(intent);
         });
 
-        binding.cardDescriptionProject.setOnClickListener(v -> {
-            navController.navigate(R.id.actionFragmentAboutProjectToFragmentDescriptionProject);
-        });
+        binding.cardDescriptionProject.setOnClickListener(v -> navController.navigate(R.id.actionFragmentAboutProjectToFragmentDescriptionProject));
 
-        binding.cardDevelopApp.setOnClickListener(v -> {
-            navController.navigate(R.id.actionFragmentAboutProjectToFragmentDevelopApp);
-        });
+        binding.cardDevelopApp.setOnClickListener(v -> navController.navigate(R.id.actionFragmentAboutProjectToFragmentDevelopApp));
 
         return view;
     }

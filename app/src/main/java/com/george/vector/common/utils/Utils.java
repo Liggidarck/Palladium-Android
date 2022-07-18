@@ -98,7 +98,7 @@ public class Utils {
         return matcher.find();
     }
 
-    Date currentDate = new Date();
+    final Date currentDate = new Date();
 
     public String getDate() {
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());

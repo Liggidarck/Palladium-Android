@@ -1,7 +1,6 @@
 package com.george.vector.ui.users.user.main;
 
 import static com.george.vector.common.consts.Keys.ARCHIVE_TASKS;
-import static com.george.vector.common.consts.Keys.COLLECTION;
 import static com.george.vector.common.consts.Keys.COMPLETED_TASKS;
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.FOLDER;
