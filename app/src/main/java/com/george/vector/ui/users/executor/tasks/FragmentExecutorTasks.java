@@ -14,35 +14,58 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.databinding.FragmentExecutorTasksBinding;
+import com.george.vector.network.model.Task;
 import com.george.vector.ui.adapter.TaskAdapter;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 public class FragmentExecutorTasks extends Fragment {
 
-    String location, folder, email;
+    String location, status, email;
 
     TaskAdapter adapter;
-    FragmentExecutorTasksBinding tasksBinding;
+    FragmentExecutorTasksBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        tasksBinding = FragmentExecutorTasksBinding.inflate(inflater, container, false);
-        View view = tasksBinding.getRoot();
+        binding = FragmentExecutorTasksBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
         Bundle args = getArguments();
         assert args != null;
         location = args.getString(LOCATION);
-        folder = args.getString(FOLDER);
+        status = args.getString(FOLDER);
         email = args.getString(EMAIL);
+
+        setUpRecyclerView();
 
         return view;
     }
 
-    void setUpRecyclerView() {
-        tasksBinding.recyclerViewTasksExecutor.setHasFixedSize(true);
-        tasksBinding.recyclerViewTasksExecutor.setLayoutManager(new LinearLayoutManager(FragmentExecutorTasks.this.getContext()));
-        tasksBinding.recyclerViewTasksExecutor.setAdapter(adapter);
+    private void setUpRecyclerView() {
+        setUpQuery();
+
+        binding.recyclerViewTasksExecutor.setHasFixedSize(true);
+        binding.recyclerViewTasksExecutor.setLayoutManager(new LinearLayoutManager(FragmentExecutorTasks.this.getContext()));
+        binding.recyclerViewTasksExecutor.setAdapter(adapter);
+    }
+
+    private void setUpQuery() {
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final CollectionReference reference = db.collection(location);
+        Query query = reference
+                .whereEqualTo("executor", email)
+                .whereEqualTo("status", status);
+
+
+        FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
+                .setQuery(query, Task.class)
+                .build();
+        adapter = new TaskAdapter(options);
     }
 
     @Override
@@ -60,6 +83,6 @@ public class FragmentExecutorTasks extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        tasksBinding = null;
+        binding = null;
     }
 }

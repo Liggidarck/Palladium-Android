@@ -2,9 +2,9 @@ package com.george.vector.network.model;
 
 public class Task {
 
-    private String name_task; // Название заявки
-    private String address; // Адрес
-    private String date_create; // Дата создания заявки
+    private String name_task;
+    private String address;
+    private String date_create;
     private String floor;
     private String cabinet;
     private String letter;

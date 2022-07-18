@@ -31,7 +31,7 @@ public class TaskRepository {
         taskMap.put("date_create", task.getDate_create());
         taskMap.put("floor", task.getFloor());
         taskMap.put("cabinet", task.getCabinet());
-        taskMap.put("letter", task.getLitera());
+        taskMap.put("litera", task.getLitera());
         taskMap.put("comment", task.getComment());
         taskMap.put("date_done", task.getDate_done());
         taskMap.put("executor", task.getExecutor());
@@ -40,7 +40,7 @@ public class TaskRepository {
         taskMap.put("time_create", task.getTime_create());
         taskMap.put("email_creator", task.getEmail_creator());
         taskMap.put("image", task.getImage());
-        taskMap.put("full_name_executor", task.getFullNameExecutor());
+        taskMap.put("fullNameExecutor", task.getFullNameExecutor());
         taskMap.put("name_creator", task.getNameCreator());
         collectionReference
                 .document(id)

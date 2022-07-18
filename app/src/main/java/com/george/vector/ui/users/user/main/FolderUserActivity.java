@@ -22,7 +22,7 @@ import com.george.vector.ui.users.user.tasks.FragmentTasksUser;
 
 public class FolderUserActivity extends AppCompatActivity {
 
-    String email, permission, collection, folder, textToolbar;
+    String email, permission, folder, textToolbar;
     ActivityFolderUserBinding folderUserBinding;
 
     @Override
@@ -34,12 +34,10 @@ public class FolderUserActivity extends AppCompatActivity {
         Bundle arguments = getIntent().getExtras();
         email = arguments.getString(EMAIL);
         permission = arguments.getString(PERMISSION);
-        collection = arguments.getString(COLLECTION);
         folder = arguments.getString(FOLDER);
 
         Log.d(TAG_FOLDER_USER_ACTIVITY, "email: " + email);
         Log.d(TAG_FOLDER_USER_ACTIVITY, "permission: " + permission);
-        Log.d(TAG_FOLDER_USER_ACTIVITY, "collection: " + collection);
         Log.d(TAG_FOLDER_USER_ACTIVITY, "folder: " + folder);
 
         if(folder.equals(NEW_TASKS))
@@ -61,7 +59,6 @@ public class FolderUserActivity extends AppCompatActivity {
         Bundle data_user_tasks = new Bundle();
         data_user_tasks.putString(EMAIL, email);
         data_user_tasks.putString(PERMISSION, permission);
-        data_user_tasks.putString(COLLECTION, collection);
         data_user_tasks.putString(FOLDER, folder);
         fragment_user_tasks.setArguments(data_user_tasks);
 

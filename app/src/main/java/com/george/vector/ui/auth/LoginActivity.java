@@ -1,16 +1,12 @@
 package com.george.vector.ui.auth;
 
-import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
-import static com.george.vector.common.consts.Keys.BAR_SCHOOL_NEW;
+
 import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL_NEW;
 import static com.george.vector.common.consts.Keys.PERMISSION;
 import static com.george.vector.common.consts.Keys.ROLE;
 import static com.george.vector.common.consts.Keys.USERS;
 import static com.george.vector.common.consts.Keys.USER_NOTIFICATIONS_OPTIONS;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_COLLECTION;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
@@ -112,21 +108,12 @@ public class LoginActivity extends AppCompatActivity {
                     String email = value.getString(EMAIL);
                     String permission = value.getString(PERMISSION);
 
-                    String collection = null;
-
-                    if (permission.equals(OST_SCHOOL))
-                        collection = OST_SCHOOL_NEW;
-
-                    if (permission.equals(BAR_SCHOOL))
-                        collection = BAR_SCHOOL_NEW;
-
                     editor.putString(USER_PREFERENCES_NAME, name);
                     editor.putString(USER_PREFERENCES_LAST_NAME, last_name);
                     editor.putString(USER_PREFERENCES_PATRONYMIC, patronymic);
                     editor.putString(USER_PREFERENCES_EMAIL, email);
                     editor.putString(USER_PREFERENCES_ROLE, role);
                     editor.putString(USER_PREFERENCES_PERMISSION, permission);
-                    editor.putString(USER_PREFERENCES_COLLECTION, collection);
                     editor.putBoolean(USER_NOTIFICATIONS_OPTIONS, false);
 
                     editor.apply();

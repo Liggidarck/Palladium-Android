@@ -6,28 +6,20 @@ import static com.george.vector.common.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.consts.Keys.PERMISSION;
 import static com.george.vector.common.consts.Keys.PERMISSION_CAMERA_CODE;
 import static com.george.vector.common.consts.Keys.PERMISSION_GALLERY_CODE;
-import static com.george.vector.common.consts.Keys.TOPIC_NEW_TASKS_CREATE;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PATRONYMIC;
 import static com.george.vector.common.consts.Logs.TAG_ADD_TASK_USER_ACTIVITY;
-import static com.george.vector.common.consts.Logs.TAG_NOTIFICATIONS;
-import static com.george.vector.common.consts.Logs.TAG_STATE_TASK;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -42,31 +34,23 @@ import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.R;
+import com.george.vector.common.utils.TextValidator;
+import com.george.vector.common.utils.Utils;
+import com.george.vector.databinding.ActivityAddTaskUserBinding;
 import com.george.vector.network.model.Task;
 import com.george.vector.network.viewmodel.TaskViewModel;
 import com.george.vector.network.viewmodel.ViewModelFactory;
 import com.george.vector.ui.tasks.BottomSheetAddImage;
-import com.george.vector.common.utils.TextValidator;
-import com.george.vector.common.utils.Utils;
-import com.george.vector.databinding.ActivityAddTaskUserBinding;
-import com.george.vector.common.notifications.SendNotification;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
-import java.util.UUID;
 
 public class AddTaskUserActivity extends AppCompatActivity implements BottomSheetAddImage.StateListener {
 
-    String address, floor, cabinet, letter, name_task, comment, email, permission, nameImage, fullNameCreator;
+    String address, floor, cabinet, letter, name_task, comment, email, permission, fullNameCreator;
     String status = "Новая заявка";
 
     SharedPreferences sharedPreferences;
@@ -130,7 +114,7 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
             comment = Objects.requireNonNull(binding.textInputLayoutComment.getEditText()).getText().toString();
 
             if (validateFields()) {
-                if (!isOnline())
+                if (!utils.isOnline(AddTaskUserActivity.this))
                     showDialogNoInternet();
                 else
                     saveTask(permission);
@@ -144,69 +128,27 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
     }
 
     void saveTask(String location) {
-        uploadImage();
-
-        Date currentDate = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        String date_create = dateFormat.format(currentDate);
-        DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        String time_create = timeFormat.format(currentDate);
-
-        Task task = new Task(name_task, address, date_create, floor, cabinet, letter, comment,
-                null, null, status, time_create, email, false, nameImage,
-                null, fullNameCreator);
-
         TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(this.getApplication(),
                 location)).get(TaskViewModel.class);
 
+        String image;
+
+        if(fileUri != null)
+            image = taskViewModel.uploadImage(fileUri, AddTaskUserActivity.this);
+        else
+            image = null;
+
+        String dateCreate = utils.getDate();
+        String timeCreate = utils.getTime();
+
+        if(comment.isEmpty())
+            comment = "Нет коментария к заявке";
+
+        Task task = new Task(name_task, address, dateCreate, floor, cabinet, letter, comment,
+                null, null, status, timeCreate, email, false, image,
+                null, fullNameCreator);
+
         taskViewModel.createTask(task);
-
-        SendNotification sendNotification = new SendNotification();
-        sendNotification.sendNotification("Созданна новая заявка", name_task, TOPIC_NEW_TASKS_CREATE);
-        Log.d(TAG_NOTIFICATIONS, "Notification sent");
-
-    }
-
-    void uploadImage() {
-        if (isOnline()) {
-            if (fileUri != null) {
-                Bitmap bmp = null;
-                try {
-                    bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), fileUri);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bmp.compress(Bitmap.CompressFormat.JPEG, 25, byteArrayOutputStream);
-                byte[] data = byteArrayOutputStream.toByteArray();
-
-                final ProgressDialog progressDialog = new ProgressDialog(AddTaskUserActivity.this);
-                progressDialog.setTitle("Загрузка...");
-                progressDialog.show();
-
-                nameImage = UUID.randomUUID().toString();
-
-                StorageReference ref = storageReference.child("images/" + nameImage);
-                ref.putBytes(data)
-                        .addOnSuccessListener(taskSnapshot -> {
-                            progressDialog.dismiss();
-                            Log.d(TAG_STATE_TASK, "Изображение успешно загружено");
-                            onBackPressed();
-                        })
-                        .addOnFailureListener(e -> {
-                            progressDialog.dismiss();
-                            Log.e(TAG_STATE_TASK, "Failed: " + e.getMessage());
-                        })
-                        .addOnProgressListener(taskSnapshot -> {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                            progressDialog.setMessage("Загрузка: " + (int) progress + "%");
-                        });
-            } else {
-                onBackPressed();
-            }
-        } else {
-            onBackPressed();
-        }
     }
 
     void initializeField(String permission) {
@@ -313,12 +255,6 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
 
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
-
-    public boolean isOnline() {
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
     }
 
     boolean validateFields() {

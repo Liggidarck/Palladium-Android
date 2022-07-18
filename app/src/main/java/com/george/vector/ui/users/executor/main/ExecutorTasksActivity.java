@@ -29,35 +29,35 @@ public class ExecutorTasksActivity extends AppCompatActivity {
         folder = arguments.getString(FOLDER);
         email = arguments.getString(EMAIL);
 
-        String text_toolbar = null;
+        String textToolbar = null;
         switch (location) {
             case "ost_school":
-                text_toolbar = getString(R.string.ost_text);
+                textToolbar = getString(R.string.ost_text);
                 break;
 
             case "bar_school":
-                text_toolbar = getString(R.string.bar_text);
+                textToolbar = getString(R.string.bar_text);
                 break;
 
             case "ost_aist":
-                text_toolbar = getString(R.string.ost_stork_text);
+                textToolbar = getString(R.string.ost_stork_text);
                 break;
 
             case "ost_yagodka":
-                text_toolbar = getString(R.string.ost_berry_text);
+                textToolbar = getString(R.string.ost_berry_text);
                 break;
 
             case "bar_rucheek":
-                text_toolbar = getString(R.string.bar_stream_text);
+                textToolbar = getString(R.string.bar_stream_text);
                 break;
 
             case "bar_star":
-                text_toolbar = getString(R.string.bar_star_text);
+                textToolbar = getString(R.string.bar_star_text);
                 break;
         }
 
         tasksBinding.toolbarTasksExecutorActivity.setNavigationOnClickListener(v -> onBackPressed());
-        tasksBinding.toolbarTasksExecutorActivity.setTitle(text_toolbar);
+        tasksBinding.toolbarTasksExecutorActivity.setTitle(textToolbar);
 
         Fragment currentFragment = new FragmentExecutorTasks();
 

@@ -91,7 +91,9 @@ public class FragmentRootHome extends Fragment {
             }
         });
 
-        homeBinding.profileLayout.setOnClickListener(v -> startActivity(new Intent(FragmentRootHome.this.getActivity(), ProfileRootActivity.class)));
+        homeBinding.profileLayout.setOnClickListener(v ->
+                startActivity(new Intent(FragmentRootHome.this.getActivity(),
+                        ProfileRootActivity.class)));
 
         updateZones(zone);
         return view;

@@ -22,7 +22,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.BuildConfig;
 import com.george.vector.R;
-import com.george.vector.develop.DevelopActivity;
 import com.george.vector.ui.auth.LoginActivity;
 import com.george.vector.ui.settings.SettingsActivity;
 import com.george.vector.databinding.ActivityProfileRootBinding;
@@ -43,8 +42,6 @@ public class ProfileRootActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         profileBinding = ActivityProfileRootBinding.inflate(getLayoutInflater());
         setContentView(profileBinding.getRoot());
-
-        profileBinding.developBtn.setOnClickListener(v -> startActivity(new Intent(this, DevelopActivity.class)));
 
         firebaseAuth = FirebaseAuth.getInstance();
 

@@ -33,8 +33,6 @@ public class FragmentTasksUser extends Fragment {
     TaskAdapter taskAdapter;
     FragmentTasksUserBinding userBinding;
 
-    String folder, email, permission, collection;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,14 +41,13 @@ public class FragmentTasksUser extends Fragment {
 
         Bundle args = getArguments();
         assert args != null;
-        email = args.getString(EMAIL);
-        permission = args.getString(PERMISSION);
-        collection = args.getString(COLLECTION);
-        folder = args.getString(FOLDER);
+
+        String email = args.getString(EMAIL);
+        String permission = args.getString(PERMISSION);
+        String folder = args.getString(FOLDER);
 
         Log.d(TAG_TASK_USER_ACTIVITY, "email: " + email);
         Log.d(TAG_TASK_USER_ACTIVITY, "permission: " + permission);
-        Log.d(TAG_TASK_USER_ACTIVITY, "collection: " + collection);
         Log.d(TAG_TASK_USER_ACTIVITY, "folder: " + folder);
 
         if(permission.equals(BAR_SCHOOL)) {
@@ -58,7 +55,7 @@ public class FragmentTasksUser extends Fragment {
             userBinding.chipOldSchoolTasksUser.setVisibility(View.INVISIBLE);
         }
 
-        setUpTasks(collection, email);
+        setUpTasks(permission, email, folder);
 
         return view;
     }
@@ -69,11 +66,14 @@ public class FragmentTasksUser extends Fragment {
         userBinding.recyclerviewUserTasks.setAdapter(taskAdapter);
     }
 
-    void setUpTasks(String collection, String email) {
+    void setUpTasks(String collection, String email, String status) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference taskRef = db.collection(collection);
+        CollectionReference collectionReference = db.collection(collection);
 
-        Query query = taskRef.whereEqualTo("email_creator", email);
+        Query query = collectionReference
+                .whereEqualTo("email_creator", email)
+                .whereEqualTo("status", status);
+
         FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
                 .setQuery(query, Task.class)
                 .build();

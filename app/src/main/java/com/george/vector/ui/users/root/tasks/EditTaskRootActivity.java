@@ -264,6 +264,14 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
         binding.letterAutoComplete.setAdapter(adapter_letter);
 
+        String[] floors_basic_school = getResources().getStringArray(R.array.floors);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+                EditTaskRootActivity.this,
+                R.layout.dropdown_menu_categories,
+                floors_basic_school
+        );
+        binding.floorAutoComplete.setAdapter(arrayAdapter);
+
         datePickCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
             datePickCalendar.set(Calendar.YEAR, year);
