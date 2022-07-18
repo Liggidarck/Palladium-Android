@@ -17,17 +17,17 @@ public class Keys {
     public static final String PERMISSION = "permission";
     public static final String EMAIL = "email";
     public static final String ROLE = "role";
-    public static final String EXECUTED = "executed";
+    public static final String EXECUTOR_EMAIL = "executed";
 
     public static final String LOCATION = "location";
     public static final String OST = "ost";
     public static final String OST_SCHOOL = "ost_school";
     public static final String BAR_SCHOOL = "bar_school";
 
-    public static final String NEW_TASKS = "new tasks";
-    public static final String IN_PROGRESS_TASKS = "in progress tasks";
-    public static final String COMPLETED_TASKS = "completed_tasks";
-    public static final String ARCHIVE_TASKS = "archive tasks";
+    public static final String NEW_TASKS = "Новая заявка";
+    public static final String IN_PROGRESS_TASKS = "В работе";
+    public static final String COMPLETED_TASKS = "Завершенная заявка";
+    public static final String ARCHIVE_TASKS = "Архив";
 
     public static final String COLLECTION = "collection";
     public static final String OST_SCHOOL_NEW = "ost_school_new";

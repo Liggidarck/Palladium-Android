@@ -3,7 +3,7 @@ package com.george.vector.ui.users.root.folders;
 import static com.george.vector.common.consts.Keys.ARCHIVE_TASKS;
 import static com.george.vector.common.consts.Keys.COMPLETED_TASKS;
 import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.EXECUTED;
+import static com.george.vector.common.consts.Keys.EXECUTOR_EMAIL;
 import static com.george.vector.common.consts.Keys.FOLDER;
 import static com.george.vector.common.consts.Keys.IN_PROGRESS_TASKS;
 import static com.george.vector.common.consts.Keys.LOCATION;
@@ -33,7 +33,7 @@ public class FolderRootActivity extends AppCompatActivity {
         Bundle arguments = getIntent().getExtras();
         String location = arguments.getString(LOCATION);
         String folder = arguments.getString(FOLDER);
-        String executed = arguments.getString(EXECUTED);
+        String executed = arguments.getString(EXECUTOR_EMAIL);
         String email = arguments.getString(EMAIL);
 
         if(folder.equals(NEW_TASKS))
@@ -55,7 +55,7 @@ public class FolderRootActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putString(LOCATION, location);
         bundle.putString(FOLDER, folder);
-        bundle.putString(EXECUTED, executed);
+        bundle.putString(EXECUTOR_EMAIL, executed);
         bundle.putString(EMAIL, email);
         currentFragment.setArguments(bundle);
 

@@ -1,7 +1,7 @@
 package com.george.vector.ui.users.root.main.fragments.home;
 
 import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.EXECUTED;
+import static com.george.vector.common.consts.Keys.EXECUTOR_EMAIL;
 import static com.george.vector.common.consts.Keys.LOCATION;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
@@ -40,7 +40,7 @@ public class FragmentRootOst extends Fragment {
         ostRootBinding.ostSchoolRoot.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentRootOst.this.getContext(), LocationFolderActivity.class);
             intent.putExtra(LOCATION, OST_SCHOOL);
-            intent.putExtra(EXECUTED, "root");
+            intent.putExtra(EXECUTOR_EMAIL, "root");
             intent.putExtra(EMAIL, email);
             startActivity(intent);
         });

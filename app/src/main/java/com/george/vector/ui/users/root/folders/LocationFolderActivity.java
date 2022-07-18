@@ -4,7 +4,7 @@ import static com.george.vector.common.consts.Keys.ARCHIVE_TASKS;
 import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
 import static com.george.vector.common.consts.Keys.COMPLETED_TASKS;
 import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.EXECUTED;
+import static com.george.vector.common.consts.Keys.EXECUTOR_EMAIL;
 import static com.george.vector.common.consts.Keys.FOLDER;
 import static com.george.vector.common.consts.Keys.IN_PROGRESS_TASKS;
 import static com.george.vector.common.consts.Keys.LOCATION;
@@ -31,7 +31,7 @@ public class LocationFolderActivity extends AppCompatActivity {
 
         Bundle arguments = getIntent().getExtras();
         String location = arguments.get(LOCATION).toString();
-        String executed = arguments.get(EXECUTED).toString();
+        String executed = arguments.get(EXECUTOR_EMAIL).toString();
         String email = arguments.get(EMAIL).toString();
 
         if(location.equals(OST_SCHOOL))
@@ -44,36 +44,36 @@ public class LocationFolderActivity extends AppCompatActivity {
 
         folderBinding.newTasksCardRoot.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);
-            intent.putExtra(LOCATION, location);
             intent.putExtra(FOLDER, NEW_TASKS);
-            intent.putExtra(EXECUTED, executed);
+            intent.putExtra(LOCATION, location);
+            intent.putExtra(EXECUTOR_EMAIL, executed);
             intent.putExtra(EMAIL, email);
             startActivity(intent);
         });
 
         folderBinding.inProgressTasksCardRoot.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);
-            intent.putExtra(LOCATION, location);
             intent.putExtra(FOLDER, IN_PROGRESS_TASKS);
-            intent.putExtra(EXECUTED, executed);
+            intent.putExtra(LOCATION, location);
+            intent.putExtra(EXECUTOR_EMAIL, executed);
             intent.putExtra(EMAIL, email);
             startActivity(intent);
         });
 
         folderBinding.completedTasksCardRoot.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);
-            intent.putExtra(LOCATION, location);
             intent.putExtra(FOLDER, COMPLETED_TASKS);
-            intent.putExtra(EXECUTED, executed);
+            intent.putExtra(LOCATION, location);
+            intent.putExtra(EXECUTOR_EMAIL, executed);
             intent.putExtra(EMAIL, email);
             startActivity(intent);
         });
 
         folderBinding.archiveTasksCardRoot.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);
-            intent.putExtra(LOCATION, location);
             intent.putExtra(FOLDER, ARCHIVE_TASKS);
-            intent.putExtra(EXECUTED, executed);
+            intent.putExtra(LOCATION, location);
+            intent.putExtra(EXECUTOR_EMAIL, executed);
             intent.putExtra(EMAIL, email);
             startActivity(intent);
         });

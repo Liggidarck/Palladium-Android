@@ -18,12 +18,13 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.R;
 import com.george.vector.databinding.ActivityEditTaskExecutorBinding;
-import com.george.vector.network.utilsLegacy.DeleteTask;
-import com.george.vector.network.utilsLegacy.SaveTask;
-import com.george.vector.network.utilsLegacy.Task;
+import com.george.vector.network.model.Task;
+import com.george.vector.network.viewmodel.TaskViewModel;
+import com.george.vector.network.viewmodel.ViewModelFactory;
 import com.george.vector.ui.users.executor.main.MainExecutorActivity;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -120,12 +121,9 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
     }
 
     void updateTask(String collection) {
-
         String update_image = image;
-
-        Task task = new Task();
-        DeleteTask deleteTask = new DeleteTask();
-        deleteTask.deleteTask(collection, id);
+//        DeleteTaskLegacy deleteTaskLegacy = new DeleteTaskLegacy();
+//        deleteTaskLegacy.deleteTask(collection, id);
 
         String update_address = Objects.requireNonNull(executorBinding.textInputLayoutAddressExecutor.getEditText()).getText().toString();
         String update_floor = Objects.requireNonNull(executorBinding.textInputLayoutFloorExecutor.getEditText()).getText().toString();
@@ -137,9 +135,15 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         String update_executor = Objects.requireNonNull(executorBinding.textInputLayoutEmailExecutor.getEditText()).getText().toString();
         String update_status = Objects.requireNonNull(executorBinding.textInputLayoutStatusExecutor.getEditText()).getText().toString();
 
-        task.save(new SaveTask(), location, update_name, update_address, dateCreate, update_floor,
+        Task task = new Task(update_name, update_address, dateCreate, update_floor,
                 update_cabinet, update_letter, update_comment, update_date_task,
-                update_executor, update_status, timeCreate, email, urgent, update_image, fullNameExecutor, nameCreator);
+                update_executor, update_status, timeCreate, email, urgent, update_image,
+                fullNameExecutor, nameCreator);
+
+        TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(this.getApplication(),
+                location)).get(TaskViewModel.class);
+
+        taskViewModel.createTask(task);
 
         Intent intent = new Intent(this, MainExecutorActivity.class);
         intent.putExtra(EMAIL, emailMailActivity);

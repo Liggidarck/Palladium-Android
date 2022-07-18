@@ -4,7 +4,6 @@ import static com.george.vector.common.consts.Keys.COLLECTION;
 import static com.george.vector.common.consts.Keys.EMAIL;
 import static com.george.vector.common.consts.Keys.ID;
 import static com.george.vector.common.consts.Keys.LOCATION;
-import static com.george.vector.common.consts.Keys.TOPIC_NEW_TASKS_CREATE;
 import static com.george.vector.common.consts.Logs.TAG_TASK_ROOT_ACTIVITY;
 
 import android.app.AlertDialog;
@@ -21,23 +20,22 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
-import com.george.vector.ui.tasks.FragmentUrgentRequest;
-import com.george.vector.ui.tasks.FragmentImageTask;
-import com.george.vector.network.utilsLegacy.DeleteTask;
 import com.george.vector.databinding.ActivityTaskRootBinding;
-import com.george.vector.common.notifications.SendNotification;
+import com.george.vector.network.viewmodel.TaskViewModel;
+import com.george.vector.network.viewmodel.ViewModelFactory;
+import com.george.vector.ui.tasks.FragmentImageTask;
+import com.george.vector.ui.tasks.FragmentUrgentRequest;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 public class TaskRootActivity extends AppCompatActivity {
 
-    String id, collection, address, floor, cabinet, letter, nameTask, comment, status,
+    String id, address, floor, cabinet, letter, nameTask, comment, status,
             dateCreate, timeCreate, location, email, imageId, emailCreator, emailExecutor,
             dateDone, fullNameExecutor, fullNameCreator;
     boolean confirmDelete, urgent;
@@ -54,20 +52,7 @@ public class TaskRootActivity extends AppCompatActivity {
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        Bundle arguments = getIntent().getExtras();
-        id = arguments.getString(ID);
-        collection = arguments.getString(COLLECTION);
-        location = arguments.getString(LOCATION);
-        email = arguments.getString(EMAIL);
-        confirmDelete = PreferenceManager
-                .getDefaultSharedPreferences(this)
-                .getBoolean("confirm_before_deleting_root", true);
-
-        Log.d(TAG_TASK_ROOT_ACTIVITY, "id: " + id);
-        Log.d(TAG_TASK_ROOT_ACTIVITY, "collection: " + collection);
-        Log.d(TAG_TASK_ROOT_ACTIVITY, "location: " + location);
-        Log.d(TAG_TASK_ROOT_ACTIVITY, "email: " + email);
-        Log.d(TAG_TASK_ROOT_ACTIVITY, "confirmDelete: " + confirmDelete);
+        initData();
 
         setSupportActionBar(taskRootBinding.topAppBarTasksRoot);
         taskRootBinding.topAppBarTasksRoot.setNavigationOnClickListener(v -> onBackPressed());
@@ -75,16 +60,25 @@ public class TaskRootActivity extends AppCompatActivity {
         taskRootBinding.editTaskRootBtn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskRootActivity.class);
             intent.putExtra(ID, id);
-            intent.putExtra(COLLECTION, collection);
             intent.putExtra(LOCATION, location);
             intent.putExtra(EMAIL, email);
             startActivity(intent);
         });
 
-        load_data(collection, id);
+        getTask(location, id);
     }
 
-    void load_data(String collection, String id) {
+    private void initData() {
+        Bundle arguments = getIntent().getExtras();
+        id = arguments.getString(ID);
+        location = arguments.getString(LOCATION);
+        email = arguments.getString(EMAIL);
+        confirmDelete = PreferenceManager
+                .getDefaultSharedPreferences(this)
+                .getBoolean("confirm_before_deleting_root", true);
+    }
+
+    void getTask(String collection, String id) {
         DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
         documentReference.addSnapshotListener(this, (value, error) -> {
             assert value != null;
@@ -204,7 +198,6 @@ public class TaskRootActivity extends AppCompatActivity {
             }
 
         });
-
         documentReference.get().addOnCompleteListener(task -> taskRootBinding.progressBarTaskRoot.setVisibility(View.INVISIBLE));
     }
 
@@ -218,12 +211,10 @@ public class TaskRootActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == R.id.root_delete_task) {
-
             if (confirmDelete)
-                show_dialog_delete();
+                showDialogDelete();
             else
-                delete_task();
-
+                deleteTask();
         }
 
         if (item.getItemId() == R.id.root_share_task) {
@@ -254,34 +245,24 @@ public class TaskRootActivity extends AppCompatActivity {
         return true;
     }
 
-    void show_dialog_delete() {
+    void showDialogDelete() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_delete_task))
-                .setPositiveButton(getText(R.string.delete), (dialog, id) -> delete_task())
+                .setPositiveButton(getText(R.string.delete), (dialog, id) -> deleteTask())
                 .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.dismiss());
 
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
-    void delete_task() {
-        DeleteTask deleteTask = new DeleteTask();
-        deleteTask.deleteTask(collection, id);
+    void deleteTask() {
+        TaskViewModel taskViewModel =
+                new ViewModelProvider(this, new ViewModelFactory(this.getApplication(), location))
+                        .get(TaskViewModel.class);
+        taskViewModel.deleteTask(id, imageId);
 
-        if (imageId != null) {
-            String storageUrl = "images/" + imageId;
-            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(storageUrl);
-            storageReference.delete();
-        }
-
-        SendNotification sendNotification = new SendNotification();
-        sendNotification.sendNotification(
-                "Изменения по заявке",
-                "Заявка " + nameTask + " удалена",
-                TOPIC_NEW_TASKS_CREATE
-        );
         onBackPressed();
     }
 

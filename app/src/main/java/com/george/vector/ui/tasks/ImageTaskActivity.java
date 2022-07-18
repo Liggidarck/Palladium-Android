@@ -9,11 +9,13 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
 import com.george.vector.databinding.ActivityImageTaskBinding;
-import com.george.vector.network.utilsLegacy.GetDataTask;
+import com.george.vector.network.viewmodel.TaskViewModel;
+import com.george.vector.network.viewmodel.ViewModelFactory;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -39,12 +41,17 @@ public class ImageTaskActivity extends AppCompatActivity {
         collection = arguments.getString(COLLECTION);
         location = arguments.getString(LOCATION);
 
-        String buffer_size_preference = PreferenceManager
+        TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                this.getApplication(),
+                collection))
+                .get(TaskViewModel.class);
+
+        String bufferSizePreference = PreferenceManager
                 .getDefaultSharedPreferences(ImageTaskActivity.this)
                 .getString("buffer_size", "2");
-        Log.d(TAG, "buffer_size_preference: " + buffer_size_preference);
+        Log.d(TAG, "buffer_size_preference: " + bufferSizePreference);
 
-        int buffer_size = Integer.parseInt(buffer_size_preference);
+        int bufferSize = Integer.parseInt(bufferSizePreference);
 
         binding.topAppBarTaskActivity.setNavigationOnClickListener(v -> onBackPressed());
 
@@ -64,8 +71,7 @@ public class ImageTaskActivity extends AppCompatActivity {
                 Log.d(TAG, "No image, stop loading");
                 binding.taskImageActivity.setImageResource(R.drawable.ic_baseline_camera_alt_24);
             } else {
-                GetDataTask getDataTask = new GetDataTask();
-                getDataTask.setImage(image, binding.progressBarImageActivity, binding.taskImageActivity, buffer_size);
+                taskViewModel.setImage(image, binding.progressBarImageActivity, binding.taskImageActivity, bufferSize);
             }
         });
     }

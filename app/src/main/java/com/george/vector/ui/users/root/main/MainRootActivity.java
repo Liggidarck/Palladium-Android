@@ -41,18 +41,18 @@ public class MainRootActivity extends AppCompatActivity {
         binding = ActivityRootMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        sharedPreferences = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
         NavController navController = Navigation.findNavController(this, R.id.navHostFragmentActivityRootMain);
         NavigationUI.setupWithNavController(binding.bottomRootNavigation, navController);
+
+        sharedPreferences = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
         String nameUser = sharedPreferences.getString(USER_PREFERENCES_NAME, "");
         String lastNameUser = sharedPreferences.getString(USER_PREFERENCES_LAST_NAME, "");
         email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
         boolean notifications = sharedPreferences.getBoolean(USER_NOTIFICATIONS_OPTIONS, false);
 
-        Log.d(TAG_MAIN_ROOT_ACTIVITY, "NOTIFICATIONS: " + notifications);
+        Log.d(TAG_MAIN_ROOT_ACTIVITY, "Notifications: " + notifications);
 
         if (!notifications) {
             AlertDialog alertDialog = new AlertDialog.Builder(this)
@@ -62,7 +62,7 @@ public class MainRootActivity extends AppCompatActivity {
                         FirebaseMessaging.getInstance().subscribeToTopic(TOPIC_NEW_TASKS_CREATE);
                         editor.putBoolean(USER_NOTIFICATIONS_OPTIONS, true);
                         editor.apply();
-                        Log.d(TAG_NOTIFICATIONS, "NOTIFICATIONS STATE: " + notifications);
+                        Log.d(TAG_NOTIFICATIONS, "Notifications state: " + notifications);
 
                         SendNotification sendNotification = new SendNotification();
                         sendNotification.sendNotification(

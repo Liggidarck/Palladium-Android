@@ -15,10 +15,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.databinding.FragmentImageTaskBinding;
-import com.george.vector.network.utilsLegacy.GetDataTask;
+import com.george.vector.network.viewmodel.TaskViewModel;
+import com.george.vector.network.viewmodel.ViewModelFactory;
 
 public class FragmentImageTask extends Fragment {
 
@@ -42,7 +44,12 @@ public class FragmentImageTask extends Fragment {
         location = args.getString(LOCATION);
         email = args.getString(EMAIL);
 
-        boolean economy_traffic = PreferenceManager
+        TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                this.requireActivity().getApplication(),
+                collection))
+                .get(TaskViewModel.class);
+
+        boolean economyTraffic = PreferenceManager
                 .getDefaultSharedPreferences(FragmentImageTask.this.getContext())
                 .getBoolean("economy_traffic", false);
 
@@ -61,7 +68,7 @@ public class FragmentImageTask extends Fragment {
                         .rotation(binding.imageRootTask.getRotation() + 90)
                         .setDuration(60));
 
-        if (economy_traffic) {
+        if (economyTraffic) {
             binding.downloadImageBtn.setVisibility(View.VISIBLE);
             binding.viewProgressIndicatorImage.setVisibility(View.INVISIBLE);
             binding.imageRootTask.setVisibility(View.INVISIBLE);
@@ -73,14 +80,14 @@ public class FragmentImageTask extends Fragment {
                 binding.imageRootTask.setVisibility(View.VISIBLE);
                 binding.rotateImageTaskRoot.setVisibility(View.VISIBLE);
 
-                GetDataTask getDataTask = new GetDataTask();
-                getDataTask.setImageFuture(image, binding.viewProgressIndicatorImage, binding.imageRootTask, buffer_size);
+
+                taskViewModel.setImage(image, binding.viewProgressIndicatorImage, binding.imageRootTask, buffer_size);
             });
 
         } else {
             binding.downloadImageBtn.setVisibility(View.INVISIBLE);
-            GetDataTask getDataTask = new GetDataTask();
-            getDataTask.setImageFuture(image, binding.viewProgressIndicatorImage, binding.imageRootTask, buffer_size);
+
+            taskViewModel.setImage(image, binding.viewProgressIndicatorImage, binding.imageRootTask, buffer_size);
         }
 
         binding.imageRootCard.setOnClickListener(v -> goActivityImage());

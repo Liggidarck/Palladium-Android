@@ -21,10 +21,10 @@ public abstract class TextValidator implements TextWatcher {
     }
 
     @Override
-    final public void beforeTextChanged(CharSequence s, int start, int count, int after) { /* Don't care */ }
+    final public void beforeTextChanged(CharSequence s, int start, int count, int after) {  }
 
     @Override
-    final public void onTextChanged(CharSequence s, int start, int before, int count) { /* Don't care */ }
+    final public void onTextChanged(CharSequence s, int start, int before, int count) { }
 
 
 }

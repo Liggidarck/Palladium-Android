@@ -7,25 +7,25 @@
     tools:context=".ui.users.root.tasks.AddTaskRootActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/topAppBar_new_task_root"
+        android:id="@+id/toolbarAddEditTask"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/blue_primary"
         app:layout_collapseMode="pin"
         app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-        app:title="@string/task"
+        app:title="@string/taskLegacy"
         app:titleTextColor="@android:color/white" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/progress_bar_add_task_root"
+        android:id="@+id/progressBarAddEditTask"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/topAppBar_new_task_root"
+        android:layout_below="@+id/toolbarAddEditTask"
         android:indeterminate="true"
         android:visibility="invisible" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/done_task_root"
+        android:id="@+id/doneBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -40,7 +40,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/topAppBar_new_task_root">
+        android:layout_below="@+id/toolbarAddEditTask">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,7 +48,7 @@
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_address_root"
+                android:id="@+id/taskAddress"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/address_autoComplete_root"
+                    android:id="@+id/addressAutoComplete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -69,7 +69,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_floor_root"
+                android:id="@+id/taskFloor"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/floor_auto_root"
+                    android:id="@+id/floorAutoComplete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -97,7 +97,7 @@
                 tools:ignore="DisableBaselineAlignment">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/text_input_layout_cabinet_root"
+                    android:id="@+id/taskCabinet"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -116,7 +116,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/text_input_layout_cabinet_liter_root"
+                    android:id="@+id/taskLetter"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -129,7 +129,7 @@
                     app:helperText="Опционально">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:id="@+id/liter_autoComplete_root"
+                        android:id="@+id/letterAutoComplete"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
@@ -141,7 +141,7 @@
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_name_task_root"
+                android:id="@+id/taskName"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -161,7 +161,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_comment_root"
+                android:id="@+id/taskComment"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -182,7 +182,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_date_task_root"
+                android:id="@+id/taskDateComplete"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -196,7 +196,6 @@
                 app:helperTextEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_text_date_task_root"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -206,7 +205,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_status_root"
+                android:id="@+id/taskStatus"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -218,7 +217,7 @@
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/status_autoComplete_root"
+                    android:id="@+id/statusAutoComplete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -227,7 +226,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <CheckBox
-                android:id="@+id/urgent_request_check_box"
+                android:id="@+id/urgentCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -235,7 +234,7 @@
                 android:text="@string/urgent_task" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_executor_root"
+                android:id="@+id/taskEmailExecutor"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -256,7 +255,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_full_name_executor_root"
+                android:id="@+id/taskNameExecutor"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -277,7 +276,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/add_executor_root"
+                android:id="@+id/addExecutorBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -286,7 +285,7 @@
                 android:text="@string/set_executor" />
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_image"
+                android:id="@+id/cardImage"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginStart="20dp"
@@ -306,7 +305,7 @@
                         tools:ignore="ContentDescription" />
 
                     <ImageView
-                        android:id="@+id/image_task"
+                        android:id="@+id/imageViewTask"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         tools:ignore="ContentDescription"/>

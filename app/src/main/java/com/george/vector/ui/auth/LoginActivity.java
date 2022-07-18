@@ -70,29 +70,24 @@ public class LoginActivity extends AppCompatActivity {
             email = Objects.requireNonNull(loginBinding.emailLoginTextLayout.getEditText()).getText().toString();
             password = Objects.requireNonNull(loginBinding.passwordLoginTextLayout.getEditText()).getText().toString();
 
-            if (isOnline()) {
-
-                if (validateFields()) {
-                    Log.d(TAG_VALIDATE_FILED, "Fields validate");
-
-                    if(!validateEmail(email)) {
-                        Log.e(TAG_VALIDATE_FILED, "Email validation failed");
-                        loginBinding.emailLoginTextLayout.setError("Некорректный формат e-mail");
-                    } else {
-                        Log.d(TAG_VALIDATE_FILED, "Email validation - OK");
-                        login(email, password);
-                    }
-
-                } else {
-                    Log.d(TAG_VALIDATE_FILED, "Fields empty");
-                }
-
-            } else
+            if (!isOnline()) {
                 onStart();
+                return;
+            }
+
+            if (!validateFields()) {
+                Log.e(TAG_VALIDATE_FILED, "Fields empty");
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                Log.e(TAG_VALIDATE_FILED, "Email validation failed");
+                loginBinding.emailLoginTextLayout.setError("Некорректный формат e-mail");
+            }
+
+            login(email, password);
 
         });
-
-
     }
 
     void login(String login, String password) {
@@ -101,7 +96,6 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         firebaseAuth.signInWithEmailAndPassword(login, password).addOnCompleteListener(task -> {
-
             if (task.isSuccessful()) {
                 Log.d(TAG_LOGIN_ACTIVITY, "Login success");
 

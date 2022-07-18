@@ -51,15 +51,15 @@ public class FragmentRootHome extends Fragment {
                 .getString("default_root_location", OST);
 
         sharedPreferences = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-        String name_user = sharedPreferences.getString(USER_PREFERENCES_NAME, "");
-        String last_name_user = sharedPreferences.getString(USER_PREFERENCES_LAST_NAME, "");
+        String nameUser = sharedPreferences.getString(USER_PREFERENCES_NAME, "");
+        String lastnameUser = sharedPreferences.getString(USER_PREFERENCES_LAST_NAME, "");
         email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
 
-        String _name = Character.toString(name_user.charAt(0));
-        String _last_name = Character.toString(last_name_user.charAt(0));
+        String _name = Character.toString(nameUser.charAt(0));
+        String _last_name = Character.toString(lastnameUser.charAt(0));
         String ava = String.format("%s%s", _name, _last_name);
 
-        homeBinding.textNameRoot.setText(String.format("%s %s", name_user, last_name_user));
+        homeBinding.textNameRoot.setText(String.format("%s %s", nameUser, lastnameUser));
         homeBinding.textEmailRoot.setText(email);
         homeBinding.textViewNameAva.setText(ava);
 
@@ -113,9 +113,9 @@ public class FragmentRootHome extends Fragment {
         homeBinding = null;
     }
 
-    void updateZones(@NotNull String zone_update) {
+    void updateZones(@NotNull String zoneUpdate) {
         Fragment currentFragment = null;
-        switch (zone_update) {
+        switch (zoneUpdate) {
             case "ost":
                 Log.i(TAG_HOME_ROOT_FRAGMENT, "Запуск фрагмента Осафьево");
                 currentFragment = new FragmentRootOst();

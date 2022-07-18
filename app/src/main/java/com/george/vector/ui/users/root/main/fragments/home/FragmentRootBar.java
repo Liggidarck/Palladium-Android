@@ -2,7 +2,7 @@ package com.george.vector.ui.users.root.main.fragments.home;
 
 import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
 import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.EXECUTED;
+import static com.george.vector.common.consts.Keys.EXECUTOR_EMAIL;
 import static com.george.vector.common.consts.Keys.LOCATION;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
 import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
@@ -40,7 +40,7 @@ public class FragmentRootBar extends Fragment {
         barRootBinding.barSchoolRoot.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentRootBar.this.getContext(), LocationFolderActivity.class);
             intent.putExtra(LOCATION, BAR_SCHOOL);
-            intent.putExtra(EXECUTED, "root");
+            intent.putExtra(EXECUTOR_EMAIL, "root");
             intent.putExtra(EMAIL, email);
             startActivity(intent);
         });

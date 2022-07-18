@@ -1,6 +1,7 @@
 package com.george.vector.ui.users.root.profile;
 
 import static com.george.vector.common.consts.Logs.TAG_EDIT_USER_ACTIVITY;
+import static java.util.Objects.requireNonNull;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -22,7 +23,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class EditUserActivity extends AppCompatActivity {
 
@@ -55,18 +55,12 @@ public class EditUserActivity extends AppCompatActivity {
             permissionUser = value.getString("permission");
             password = value.getString("password");
 
-            Log.i(TAG_EDIT_USER_ACTIVITY, "name: " + nameUser);
-            Log.i(TAG_EDIT_USER_ACTIVITY, "last_name: " + lastNameUser);
-            Log.i(TAG_EDIT_USER_ACTIVITY, "patronymic: " + patronymicUser);
-            Log.i(TAG_EDIT_USER_ACTIVITY, "email: " + emailUser);
-            Log.i(TAG_EDIT_USER_ACTIVITY, "role: " + roleUser);
-
-            Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditNameUser.getEditText()).setText(nameUser);
-            Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditLastNameUser.getEditText()).setText(lastNameUser);
-            Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditPatronymicUser.getEditText()).setText(patronymicUser);
-            Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditEmailUser.getEditText()).setText(emailUser);
-            Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditRoleUser.getEditText()).setText(roleUser);
-            Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditPermissionUser.getEditText()).setText(permissionUser);
+            requireNonNull(editUserActivityBinding.textInputLayoutEditNameUser.getEditText()).setText(nameUser);
+            requireNonNull(editUserActivityBinding.textInputLayoutEditLastNameUser.getEditText()).setText(lastNameUser);
+            requireNonNull(editUserActivityBinding.textInputLayoutEditPatronymicUser.getEditText()).setText(patronymicUser);
+            requireNonNull(editUserActivityBinding.textInputLayoutEditEmailUser.getEditText()).setText(emailUser);
+            requireNonNull(editUserActivityBinding.textInputLayoutEditRoleUser.getEditText()).setText(roleUser);
+            requireNonNull(editUserActivityBinding.textInputLayoutEditPermissionUser.getEditText()).setText(permissionUser);
 
             if (emailUser.equals("api@2122.pro"))
                 editUserActivityBinding.textInputLayoutPasswordUser.getEditText().setText("Пароль? Какой пароль? ¯\\_(ツ)_/¯");
@@ -93,56 +87,59 @@ public class EditUserActivity extends AppCompatActivity {
 
         });
 
-        editUserActivityBinding.updateUserBtn.setOnClickListener(v -> {
-            nameUser = Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditNameUser.getEditText()).getText().toString();
-            lastNameUser = Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditLastNameUser.getEditText()).getText().toString();
-            patronymicUser = Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditPatronymicUser.getEditText()).getText().toString();
-            emailUser = Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditEmailUser.getEditText()).getText().toString();
-            roleUser = Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditRoleUser.getEditText()).getText().toString();
-            permissionUser = Objects.requireNonNull(editUserActivityBinding.textInputLayoutEditPermissionUser.getEditText()).getText().toString();
-            password = Objects.requireNonNull(editUserActivityBinding.textInputLayoutPasswordUser.getEditText()).getText().toString();
+        editUserActivityBinding.updateUserBtn.setOnClickListener(v -> updateUser(documentReference));
 
-            if (validateFields()) {
-                editUserActivityBinding.progressBarEditUser.setVisibility(View.VISIBLE);
+        editUserActivityBinding.textInputLayoutPasswordUser.setEndIconOnClickListener(v -> copyUserData());
 
-                Map<String, Object> user = new HashMap<>();
-                user.put("name", nameUser);
-                user.put("last_name", lastNameUser);
-                user.put("patronymic", patronymicUser);
-                user.put("email", emailUser);
-                user.put("role", roleUser);
-                user.put("permission", permissionUser);
-                user.put("password", password);
+    }
 
-                documentReference.get().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.i(TAG_EDIT_USER_ACTIVITY, "update completed!");
-                        editUserActivityBinding.progressBarEditUser.setVisibility(View.INVISIBLE);
-                        startActivity(new Intent(this, ListUsersActivity.class));
-                    } else
-                        Log.e(TAG_EDIT_USER_ACTIVITY, "Error: " + task.getException());
-                });
+    private void updateUser(DocumentReference documentReference) {
+        nameUser = requireNonNull(editUserActivityBinding.textInputLayoutEditNameUser.getEditText()).getText().toString();
+        lastNameUser = requireNonNull(editUserActivityBinding.textInputLayoutEditLastNameUser.getEditText()).getText().toString();
+        patronymicUser = requireNonNull(editUserActivityBinding.textInputLayoutEditPatronymicUser.getEditText()).getText().toString();
+        emailUser = requireNonNull(editUserActivityBinding.textInputLayoutEditEmailUser.getEditText()).getText().toString();
+        roleUser = requireNonNull(editUserActivityBinding.textInputLayoutEditRoleUser.getEditText()).getText().toString();
+        permissionUser = requireNonNull(editUserActivityBinding.textInputLayoutEditPermissionUser.getEditText()).getText().toString();
+        password = requireNonNull(editUserActivityBinding.textInputLayoutPasswordUser.getEditText()).getText().toString();
 
-                documentReference.set(user)
-                        .addOnSuccessListener(unused -> Log.d(TAG_EDIT_USER_ACTIVITY, "onSuccess: user - " + userID))
-                        .addOnFailureListener(e -> Log.e("TAG", "Failure - " + e));
+        if (validateFields()) {
+            editUserActivityBinding.progressBarEditUser.setVisibility(View.VISIBLE);
 
-            }
+            Map<String, Object> user = new HashMap<>();
+            user.put("name", nameUser);
+            user.put("last_name", lastNameUser);
+            user.put("patronymic", patronymicUser);
+            user.put("email", emailUser);
+            user.put("role", roleUser);
+            user.put("permission", permissionUser);
+            user.put("password", password);
 
-        });
+            documentReference.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Log.i(TAG_EDIT_USER_ACTIVITY, "update completed!");
+                    editUserActivityBinding.progressBarEditUser.setVisibility(View.INVISIBLE);
+                    startActivity(new Intent(this, ListUsersActivity.class));
+                } else
+                    Log.e(TAG_EDIT_USER_ACTIVITY, "Error: " + task.getException());
+            });
 
-        editUserActivityBinding.textInputLayoutPasswordUser.setEndIconOnClickListener(v -> {
-            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            documentReference.set(user)
+                    .addOnSuccessListener(unused -> Log.d(TAG_EDIT_USER_ACTIVITY, "onSuccess: user - " + userID))
+                    .addOnFailureListener(e -> Log.e("TAG", "Failure - " + e));
 
-            String email = editUserActivityBinding.textInputLayoutEditEmailUser.getEditText().getText().toString();
-            String password = editUserActivityBinding.textInputLayoutPasswordUser.getEditText().getText().toString();
+        }
+    }
 
-            ClipData clip = ClipData.newPlainText(null,email + " " + password);
-            clipboard.setPrimaryClip(clip);
+    private void copyUserData() {
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 
-            Snackbar.make(editUserActivityBinding.baseLayout, "Логин и пароль пользователя скопированы", Snackbar.LENGTH_SHORT).show();
-        });
+        String email = editUserActivityBinding.textInputLayoutEditEmailUser.getEditText().getText().toString();
+        String password = editUserActivityBinding.textInputLayoutPasswordUser.getEditText().getText().toString();
 
+        ClipData clip = ClipData.newPlainText(null,email + " " + password);
+        clipboard.setPrimaryClip(clip);
+
+        Snackbar.make(editUserActivityBinding.baseLayout, "Логин и пароль пользователя скопированы", Snackbar.LENGTH_SHORT).show();
     }
 
     boolean validateFields() {

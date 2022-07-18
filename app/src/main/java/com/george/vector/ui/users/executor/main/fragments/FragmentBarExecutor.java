@@ -15,7 +15,7 @@ import com.george.vector.databinding.FragmentBarExecutorBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-public class fragment_bar extends Fragment {
+public class FragmentBarExecutor extends Fragment {
 
     FragmentBarExecutorBinding executorBinding;
 

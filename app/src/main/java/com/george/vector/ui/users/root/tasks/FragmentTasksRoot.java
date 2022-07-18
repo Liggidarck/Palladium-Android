@@ -1,25 +1,13 @@
 package com.george.vector.ui.users.root.tasks;
 
-import static com.george.vector.common.consts.Keys.ARCHIVE_TASKS;
 import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
-import static com.george.vector.common.consts.Keys.BAR_SCHOOL_ARCHIVE;
-import static com.george.vector.common.consts.Keys.BAR_SCHOOL_COMPLETED;
-import static com.george.vector.common.consts.Keys.BAR_SCHOOL_NEW;
-import static com.george.vector.common.consts.Keys.BAR_SCHOOL_PROGRESS;
 import static com.george.vector.common.consts.Keys.COLLECTION;
-import static com.george.vector.common.consts.Keys.COMPLETED_TASKS;
 import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.EXECUTED;
+import static com.george.vector.common.consts.Keys.EXECUTOR_EMAIL;
 import static com.george.vector.common.consts.Keys.FOLDER;
 import static com.george.vector.common.consts.Keys.ID;
-import static com.george.vector.common.consts.Keys.IN_PROGRESS_TASKS;
 import static com.george.vector.common.consts.Keys.LOCATION;
-import static com.george.vector.common.consts.Keys.NEW_TASKS;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL_ARCHIVE;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL_COMPLETED;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL_NEW;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL_PROGRESS;
 import static com.george.vector.common.consts.Logs.TAG_TASK_ROOT_FRAGMENT;
 
 import android.content.Intent;
@@ -45,7 +33,7 @@ import com.google.firebase.firestore.Query;
 
 public class FragmentTasksRoot extends Fragment {
 
-    String location, folder, executed, email;
+    String location, status, executorEmail, email;
 
     TaskAdapter taskAdapter;
     FragmentTasksRootBinding binding;
@@ -59,342 +47,176 @@ public class FragmentTasksRoot extends Fragment {
         Bundle args = getArguments();
         assert args != null;
         location = args.getString(LOCATION);
-        folder = args.getString(FOLDER);
-        executed = args.getString(EXECUTED);
+        status = args.getString(FOLDER);
+        executorEmail = args.getString(EXECUTOR_EMAIL);
         email = args.getString(EMAIL);
 
-        if (location.equals(OST_SCHOOL) && folder.equals(NEW_TASKS))
-            ostSchoolNewTasks();
-
-        if (location.equals(OST_SCHOOL) && folder.equals(IN_PROGRESS_TASKS))
-            ostSchoolProgressTasks();
-
-        if (location.equals(OST_SCHOOL) && folder.equals(COMPLETED_TASKS))
-            ostSchoolCompletedTasks();
-
-        if (location.equals(OST_SCHOOL) && folder.equals(ARCHIVE_TASKS))
-            ostSchoolArchiveTasks();
-
-        if (location.equals(BAR_SCHOOL) && folder.equals(NEW_TASKS))
-            barSchoolNewTasks();
-
-        if (location.equals(BAR_SCHOOL) && folder.equals(IN_PROGRESS_TASKS))
-            barSchoolProgressTasks();
-
-        if (location.equals(BAR_SCHOOL) && folder.equals(COMPLETED_TASKS))
-            barSchoolCompletedTasks();
-
-        if (location.equals(BAR_SCHOOL) && folder.equals(ARCHIVE_TASKS))
-            barSchoolArchiveTasks();
-
-        if(location.equals(BAR_SCHOOL)) {
+        if (location.equals(BAR_SCHOOL)) {
             binding.chipNewSchoolTasksRoot.setVisibility(View.INVISIBLE);
             binding.chipOldSchoolTasksRoot.setVisibility(View.INVISIBLE);
         }
 
+        setUpRecyclerView(location, status, executorEmail);
+
         return view;
     }
 
-    void setUpRecyclerView() {
+    void setUpRecyclerView(String location, String status, String executed) {
+        initQuery(location, status, executed);
+
         binding.recyclerviewSchoolOstNewTasks.setHasFixedSize(true);
         binding.recyclerviewSchoolOstNewTasks.setLayoutManager(new LinearLayoutManager(FragmentTasksRoot.this.getContext()));
         binding.recyclerviewSchoolOstNewTasks.setAdapter(taskAdapter);
+
+        taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
+            String id = documentSnapshot.getId();
+
+            Log.d(TAG_TASK_ROOT_FRAGMENT, String.format("position: %d id: %s", position, id));
+
+            Intent intent = new Intent(FragmentTasksRoot.this.getContext(), TaskRootActivity.class);
+            intent.putExtra(ID, id);
+            intent.putExtra(LOCATION, location);
+            intent.putExtra(EMAIL, email);
+            startActivity(intent);
+
+        });
     }
 
-    void queryTasks(String executed, String collectionReference, String status) {
+    private void initQuery(String location, String status, String executed) {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final CollectionReference taskRef = db.collection(collectionReference);
+        final CollectionReference reference = db.collection(location);
+        Query query = null;
 
-        Query query = taskRef.whereEqualTo("status", status);
+        if (executed.equals("root")) {
+            query = reference
+                    .whereEqualTo("status", status);
+
+            chipRootBehavior(reference, status);
+        }
+
+        if (executed.equals("work")) {
+            query = reference
+                    .whereEqualTo("status", status)
+                    .whereEqualTo("executor", email);
+
+            chipWorkBehavior(reference, status);
+        }
+
         FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
                 .setQuery(query, Task.class)
                 .build();
         taskAdapter = new TaskAdapter(options);
-
-        if (executed.equals("root")) {
-            Log.d(TAG_TASK_ROOT_FRAGMENT, "All Tasks");
-
-            binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-                if (isChecked) {
-                    Log.d(TAG_TASK_ROOT_FRAGMENT, "Default Query");
-
-                    Query query_all = taskRef.whereEqualTo("status", status);
-                    FirestoreRecyclerOptions<Task> all_tasks = new FirestoreRecyclerOptions.Builder<Task>()
-                            .setQuery(query_all, Task.class)
-                            .build();
-
-                    taskAdapter.updateOptions(all_tasks);
-                }
-
-            });
-
-            binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-                if (isChecked) {
-                    Log.i(TAG_TASK_ROOT_FRAGMENT, "urgent checked");
-                    Query query_urgent = taskRef.whereEqualTo("urgent", true);
-
-                    FirestoreRecyclerOptions<Task> urgent_options = new FirestoreRecyclerOptions.Builder<Task>()
-                            .setQuery(query_urgent, Task.class)
-                            .build();
-
-                    taskAdapter.updateOptions(urgent_options);
-                }
-
-            });
-
-            binding.chipOldSchoolTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-                if (isChecked) {
-                    Query query_address = taskRef.whereEqualTo("address", getText(R.string.old_school_full_text));
-
-                    FirestoreRecyclerOptions<Task> address_options = new FirestoreRecyclerOptions.Builder<Task>()
-                            .setQuery(query_address, Task.class)
-                            .build();
-
-                    taskAdapter.updateOptions(address_options);
-                }
-
-            });
-
-            binding.chipNewSchoolTasksRoot.setOnCheckedChangeListener((compoundButton, isChecked) -> {
-                if (isChecked) {
-                    Query query_address = taskRef.whereEqualTo("address", getText(R.string.new_school_full_text));
-
-                    FirestoreRecyclerOptions<Task> address_options = new FirestoreRecyclerOptions.Builder<Task>()
-                            .setQuery(query_address, Task.class)
-                            .build();
-
-                    taskAdapter.updateOptions(address_options);
-                }
-            });
-
-        }
-
-        if (executed.equals("work")) {
-            Log.d(TAG_TASK_ROOT_FRAGMENT, "All Executed Tasks");
-
-            Query query_all_default = taskRef.whereEqualTo("executor", email);
-            FirestoreRecyclerOptions<Task> executor_options_default = new FirestoreRecyclerOptions.Builder<Task>()
-                    .setQuery(query_all_default, Task.class)
-                    .build();
-
-            taskAdapter.updateOptions(executor_options_default);
-
-            binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-                if (isChecked) {
-                    Query query_all = taskRef.whereEqualTo("executor", email);
-                    FirestoreRecyclerOptions<Task> executor_options = new FirestoreRecyclerOptions.Builder<Task>()
-                            .setQuery(query_all, Task.class)
-                            .build();
-
-                    taskAdapter.updateOptions(executor_options);
-                }
-
-            });
-
-            binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-                if (isChecked) {
-                    Log.i(TAG_TASK_ROOT_FRAGMENT, "urgent checked");
-                    Query query_urgent = taskRef.whereEqualTo("urgent", true).whereEqualTo("executor", email);
-
-                    FirestoreRecyclerOptions<Task> search_options = new FirestoreRecyclerOptions.Builder<Task>()
-                            .setQuery(query_urgent, Task.class)
-                            .build();
-
-                    taskAdapter.updateOptions(search_options);
-                }
-
-            });
-
-            binding.chipOldSchoolTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-                if (isChecked) {
-                    Query query_address = taskRef.whereEqualTo("address", getText(R.string.old_school_full_text)).whereEqualTo("executor", email);
-
-                    FirestoreRecyclerOptions<Task> search_options = new FirestoreRecyclerOptions.Builder<Task>()
-                            .setQuery(query_address, Task.class)
-                            .build();
-
-                    taskAdapter.updateOptions(search_options);
-                }
-
-            });
-
-            binding.chipNewSchoolTasksRoot.setOnCheckedChangeListener((compoundButton, isChecked) -> {
-                if (isChecked) {
-                    Query query_address = taskRef.whereEqualTo("address", getText(R.string.new_school_full_text)).whereEqualTo("executor", email);
-
-                    FirestoreRecyclerOptions<Task> search_options = new FirestoreRecyclerOptions.Builder<Task>()
-                            .setQuery(query_address, Task.class)
-                            .build();
-
-                    taskAdapter.updateOptions(search_options);
-                }
-            });
-
-        }
     }
 
-    void ostSchoolNewTasks() {
-        queryTasks(executed, OST_SCHOOL_NEW, "Новая заявка");
+    void chipRootBehavior(CollectionReference reference, String status) {
+        binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-        setUpRecyclerView();
+            if (isChecked) {
+                Query queryAll = reference.whereEqualTo("status", status);
+                FirestoreRecyclerOptions<Task> allTasks = new FirestoreRecyclerOptions.Builder<Task>()
+                        .setQuery(queryAll, Task.class)
+                        .build();
 
-        taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
-            String id = documentSnapshot.getId();
+                taskAdapter.updateOptions(allTasks);
+            }
 
-            Log.d(TAG_TASK_ROOT_FRAGMENT, String.format("position: %d id: %s", position, id));
+        });
 
-            Intent intent = new Intent(FragmentTasksRoot.this.getContext(), TaskRootActivity.class);
-            intent.putExtra(ID, id);
-            intent.putExtra(COLLECTION, OST_SCHOOL_NEW);
-            intent.putExtra(LOCATION, OST_SCHOOL);
-            intent.putExtra(EMAIL, email);
-            startActivity(intent);
+        binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
+            if (isChecked) {
+                Query queryUrgent = reference.whereEqualTo("urgent", true);
+                FirestoreRecyclerOptions<Task> urgentOptions = new FirestoreRecyclerOptions.Builder<Task>()
+                        .setQuery(queryUrgent, Task.class)
+                        .build();
+
+                taskAdapter.updateOptions(urgentOptions);
+            }
+
+        });
+
+        binding.chipOldSchoolTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+            if (isChecked) {
+                Query queryAddress = reference.whereEqualTo("address", getText(R.string.old_school_full_text));
+                FirestoreRecyclerOptions<Task> addressOptions = new FirestoreRecyclerOptions.Builder<Task>()
+                        .setQuery(queryAddress, Task.class)
+                        .build();
+
+                taskAdapter.updateOptions(addressOptions);
+            }
+
+        });
+
+        binding.chipNewSchoolTasksRoot.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if (isChecked) {
+                Query queryAddress = reference.whereEqualTo("address", getText(R.string.new_school_full_text));
+                FirestoreRecyclerOptions<Task> addressOptions = new FirestoreRecyclerOptions.Builder<Task>()
+                        .setQuery(queryAddress, Task.class)
+                        .build();
+
+                taskAdapter.updateOptions(addressOptions);
+            }
         });
     }
 
-    void ostSchoolProgressTasks() {
-        queryTasks(executed, OST_SCHOOL_PROGRESS, "В работе");
+    void chipWorkBehavior(CollectionReference reference, String status) {
+        binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-        setUpRecyclerView();
+            if (isChecked) {
+                Query queryAll = reference
+                        .whereEqualTo("executor", email)
+                        .whereEqualTo("status", status);
+                FirestoreRecyclerOptions<Task> allTasks = new FirestoreRecyclerOptions.Builder<Task>()
+                        .setQuery(queryAll, Task.class)
+                        .build();
 
-        taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
-            String id = documentSnapshot.getId();
-
-            Log.d(TAG_TASK_ROOT_FRAGMENT, String.format("position: %d id: %s", position, id));
-
-            Intent intent = new Intent(FragmentTasksRoot.this.getContext(), TaskRootActivity.class);
-            intent.putExtra(ID, id);
-            intent.putExtra(COLLECTION, OST_SCHOOL_PROGRESS);
-            intent.putExtra(LOCATION, OST_SCHOOL);
-            intent.putExtra(EMAIL, email);
-            startActivity(intent);
+                taskAdapter.updateOptions(allTasks);
+            }
 
         });
-    }
 
-    void ostSchoolCompletedTasks() {
-        queryTasks(executed, OST_SCHOOL_COMPLETED, "Завершенная заявка");
+        binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-        setUpRecyclerView();
+            if (isChecked) {
+                Query queryUrgent = reference.
+                        whereEqualTo("executor", email)
+                        .whereEqualTo("urgent", true);
+                FirestoreRecyclerOptions<Task> urgentOptions = new FirestoreRecyclerOptions.Builder<Task>()
+                        .setQuery(queryUrgent, Task.class)
+                        .build();
 
-        taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
-            String id = documentSnapshot.getId();
-
-            Log.d(TAG_TASK_ROOT_FRAGMENT, String.format("position: %d id: %s", position, id));
-
-            Intent intent = new Intent(FragmentTasksRoot.this.getContext(), TaskRootActivity.class);
-            intent.putExtra(ID, id);
-            intent.putExtra(COLLECTION, OST_SCHOOL_COMPLETED);
-            intent.putExtra(LOCATION, OST_SCHOOL);
-            intent.putExtra(EMAIL, email);
-            startActivity(intent);
+                taskAdapter.updateOptions(urgentOptions);
+            }
 
         });
-    }
 
-    void ostSchoolArchiveTasks() {
-        queryTasks(executed, OST_SCHOOL_ARCHIVE, "Архив");
+        binding.chipOldSchoolTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-        setUpRecyclerView();
+            if (isChecked) {
+                Query queryAddress = reference
+                        .whereEqualTo("executor", email)
+                        .whereEqualTo("address", getText(R.string.old_school_full_text));
+                FirestoreRecyclerOptions<Task> addressOptions = new FirestoreRecyclerOptions.Builder<Task>()
+                        .setQuery(queryAddress, Task.class)
+                        .build();
 
-        taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
-            String id = documentSnapshot.getId();
-
-            Log.d(TAG_TASK_ROOT_FRAGMENT, String.format("position: %d id: %s", position, id));
-
-            Intent intent = new Intent(FragmentTasksRoot.this.getContext(), TaskRootActivity.class);
-            intent.putExtra(ID, id);
-            intent.putExtra(COLLECTION, OST_SCHOOL_ARCHIVE);
-            intent.putExtra(LOCATION, OST_SCHOOL);
-            intent.putExtra(EMAIL, email);
-            startActivity(intent);
+                taskAdapter.updateOptions(addressOptions);
+            }
 
         });
-    }
 
-    void barSchoolNewTasks() {
-        queryTasks(executed, BAR_SCHOOL_NEW, "Новая заявка");
+        binding.chipNewSchoolTasksRoot.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if (isChecked) {
+                Query queryAddress = reference
+                        .whereEqualTo("executor", email)
+                        .whereEqualTo("address", getText(R.string.new_school_full_text));
+                FirestoreRecyclerOptions<Task> addressOptions = new FirestoreRecyclerOptions.Builder<Task>()
+                        .setQuery(queryAddress, Task.class)
+                        .build();
 
-        setUpRecyclerView();
-
-        taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
-            String id = documentSnapshot.getId();
-
-            Log.d(TAG_TASK_ROOT_FRAGMENT, String.format("position: %d id: %s", position, id));
-
-            Intent intent = new Intent(FragmentTasksRoot.this.getContext(), TaskRootActivity.class);
-            intent.putExtra(ID, id);
-            intent.putExtra(COLLECTION, BAR_SCHOOL_NEW);
-            intent.putExtra(LOCATION, BAR_SCHOOL);
-            intent.putExtra(EMAIL, email);
-            startActivity(intent);
-        });
-    }
-
-    void barSchoolProgressTasks() {
-        queryTasks(executed, BAR_SCHOOL_PROGRESS, "В работе");
-
-        setUpRecyclerView();
-
-        taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
-            String id = documentSnapshot.getId();
-
-            Log.d(TAG_TASK_ROOT_FRAGMENT, String.format("position: %d id: %s", position, id));
-
-            Intent intent = new Intent(FragmentTasksRoot.this.getContext(), TaskRootActivity.class);
-            intent.putExtra(ID, id);
-            intent.putExtra(COLLECTION, BAR_SCHOOL_PROGRESS);
-            intent.putExtra(LOCATION, BAR_SCHOOL);
-            intent.putExtra(EMAIL, email);
-            startActivity(intent);
-
-        });
-    }
-
-    void barSchoolCompletedTasks() {
-        queryTasks(executed, BAR_SCHOOL_COMPLETED, "Завершенная заявка");
-
-        setUpRecyclerView();
-
-        taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
-            String id = documentSnapshot.getId();
-
-            Log.d(TAG_TASK_ROOT_FRAGMENT, String.format("position: %d id: %s", position, id));
-
-            Intent intent = new Intent(FragmentTasksRoot.this.getContext(), TaskRootActivity.class);
-            intent.putExtra(ID, id);
-            intent.putExtra(COLLECTION, BAR_SCHOOL_COMPLETED);
-            intent.putExtra(LOCATION, BAR_SCHOOL);
-            intent.putExtra(EMAIL, email);
-            startActivity(intent);
-
-        });
-    }
-
-    void barSchoolArchiveTasks() {
-        queryTasks(executed, BAR_SCHOOL_ARCHIVE, "Архив");
-
-        setUpRecyclerView();
-
-        taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
-            String id = documentSnapshot.getId();
-
-            Log.d(TAG_TASK_ROOT_FRAGMENT, String.format("position: %d id: %s", position, id));
-
-            Intent intent = new Intent(FragmentTasksRoot.this.getContext(), TaskRootActivity.class);
-            intent.putExtra(ID, id);
-            intent.putExtra(COLLECTION, BAR_SCHOOL_ARCHIVE);
-            intent.putExtra(LOCATION, BAR_SCHOOL);
-            intent.putExtra(EMAIL, email);
-            startActivity(intent);
-
+                taskAdapter.updateOptions(addressOptions);
+            }
         });
     }
 

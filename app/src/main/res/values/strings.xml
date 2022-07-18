@@ -2,7 +2,7 @@
     <string name="app_name">Цифровой завхоз</string>
 
     <string name="tasks">Заявки</string>
-    <string name="task">Заявка</string>
+    <string name="taskLegacy">Заявка</string>
 
     <string name="new_tasks_text">Новые заявки</string>
     <string name="progress_tasks">Заявки в работе</string>

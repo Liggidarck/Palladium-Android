@@ -25,8 +25,8 @@ import android.view.MenuItem;
 
 import com.george.vector.R;
 import com.george.vector.databinding.ActivityMainExecutorBinding;
-import com.george.vector.ui.users.executor.main.fragments.fragment_bar;
-import com.george.vector.ui.users.executor.main.fragments.fragment_ost;
+import com.george.vector.ui.users.executor.main.fragments.FragmentBarExecutor;
+import com.george.vector.ui.users.executor.main.fragments.FragmentOstExecutor;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
@@ -99,7 +99,7 @@ public class MainExecutorActivity extends AppCompatActivity {
         switch (zone_update) {
             case "ost":
                 Log.i(TAG_MAIN_EXECUTOR_ACTIVITY, "Запуск фрагмента Осафьево");
-                currentFragment = new fragment_ost();
+                currentFragment = new FragmentOstExecutor();
 
                 Bundle email = new Bundle();
                 email.putString(EMAIL, this.email);
@@ -108,7 +108,7 @@ public class MainExecutorActivity extends AppCompatActivity {
                 break;
             case "bar":
                 Log.i(TAG_MAIN_EXECUTOR_ACTIVITY, "Запуск фрагмента Барыши");
-                currentFragment = new fragment_bar();
+                currentFragment = new FragmentBarExecutor();
 
                 Bundle email_bar = new Bundle();
                 email_bar.putString(EMAIL, this.email);

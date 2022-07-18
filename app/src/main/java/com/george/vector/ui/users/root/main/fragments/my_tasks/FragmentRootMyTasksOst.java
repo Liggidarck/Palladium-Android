@@ -1,7 +1,7 @@
 package com.george.vector.ui.users.root.main.fragments.my_tasks;
 
 import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.EXECUTED;
+import static com.george.vector.common.consts.Keys.EXECUTOR_EMAIL;
 import static com.george.vector.common.consts.Keys.LOCATION;
 import static com.george.vector.common.consts.Keys.OST_SCHOOL;
 
@@ -36,7 +36,7 @@ public class FragmentRootMyTasksOst extends Fragment {
             Intent intent = new Intent(FragmentRootMyTasksOst.this.getContext(), LocationFolderActivity.class);
             intent.putExtra(LOCATION, OST_SCHOOL);
             intent.putExtra(EMAIL, email);
-            intent.putExtra(EXECUTED, "work");
+            intent.putExtra(EXECUTOR_EMAIL, "work");
             startActivity(intent);
         });
 

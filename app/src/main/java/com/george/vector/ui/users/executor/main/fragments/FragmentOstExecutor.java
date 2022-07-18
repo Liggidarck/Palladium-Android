@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.george.vector.databinding.FragmentOstExecutorBinding;
 import com.george.vector.ui.users.executor.main.FolderExecutorActivity;
 
-public class fragment_ost extends Fragment {
+public class FragmentOstExecutor extends Fragment {
 
     FragmentOstExecutorBinding executorBinding;
 
@@ -32,7 +32,7 @@ public class fragment_ost extends Fragment {
         String email = args.getString(EMAIL);
 
         executorBinding.ostSchoolExecutor.setOnClickListener(v -> {
-            Intent intent = new Intent(fragment_ost.this.getContext(), FolderExecutorActivity.class);
+            Intent intent = new Intent(FragmentOstExecutor.this.getContext(), FolderExecutorActivity.class);
             intent.putExtra(LOCATION, OST_SCHOOL);
             intent.putExtra(EMAIL, email);
             startActivity(intent);

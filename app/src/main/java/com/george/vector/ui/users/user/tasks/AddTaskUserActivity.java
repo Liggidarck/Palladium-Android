@@ -39,11 +39,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.R;
+import com.george.vector.network.model.Task;
+import com.george.vector.network.viewmodel.TaskViewModel;
+import com.george.vector.network.viewmodel.ViewModelFactory;
 import com.george.vector.ui.tasks.BottomSheetAddImage;
-import com.george.vector.network.utilsLegacy.SaveTask;
-import com.george.vector.network.utilsLegacy.Task;
 import com.george.vector.common.utils.TextValidator;
 import com.george.vector.common.utils.Utils;
 import com.george.vector.databinding.ActivityAddTaskUserBinding;
@@ -51,8 +53,6 @@ import com.george.vector.common.notifications.SendNotification;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -143,9 +143,7 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
         initializeField(permission);
     }
 
-    void saveTask(@NotNull String location) {
-        Task task = new Task();
-
+    void saveTask(String location) {
         uploadImage();
 
         Date currentDate = new Date();
@@ -154,8 +152,14 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
         DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String time_create = timeFormat.format(currentDate);
 
-        task.save(new SaveTask(), location, name_task, address, date_create, floor, cabinet, letter, comment,
-                null, null, status, time_create, email, false, nameImage, null, fullNameCreator);
+        Task task = new Task(name_task, address, date_create, floor, cabinet, letter, comment,
+                null, null, status, time_create, email, false, nameImage,
+                null, fullNameCreator);
+
+        TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(this.getApplication(),
+                location)).get(TaskViewModel.class);
+
+        taskViewModel.createTask(task);
 
         SendNotification sendNotification = new SendNotification();
         sendNotification.sendNotification("Созданна новая заявка", name_task, TOPIC_NEW_TASKS_CREATE);

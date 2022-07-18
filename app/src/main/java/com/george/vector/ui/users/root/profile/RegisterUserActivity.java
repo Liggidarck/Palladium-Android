@@ -88,80 +88,77 @@ public class RegisterUserActivity extends AppCompatActivity {
             roleUser = Objects.requireNonNull(registerUserBinding.textInputLayoutRoleUser.getEditText()).getText().toString();
             permissionUser = Objects.requireNonNull(registerUserBinding.textInputLayoutPermissionUser.getEditText()).getText().toString();
 
-            if (validateFields()) {
-                if (!validateEmail(emailUser)) {
-                    Log.e(TAG_VALIDATE_FILED, "Email validation failed");
-                    registerUserBinding.textInputLayoutEmailUser.setError("Некорректный формат e-mail");
-                } else {
-                    registerUserBinding.progressBarRegister.setVisibility(View.VISIBLE);
+            if (!validateFields()) {
+                return;
+            }
 
-                    try {
-                        mAuth2.createUserWithEmailAndPassword(emailUser, passwordUser).addOnCompleteListener(task -> {
-
-                            if (task.isSuccessful()) {
-                                if (permissionUser.equals("ОП Остафьево"))
-                                    permissionUser = "ost_school";
-
-                                if(permissionUser.equals("ОП Аист"))
-                                    permissionUser = "ost_aist";
-
-                                if(permissionUser.equals("ОП Ягодка"))
-                                    permissionUser = "ost_yagodka";
+            if (!validateEmail(emailUser)) {
+                Log.e(TAG_VALIDATE_FILED, "Email validation failed");
+                registerUserBinding.textInputLayoutEmailUser.setError("Некорректный формат e-mail");
+                return;
+            }
 
 
-                                if(permissionUser.equals("ОП Барыши"))
-                                    permissionUser = "bar_school";
+            registerUserBinding.progressBarRegister.setVisibility(View.VISIBLE);
 
-                                if(permissionUser.equals("ОП Ручеек"))
-                                    permissionUser = "bar_rucheek";
+            try {
+                mAuth2.createUserWithEmailAndPassword(emailUser, passwordUser).addOnCompleteListener(task -> {
 
-                                if(permissionUser.equals("ОП Звездочка"))
-                                    permissionUser = "bar_star";
+                    if (task.isSuccessful()) {
+                        if (permissionUser.equals("ОП Остафьево"))
+                            permissionUser = "ost_school";
 
-                                Log.d(TAG_REGISTER_ACTIVITY, "permission: " + permissionUser);
+                        if (permissionUser.equals("ОП Аист"))
+                            permissionUser = "ost_aist";
+
+                        if (permissionUser.equals("ОП Ягодка"))
+                            permissionUser = "ost_yagodka";
 
 
-                                userID = Objects.requireNonNull(mAuth2.getCurrentUser()).getUid();
-                                DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userID);
-                                Map<String, Object> user = new HashMap<>();
-                                user.put("name", nameUser);
-                                user.put("last_name", lastNameUser);
-                                user.put("patronymic", patronymicUser);
-                                user.put("email", emailUser);
-                                user.put("role", roleUser);
-                                user.put("permission", permissionUser);
-                                user.put("password", passwordUser);
+                        if (permissionUser.equals("ОП Барыши"))
+                            permissionUser = "bar_school";
 
-                                documentReference.set(user)
-                                        .addOnSuccessListener(unused -> Log.d(TAG_REGISTER_ACTIVITY, "Success register user - " + userID))
-                                        .addOnFailureListener(e -> Log.e(TAG_REGISTER_ACTIVITY, "Failure register user - " + e));
+                        if (permissionUser.equals("ОП Ручеек"))
+                            permissionUser = "bar_rucheek";
 
-                                onBackPressed();
+                        if (permissionUser.equals("ОП Звездочка"))
+                            permissionUser = "bar_star";
 
-                            } else {
-                                Toast.makeText(RegisterUserActivity.this, "Error" + Objects.requireNonNull(task.getException()).getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                                Log.e(TAG_REGISTER_ACTIVITY, "Error! " + task.getException().toString());
-                            }
+                        Log.d(TAG_REGISTER_ACTIVITY, "permission: " + permissionUser);
 
-                            registerUserBinding.progressBarRegister.setVisibility(View.INVISIBLE);
-                            Log.d(TAG_REGISTER_ACTIVITY, "Complete: " + task.getResult());
-                            Toast.makeText(this, "Complete: " + task.getResult(), Toast.LENGTH_SHORT).show();
 
-                        }).addOnFailureListener(e -> {
-                            registerUserBinding.progressBarRegister.setVisibility(View.INVISIBLE);
-                            Log.e(TAG_REGISTER_ACTIVITY, "Error: " + e);
-                            Toast.makeText(this, "Error: " + e, Toast.LENGTH_SHORT).show();
-                        });
+                        userID = Objects.requireNonNull(mAuth2.getCurrentUser()).getUid();
+                        DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userID);
+                        Map<String, Object> user = new HashMap<>();
+                        user.put("name", nameUser);
+                        user.put("last_name", lastNameUser);
+                        user.put("patronymic", patronymicUser);
+                        user.put("email", emailUser);
+                        user.put("role", roleUser);
+                        user.put("permission", permissionUser);
+                        user.put("password", passwordUser);
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Log.e(TAG_REGISTER_ACTIVITY, "Error! " + e);
-                        Toast.makeText(this, "Error: " + e, Toast.LENGTH_SHORT).show();
+                        documentReference.set(user)
+                                .addOnSuccessListener(unused -> Log.d(TAG_REGISTER_ACTIVITY, "Success register user - " + userID))
+                                .addOnFailureListener(e -> Log.e(TAG_REGISTER_ACTIVITY, "Failure register user - " + e));
+
+                        onBackPressed();
+
+                    } else {
+                        Toast.makeText(RegisterUserActivity.this, "Error" + Objects.requireNonNull(task.getException()).getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        Log.e(TAG_REGISTER_ACTIVITY, "Error! " + task.getException().toString());
                     }
 
+                    registerUserBinding.progressBarRegister.setVisibility(View.INVISIBLE);
 
-                }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e(TAG_REGISTER_ACTIVITY, "Error! " + e);
+                Toast.makeText(this, "Error: " + e, Toast.LENGTH_SHORT).show();
             }
+
 
         });
 
@@ -185,7 +182,7 @@ public class RegisterUserActivity extends AppCompatActivity {
             @Override
             public void validate(TextView text_view, String text) {
                 Log.d(TAG_REGISTER_ACTIVITY, "text: " + text);
-                if(text.equals("Root") || text.equals("Исполнитель"))
+                if (text.equals("Root") || text.equals("Исполнитель"))
                     registerUserBinding.textInputLayoutPermissionUser.getEditText().setText("All");
                 else {
                     registerUserBinding.textInputLayoutPermissionUser.getEditText().setText("");
