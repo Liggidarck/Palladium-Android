@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".users.root.profile.ProfileRootActivity" >
+    tools:context=".ui.users.root.profile.ProfileRootActivity" >
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -169,6 +169,15 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:text="@string/settings" />
+
+                    <Button
+                        android:id="@+id/developBtn"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Develop zone" />
+
 
                     <Button
                         android:id="@+id/logout_btn"

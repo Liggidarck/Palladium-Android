@@ -15,7 +15,6 @@ public class Logs {
     public static final String TAG_LOADING_ACTIVITY = "LOADING_ACTIVITY";
 
     // Пользователь
-    public static final String TAG_MAIN_USER_ACTIVITY = "MAIN_USER_ACTIVITY";
     public static final String TAG_FOLDER_USER_ACTIVITY = "FOLDER_USER_ACTIVITY";
     public static final String TAG_HOME_USER_FRAGMENT = "HOME_USER_FRAGMENT";
     public static final String TAG_ADD_TASK_USER_ACTIVITY = "ADD_TASK_USER_ACTIVITY";
@@ -27,7 +26,6 @@ public class Logs {
     public static final String TAG_TASK_ROOT_FRAGMENT = "TASK_ROOT_FRAGMENT";
     public static final String TAG_TASK_ROOT_ACTIVITY = "TASK_ROOT_ACTIVITY";
     public static final String TAG_EDIT_USER_ACTIVITY = "EDIT_USER_ACTIVITY";
-    public static final String TAG_ADD_TASK_ROOT_ACTIVITY = "ADD_TASK_ROOT_ACTIVITY";
     public static final String TAG_EDIT_TASK_ROOT_ACTIVITY = "EDIT_TASK_ROOT_ACTIVITY";
 
     //Исполнитель

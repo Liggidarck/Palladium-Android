@@ -4,13 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".users.root.main.MainRootActivity" >
+    tools:context=".ui.users.root.main.MainRootActivity" >
 
-    <FrameLayout
-        android:id="@+id/frame_main_root"
+    <fragment
+        android:id="@+id/navHostFragmentActivityRootMain"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottom_root_navigation" />
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/root_navigation"
+        android:layout_above="@id/bottom_root_navigation"
+        tools:ignore="FragmentTagUsage" />
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_root_navigation"

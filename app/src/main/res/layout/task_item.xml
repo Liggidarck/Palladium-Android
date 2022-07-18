@@ -30,11 +30,11 @@
             android:id="@+id/image_warning_task"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:src="@drawable/ic_red_warning"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
+            android:src="@drawable/ic_red_warning"
+            android:visibility="invisible"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -51,26 +51,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_view_address"
-            android:text="03.11.2021"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="5dp"
+            android:text="03.11.2021" />
 
         <TextView
             android:id="@+id/text_view_time_create"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_below="@id/text_view_address"
-            android:text="16:01"
+            android:layout_alignParentEnd="true"
             android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp" />
+            android:layout_marginEnd="5dp"
+            android:text="16:01" />
 
-        <ImageView
+        <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
-            android:layout_height="3dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/date_create"
-            android:layout_marginTop="6dp"
-            android:src="@drawable/line_gray"
-            tools:ignore="ContentDescription" />
+            android:layout_marginTop="6dp" />
 
     </RelativeLayout>
 

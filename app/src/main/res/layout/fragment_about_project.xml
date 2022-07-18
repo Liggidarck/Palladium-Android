@@ -48,20 +48,19 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="«Интеллект — это способность избегать\n выполнения работы, но так, чтобы она\n при этом была сделана.» - Линус Торвальдс"
+                    android:text="Плейсхолдерная крутая цитата, котороая должа быть тут, \n но я ничего не нашел умного."
                     android:textColor="@color/black"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
                     android:textStyle="italic"
                     android:textSize="13sp" />
 
-                <ImageView
+                <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    android:src="@drawable/line_gray"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
-                    android:layout_marginTop="20dp" />
+                    android:layout_marginTop="20dp"/>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_description_project"
@@ -102,9 +101,9 @@
                             android:layout_centerVertical="true"
                             android:layout_marginStart="20dp"
                             android:layout_toEndOf="@+id/about_app_layout"
-                            android:text="Описание приложения"
-                            android:textSize="20sp"
-                            android:textColor="@color/black"/>
+                            android:text="Документация"
+                            android:textColor="@color/black"
+                            android:textSize="20sp" />
 
                     </RelativeLayout>
 
@@ -155,10 +154,9 @@
                     </RelativeLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <ImageView
+                <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    android:src="@drawable/line_gray"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginTop="20dp" />

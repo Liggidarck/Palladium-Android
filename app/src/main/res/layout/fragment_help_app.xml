@@ -80,7 +80,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/card_full_help_superusers"
+                    android:id="@+id/card_full_help_root"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_rowWeight="1"

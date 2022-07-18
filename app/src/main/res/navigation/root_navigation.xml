@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_navigation"
+    app:startDestination="@id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.george.vector.ui.users.root.main.fragments.home.FragmentRootHome"
+        android:label="FragmentRootHome"
+        tools:layout="@layout/fragment_root_home" />
+
+    <fragment
+        android:id="@+id/nav_tasks"
+        android:name="com.george.vector.ui.users.root.main.fragments.my_tasks.FragmentRootMyTasks"
+        android:label="FragmentRootMyTasks"
+        tools:layout="@layout/fragment_root_tasks" />
+
+    <fragment
+        android:id="@+id/nav_help"
+        android:name="com.george.vector.ui.help.root.FragmentRootHelp"
+        android:label="FragmentRootHelp"
+        tools:layout="@layout/fragment_root_help">
+        <action
+            android:id="@+id/actionNavHelpToFragmentAboutProject"
+            app:destination="@id/fragmentAboutProject" />
+        <action
+            android:id="@+id/actionNavHelpToFragmentHelpApp"
+            app:destination="@id/fragmentHelpApp" />
+        <action
+            android:id="@+id/actionNavHelpToFragmentDataHelp"
+            app:destination="@id/fragmentDataHelp" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentAboutProject"
+        android:name="com.george.vector.ui.help.root.FragmentAboutProject"
+        android:label="FragmentAboutProject"
+        tools:layout="@layout/fragment_about_project">
+
+        <action
+            android:id="@+id/actionFragmentAboutProjectToFragmentDevelopApp"
+            app:destination="@id/fragmentDevelopApp" />
+
+        <action
+            android:id="@+id/actionFragmentAboutProjectToFragmentDescriptionProject"
+            app:destination="@id/fragmentDescriptionProject" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentHelpApp"
+        android:name="com.george.vector.ui.help.root.app.FragmentHelpApp"
+        android:label="FragmentHelpApp"
+        tools:layout="@layout/fragment_help_app">
+        <action
+            android:id="@+id/actionFragmentHelpAppToFragmentHelpTextApp"
+            app:destination="@id/fragmentHelpTextApp" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentDevelopApp"
+        android:name="com.george.vector.ui.help.root.develop_app.FragmentDevelopApp"
+        android:label="FragmentDevelopApp"
+        tools:layout="@layout/fragment_develop_app" />
+
+    <fragment
+        android:id="@+id/fragmentDescriptionProject"
+        android:name="com.george.vector.ui.help.root.FragmentDescriptionProject"
+        android:label="FragmentDescriptionProject"
+        tools:layout="@layout/fragment_description_project" />
+
+    <fragment
+        android:id="@+id/fragmentDataHelp"
+        android:name="com.george.vector.ui.help.root.FragmentDataHelp"
+        android:label="FragmentDataHelp"
+        tools:layout="@layout/fragment_data_help" />
+    <fragment
+        android:id="@+id/fragmentHelpTextApp"
+        android:name="com.george.vector.ui.help.root.app.FragmentHelpTextApp"
+        android:label="FragmentHelpTextApp" />
+
+
+</navigation>

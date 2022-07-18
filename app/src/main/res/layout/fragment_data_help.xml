@@ -37,6 +37,7 @@
                     android:text="placeholder"
                     android:layout_marginTop="10dp"
                     android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
                     android:textSize="16sp"
                     android:textColor="@color/black" />
 

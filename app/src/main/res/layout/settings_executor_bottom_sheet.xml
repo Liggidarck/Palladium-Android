@@ -30,12 +30,10 @@
 
     </RelativeLayout>
 
-    <ImageView
+    <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:src="@drawable/line_gray"
-        android:layout_marginTop="12dp"
-        tools:ignore="ContentDescription" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp" />
 
     <RelativeLayout
         android:id="@+id/layout_settings_executor"

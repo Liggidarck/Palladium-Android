@@ -195,52 +195,6 @@
 
                 </HorizontalScrollView>
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card_about_project"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"
-                    app:cardCornerRadius="10dp"
-                    app:cardElevation="6dp">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="20dp">
-
-                        <RelativeLayout
-                            android:id="@+id/ava_folder_2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:src="#85C2FF" />
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
-                                android:src="@drawable/ic_baseline_help_24"
-                                tools:ignore="ContentDescription" />
-
-                        </RelativeLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="20dp"
-                            android:layout_toEndOf="@+id/ava_folder_2"
-                            android:text="О проекте"
-                            android:textAppearance="?attr/textAppearanceHeadline6" />
-
-                    </RelativeLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="50dp" />
