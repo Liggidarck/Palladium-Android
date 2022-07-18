@@ -12,7 +12,7 @@
         android:title="@string/history_text" />
 
     <item
-        android:id="@+id/nav_profile_user"
+        android:id="@+id/nav_help_user"
         android:icon="@drawable/ic_baseline_help_24"
         android:title="@string/text_help" />
 

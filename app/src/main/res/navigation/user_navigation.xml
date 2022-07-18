@@ -18,10 +18,20 @@
         tools:layout="@layout/fragment_history_user"/>
 
     <fragment
-        android:id="@+id/nav_profile_user"
+        android:id="@+id/nav_help_user"
         android:name="com.george.vector.ui.help.user.FragmentUserHelp"
         android:label="FragmentUserHelp"
-        tools:layout="@layout/fragment_help_user"/>
+        tools:layout="@layout/fragment_help_user">
+        <action
+            android:id="@+id/action_nav_profile_user_to_fragmentDataHelp2"
+            app:destination="@id/fragmentDataHelp2" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentDataHelp2"
+        android:name="com.george.vector.ui.help.root.FragmentDataHelp"
+        android:label="FragmentDataHelp"
+        tools:layout="@layout/fragment_data_help"/>
 
 
 </navigation>

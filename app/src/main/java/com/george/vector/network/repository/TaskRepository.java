@@ -1,13 +1,8 @@
 package com.george.vector.network.repository;
 
-import androidx.annotation.Nullable;
-
 import com.george.vector.network.model.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.HashMap;
 import java.util.Map;

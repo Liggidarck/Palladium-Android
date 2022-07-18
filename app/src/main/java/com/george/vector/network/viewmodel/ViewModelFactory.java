@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class ViewModelFactory implements ViewModelProvider.Factory {
 
-    private Application application;
-    private String collection;
+    private final Application application;
+    private final String collection;
 
     public ViewModelFactory(Application application, String collection) {
         this.application = application;

@@ -10,32 +10,48 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import com.george.vector.R;
 import com.george.vector.databinding.FragmentAboutProjectBinding;
 
 public class FragmentAboutProject extends Fragment {
 
-    FragmentAboutProjectBinding aboutProject;
-    Bundle bundle = new Bundle();
+    FragmentAboutProjectBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        aboutProject = FragmentAboutProjectBinding.inflate(inflater, container, false);
-        View view = aboutProject.getRoot();
+        binding = FragmentAboutProjectBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        aboutProject.cardPrivacyPolicy.setOnClickListener(v -> {
+        binding.toolbarAboutProject.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
+
+        NavController navController =
+                Navigation.findNavController(FragmentAboutProject.this.requireActivity(),
+                        R.id.navHostFragmentActivityRootMain);
+
+        binding.cardPrivacyPolicy.setOnClickListener(v -> {
             String url = "https://drive.google.com/file/d/1g0l1gDULwpHrEWLNo2-d8QQE0LvydXpR/view?usp=sharing";
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(url));
             startActivity(intent);
         });
 
-        aboutProject.cardLicence.setOnClickListener(v -> {
+        binding.cardLicence.setOnClickListener(v -> {
             String url = "https://drive.google.com/file/d/1d1T4Rvr3TxvFO-CxPrmSP0Satquk6vvd/view?usp=sharing";
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(url));
             startActivity(intent);
+        });
+
+        binding.cardDescriptionProject.setOnClickListener(v -> {
+            navController.navigate(R.id.actionFragmentAboutProjectToFragmentDescriptionProject);
+        });
+
+        binding.cardDevelopApp.setOnClickListener(v -> {
+            navController.navigate(R.id.actionFragmentAboutProjectToFragmentDevelopApp);
         });
 
         return view;
@@ -44,6 +60,6 @@ public class FragmentAboutProject extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        aboutProject = null;
+        binding = null;
     }
 }

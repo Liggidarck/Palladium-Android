@@ -176,10 +176,6 @@ public class FragmentDevelopApp extends Fragment {
         ReleaseAdapter adapter = new ReleaseAdapter(FragmentDevelopApp.this.getActivity(), releases);
         binding.developRecycler.setAdapter(adapter);
 
-        Bundle args = getArguments();
-        assert args != null;
-        String user = args.getString("user");
-
         return view;
     }
 

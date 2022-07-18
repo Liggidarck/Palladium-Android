@@ -94,5 +94,8 @@
     <string name="permission_gallery">Для того, чтобы загрузить изображение необходимо разрешить Palladium доступ файловому хранилищу</string>
     <string name="permission_camera">Для того, чтобы загрузить изображение необходимо разрешить Palladium доступ к камере</string>
     <string name="text_help">Поддержка</string>
+    <string name="text_send_email">Выберите приложение для отправки электронного письма разработчику приложения</string>
+    <string name="email_developer">georgyfilatov@yandex.ru</string>
+    <string name="url_download_text_help"><![CDATA[https://docs.google.com/document/d/1jP6xACZYv3jYBoPE7f2TmiBpjqu8xRNC/edit?usp=sharing&ouid=107837366117826648347&rtpof=true&sd=true]]></string>
 
 </resources>

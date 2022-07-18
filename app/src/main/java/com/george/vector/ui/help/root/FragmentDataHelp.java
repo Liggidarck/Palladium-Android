@@ -26,6 +26,8 @@ public class FragmentDataHelp extends Fragment {
         assert args != null;
         String task = args.getString("task");
 
+        binding.toolbarQa.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
+
         if (task.equals("HowToCreateTask")) {
             binding.titleHelp.setText(getString(R.string.how_to_create_task_title));
             binding.bodyHelp.setText(getString(R.string.how_to_create_task_body));

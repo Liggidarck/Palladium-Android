@@ -10,25 +10,52 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import com.george.vector.R;
 import com.george.vector.databinding.FragmentHelpAppBinding;
 
 public class FragmentHelpApp extends Fragment {
 
-    FragmentHelpAppBinding appBinding;
+    private FragmentHelpAppBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        appBinding = FragmentHelpAppBinding.inflate(inflater, container, false);
-        View view = appBinding.getRoot();
+        binding = FragmentHelpAppBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        appBinding.cardDownloadTextHelp.setOnClickListener(v -> {
-            String url = "https://docs.google.com/document/d/1jP6xACZYv3jYBoPE7f2TmiBpjqu8xRNC/edit?usp=sharing&ouid=107837366117826648347&rtpof=true&sd=true";
+        Bundle bundle = new Bundle();
+
+        NavController navController =
+                Navigation.findNavController(FragmentHelpApp.this.requireActivity(),
+                        R.id.navHostFragmentActivityRootMain);
+
+        binding.toolbarHelpApp.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
+
+        binding.cardDownloadTextHelp.setOnClickListener(v -> {
+            String url = getString(R.string.url_download_text_help);
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(url));
             startActivity(intent);
         });
+
+        binding.cardFullHelpUsers.setOnClickListener(v -> {
+            bundle.putString("user", "user");
+            navController.navigate(R.id.actionFragmentHelpAppToFragmentHelpTextApp, bundle);
+        });
+
+        binding.cardFullHelpRoot.setOnClickListener(v -> {
+            bundle.putString("user", "root");
+            navController.navigate(R.id.actionFragmentHelpAppToFragmentHelpTextApp, bundle);
+        });
+
+        binding.cardFullHelpExecutor.setOnClickListener(v -> {
+            bundle.putString("user", "executor");
+            navController.navigate(R.id.actionFragmentHelpAppToFragmentHelpTextApp, bundle);
+        });
+
 
         return view;
     }
@@ -36,6 +63,6 @@ public class FragmentHelpApp extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        appBinding = null;
+        binding = null;
     }
 }

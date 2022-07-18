@@ -2,9 +2,9 @@ package com.george.vector.ui.help.root.develop_app;
 
 public class Release {
 
-    private String title;
-    private String date;
-    private String description;
+    private final String title;
+    private final String date;
+    private final String description;
 
     public Release(String title, String date, String description) {
         this.title = title;
@@ -16,23 +16,12 @@ public class Release {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getDate() {
         return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

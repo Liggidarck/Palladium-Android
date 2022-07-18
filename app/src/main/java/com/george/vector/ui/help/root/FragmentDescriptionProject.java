@@ -24,10 +24,6 @@ public class FragmentDescriptionProject extends Fragment {
         binding = FragmentDescriptionProjectBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        Bundle args = getArguments();
-        assert args != null;
-        String user = args.getString("user");
-
         binding.downloadFullText.setOnClickListener(v -> {
             String url = "https://docs.google.com/document/d/1YGy2YM9jFOcPkwCeRWDB2iy_AiDoriyR/edit?usp=sharing&ouid=107837366117826648347&rtpof=true&sd=true";
             Intent intent = new Intent(Intent.ACTION_VIEW);
