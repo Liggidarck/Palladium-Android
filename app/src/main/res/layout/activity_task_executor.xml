@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".users.executor.tasks.TaskExecutorActivity">
+    tools:context=".ui.users.executor.tasks.TaskExecutorActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/topAppBar_task_executor"
@@ -13,7 +13,7 @@
         android:background="@color/blue_primary"
         app:layout_collapseMode="pin"
         app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-        app:title="@string/task"
+        app:title="@string/taskLegacy"
         app:titleTextColor="@android:color/white" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -84,12 +84,10 @@
                         android:text="@string/no_comment"
                         android:textSize="15sp" />
 
-                    <ImageView
+                    <com.google.android.material.divider.MaterialDivider
                         android:layout_width="match_parent"
-                        android:layout_height="3dp"
-                        android:layout_marginTop="10dp"
-                        android:src="@drawable/line_gray"
-                        tools:ignore="ContentDescription" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -123,12 +121,10 @@
                         android:textColor="?attr/textColor"
                         android:textSize="15sp" />
 
-                    <ImageView
+                    <com.google.android.material.divider.MaterialDivider
                         android:layout_width="match_parent"
-                        android:layout_height="3dp"
-                        android:layout_marginTop="10dp"
-                        android:src="@drawable/line_gray"
-                        tools:ignore="ContentDescription" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -152,12 +148,10 @@
                         android:layout_height="wrap_content"
                         android:textSize="12sp" />
 
-                    <ImageView
+                    <com.google.android.material.divider.MaterialDivider
                         android:layout_width="match_parent"
-                        android:layout_height="3dp"
-                        android:layout_marginTop="10dp"
-                        android:src="@drawable/line_gray"
-                        tools:ignore="ContentDescription" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp" />
 
                     <TextView
                         android:layout_width="wrap_content"

@@ -55,13 +55,12 @@
                     android:textStyle="italic"
                     android:textSize="13sp" />
 
-                <ImageView
+                <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    android:src="@drawable/line_gray"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
-                    android:layout_marginTop="20dp" />
+                    android:layout_marginTop="20dp"/>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_description_project"
@@ -155,10 +154,9 @@
                     </RelativeLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <ImageView
+                <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    android:src="@drawable/line_gray"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginTop="20dp" />

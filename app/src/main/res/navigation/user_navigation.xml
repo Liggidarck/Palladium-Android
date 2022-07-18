@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/user_navigation"
+    app:startDestination="@id/nav_home_user">
+
+    <fragment
+        android:id="@+id/nav_home_user"
+        android:name="com.george.vector.ui.users.user.main.fragments.home.FragmentUserHome"
+        android:label="FragmentUserHome"
+        tools:layout="@layout/fragment_user_home"/>
+
+    <fragment
+        android:id="@+id/nav_history_user"
+        android:name="com.george.vector.ui.users.user.main.fragments.FragmentUserHistory"
+        android:label="FragmentUserHistory"
+        tools:layout="@layout/fragment_history_user"/>
+
+    <fragment
+        android:id="@+id/nav_profile_user"
+        android:name="com.george.vector.ui.help.user.FragmentUserHelp"
+        android:label="FragmentUserHelp"
+        tools:layout="@layout/fragment_help_user"/>
+
+
+</navigation>
