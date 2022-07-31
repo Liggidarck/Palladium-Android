@@ -18,6 +18,7 @@ import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.splashscreen.SplashScreen;
 
 import com.george.vector.databinding.ActivityLoadingBinding;
 import com.george.vector.ui.users.executor.main.MainExecutorActivity;
@@ -38,6 +39,7 @@ public class LoadingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SplashScreen.installSplashScreen(this);
 
         loadingBinding = ActivityLoadingBinding.inflate(getLayoutInflater());
         setContentView(loadingBinding.getRoot());
