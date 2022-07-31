@@ -26,6 +26,7 @@ public class FolderRootActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
         folderRootBinding = ActivityFolderRootBinding.inflate(getLayoutInflater());
         setContentView(folderRootBinding.getRoot());

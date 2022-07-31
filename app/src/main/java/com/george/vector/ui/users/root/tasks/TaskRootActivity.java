@@ -46,6 +46,7 @@ public class TaskRootActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
         taskRootBinding = ActivityTaskRootBinding.inflate(getLayoutInflater());
         setContentView(taskRootBinding.getRoot());

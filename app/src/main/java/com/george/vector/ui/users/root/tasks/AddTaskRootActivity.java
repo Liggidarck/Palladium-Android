@@ -83,6 +83,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
         binding = ActivityAddTaskRootBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

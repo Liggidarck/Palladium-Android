@@ -36,6 +36,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
         taskExecutorBinding = ActivityTaskExecutorBinding.inflate(getLayoutInflater());
         setContentView(taskExecutorBinding.getRoot());

@@ -20,6 +20,7 @@ public class ExecutorTasksActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
         tasksBinding = ActivityExecutorTasksBinding.inflate(getLayoutInflater());
         setContentView(tasksBinding.getRoot());

@@ -7,6 +7,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.george.vector.R;
 import com.george.vector.common.utils.Utils;
 import com.george.vector.databinding.ActivityEditDataUserBinding;
 import com.george.vector.ui.users.user.main.MainUserActivity;
@@ -31,6 +32,7 @@ public class EditDataUserActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
         editDataUserBinding = ActivityEditDataUserBinding.inflate(getLayoutInflater());
         setContentView(editDataUserBinding.getRoot());

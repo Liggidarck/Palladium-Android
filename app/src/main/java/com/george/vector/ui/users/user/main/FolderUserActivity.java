@@ -26,6 +26,7 @@ public class FolderUserActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
         folderUserBinding = ActivityFolderUserBinding.inflate(getLayoutInflater());
         setContentView(folderUserBinding.getRoot());

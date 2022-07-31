@@ -57,6 +57,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
         binding = ActivityAddTaskRootBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

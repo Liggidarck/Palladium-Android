@@ -39,6 +39,7 @@ public class ProfileRootActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
         profileBinding = ActivityProfileRootBinding.inflate(getLayoutInflater());
         setContentView(profileBinding.getRoot());

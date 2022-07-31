@@ -25,6 +25,7 @@ public class LocationFolderActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
         folderBinding = ActivityLocationFolderBinding.inflate(getLayoutInflater());
         setContentView(folderBinding.getRoot());

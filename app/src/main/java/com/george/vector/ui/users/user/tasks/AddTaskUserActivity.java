@@ -82,6 +82,7 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
         binding = ActivityAddTaskUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

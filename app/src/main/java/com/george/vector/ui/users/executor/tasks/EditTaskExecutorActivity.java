@@ -44,6 +44,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
         executorBinding = ActivityEditTaskExecutorBinding.inflate(getLayoutInflater());
         setContentView(executorBinding.getRoot());

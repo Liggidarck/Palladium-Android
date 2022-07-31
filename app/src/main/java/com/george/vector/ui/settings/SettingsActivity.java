@@ -16,6 +16,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
         binding = SettingsRootActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
