@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class FragmentDevelopApp extends Fragment {
 
     FragmentDevelopAppBinding binding;
-    ArrayList<Release> releases = new ArrayList<>();
+    final ArrayList<Release> releases = new ArrayList<>();
     public static final String TAG = "FragmentDevelopApp";
 
     /**
@@ -172,6 +172,24 @@ public class FragmentDevelopApp extends Fragment {
         releases.add(new Release("Palladium 1.3.2", "13 марта 2022", "Основные изменения\n" + " - Приложение больше не собирает статискику использования. \n" + " - Полностью активированна барышевская школа."));
 
         releases.add(new Release("Palladium 1.4.0", "3 апреля 2022", "Основные изменения\n" + " - Более удобно отображаются входящие уведомления. \n" + " - Регистраци нового пользователя стала более удобной."));
+
+        releases.add(new Release("Palladium 1.5.0", "1 автуста 2022", "Большое обновление исправляющее очень много ошибок, которых не видит пользователь.\n" +
+                "\n" +
+                "- Новая иконка! Теперь это желный алмаз Allnatt Diamond.\n" +
+                "\n" +
+                "- Исправлена ошибка с выходом из аккаунта.\n" +
+                "\n" +
+                "- Добавлена возможность выйти из аккаунта исполнителю :)\n" +
+                "\n" +
+                "- Я решил вернуть темную тему. Теперь она выглядит горадзо лучше. Приложение будет автоматически подстравиваться под тему устройства.\n" +
+                "\n" +
+                "- Серьезно усовершенствована серверная сторона. Стало работать еще быстрее! \n" +
+                "\n" +
+                "- Исправлена критическая ошибка с утечкой памяти. \n" +
+                "\n" +
+                "- Добавлен новый крутой экран загрузки.\n" +
+                "\n" +
+                "- Приложение стало меньше занимать места на телефоне. -30% по стравнениею с версиеей 1.4.0"));
 
         ReleaseAdapter adapter = new ReleaseAdapter(FragmentDevelopApp.this.getActivity(), releases);
         binding.developRecycler.setAdapter(adapter);

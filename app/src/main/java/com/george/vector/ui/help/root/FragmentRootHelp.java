@@ -35,7 +35,7 @@ public class FragmentRootHelp extends Fragment {
         binding.technicalSupport.setOnClickListener(v -> {
             Intent intent = new Intent("android.intent.action.SENDTO",
                     Uri.fromParts("mailto", getString(R.string.email_developer), null));
-            intent.putExtra("android.intent.extra.SUBJECT", "Помощь с приложением");
+            intent.putExtra("android.intent.extra.SUBJECT", getString(R.string.text_help));
             startActivity(Intent.createChooser(intent,
                     getString(R.string.text_send_email)));
         });

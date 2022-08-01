@@ -1,19 +1,16 @@
 package com.george.vector.ui.users.executor.main;
 
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.OST;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
-import static com.george.vector.common.consts.Logs.TAG_MAIN_EXECUTOR_ACTIVITY;
+import static com.george.vector.common.utils.consts.Keys.OST;
+import static com.george.vector.common.utils.consts.Logs.TAG_MAIN_EXECUTOR_ACTIVITY;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -24,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.george.vector.R;
+import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityMainExecutorBinding;
 import com.george.vector.ui.users.executor.main.fragments.FragmentBarExecutor;
 import com.george.vector.ui.users.executor.main.fragments.FragmentOstExecutor;
@@ -35,7 +33,6 @@ public class MainExecutorActivity extends AppCompatActivity {
 
     String zone, email;
     ActivityMainExecutorBinding executorBinding;
-    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,25 +41,20 @@ public class MainExecutorActivity extends AppCompatActivity {
         executorBinding = ActivityMainExecutorBinding.inflate(getLayoutInflater());
         setContentView(executorBinding.getRoot());
 
-        sharedPreferences = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-
-        email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+        email = userPrefViewModel.getUser().getEmail();
         zone = PreferenceManager.getDefaultSharedPreferences(this).getString("default_executor_location", OST);
 
         executorBinding.technicalSupportExecutor.setOnClickListener(v -> {
-            Intent intent = new Intent("android.intent.action.SENDTO", Uri.fromParts("mailto", "georgyfilatov@yandex.ru", null));
-            intent.putExtra("android.intent.extra.SUBJECT", "Помощь с приложением");
-            startActivity(Intent.createChooser(intent, "Выберите приложение для отправки электронного письма разработчику приложения"));
+            Intent intent = new Intent("android.intent.action.SENDTO", Uri.fromParts("mailto",
+                    getString(R.string.email_developer), null));
+            intent.putExtra("android.intent.extra.SUBJECT", getString(R.string.text_help));
+            startActivity(Intent.createChooser(intent, getString(R.string.text_send_email)));
         });
 
         setSupportActionBar(executorBinding.bottomAppBarWorker);
         executorBinding.bottomAppBarWorker.setNavigationOnClickListener(v -> {
             SettingsExecutorBottomSheet bottomSheet = new SettingsExecutorBottomSheet();
-            Bundle bundle = new Bundle();
-
-            bundle.putString(EMAIL, email);
-            bottomSheet.setArguments(bundle);
-
             bottomSheet.show(getSupportFragmentManager(), "SettingsExecutorBottomSheet");
         });
 
@@ -100,20 +92,10 @@ public class MainExecutorActivity extends AppCompatActivity {
             case "ost":
                 Log.i(TAG_MAIN_EXECUTOR_ACTIVITY, "Запуск фрагмента Осафьево");
                 currentFragment = new FragmentOstExecutor();
-
-                Bundle email = new Bundle();
-                email.putString(EMAIL, this.email);
-                currentFragment.setArguments(email);
-
                 break;
             case "bar":
                 Log.i(TAG_MAIN_EXECUTOR_ACTIVITY, "Запуск фрагмента Барыши");
                 currentFragment = new FragmentBarExecutor();
-
-                Bundle email_bar = new Bundle();
-                email_bar.putString(EMAIL, this.email);
-                currentFragment.setArguments(email_bar);
-
                 break;
         }
         assert currentFragment != null;

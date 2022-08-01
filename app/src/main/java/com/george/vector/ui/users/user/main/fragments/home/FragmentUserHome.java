@@ -1,17 +1,10 @@
 package com.george.vector.ui.users.user.main.fragments.home;
 
-import static com.george.vector.common.consts.Keys.COLLECTION;
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.ID;
-import static com.george.vector.common.consts.Keys.PERMISSION;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PERMISSION;
-import static com.george.vector.common.consts.Logs.TAG_HOME_USER_FRAGMENT;
+import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ID;
+import static com.george.vector.common.utils.consts.Logs.TAG_HOME_USER_FRAGMENT;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,9 +14,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.FragmentUserHomeBinding;
 import com.george.vector.network.model.Task;
 import com.george.vector.ui.adapter.TaskAdapter;
@@ -39,7 +34,6 @@ public class FragmentUserHome extends Fragment {
     String permission, email;
 
     TaskAdapter adapter;
-    SharedPreferences sharedPreferences;
 
     @Nullable
     @Override
@@ -47,12 +41,9 @@ public class FragmentUserHome extends Fragment {
         homeBinding = FragmentUserHomeBinding.inflate(inflater, container, false);
         View view = homeBinding.getRoot();
 
-        sharedPreferences = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-        email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
-        permission = sharedPreferences.getString(USER_PREFERENCES_PERMISSION, "");
-
-        Log.d(TAG_HOME_USER_FRAGMENT, "email: " + email);
-        Log.d(TAG_HOME_USER_FRAGMENT, "permission: " + permission);
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+        email = userPrefViewModel.getUser().getEmail();
+        permission = userPrefViewModel.getUser().getPermission();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = db.collection(permission);
@@ -83,16 +74,12 @@ public class FragmentUserHome extends Fragment {
             Intent intent = new Intent(FragmentUserHome.this.getContext(), TaskUserActivity.class);
             intent.putExtra(ID, id);
             intent.putExtra(COLLECTION, permission);
-            intent.putExtra(EMAIL, email);
             startActivity(intent);
         });
 
-        homeBinding.createTaskUser.setOnClickListener(v -> {
-            Intent intent = new Intent(FragmentUserHome.this.getContext(), AddTaskUserActivity.class);
-            intent.putExtra(PERMISSION, permission);
-            intent.putExtra(EMAIL, email);
-            startActivity(intent);
-        });
+        homeBinding.createTaskUser.setOnClickListener(v ->
+                startActivity(new Intent(FragmentUserHome.this.getContext(), AddTaskUserActivity.class))
+        );
 
         return view;
     }

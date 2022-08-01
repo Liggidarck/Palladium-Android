@@ -1,12 +1,11 @@
 package com.george.vector.ui.users.root.tasks;
 
-import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.EXECUTOR_EMAIL;
-import static com.george.vector.common.consts.Keys.FOLDER;
-import static com.george.vector.common.consts.Keys.ID;
-import static com.george.vector.common.consts.Keys.LOCATION;
-import static com.george.vector.common.consts.Logs.TAG_TASK_ROOT_FRAGMENT;
+import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
+import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
+import static com.george.vector.common.utils.consts.Keys.FOLDER;
+import static com.george.vector.common.utils.consts.Keys.ID;
+import static com.george.vector.common.utils.consts.Logs.TAG_TASK_ROOT_FRAGMENT;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,10 +17,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
+import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.FragmentTasksRootBinding;
 import com.george.vector.ui.adapter.TaskAdapter;
 import com.george.vector.network.model.Task;
@@ -31,7 +32,7 @@ import com.google.firebase.firestore.Query;
 
 public class FragmentTasksRoot extends Fragment {
 
-    String location, status, executorEmail, email;
+    String collections, status, executorEmail, email;
 
     TaskAdapter taskAdapter;
     FragmentTasksRootBinding binding;
@@ -44,23 +45,25 @@ public class FragmentTasksRoot extends Fragment {
 
         Bundle args = getArguments();
         assert args != null;
-        location = args.getString(LOCATION);
+        collections = args.getString(COLLECTION);
         status = args.getString(FOLDER);
         executorEmail = args.getString(EXECUTOR_EMAIL);
-        email = args.getString(EMAIL);
 
-        if (location.equals(BAR_SCHOOL)) {
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+        email = userPrefViewModel.getUser().getEmail();
+
+        if (collections.equals(BAR_SCHOOL)) {
             binding.chipNewSchoolTasksRoot.setVisibility(View.INVISIBLE);
             binding.chipOldSchoolTasksRoot.setVisibility(View.INVISIBLE);
         }
 
-        setUpRecyclerView(location, status, executorEmail);
+        setUpRecyclerView(collections, status, executorEmail);
 
         return view;
     }
 
-    void setUpRecyclerView(String location, String status, String executed) {
-        initQuery(location, status, executed);
+    void setUpRecyclerView(String collections, String status, String executed) {
+        initQuery(collections, status, executed);
 
         binding.recyclerviewSchoolOstNewTasks.setHasFixedSize(true);
         binding.recyclerviewSchoolOstNewTasks.setLayoutManager(new LinearLayoutManager(FragmentTasksRoot.this.getContext()));
@@ -73,8 +76,7 @@ public class FragmentTasksRoot extends Fragment {
 
             Intent intent = new Intent(FragmentTasksRoot.this.getContext(), TaskRootActivity.class);
             intent.putExtra(ID, id);
-            intent.putExtra(LOCATION, location);
-            intent.putExtra(EMAIL, email);
+            intent.putExtra(COLLECTION, collections);
             startActivity(intent);
 
         });

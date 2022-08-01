@@ -195,6 +195,54 @@
 
                 </HorizontalScrollView>
 
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/download_full_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    app:cardElevation="5dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="20dp">
+
+                        <RelativeLayout
+                            android:id="@+id/about_app_layout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:src="#85C2FF" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:src="@drawable/ic_baseline_cloud_download_24"
+                                tools:ignore="ContentDescription" />
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="20dp"
+                            android:layout_toEndOf="@+id/about_app_layout"
+                            android:text="Скачать полный текст технической поддержки"
+                            android:textColor="?attr/textColor"
+                            android:textSize="17sp" />
+
+                    </RelativeLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="50dp" />

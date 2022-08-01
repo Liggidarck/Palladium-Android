@@ -1,13 +1,10 @@
 package com.george.vector.ui.users.root.tasks;
 
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.ID;
-import static com.george.vector.common.consts.Keys.LOCATION;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL;
-import static com.george.vector.common.consts.Logs.TAG_EDIT_TASK_ROOT_ACTIVITY;
-import static com.george.vector.common.consts.Logs.TAG_STATE_TASK;
-
-import static java.util.Objects.*;
+import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ID;
+import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
+import static com.george.vector.common.utils.consts.Logs.TAG_STATE_TASK;
+import static java.util.Objects.requireNonNull;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -16,22 +13,20 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
-import com.george.vector.common.utils.TextValidator;
-import com.george.vector.common.utils.Utils;
+import com.george.vector.common.utils.DialogsUtils;
+import com.george.vector.common.utils.NetworkUtils;
+import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.databinding.ActivityAddTaskRootBinding;
 import com.george.vector.network.model.Task;
 import com.george.vector.network.viewmodel.TaskViewModel;
 import com.george.vector.network.viewmodel.ViewModelFactory;
 import com.george.vector.ui.users.root.main.MainRootActivity;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,24 +34,21 @@ import java.util.Locale;
 
 public class EditTaskRootActivity extends AppCompatActivity {
 
-    Calendar datePickCalendar;
+    private Calendar datePickCalendar;
 
-    String id, address, floor, cabinet, letter, nameTask, comment, status, dateCreate, timeCreate,
-            dateDone, emailCreator, collection, userEmail, image, fullNameExecutor, nameCreator,
-            emailExecutor;
+    private String id, comment, dateCreate, timeCreate, emailCreator, collection, image, nameCreator;
 
-    boolean urgent;
+    private final TextValidatorUtils textValidatorUtils = new TextValidatorUtils();
+    private final NetworkUtils networkUtils = new NetworkUtils();
+    private final DialogsUtils dialogsUtils = new DialogsUtils();
 
-    private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    private ActivityAddTaskRootBinding binding;
 
-    Utils utils = new Utils();
-
-    ActivityAddTaskRootBinding binding;
-
-    TaskViewModel taskViewModel;
+    private TaskViewModel taskViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
         binding = ActivityAddTaskRootBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -65,14 +57,13 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.getString(ID);
-        collection = arguments.getString(LOCATION);
-        userEmail = arguments.getString(EMAIL);
+        collection = arguments.getString(COLLECTION);
+
         String bufferSizePreference = PreferenceManager
                 .getDefaultSharedPreferences(EditTaskRootActivity.this)
                 .getString("buffer_size", "2");
 
-        Log.d(TAG_EDIT_TASK_ROOT_ACTIVITY, "buffer_size_preference: " + bufferSizePreference);
-
+        initializeFields(collection);
 
         taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
                 this.getApplication(),
@@ -81,7 +72,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
         int bufferSize = Integer.parseInt(bufferSizePreference);
 
-        binding.addExecutorBtn.setOnClickListener(v -> utils.showAddExecutorDialog(EditTaskRootActivity.this,
+        binding.addExecutorBtn.setOnClickListener(v -> dialogsUtils.showAddExecutorDialog(EditTaskRootActivity.this,
                 binding.taskEmailExecutor, binding.taskNameExecutor));
 
         getTask(bufferSize);
@@ -90,7 +81,8 @@ public class EditTaskRootActivity extends AppCompatActivity {
             if (!validateFields()) {
                 return;
             }
-            if (!utils.isOnline(EditTaskRootActivity.this)) {
+
+            if (!networkUtils.isOnline(EditTaskRootActivity.this)) {
                 showDialog();
                 return;
             }
@@ -100,63 +92,37 @@ public class EditTaskRootActivity extends AppCompatActivity {
     }
 
     private void getTask(int bufferSize) {
-        DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
-        documentReference.addSnapshotListener(this, (value, error) -> {
-            binding.progressBarAddEditTask.setVisibility(View.VISIBLE);
+        binding.progressBarAddEditTask.setVisibility(View.VISIBLE);
+        taskViewModel.getTask(id).observe(EditTaskRootActivity.this, task -> {
 
-            assert value != null;
-            address = value.getString("address");
-            floor = value.getString("floor");
-            cabinet = value.getString("cabinet");
-            letter = value.getString("litera");
-            nameTask = value.getString("name_task");
-            comment = value.getString("comment");
-            status = value.getString("status");
+            comment = task.getComment();
+            dateCreate = task.getDate_create();
+            timeCreate = task.getTime_create();
+            image = task.getImage();
+            emailCreator = task.getEmail_creator();
+            nameCreator = task.getNameCreator();
 
-            dateDone = value.getString("date_done");
-            emailExecutor = value.getString("executor");
-            fullNameExecutor = value.getString("fullNameExecutor");
+            requireNonNull(binding.taskAddress.getEditText()).setText(task.getAddress());
+            requireNonNull(binding.taskFloor.getEditText()).setText(task.getFloor());
+            requireNonNull(binding.taskCabinet.getEditText()).setText(task.getCabinet());
+            requireNonNull(binding.taskLetter.getEditText()).setText(task.getLitera());
+            requireNonNull(binding.taskName.getEditText()).setText(task.getName_task());
+            requireNonNull(binding.taskDateComplete.getEditText()).setText(task.getDate_done());
+            requireNonNull(binding.taskEmailExecutor.getEditText()).setText(task.getExecutor());
+            requireNonNull(binding.taskStatus.getEditText()).setText(task.getStatus());
+            requireNonNull(binding.taskNameExecutor.getEditText()).setText(task.getFullNameExecutor());
+            binding.urgentCheckBox.setChecked(task.getUrgent());
 
-            dateCreate = value.getString("date_create");
-            timeCreate = value.getString("time_create");
-            emailCreator = value.getString("email_creator");
-            nameCreator = value.getString("nameCreator");
+            if (comment.equals("Нет коментария к заявке"))
+                requireNonNull(binding.taskComment.getEditText()).setText("");
+            else
+                requireNonNull(binding.taskComment.getEditText()).setText(comment);
 
-            image = value.getString("image");
-
-            if (image == null) {
-                Log.d(TAG_EDIT_TASK_ROOT_ACTIVITY, "No image, stop loading");
-                binding.progressBarAddEditTask.setVisibility(View.INVISIBLE);
-            } else {
+            if (image != null)
                 taskViewModel.setImage(image, binding.progressBarAddEditTask, binding.imageViewTask, bufferSize);
-            }
 
-            try {
-                urgent = value.getBoolean("urgent");
-
-                requireNonNull(binding.taskAddress.getEditText()).setText(address);
-                requireNonNull(binding.taskFloor.getEditText()).setText(floor);
-                requireNonNull(binding.taskCabinet.getEditText()).setText(cabinet);
-                requireNonNull(binding.taskLetter.getEditText()).setText(letter);
-                requireNonNull(binding.taskName.getEditText()).setText(nameTask);
-                requireNonNull(binding.taskDateComplete.getEditText()).setText(dateDone);
-                requireNonNull(binding.taskEmailExecutor.getEditText()).setText(emailExecutor);
-                requireNonNull(binding.taskStatus.getEditText()).setText(status);
-                requireNonNull(binding.taskNameExecutor.getEditText()).setText(fullNameExecutor);
-
-                if (comment.equals("Нет коментария к заявке"))
-                    requireNonNull(binding.taskComment.getEditText()).setText("");
-                else
-                    requireNonNull(binding.taskComment.getEditText()).setText(comment);
-
-                binding.urgentCheckBox.setChecked(urgent);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            initializeFields(collection);
         });
+        binding.progressBarAddEditTask.setVisibility(View.INVISIBLE);
     }
 
     void updateTask(String collection) {
@@ -183,9 +149,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
         taskViewModel.updateTask(id, task);
 
-        Intent intent = new Intent(this, MainRootActivity.class);
-        intent.putExtra(EMAIL, userEmail);
-        startActivity(intent);
+        startActivity(new Intent(this, MainRootActivity.class));
     }
 
     void showDialog() {
@@ -194,45 +158,32 @@ public class EditTaskRootActivity extends AppCompatActivity {
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_no_connection))
                 .setPositiveButton(getText(R.string.save), (dialog, id) -> updateTask(collection))
-                .setNegativeButton(android.R.string.cancel, (dialog, id) -> {
-                    Intent intent = new Intent(this, MainRootActivity.class);
-                    intent.putExtra(EMAIL, userEmail);
-                    startActivity(intent);
-                });
+                .setNegativeButton(android.R.string.cancel, (dialog, id) ->
+                        startActivity(new Intent(this, MainRootActivity.class)));
 
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
     boolean validateFields() {
-        utils.clearError(binding.taskAddress);
-        utils.clearError(binding.taskFloor);
-        utils.clearError(binding.taskCabinet);
-        utils.clearError(binding.taskName);
-        utils.clearError(binding.taskDateComplete);
-        utils.clearError(binding.taskEmailExecutor);
-        utils.clearError(binding.taskStatus);
-        utils.clearError(binding.taskName);
+        String address = binding.taskAddress.getEditText().getText().toString();
+        String floor = binding.taskFloor.getEditText().getText().toString();
+        String cabinet = binding.taskCabinet.getEditText().getText().toString();
+        String taskName = binding.taskName.getEditText().getText().toString();
+        String dateComplete = binding.taskDateComplete.getEditText().getText().toString();
+        String emailExecutor = binding.taskEmailExecutor.getEditText().getText().toString();
+        String taskStatus = binding.taskStatus.getEditText().getText().toString();
+        String fullNameExecutor = binding.taskNameExecutor.getEditText().getText().toString();
 
-        address = requireNonNull(binding.taskAddress.getEditText()).getText().toString();
-        floor = requireNonNull(binding.taskFloor.getEditText()).getText().toString();
-        cabinet = requireNonNull(binding.taskCabinet.getEditText()).getText().toString();
-        nameTask = requireNonNull(binding.taskName.getEditText()).getText().toString();
-        String dateTask = requireNonNull(binding.taskDateComplete.getEditText()).getText().toString();
-        emailExecutor = requireNonNull(binding.taskEmailExecutor.getEditText()).getText().toString();
-        status = requireNonNull(binding.taskStatus.getEditText()).getText().toString();
-        fullNameExecutor = binding.taskNameExecutor.getEditText().getText().toString();
-
-        boolean checkAddress = utils.validateField(address, binding.taskAddress);
-        boolean checkFloor = utils.validateField(floor, binding.taskFloor);
-        boolean checkCabinet = utils.validateField(cabinet, binding.taskCabinet);
-        boolean checkNameTask = utils.validateField(nameTask, binding.taskName);
-        boolean checkDateTask = utils.validateField(dateTask, binding.taskDateComplete);
-        boolean checkExecutor = utils.validateField(emailExecutor, binding.taskEmailExecutor);
-        boolean checkStatus = utils.validateField(status, binding.taskStatus);
-        boolean checkNameExecutor = utils.validateField(fullNameExecutor, binding.taskNameExecutor);
-
-        return checkAddress & checkFloor & checkCabinet & checkNameTask & checkDateTask & checkExecutor & checkStatus & checkNameExecutor;
+        return textValidatorUtils.isEmptyField(address, binding.taskAddress) &
+                textValidatorUtils.isEmptyField(floor, binding.taskFloor) &
+                textValidatorUtils.isEmptyField(cabinet, binding.taskCabinet) &
+                textValidatorUtils.isEmptyField(taskName, binding.taskName) &
+                textValidatorUtils.isEmptyField(dateComplete, binding.taskDateComplete) &
+                textValidatorUtils.isEmptyField(emailExecutor, binding.taskEmailExecutor) &
+                textValidatorUtils.isEmptyField(taskStatus, binding.taskStatus) &
+                textValidatorUtils.isEmptyField(fullNameExecutor, binding.taskNameExecutor)&
+                textValidatorUtils.validateNumberField(cabinet, binding.taskCabinet, 3);
     }
 
     void initializeFields(String location) {
@@ -285,22 +236,6 @@ public class EditTaskRootActivity extends AppCompatActivity {
                         .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar
                         .get(Calendar.DAY_OF_MONTH))
                         .show());
-
-        binding.taskFloor.getEditText().addTextChangedListener(
-                new TextValidator(binding.taskFloor.getEditText()) {
-            @Override
-            public void validate(TextView textView, String text) {
-                utils.validateNumberField(text, binding.taskFloor, binding.doneBtn, 1);
-            }
-        });
-
-        binding.taskCabinet.getEditText().addTextChangedListener(
-                new TextValidator(binding.taskCabinet.getEditText()) {
-            @Override
-            public void validate(TextView textView, String text) {
-                utils.validateNumberField(text, binding.taskCabinet, binding.doneBtn, 3);
-            }
-        });
 
     }
 

@@ -25,11 +25,11 @@ public class UserAdapter extends FirestoreRecyclerAdapter<User, UserAdapter.User
     @Override
     protected void onBindViewHolder(@NonNull UserAdapter.UserHolder holder, int position, @NonNull User model) {
         String name = model.getName();
-        String last_name = model.getLast_name();
+        String lastName = model.getLast_name();
         String patronymic = model.getPatronymic();
-        String full_name = String.format("%s %s %s", last_name, name, patronymic);
+        String fullName = String.format("%s %s %s", lastName, name, patronymic);
 
-        holder.textViewName.setText(full_name);
+        holder.textViewName.setText(fullName);
         holder.textViewEmail.setText(model.getEmail());
     }
 

@@ -15,7 +15,7 @@
         android:textSize="22sp" />
 
     <RelativeLayout
-        android:id="@+id/layout_new_photo_bottom_sheet"
+        android:id="@+id/newPhoto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="?android:attr/selectableItemBackground"
@@ -24,7 +24,7 @@
         tools:ignore="UnusedAttribute">
 
         <ImageView
-            android:id="@+id/camera_image"
+            android:id="@+id/imageViewCamera"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_centerVertical="true"
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
-            android:layout_toEndOf="@id/camera_image"
+            android:layout_toEndOf="@id/imageViewCamera"
             android:text="@string/take_photo"
             android:textColor="?attr/textColor"
             android:textSize="17sp" />
@@ -47,7 +47,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/layout_folder_bottom_sheet"
+        android:id="@+id/folder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="?android:attr/selectableItemBackground"
@@ -56,14 +56,14 @@
         tools:ignore="UnusedAttribute">
 
         <ImageView
-            android:id="@+id/following_image_sheet"
+            android:id="@+id/imageViewFolder"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:src="@drawable/ic_gray_folder_24"
             android:layout_centerVertical="true"
             android:layout_marginTop="15dp"
-            app:tint="?attr/colorControlNormal"
             android:layout_marginBottom="15dp"
+            android:src="@drawable/ic_baseline_folder_24"
+            app:tint="?attr/colorControlNormal"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
-            android:layout_toEndOf="@id/following_image_sheet"
+            android:layout_toEndOf="@id/imageViewFolder"
             android:text="@string/choose_existing"
             android:textColor="?attr/textColor"
             android:textSize="17sp" />

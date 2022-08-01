@@ -25,7 +25,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Узнайте больше о проекте"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/textColor"
                     android:textSize="21sp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp" />
@@ -34,7 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/app_name"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/textColor"
                     android:textSize="30sp"
                     android:layout_marginStart="20dp"
                     android:textStyle="bold"/>
@@ -49,7 +49,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Плейсхолдерная крутая цитата, котороая должа быть тут, \n но я ничего не нашел умного."
-                    android:textColor="@color/black"
+                    android:textColor="?attr/textColor"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
                     android:textStyle="italic"
@@ -102,7 +102,7 @@
                             android:layout_marginStart="20dp"
                             android:layout_toEndOf="@+id/about_app_layout"
                             android:text="Документация"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/textColor"
                             android:textSize="20sp" />
 
                     </RelativeLayout>
@@ -201,8 +201,8 @@
                             android:layout_marginStart="20dp"
                             android:layout_toEndOf="@+id/privacy_policy_layout"
                             android:text="Политика конфиденциальности"
-                            android:textSize="20sp"
-                            android:textColor="@color/black" />
+                            android:textColor="?attr/textColor"
+                            android:textSize="20sp" />
 
                     </RelativeLayout>
 
@@ -249,8 +249,8 @@
                             android:layout_marginStart="20dp"
                             android:layout_toEndOf="@+id/licence_layout"
                             android:text="Лицензия"
-                            android:textSize="20sp"
-                            android:textColor="@color/black" />
+                            android:textColor="?attr/textColor"
+                            android:textSize="20sp" />
 
                     </RelativeLayout>
 
@@ -268,7 +268,7 @@
                 android:id="@+id/toolbar_about_project"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/blue_primary"
+                style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 app:layout_collapseMode="pin"
                 app:title="О проекте"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"

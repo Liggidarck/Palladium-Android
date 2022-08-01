@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.george.vector.R;
 import com.george.vector.databinding.ActivityListUsersBinding;
 import com.george.vector.network.model.User;
 import com.george.vector.ui.adapter.UserAdapter;
@@ -26,6 +27,7 @@ public class ListUsersActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
         usersBinding = ActivityListUsersBinding.inflate(getLayoutInflater());
         setContentView(usersBinding.getRoot());

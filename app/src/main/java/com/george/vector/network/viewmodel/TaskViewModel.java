@@ -1,6 +1,6 @@
 package com.george.vector.network.viewmodel;
 
-import static com.george.vector.common.consts.Keys.TOPIC_NEW_TASKS_CREATE;
+import static com.george.vector.common.utils.consts.Keys.TOPIC_NEW_TASKS_CREATE;
 
 import android.app.Application;
 import android.app.ProgressDialog;
@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
 
 import com.george.vector.common.notifications.SendNotification;
 import com.george.vector.network.model.Task;
@@ -32,12 +33,15 @@ public class TaskViewModel extends AndroidViewModel {
     final FirebaseStorage firebaseStorage;
     final StorageReference storageReference;
 
-
     public TaskViewModel(@NonNull Application application, String collection) {
         super(application);
         repository = new TaskRepository(collection);
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
+    }
+
+    public MutableLiveData<Task> getTask(String taskId) {
+        return repository.getTask(taskId);
     }
 
     public void createTask(Task task) {

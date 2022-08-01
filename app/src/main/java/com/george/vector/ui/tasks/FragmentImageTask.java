@@ -1,9 +1,7 @@
 package com.george.vector.ui.tasks;
 
-import static com.george.vector.common.consts.Keys.COLLECTION;
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.ID;
-import static com.george.vector.common.consts.Keys.LOCATION;
+import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ID;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,7 +26,7 @@ public class FragmentImageTask extends Fragment {
 
     FragmentImageTaskBinding binding;
 
-    String image, id, collection, location, email;
+    String image, id, collection;
 
     @Nullable
     @Override
@@ -41,56 +39,50 @@ public class FragmentImageTask extends Fragment {
         image = args.getString("image_id");
         id = args.getString(ID);
         collection = args.getString(COLLECTION);
-        location = args.getString(LOCATION);
-        email = args.getString(EMAIL);
 
         TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
                 this.requireActivity().getApplication(),
-                collection))
-                .get(TaskViewModel.class);
+                collection)
+        ).get(TaskViewModel.class);
 
         boolean economyTraffic = PreferenceManager
                 .getDefaultSharedPreferences(FragmentImageTask.this.getContext())
                 .getBoolean("economy_traffic", false);
 
-        String buffer_size_preference = PreferenceManager
+        String bufferSizePreference = PreferenceManager
                 .getDefaultSharedPreferences(FragmentImageTask.this.getContext())
                 .getString("buffer_size", "2");
-        Log.d(TAG, "buffer_size_preference: " + buffer_size_preference);
+        Log.d(TAG, "buffer_size_preference: " + bufferSizePreference);
 
-        int buffer_size = Integer.parseInt(buffer_size_preference);
+        int bufferSize = Integer.parseInt(bufferSizePreference);
 
-        Log.d(TAG, "buffer_size: " + buffer_size);
+        Log.d(TAG, "buffer_size: " + bufferSize);
 
-        binding.rotateImageTaskRoot.setOnClickListener(v ->
-                binding.imageRootTask
+        binding.btnRotateImage.setOnClickListener(v ->
+                binding.imageViewTask
                         .animate()
-                        .rotation(binding.imageRootTask.getRotation() + 90)
+                        .rotation(binding.imageViewTask.getRotation() + 90)
                         .setDuration(60));
 
         if (economyTraffic) {
-            binding.downloadImageBtn.setVisibility(View.VISIBLE);
-            binding.viewProgressIndicatorImage.setVisibility(View.INVISIBLE);
-            binding.imageRootTask.setVisibility(View.INVISIBLE);
-            binding.rotateImageTaskRoot.setVisibility(View.INVISIBLE);
+            binding.btnDownload.setVisibility(View.VISIBLE);
+            binding.progressBarImage.setVisibility(View.INVISIBLE);
+            binding.imageViewTask.setVisibility(View.INVISIBLE);
+            binding.btnRotateImage.setVisibility(View.INVISIBLE);
 
-            binding.downloadImageBtn.setOnClickListener(v -> {
-                binding.downloadImageBtn.setVisibility(View.INVISIBLE);
-                binding.viewProgressIndicatorImage.setVisibility(View.VISIBLE);
-                binding.imageRootTask.setVisibility(View.VISIBLE);
-                binding.rotateImageTaskRoot.setVisibility(View.VISIBLE);
-
-
-                taskViewModel.setImage(image, binding.viewProgressIndicatorImage, binding.imageRootTask, buffer_size);
+            binding.btnDownload.setOnClickListener(v -> {
+                binding.btnDownload.setVisibility(View.INVISIBLE);
+                binding.progressBarImage.setVisibility(View.VISIBLE);
+                binding.imageViewTask.setVisibility(View.VISIBLE);
+                binding.btnRotateImage.setVisibility(View.VISIBLE);
+                taskViewModel.setImage(image, binding.progressBarImage, binding.imageViewTask, bufferSize);
             });
-
         } else {
-            binding.downloadImageBtn.setVisibility(View.INVISIBLE);
-
-            taskViewModel.setImage(image, binding.viewProgressIndicatorImage, binding.imageRootTask, buffer_size);
+            binding.btnDownload.setVisibility(View.INVISIBLE);
+            taskViewModel.setImage(image, binding.progressBarImage, binding.imageViewTask, bufferSize);
         }
 
-        binding.imageRootCard.setOnClickListener(v -> goActivityImage());
+        binding.cardViewImage.setOnClickListener(v -> goActivityImage());
 
         return root;
     }
@@ -99,8 +91,6 @@ public class FragmentImageTask extends Fragment {
         Intent intent = new Intent(FragmentImageTask.this.getContext(), ImageTaskActivity.class);
         intent.putExtra(ID, id);
         intent.putExtra(COLLECTION, collection);
-        intent.putExtra(LOCATION, location);
-        intent.putExtra(EMAIL, email);
         startActivity(intent);
     }
 

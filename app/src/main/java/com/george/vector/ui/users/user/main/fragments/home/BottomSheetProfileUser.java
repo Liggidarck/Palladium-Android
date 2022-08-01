@@ -1,15 +1,7 @@
 package com.george.vector.ui.users.user.main.fragments.home;
 
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.PERMISSION;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
-
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +9,9 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ProfileUserBottomSheetBinding;
 import com.george.vector.ui.settings.SettingsActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -25,7 +19,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 public class BottomSheetProfileUser extends BottomSheetDialogFragment {
 
     ProfileUserBottomSheetBinding binding;
-    SharedPreferences sharedPreferences;
 
     stateBtnListener listener;
 
@@ -35,24 +28,21 @@ public class BottomSheetProfileUser extends BottomSheetDialogFragment {
         binding = ProfileUserBottomSheetBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        sharedPreferences = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-        String name_user = sharedPreferences.getString(USER_PREFERENCES_NAME, "");
-        String last_name_user = sharedPreferences.getString(USER_PREFERENCES_LAST_NAME, "");
-        String email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+        String nameUser = userPrefViewModel.getUser().getName();
+        String lastNameUser = userPrefViewModel.getUser().getLast_name();
+        String email = userPrefViewModel.getUser().getEmail();
 
-        String _name = Character.toString(name_user.charAt(0));
-        String _last_name = Character.toString(last_name_user.charAt(0));
+        String charName = Character.toString(nameUser.charAt(0));
+        String charLastname = Character.toString(lastNameUser.charAt(0));
 
-        binding.textNameUser.setText(String.format("%s %s", name_user, last_name_user));
+        binding.textNameUser.setText(String.format("%s %s", nameUser, lastNameUser));
         binding.textEmailUser.setText(email);
-        binding.textViewNameAva.setText(String.format("%s%s", _name, _last_name));
+        binding.textViewNameAva.setText(String.format("%s%s", charName, charLastname));
 
-        binding.settingsBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(BottomSheetProfileUser.this.getContext(), SettingsActivity.class);
-            intent.putExtra(PERMISSION, "user");
-            intent.putExtra(EMAIL, "null");
-            startActivity(intent);
-        });
+        binding.settingsBtn.setOnClickListener(v ->
+                startActivity(new Intent(BottomSheetProfileUser.this.getContext(), SettingsActivity.class))
+        );
 
         binding.logoutBtnUser.setOnClickListener(v -> listener.getButton("logoutBtnUser"));
 

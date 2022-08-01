@@ -1,29 +1,25 @@
 package com.george.vector.ui.users.root.tasks;
 
-import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.LOCATION;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
+import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
+import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.BottomSheetAddTaskBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class BottomSheetAddTask extends BottomSheetDialogFragment {
 
     String email;
-    SharedPreferences sharedPreferences;
 
     BottomSheetAddTaskBinding taskBinding;
 
@@ -32,20 +28,18 @@ public class BottomSheetAddTask extends BottomSheetDialogFragment {
         taskBinding = BottomSheetAddTaskBinding.inflate(inflater, container, false);
         View view = taskBinding.getRoot();
 
-        sharedPreferences = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-        email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+        email = userPrefViewModel.getUser().getEmail();
 
         taskBinding.ostSchoolNewTask.setOnClickListener(v-> {
             Intent intent = new Intent(BottomSheetAddTask.this.getContext(), AddTaskRootActivity.class);
-            intent.putExtra(LOCATION, OST_SCHOOL);
-            intent.putExtra(EMAIL, email);
+            intent.putExtra(COLLECTION, OST_SCHOOL);
             startActivity(intent);
         });
 
         taskBinding.barSchoolNewTask.setOnClickListener(v -> {
             Intent intent = new Intent(BottomSheetAddTask.this.getContext(), AddTaskRootActivity.class);
-            intent.putExtra(LOCATION, BAR_SCHOOL);
-            intent.putExtra(EMAIL, email);
+            intent.putExtra(COLLECTION, BAR_SCHOOL);
             startActivity(intent);
         });
 

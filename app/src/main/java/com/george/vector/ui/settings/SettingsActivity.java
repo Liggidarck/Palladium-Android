@@ -1,13 +1,13 @@
 package com.george.vector.ui.settings;
 
-import static com.george.vector.common.consts.Keys.PERMISSION;
-
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.george.vector.R;
+import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.SettingsRootActivityBinding;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -16,30 +16,31 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
         binding = SettingsRootActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        Bundle arguments = getIntent().getExtras();
-        String permission = arguments.getString(PERMISSION);
+        UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+        String role = userDataViewModel.getUser().getRole();
 
         binding.toolbarRootToolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         if (savedInstanceState == null) {
 
-            if (permission.equals("root"))
+            if (role.equals("root"))
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.settings_frame, new SettingsRootFragment())
                         .commit();
 
-            if (permission.equals("user"))
+            if (role.equals("user"))
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.settings_frame, new SettingsUserFragment())
                         .commit();
 
-            if (permission.equals("executor"))
+            if (role.equals("Исполнитель"))
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.settings_frame, new SettingsExecutorFragment())

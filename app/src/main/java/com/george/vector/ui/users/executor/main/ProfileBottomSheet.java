@@ -7,21 +7,18 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.databinding.ProfileBottomSheetBinding;
+import com.george.vector.network.viewmodel.UserViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
 public class ProfileBottomSheet extends BottomSheetDialogFragment {
 
     FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
-
-    String userId, name, lastName, patronymic, email, role;
 
     ProfileBottomSheetBinding sheetBinding;
 
@@ -32,30 +29,29 @@ public class ProfileBottomSheet extends BottomSheetDialogFragment {
         View view = sheetBinding.getRoot();
 
         firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         sheetBinding.closeBtn.setOnClickListener(v -> dismiss());
 
-        userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReference = firebaseFirestore.collection("users").document(userId);
-        documentReference.addSnapshotListener((value, error) -> {
-            assert value != null;
-            name = value.getString("name");
-            lastName = value.getString("last_name");
-            patronymic = value.getString("patronymic");
-            email = value.getString("email");
-            role = value.getString("role");
+        String userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        userViewModel.getUser(userId).observe(this, user -> {
+            String name = user.getName();
+            String lastName = user.getLast_name();
+            String patronymic = user.getPatronymic();
+            String email = user.getEmail();
+            String role = user.getRole();
 
             String fullName = String.format("%s %s %s", lastName, name, patronymic);
-            String name = Character.toString(this.name.charAt(0));
-            String lastName = Character.toString(this.lastName.charAt(0));
-            String ava = String.format("%s%s", name, lastName);
+            String charName = Character.toString(name.charAt(0));
+            String charLastName = Character.toString(lastName.charAt(0));
+            String ava = String.format("%s%s", charName, charLastName);
 
             sheetBinding.textViewFullName.setText(fullName);
             sheetBinding.textViewNameAva.setText(ava);
             sheetBinding.textViewEmail.setText(email);
             sheetBinding.textViewRole.setText(role);
         });
+
         return view;
     }
 

@@ -1,10 +1,8 @@
 package com.george.vector.ui.users.executor.tasks;
 
-import static com.george.vector.common.consts.Keys.COLLECTION;
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.ID;
-import static com.george.vector.common.consts.Keys.LOCATION;
-import static com.george.vector.common.consts.Logs.TAG_TASK_EXECUTOR_FRAGMENT;
+import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ID;
+import static com.george.vector.common.utils.consts.Logs.TAG_TASK_EXECUTOR_FRAGMENT;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,26 +14,35 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.R;
 import com.george.vector.databinding.ActivityTaskExecutorBinding;
+import com.george.vector.network.viewmodel.TaskViewModel;
+import com.george.vector.network.viewmodel.ViewModelFactory;
 import com.george.vector.ui.tasks.FragmentImageTask;
 import com.george.vector.ui.tasks.FragmentUrgentRequest;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class TaskExecutorActivity extends AppCompatActivity {
 
-    String id, collection, location, address, floor, cabinet, letter, nameTask, comment, status, dateCreate , timeCreate,
-            emailExecutor, emailCreator, dateDone, image, fullNameCreator, fullNameExecutor, emailMainActivity;
+    String id;
+    String collection;
+    String cabinet;
+    String letter;
+    String status;
+    String dateCreate;
+    String timeCreate;
+    String dateDone;
+    String image;
+
     boolean urgent;
 
-    FirebaseFirestore firebaseFirestore;
     ActivityTaskExecutorBinding taskExecutorBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
         taskExecutorBinding = ActivityTaskExecutorBinding.inflate(getLayoutInflater());
         setContentView(taskExecutorBinding.getRoot());
@@ -43,118 +50,80 @@ public class TaskExecutorActivity extends AppCompatActivity {
         Bundle arguments = getIntent().getExtras();
         id = arguments.getString(ID);
         collection = arguments.getString(COLLECTION);
-        location = arguments.getString(LOCATION);
-        emailMainActivity = arguments.getString(EMAIL);
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        TaskViewModel taskViewModel = new ViewModelProvider(
+                this,
+                new ViewModelFactory(TaskExecutorActivity.this.getApplication(), collection)
+        ).get(TaskViewModel.class);
+
         taskExecutorBinding.topAppBarTaskExecutor.setNavigationOnClickListener(v -> onBackPressed());
 
         taskExecutorBinding.editTaskExecutorBtn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskExecutorActivity.class);
             intent.putExtra(ID, id);
             intent.putExtra(COLLECTION, collection);
-            intent.putExtra(LOCATION, location);
-            intent.putExtra(EMAIL, emailMainActivity);
             startActivity(intent);
         });
 
-        DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
-        documentReference.addSnapshotListener(this, (value, error) -> {
-            taskExecutorBinding.progressBarTaskExecutor.setVisibility(View.VISIBLE);
-            assert value != null;
-            try {
-                address = value.getString("address");
-                floor = value.getString("floor");
-                cabinet = value.getString("cabinet");
-                letter = value.getString("litera");
-                nameTask = value.getString("name_task");
-                comment = value.getString("comment");
-                status = value.getString("status");
-                dateCreate = value.getString("date_create");
-                timeCreate = value.getString("time_create");
-                emailExecutor = value.getString("executor");
-                dateDone = value.getString("date_done");
-                image = value.getString("image");
+        taskViewModel.getTask(id).observe(this, task -> {
+            image = task.getImage();
+            letter = task.getLitera();
+            dateCreate = task.getDate_create();
+            timeCreate = task.getTime_create();
+            dateDone = task.getDate_done();
+            cabinet = task.getCabinet();
+            urgent = task.getUrgent();
+            status = task.getStatus();
+            String dateCreateText = String.format("Созданно: %s %s", dateCreate, timeCreate);
 
-                fullNameCreator = value.getString("nameCreator");
-                emailCreator = value.getString("email_creator");
+            if (status.equals("Новая заявка"))
+                taskExecutorBinding.circleStatusExecutor.setImageResource(R.color.red);
 
-                fullNameExecutor = value.getString("fullNameExecutor");
-                urgent = value.getBoolean("urgent");
+            if (status.equals("В работе"))
+                taskExecutorBinding.circleStatusExecutor.setImageResource(R.color.orange);
 
-                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "address: " + address);
-                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "floor: " + floor);
-                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "litera: " + letter);
-                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "comment: " + comment);
-                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "status: " + status);
-                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "date_create: " + dateCreate);
-                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "time_create: " + timeCreate);
-                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "email_executor: " + emailExecutor);
-                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "email_creator: " + emailCreator);
-                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "date_done: " + dateDone);
-                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "image: " + image);
+            if (status.equals("Архив"))
+                taskExecutorBinding.circleStatusExecutor.setImageResource(R.color.green);
 
-                if (status.equals("Новая заявка"))
-                    taskExecutorBinding.circleStatusExecutor.setImageResource(R.color.red);
+            if (!letter.equals("-") && !letter.isEmpty())
+                cabinet = String.format("%s%s", cabinet, letter);
 
-                if (status.equals("В работе"))
-                    taskExecutorBinding.circleStatusExecutor.setImageResource(R.color.orange);
+            if (urgent) {
+                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "Срочная заявка");
 
-                if (status.equals("Архив"))
-                    taskExecutorBinding.circleStatusExecutor.setImageResource(R.color.green);
+                Fragment urgent_fragment = new FragmentUrgentRequest();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frame_urgent_task_executor, urgent_fragment)
+                        .commit();
 
-                if (!letter.equals("-") && !letter.isEmpty())
-                    cabinet = String.format("%s%s", cabinet, letter);
-
-                if (urgent) {
-                    Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "Срочная заявка");
-
-                    Fragment urgent_fragment = new FragmentUrgentRequest();
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.frame_urgent_task_executor, urgent_fragment)
-                            .commit();
-
-                }
-
-                if (image != null) {
-                    Fragment image_fragment = new FragmentImageTask();
-
-                    Bundle bundle = new Bundle();
-                    bundle.putString("image_id", image);
-                    bundle.putString(ID, id);
-                    bundle.putString(COLLECTION, collection);
-                    bundle.putString(LOCATION, location);
-                    bundle.putString(EMAIL, "email");
-
-                    image_fragment.setArguments(bundle);
-
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.frame_image_task_executor, image_fragment)
-                            .commit();
-                }
-
-            } catch (Exception e) {
-                Log.e(TAG_TASK_EXECUTOR_FRAGMENT, "Error! " + e);
             }
 
-            taskExecutorBinding.textViewAddressTaskExecutor.setText(address);
-            taskExecutorBinding.textViewFloorTaskExecutor.setText(String.format("%s %s", getText(R.string.floor), floor));
+            if (image != null) {
+                Fragment fragmentImageTask = new FragmentImageTask();
+                Bundle bundle = new Bundle();
+                bundle.putString("image_id", image);
+                bundle.putString(ID, id);
+                bundle.putString(COLLECTION, collection);
+                fragmentImageTask.setArguments(bundle);
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frame_image_task_executor, fragmentImageTask)
+                        .commit();
+            }
+
+            taskExecutorBinding.textViewAddressTaskExecutor.setText(task.getAddress());
+            taskExecutorBinding.textViewFloorTaskExecutor.setText(String.format("%s %s", getText(R.string.floor), task.getFloor()));
             taskExecutorBinding.textViewCabinetTaskExecutor.setText(String.format("%s %s", getText(R.string.cabinet), cabinet));
-            taskExecutorBinding.textViewNameTaskExecutor.setText(nameTask);
-            taskExecutorBinding.textViewCommentTaskExecutor.setText(comment);
+            taskExecutorBinding.textViewNameTaskExecutor.setText(task.getName_task());
+            taskExecutorBinding.textViewCommentTaskExecutor.setText(task.getComment());
             taskExecutorBinding.textViewStatusTaskExecutor.setText(status);
-
-            String date_create_text = String.format("Созданно: %s %s", dateCreate, timeCreate);
-            taskExecutorBinding.textViewDateCreateTaskExecutor.setText(date_create_text);
-
-            taskExecutorBinding.textViewFullNameCreatorExecutor.setText(fullNameCreator);
-            taskExecutorBinding.textViewEmailCreatorTaskExecutor.setText(emailCreator);
-
-            taskExecutorBinding.textViewFullNameExecutorEX.setText(fullNameExecutor);
-            taskExecutorBinding.textViewEmailExecutorTaskExecutor.setText(emailExecutor);
-
+            taskExecutorBinding.textViewDateCreateTaskExecutor.setText(dateCreateText);
+            taskExecutorBinding.textViewFullNameCreatorExecutor.setText(task.getNameCreator());
+            taskExecutorBinding.textViewEmailCreatorTaskExecutor.setText(task.getEmail_creator());
+            taskExecutorBinding.textViewFullNameExecutorEX.setText(task.getFullNameExecutor());
+            taskExecutorBinding.textViewEmailExecutorTaskExecutor.setText(task.getExecutor());
             if (dateDone == null)
                 taskExecutorBinding.textViewDateDoneTaskExecutor.setText("Дата выполнения не назначена");
             else {
@@ -164,7 +133,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
 
         });
 
-        documentReference.get().addOnCompleteListener(task -> taskExecutorBinding.progressBarTaskExecutor.setVisibility(View.INVISIBLE));
+        taskExecutorBinding.progressBarTaskExecutor.setVisibility(View.INVISIBLE);
 
     }
 

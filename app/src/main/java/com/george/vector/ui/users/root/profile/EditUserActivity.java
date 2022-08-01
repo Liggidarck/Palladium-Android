@@ -1,162 +1,150 @@
 package com.george.vector.ui.users.root.profile;
 
-import static com.george.vector.common.consts.Logs.TAG_EDIT_USER_ACTIVITY;
 import static java.util.Objects.requireNonNull;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.R;
-import com.george.vector.common.utils.Utils;
+import com.george.vector.common.utils.NetworkUtils;
+import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.databinding.EditUserActivityBinding;
+import com.george.vector.network.model.User;
+import com.george.vector.network.viewmodel.UserViewModel;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class EditUserActivity extends AppCompatActivity {
 
-    String nameUser, lastNameUser, patronymicUser, emailUser, roleUser, permissionUser, userID, password;
-    FirebaseFirestore firebaseFirestore;
+    private String nameUser;
+    private String lastNameUser;
+    private String patronymicUser;
+    private String emailUser;
+    private String roleUser;
+    private String permissionUser;
+    private String userID;
+    private String password;
 
-    EditUserActivityBinding editUserActivityBinding;
+    private EditUserActivityBinding binding;
+
+    private UserViewModel userViewModel;
+
+    NetworkUtils networkUtils = new NetworkUtils();
+    TextValidatorUtils textValidator = new TextValidatorUtils();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
-        editUserActivityBinding = EditUserActivityBinding.inflate(getLayoutInflater());
-        setContentView(editUserActivityBinding.getRoot());
-
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        binding = EditUserActivityBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
         userID = arguments.get("user_id").toString();
 
-        editUserActivityBinding.topAppBarEdit.setNavigationOnClickListener(v -> onBackPressed());
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
-        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
-        documentReference.addSnapshotListener(this, (value, error) -> {
-            assert value != null;
-            nameUser = value.getString("name");
-            lastNameUser = value.getString("last_name");
-            patronymicUser = value.getString("patronymic");
-            emailUser = value.getString("email");
-            roleUser = value.getString("role");
-            permissionUser = value.getString("permission");
-            password = value.getString("password");
+        userViewModel.getUser(userID).observe(this, user -> {
+            nameUser = user.getName();
+            lastNameUser = user.getLast_name();
+            patronymicUser = user.getPatronymic();
+            emailUser = user.getEmail();
+            roleUser = user.getRole();
+            permissionUser = user.getPermission();
+            password = user.getPassword();
 
-            requireNonNull(editUserActivityBinding.textInputLayoutEditNameUser.getEditText()).setText(nameUser);
-            requireNonNull(editUserActivityBinding.textInputLayoutEditLastNameUser.getEditText()).setText(lastNameUser);
-            requireNonNull(editUserActivityBinding.textInputLayoutEditPatronymicUser.getEditText()).setText(patronymicUser);
-            requireNonNull(editUserActivityBinding.textInputLayoutEditEmailUser.getEditText()).setText(emailUser);
-            requireNonNull(editUserActivityBinding.textInputLayoutEditRoleUser.getEditText()).setText(roleUser);
-            requireNonNull(editUserActivityBinding.textInputLayoutEditPermissionUser.getEditText()).setText(permissionUser);
+            requireNonNull(binding.textName.getEditText()).setText(nameUser);
+            requireNonNull(binding.textLastName.getEditText()).setText(lastNameUser);
+            requireNonNull(binding.textPatronymic.getEditText()).setText(patronymicUser);
+            requireNonNull(binding.textEmail.getEditText()).setText(emailUser);
+            requireNonNull(binding.textRole.getEditText()).setText(roleUser);
+            requireNonNull(binding.textPermissions.getEditText()).setText(permissionUser);
 
             if (emailUser.equals("api@2122.pro"))
-                editUserActivityBinding.textInputLayoutPasswordUser.getEditText().setText("Пароль? Какой пароль? ¯\\_(ツ)_/¯");
+                binding.textPassword.getEditText().setText("Пароль? Какой пароль? ¯\\_(ツ)_/¯");
             else
-                editUserActivityBinding.textInputLayoutPasswordUser.getEditText().setText(password);
+                binding.textPassword.getEditText().setText(password);
 
-            String[] items = getResources().getStringArray(R.array.roles);
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
-                    EditUserActivity.this,
-                    R.layout.dropdown_menu_categories,
-                    items
-            );
-
-            editUserActivityBinding.autoCompleteTextViewEditRoleUser.setAdapter(arrayAdapter);
-
-            String[] permissions = getResources().getStringArray(R.array.permissions);
-            ArrayAdapter<String> arrayAdapterPermission = new ArrayAdapter<>(
-                    EditUserActivity.this,
-                    R.layout.dropdown_menu_categories,
-                    permissions
-            );
-
-            editUserActivityBinding.autoCompleteTextViewEditPermissionUser.setAdapter(arrayAdapterPermission);
-
+            initFields();
         });
 
-        editUserActivityBinding.updateUserBtn.setOnClickListener(v -> updateUser(documentReference));
-
-        editUserActivityBinding.textInputLayoutPasswordUser.setEndIconOnClickListener(v -> copyUserData());
-
+        binding.toolbarEditUser.setNavigationOnClickListener(v -> onBackPressed());
+        binding.btnUpdateUser.setOnClickListener(v -> updateUser());
+        binding.textPassword.setEndIconOnClickListener(v -> copyUserData());
     }
 
-    private void updateUser(DocumentReference documentReference) {
-        nameUser = requireNonNull(editUserActivityBinding.textInputLayoutEditNameUser.getEditText()).getText().toString();
-        lastNameUser = requireNonNull(editUserActivityBinding.textInputLayoutEditLastNameUser.getEditText()).getText().toString();
-        patronymicUser = requireNonNull(editUserActivityBinding.textInputLayoutEditPatronymicUser.getEditText()).getText().toString();
-        emailUser = requireNonNull(editUserActivityBinding.textInputLayoutEditEmailUser.getEditText()).getText().toString();
-        roleUser = requireNonNull(editUserActivityBinding.textInputLayoutEditRoleUser.getEditText()).getText().toString();
-        permissionUser = requireNonNull(editUserActivityBinding.textInputLayoutEditPermissionUser.getEditText()).getText().toString();
-        password = requireNonNull(editUserActivityBinding.textInputLayoutPasswordUser.getEditText()).getText().toString();
+    private void initFields() {
+        String[] items = getResources().getStringArray(R.array.roles);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+                EditUserActivity.this,
+                R.layout.dropdown_menu_categories,
+                items
+        );
 
-        if (validateFields()) {
-            editUserActivityBinding.progressBarEditUser.setVisibility(View.VISIBLE);
+        binding.autoCompleteTextViewEditRoleUser.setAdapter(arrayAdapter);
 
-            Map<String, Object> user = new HashMap<>();
-            user.put("name", nameUser);
-            user.put("last_name", lastNameUser);
-            user.put("patronymic", patronymicUser);
-            user.put("email", emailUser);
-            user.put("role", roleUser);
-            user.put("permission", permissionUser);
-            user.put("password", password);
+        String[] permissions = getResources().getStringArray(R.array.permissions);
+        ArrayAdapter<String> arrayAdapterPermission = new ArrayAdapter<>(
+                EditUserActivity.this,
+                R.layout.dropdown_menu_categories,
+                permissions
+        );
 
-            documentReference.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    Log.i(TAG_EDIT_USER_ACTIVITY, "update completed!");
-                    editUserActivityBinding.progressBarEditUser.setVisibility(View.INVISIBLE);
-                    startActivity(new Intent(this, ListUsersActivity.class));
-                } else
-                    Log.e(TAG_EDIT_USER_ACTIVITY, "Error: " + task.getException());
-            });
+        binding.autoCompletePermissions.setAdapter(arrayAdapterPermission);
+    }
 
-            documentReference.set(user)
-                    .addOnSuccessListener(unused -> Log.d(TAG_EDIT_USER_ACTIVITY, "onSuccess: user - " + userID))
-                    .addOnFailureListener(e -> Log.e("TAG", "Failure - " + e));
+    private void updateUser() {
+        nameUser = requireNonNull(binding.textName.getEditText()).getText().toString();
+        lastNameUser = requireNonNull(binding.textLastName.getEditText()).getText().toString();
+        patronymicUser = requireNonNull(binding.textPatronymic.getEditText()).getText().toString();
+        emailUser = requireNonNull(binding.textEmail.getEditText()).getText().toString();
+        roleUser = requireNonNull(binding.textRole.getEditText()).getText().toString();
+        permissionUser = requireNonNull(binding.textPermissions.getEditText()).getText().toString();
+        password = requireNonNull(binding.textPassword.getEditText()).getText().toString();
 
+        if(!validateFields()) {
+            return;
         }
+
+        if(!networkUtils.isOnline(EditUserActivity.this)) {
+            Snackbar.make(findViewById(R.id.coordinator_login_activity),
+                    getString(R.string.error_no_connection), Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        binding.progressBarEditUser.setVisibility(View.VISIBLE);
+
+        userViewModel.updateUser(userID, new User(nameUser, lastNameUser, patronymicUser,
+                emailUser, roleUser, permissionUser, password));
+
+        binding.progressBarEditUser.setVisibility(View.INVISIBLE);
     }
 
     private void copyUserData() {
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 
-        String email = editUserActivityBinding.textInputLayoutEditEmailUser.getEditText().getText().toString();
-        String password = editUserActivityBinding.textInputLayoutPasswordUser.getEditText().getText().toString();
+        String email = binding.textEmail.getEditText().getText().toString();
+        String password = binding.textPassword.getEditText().getText().toString();
 
-        ClipData clip = ClipData.newPlainText(null,email + " " + password);
+        ClipData clip = ClipData.newPlainText(null, email + " " + password);
         clipboard.setPrimaryClip(clip);
 
-        Snackbar.make(editUserActivityBinding.baseLayout, "Логин и пароль пользователя скопированы", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(binding.baseLayout, "Логин и пароль пользователя скопированы", Snackbar.LENGTH_SHORT).show();
     }
 
     boolean validateFields() {
-        Utils utils = new Utils();
-
-        utils.clearError(editUserActivityBinding.textInputLayoutEditNameUser);
-        utils.clearError(editUserActivityBinding.textInputLayoutEditLastNameUser);
-        utils.clearError(editUserActivityBinding.textInputLayoutEditPatronymicUser);
-        utils.clearError(editUserActivityBinding.textInputLayoutEditEmailUser);
-        utils.clearError(editUserActivityBinding.textInputLayoutEditRoleUser);
-
-        boolean checkName = utils.validateField(nameUser, editUserActivityBinding.textInputLayoutEditNameUser);
-        boolean checkLastName = utils.validateField(lastNameUser, editUserActivityBinding.textInputLayoutEditLastNameUser);
-        boolean checkPatronymic = utils.validateField(patronymicUser, editUserActivityBinding.textInputLayoutEditPatronymicUser);
-        boolean checkEmail = utils.validateField(emailUser, editUserActivityBinding.textInputLayoutEditEmailUser);
-        boolean checkRole = utils.validateField(roleUser, editUserActivityBinding.textInputLayoutEditRoleUser);
-
-        return checkName & checkLastName & checkPatronymic & checkEmail & checkRole;
+        return textValidator.isEmptyField(nameUser, binding.textName) &
+                textValidator.isEmptyField(lastNameUser, binding.textLastName) &
+                textValidator.isEmptyField(patronymicUser, binding.textPatronymic) &
+                textValidator.isEmptyField(emailUser, binding.textEmail) &
+                textValidator.isEmptyField(roleUser, binding.textRole) &
+                textValidator.isEmptyField(permissionUser, binding.textPermissions) &
+                textValidator.isEmptyField(password, binding.textPassword);
     }
 }

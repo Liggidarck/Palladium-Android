@@ -40,7 +40,7 @@
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="10dp"
                     android:text="Часто задаваемые вопросы"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/textColor"
                     android:textSize="23sp" />
 
                 <HorizontalScrollView
@@ -247,7 +247,7 @@
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="10dp"
                     android:text="О приложении"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/textColor"
                     android:textSize="23sp" />
 
                 <androidx.cardview.widget.CardView
@@ -348,7 +348,7 @@
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="20dp"
                     android:text="@string/tasks"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/textColor"
                     android:textSize="23sp" />
 
                 <androidx.cardview.widget.CardView
@@ -403,7 +403,7 @@
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="20dp"
                     android:text="@string/users_text"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/textColor"
                     android:textSize="23sp" />
 
                 <androidx.cardview.widget.CardView
@@ -462,9 +462,9 @@
             app:liftOnScroll="true">
 
             <com.google.android.material.appbar.MaterialToolbar
+                style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/blue_primary"
                 app:layout_collapseMode="pin"
                 app:title="@string/text_help"
                 app:titleTextColor="@android:color/white" />

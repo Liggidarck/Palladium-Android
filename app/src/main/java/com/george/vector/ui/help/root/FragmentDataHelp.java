@@ -58,6 +58,22 @@ public class FragmentDataHelp extends Fragment {
             binding.bodyHelp.setText(getString(R.string.user_help));
         }
 
+        if(task.equals("cardHowToCreateTaskUser")) {
+            binding.titleHelp.setText(getString(R.string.tasks));
+            binding.bodyHelp.setText(getString(R.string.task_hel_user));
+        }
+
+        if(task.equals("cardHowToAddImageTask")) {
+            binding.titleHelp.setText("Как добавить изображение к заявке?");
+            binding.bodyHelp.setText("Для того чтобы прикрепить изображение к заявке необходимо на экране создания заявки нажать на поле изображение. Далее откроется диалоговое окно, которое предложит сделать изображение или выбрать изображение с памяти устройства.");
+        }
+
+        if(task.equals("cardStatusTasks")) {
+            binding.titleHelp.setText("Что такое статус заявки? Виды статусов заявки.");
+            binding.bodyHelp.setText(getText(R.string.text_help_status_user));
+
+        }
+
         return view;
     }
 

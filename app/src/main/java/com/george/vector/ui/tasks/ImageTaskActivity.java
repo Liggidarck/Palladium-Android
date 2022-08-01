@@ -1,8 +1,7 @@
 package com.george.vector.ui.tasks;
 
-import static com.george.vector.common.consts.Keys.COLLECTION;
-import static com.george.vector.common.consts.Keys.ID;
-import static com.george.vector.common.consts.Keys.LOCATION;
+import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ID;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -16,63 +15,51 @@ import com.george.vector.R;
 import com.george.vector.databinding.ActivityImageTaskBinding;
 import com.george.vector.network.viewmodel.TaskViewModel;
 import com.george.vector.network.viewmodel.ViewModelFactory;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ImageTaskActivity extends AppCompatActivity {
 
-    String id, collection, location, image;
+    String id, collection, image;
 
     ActivityImageTaskBinding binding;
-    FirebaseFirestore firebaseFirestore;
-
-    private static final String TAG = "ImageTaskActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
         binding = ActivityImageTaskBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        binding.toolbarImage.setNavigationOnClickListener(v -> onBackPressed());
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.getString(ID);
         collection = arguments.getString(COLLECTION);
-        location = arguments.getString(LOCATION);
-
-        TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
-                this.getApplication(),
-                collection))
-                .get(TaskViewModel.class);
 
         String bufferSizePreference = PreferenceManager
                 .getDefaultSharedPreferences(ImageTaskActivity.this)
                 .getString("buffer_size", "2");
-        Log.d(TAG, "buffer_size_preference: " + bufferSizePreference);
-
         int bufferSize = Integer.parseInt(bufferSizePreference);
 
-        binding.topAppBarTaskActivity.setNavigationOnClickListener(v -> onBackPressed());
+        TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                this.getApplication(),
+                collection)
+        ).get(TaskViewModel.class);
 
-        binding.taskImageActivity.setOnClickListener(v ->
-                binding.taskImageActivity
+        binding.imageViewTask.setOnClickListener(v ->
+                binding.imageViewTask
                         .animate()
-                        .rotation(binding.taskImageActivity.getRotation() + 90)
+                        .rotation(binding.imageViewTask.getRotation() + 90)
                         .setDuration(60));
 
-        DocumentReference documentReference = firebaseFirestore.collection(collection).document(id);
-        documentReference.addSnapshotListener(this, (value, error) -> {
-            binding.progressBarImageActivity.setVisibility(View.VISIBLE);
-            assert value != null;
-            image = value.getString("image");
-
-            if (image == null) {
-                Log.d(TAG, "No image, stop loading");
-                binding.taskImageActivity.setImageResource(R.drawable.ic_baseline_camera_alt_24);
+        taskViewModel.getTask(id).observe(this, task -> {
+            binding.progressBarImage.setVisibility(View.VISIBLE);
+            image = task.getImage();
+            if (image != null) {
+                taskViewModel.setImage(image, binding.progressBarImage, binding.imageViewTask, bufferSize);
             } else {
-                taskViewModel.setImage(image, binding.progressBarImageActivity, binding.taskImageActivity, bufferSize);
+                binding.imageViewTask.setImageResource(R.drawable.ic_baseline_camera_alt_24);
             }
         });
+
     }
 }

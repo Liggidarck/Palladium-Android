@@ -1,117 +1,88 @@
 package com.george.vector.ui.edit_users;
 
-import android.content.Intent;
+import static java.util.Objects.requireNonNull;
+
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.george.vector.common.utils.Utils;
+import com.george.vector.R;
+import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.databinding.ActivityEditDataUserBinding;
-import com.george.vector.ui.users.user.main.MainUserActivity;
+import com.george.vector.network.model.User;
+import com.george.vector.network.viewmodel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 public class EditDataUserActivity extends AppCompatActivity {
 
-    private static final String TAG = "EditDataUserActivity";
+    ActivityEditDataUserBinding binding;
+    TextValidatorUtils textValidator = new TextValidatorUtils();
 
-    String nameUser, lastNameUser, patronymicUser, emailUser, roleUser, userId, password;
-
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
-
-    ActivityEditDataUserBinding editDataUserBinding;
+    String permissionUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
-        editDataUserBinding = ActivityEditDataUserBinding.inflate(getLayoutInflater());
-        setContentView(editDataUserBinding.getRoot());
+        binding = ActivityEditDataUserBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
-        editDataUserBinding.topAppBarEditDataUser.setNavigationOnClickListener(v -> onBackPressed());
+        binding.toolbarEditDataUser.setNavigationOnClickListener(v -> onBackPressed());
 
-        userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReference = firebaseFirestore.collection("users").document(userId);
-        documentReference.addSnapshotListener((value, error) -> {
-            assert value != null;
-            nameUser = value.getString("name");
-            lastNameUser = value.getString("last_name");
-            patronymicUser = value.getString("patronymic");
-            emailUser = value.getString("email");
-            roleUser = value.getString("role");
-            password = value.getString("password");
-            Log.i(TAG, String.format("name: %s last_name: %s patronymic: %s email: %s", nameUser, lastNameUser, patronymicUser, emailUser));
-
-            Objects.requireNonNull(editDataUserBinding.textInputLayoutNameUserEdit.getEditText()).setText(nameUser);
-            Objects.requireNonNull(editDataUserBinding.textInputLayoutLastNameUserEdit.getEditText()).setText(lastNameUser);
-            Objects.requireNonNull(editDataUserBinding.textInputLayoutPatronymicUserEdit.getEditText()).setText(patronymicUser);
-            Objects.requireNonNull(editDataUserBinding.textInputLayoutEmailUserEdit.getEditText()).setText(emailUser);
-            Objects.requireNonNull(editDataUserBinding.textInputLayoutRoleUserEdit.getEditText()).setText(roleUser);
-            Objects.requireNonNull(editDataUserBinding.textInputLayoutPasswordUserEdit.getEditText()).setText(password);
+        String userId = requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        userViewModel.getUser(userId).observe(this, user -> {
+            binding.progressBarEditDataUser.setVisibility(View.VISIBLE);
+            requireNonNull(binding.textNameUser.getEditText()).setText(user.getName());
+            requireNonNull(binding.textLastNameUser.getEditText()).setText(user.getLast_name());
+            requireNonNull(binding.textPatronymicUser.getEditText()).setText(user.getPatronymic());
+            requireNonNull(binding.textEmailUser.getEditText()).setText(user.getEmail());
+            requireNonNull(binding.textRoleUser.getEditText()).setText(user.getRole());
+            requireNonNull(binding.textPasswordUser.getEditText()).setText(user.getPassword());
+            permissionUser = user.getPermission();
+            binding.progressBarEditDataUser.setVisibility(View.INVISIBLE);
         });
 
-        editDataUserBinding.btnSaveEditDataUser.setOnClickListener(v -> {
-            nameUser = Objects.requireNonNull(editDataUserBinding.textInputLayoutNameUserEdit.getEditText()).getText().toString();
-            lastNameUser = Objects.requireNonNull(editDataUserBinding.textInputLayoutLastNameUserEdit.getEditText()).getText().toString();
-            patronymicUser = Objects.requireNonNull(editDataUserBinding.textInputLayoutPatronymicUserEdit.getEditText()).getText().toString();
-            emailUser = Objects.requireNonNull(editDataUserBinding.textInputLayoutEmailUserEdit.getEditText()).getText().toString();
-            roleUser = Objects.requireNonNull(editDataUserBinding.textInputLayoutRoleUserEdit.getEditText()).getText().toString();
-            password = Objects.requireNonNull(editDataUserBinding.textInputLayoutPasswordUserEdit.getEditText()).getText().toString();
+        binding.btnSaveUser.setOnClickListener(v -> {
+            binding.progressBarEditDataUser.setVisibility(View.VISIBLE);
+            String nameUser = requireNonNull(binding.textNameUser.getEditText()).getText().toString();
+            String lastNameUser = requireNonNull(binding.textLastNameUser.getEditText()).getText().toString();
+            String patronymicUser = requireNonNull(binding.textPatronymicUser.getEditText()).getText().toString();
+            String emailUser = requireNonNull(binding.textEmailUser.getEditText()).getText().toString();
+            String roleUser = requireNonNull(binding.textRoleUser.getEditText()).getText().toString();
+            String password = requireNonNull(binding.textPasswordUser.getEditText()).getText().toString();
 
-            if(validateFields()) {
-                editDataUserBinding.progressBarEditDataUser.setVisibility(View.VISIBLE);
-
-                Map<String, Object> user = new HashMap<>();
-                user.put("name", nameUser);
-                user.put("last_name", lastNameUser);
-                user.put("patronymic", patronymicUser);
-                user.put("email", emailUser);
-                user.put("role", roleUser);
-                user.put("password", password);
-
-                documentReference.get().addOnCompleteListener(task -> {
-                    if(task.isSuccessful()) {
-                        Log.i(TAG, "update completed!");
-                        editDataUserBinding.progressBarEditDataUser.setVisibility(View.INVISIBLE);
-                        Intent intent = new Intent(this, MainUserActivity.class);
-                        intent.putExtra("email", emailUser);
-                        startActivity(intent);
-                    } else
-                        Log.i(TAG, "Error: " + task.getException());
-                    
-                });
-
-                documentReference.set(user)
-                        .addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user - " + userId))
-                        .addOnFailureListener(e -> Log.d("TAG", "Failure - " + e));
+            if (!validateFields()) {
+                return;
             }
+
+            binding.progressBarEditDataUser.setVisibility(View.VISIBLE);
+            userViewModel.updateUser(userId, new User(nameUser, lastNameUser, patronymicUser,
+                    emailUser, roleUser, permissionUser, password));
+            binding.progressBarEditDataUser.setVisibility(View.INVISIBLE);
+            onBackPressed();
         });
+
     }
 
-    boolean validateFields(){
-        Utils utils = new Utils();
+    boolean validateFields() {
+        String nameUser = binding.textNameUser.getEditText().getText().toString();
+        String lastNameUser = binding.textLastNameUser.getEditText().getText().toString();
+        String patronymicUser = binding.textPatronymicUser.getEditText().getText().toString();
+        String emailUser = binding.textEmailUser.getEditText().getText().toString();
+        String roleUser = binding.textRoleUser.getEditText().getText().toString();
+        String password = binding.textPasswordUser.getEditText().getText().toString();
 
-        utils.clearError(editDataUserBinding.textInputLayoutNameUserEdit);
-        utils.clearError(editDataUserBinding.textInputLayoutLastNameUserEdit);
-        utils.clearError(editDataUserBinding.textInputLayoutPatronymicUserEdit);
-        utils.clearError(editDataUserBinding.textInputLayoutEmailUserEdit);
-
-        boolean checkName = utils.validateField(nameUser, editDataUserBinding.textInputLayoutNameUserEdit);
-        boolean checkLastName = utils.validateField(lastNameUser, editDataUserBinding.textInputLayoutLastNameUserEdit);
-        boolean checkPatronymic = utils.validateField(patronymicUser, editDataUserBinding.textInputLayoutPatronymicUserEdit);
-        boolean checkEmail = utils.validateField(emailUser, editDataUserBinding.textInputLayoutEmailUserEdit);
-
-        return checkName & checkLastName & checkPatronymic & checkEmail;
+        return textValidator.isEmptyField(nameUser, binding.textNameUser) &
+                textValidator.isEmptyField(lastNameUser, binding.textLastNameUser) &
+                textValidator.isEmptyField(patronymicUser, binding.textPatronymicUser) &
+                textValidator.isEmptyField(emailUser, binding.textEmailUser) &
+                textValidator.isEmptyField(roleUser, binding.textRoleUser) &
+                textValidator.isEmptyField(password, binding.textPasswordUser);
     }
 
 }

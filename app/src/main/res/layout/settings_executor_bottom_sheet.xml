@@ -20,7 +20,7 @@
             tools:ignore="RelativeOverlap" />
 
         <ImageView
-            android:id="@+id/close_btn_executor"
+            android:id="@+id/btnClose"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:src="@drawable/ic_baseline_close_24"
@@ -36,7 +36,7 @@
         android:layout_marginTop="12dp" />
 
     <RelativeLayout
-        android:id="@+id/layout_settings_executor"
+        android:id="@+id/btnSettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="?android:attr/selectableItemBackground"
@@ -69,7 +69,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/layout_edit_person_executor"
+        android:id="@+id/btnEditUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="?android:attr/selectableItemBackground"
@@ -100,6 +100,15 @@
             android:textSize="17sp" />
 
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnLogout"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/logout"
+        android:textColor="@color/red" />
 
     <View
         android:layout_width="match_parent"

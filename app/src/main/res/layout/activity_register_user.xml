@@ -1,50 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.users.root.profile.RegisterUserActivity" >
+    tools:context=".ui.users.root.profile.RegisterUserActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/topAppBar_register"
+        style="@style/Widget.MaterialComponents.Toolbar.Primary"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="@string/registration"
-        app:titleTextColor="@android:color/white"
-        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
         app:layout_collapseMode="pin"
-        android:background="@color/blue_primary" />
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        app:title="@string/registration"
+        app:titleTextColor="@android:color/white" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progress_bar_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/topAppBar_register"
         android:indeterminate="true"
-        android:visibility="invisible"
-        android:layout_below="@+id/topAppBar_register" />
+        android:visibility="invisible" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/topAppBar_register" >
+        android:layout_below="@+id/topAppBar_register">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_last_name_user"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/last_name"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="@string/last_name"
                 app:endIconMode="clear_text"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -56,14 +55,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_name_user"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/name"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="@string/name"
                 app:endIconMode="clear_text"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -75,14 +74,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_patronymic_user"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/patronymic"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="@string/patronymic"
                 app:endIconMode="clear_text"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -94,14 +93,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_email_user"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/email_text"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="@string/email_text"
                 app:endIconMode="clear_text"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -113,13 +112,13 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_password_user"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/password"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginEnd="20dp"
+                android:hint="@string/password"
                 app:endIconMode="password_toggle"
                 app:errorEnabled="true">
 
@@ -132,15 +131,15 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_role_user"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
                 android:hint="@string/role_text"
                 app:endIconMode="dropdown_menu"
-                app:errorEnabled="true"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp" >
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/auto_complete_text_view_role_user"
@@ -153,15 +152,15 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_permission_user"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
                 android:hint="@string/permission_text"
                 app:endIconMode="dropdown_menu"
-                app:errorEnabled="true"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp" >
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/auto_complete_text_view_permission_user"
@@ -177,9 +176,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="30dp"
-                android:layout_marginTop="10dp"
                 android:text="@string/add_user" />
 
         </LinearLayout>

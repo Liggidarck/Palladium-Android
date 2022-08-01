@@ -1,29 +1,20 @@
 package com.george.vector.ui.users.user.tasks;
 
-import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL;
-import static com.george.vector.common.consts.Keys.PERMISSION;
-import static com.george.vector.common.consts.Keys.PERMISSION_CAMERA_CODE;
-import static com.george.vector.common.consts.Keys.PERMISSION_GALLERY_CODE;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PATRONYMIC;
-import static com.george.vector.common.consts.Logs.TAG_ADD_TASK_USER_ACTIVITY;
+import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
+import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
+import static com.george.vector.common.utils.consts.Keys.PERMISSION_CAMERA_CODE;
+import static com.george.vector.common.utils.consts.Keys.PERMISSION_GALLERY_CODE;
+import static com.george.vector.common.utils.consts.Logs.TAG_ADD_TASK_USER_ACTIVITY;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -34,74 +25,65 @@ import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.R;
-import com.george.vector.common.utils.TextValidator;
-import com.george.vector.common.utils.Utils;
+import com.george.vector.common.utils.NetworkUtils;
+import com.george.vector.common.utils.TextValidatorUtils;
+import com.george.vector.common.utils.TimeUtils;
+import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityAddTaskUserBinding;
 import com.george.vector.network.model.Task;
 import com.george.vector.network.viewmodel.TaskViewModel;
 import com.george.vector.network.viewmodel.ViewModelFactory;
 import com.george.vector.ui.tasks.BottomSheetAddImage;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.util.Objects;
 
 public class AddTaskUserActivity extends AppCompatActivity implements BottomSheetAddImage.StateListener {
 
-    String address, floor, cabinet, letter, name_task, comment, email, permission, fullNameCreator;
-    String status = "Новая заявка";
-
-    SharedPreferences sharedPreferences;
-
-    FirebaseFirestore firebaseFirestore;
-    FirebaseStorage firebaseStorage;
-    StorageReference storageReference;
+    String address, floor, cabinet, letter, nameTask, comment, email, permission, fullNameCreator;
+    final String status = "Новая заявка";
 
     private Uri fileUri;
 
-    Utils utils = new Utils();
+    private final TextValidatorUtils textValidator = new TextValidatorUtils();
+    private final NetworkUtils networkUtils = new NetworkUtils();
+    private final TimeUtils timeUtils = new TimeUtils();
+    private ActivityAddTaskUserBinding binding;
 
-    ActivityAddTaskUserBinding binding;
-
-    ActivityResultLauncher<String> selectPictureLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
+    final ActivityResultLauncher<String> selectPictureLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
             uri -> {
                 fileUri = uri;
                 binding.imageTaskUser.setImageURI(fileUri);
             });
 
-    ActivityResultLauncher<Uri> cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicture(),
+    final ActivityResultLauncher<Uri> cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicture(),
             result -> {
                 if (result) {
                     binding.imageTaskUser.setImageURI(fileUri);
                 }
             });
 
-    BottomSheetAddImage addImage = new BottomSheetAddImage();
+    final BottomSheetAddImage addImage = new BottomSheetAddImage();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
         binding = ActivityAddTaskUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
-
-        Bundle arguments = getIntent().getExtras();
-        permission = arguments.getString(PERMISSION);
-        email = arguments.getString(EMAIL);
+        UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+        permission = userDataViewModel.getUser().getPermission();
+        email = userDataViewModel.getUser().getEmail();
 
         Log.i(TAG_ADD_TASK_USER_ACTIVITY, "permission: " + permission);
         Log.d(TAG_ADD_TASK_USER_ACTIVITY, "email: " + email);
 
-        sharedPreferences = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-        String name_user = sharedPreferences.getString(USER_PREFERENCES_NAME, "");
-        String last_name_user = sharedPreferences.getString(USER_PREFERENCES_LAST_NAME, "");
-        String patronymic_user = sharedPreferences.getString(USER_PREFERENCES_PATRONYMIC, "");
-        fullNameCreator = name_user + " " + last_name_user + " " + patronymic_user;
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+        String nameUser = userPrefViewModel.getUser().getName();
+        String lastNameUser = userPrefViewModel.getUser().getLast_name();
+        String patronymicUser = userPrefViewModel.getUser().getPatronymic();
+        fullNameCreator = nameUser + " " + lastNameUser + " " + patronymicUser;
 
         binding.topAppBarNewTaskUser.setNavigationOnClickListener(v -> onBackPressed());
 
@@ -110,16 +92,19 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
             floor = Objects.requireNonNull(binding.textInputLayoutFloor.getEditText()).getText().toString();
             cabinet = Objects.requireNonNull(binding.textInputLayoutCabinet.getEditText()).getText().toString();
             letter = Objects.requireNonNull(binding.textInputLayoutCabinetLiterUser.getEditText()).getText().toString();
-            name_task = Objects.requireNonNull(binding.textInputLayoutNameTask.getEditText()).getText().toString();
+            nameTask = Objects.requireNonNull(binding.textInputLayoutNameTask.getEditText()).getText().toString();
             comment = Objects.requireNonNull(binding.textInputLayoutComment.getEditText()).getText().toString();
 
-            if (validateFields()) {
-                if (!utils.isOnline(AddTaskUserActivity.this))
-                    showDialogNoInternet();
-                else
-                    saveTask(permission);
+            if(!validateFields()) {
+                return;
             }
 
+            if (!networkUtils.isOnline(AddTaskUserActivity.this)) {
+                showDialogNoInternet();
+                return;
+            }
+
+            saveTask(permission);
         });
 
         binding.cardImage.setOnClickListener(v -> showDialogImage());
@@ -133,22 +118,30 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
 
         String image;
 
-        if(fileUri != null)
+        if (fileUri != null)
             image = taskViewModel.uploadImage(fileUri, AddTaskUserActivity.this);
         else
             image = null;
 
-        String dateCreate = utils.getDate();
-        String timeCreate = utils.getTime();
+        String dateCreate = timeUtils.getDate();
+        String timeCreate = timeUtils.getTime();
 
-        if(comment.isEmpty())
+        if (comment.isEmpty())
             comment = "Нет коментария к заявке";
 
-        Task task = new Task(name_task, address, dateCreate, floor, cabinet, letter, comment,
+        Task task = new Task(nameTask, address, dateCreate, floor, cabinet, letter, comment,
                 null, null, status, timeCreate, email, false, image,
                 null, fullNameCreator);
 
         taskViewModel.createTask(task);
+        onBackPressed();
+    }
+
+    boolean validateFields() {
+        return textValidator.isEmptyField(address, binding.textInputLayoutAddress) &
+                textValidator.isEmptyField(floor, binding.textInputLayoutFloor) &
+                textValidator.isEmptyField(cabinet, binding.textInputLayoutCabinet) &
+                textValidator.isEmptyField(nameTask, binding.textInputLayoutNameTask);
     }
 
     void initializeField(String permission) {
@@ -174,20 +167,6 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
 
         if (permission.equals(BAR_SCHOOL))
             Objects.requireNonNull(binding.textInputLayoutAddress.getEditText()).setText(getText(R.string.bar_school_address));
-
-        binding.textInputLayoutFloor.getEditText().addTextChangedListener(new TextValidator(binding.textInputLayoutFloor.getEditText()) {
-            @Override
-            public void validate(TextView textView, String text) {
-                utils.validateNumberField(text, binding.textInputLayoutFloor, binding.crateTask, 1);
-            }
-        });
-
-        binding.textInputLayoutCabinet.getEditText().addTextChangedListener(new TextValidator(binding.textInputLayoutCabinet.getEditText()) {
-            @Override
-            public void validate(TextView textView, String text) {
-                utils.validateNumberField(text, binding.textInputLayoutCabinet, binding.crateTask, 3);
-            }
-        });
 
     }
 
@@ -255,20 +234,6 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
 
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
-
-    boolean validateFields() {
-        utils.clearError(binding.textInputLayoutAddress);
-        utils.clearError(binding.textInputLayoutFloor);
-        utils.clearError(binding.textInputLayoutCabinet);
-        utils.clearError(binding.textInputLayoutNameTask);
-
-        boolean check_address = utils.validateField(address, binding.textInputLayoutAddress);
-        boolean check_floor = utils.validateField(floor, binding.textInputLayoutFloor);
-        boolean check_cabinet = utils.validateField(cabinet, binding.textInputLayoutCabinet);
-        boolean check_name_task = utils.validateField(name_task, binding.textInputLayoutNameTask);
-
-        return check_address & check_floor & check_cabinet & check_name_task;
     }
 
     @Override

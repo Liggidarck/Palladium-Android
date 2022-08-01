@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.users.root.profile.ListUsersActivity" >
+    tools:context=".ui.users.root.profile.ListUsersActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_list_users"
+        style="@style/Widget.MaterialComponents.Toolbar.Primary"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="@string/users_text"
-        app:titleTextColor="@android:color/white"
-        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
         app:layout_collapseMode="pin"
-        android:background="@color/blue_primary" />
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        app:title="@string/users_text"
+        app:titleTextColor="@android:color/white" />
 
     <HorizontalScrollView
         android:id="@+id/chip_scroll"
@@ -66,6 +65,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/chip_scroll"
-        tools:listitem="@layout/user_item"/>
+        tools:listitem="@layout/user_item" />
 
 </RelativeLayout>

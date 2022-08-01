@@ -24,22 +24,22 @@
                     android:id="@+id/title_help"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Placeholder"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
-                    android:textColor="@color/black"
+                    android:text="Placeholder"
+                    android:textColor="?attr/textColor"
                     android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/body_help"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="placeholder"
-                    android:layout_marginTop="10dp"
                     android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/black" />
+                    android:text="placeholder"
+                    android:textColor="?attr/textColor"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -55,10 +55,10 @@
                 android:id="@+id/toolbar_qa"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/blue_primary"
+                style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 app:layout_collapseMode="pin"
-                app:title="Вопросы"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+                app:title="Вопросы"
                 app:titleTextColor="@android:color/white" />
 
         </com.google.android.material.appbar.AppBarLayout>
