@@ -52,6 +52,12 @@ public class FragmentUserHelp extends Fragment {
             navController.navigate(R.id.action_nav_profile_user_to_fragmentDataHelp2, bundle);
         });
 
+        binding.downloadFullText.setOnClickListener(v -> {
+            String url = getString(R.string.url_download_text_help);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
+        });
 
         return view;
     }

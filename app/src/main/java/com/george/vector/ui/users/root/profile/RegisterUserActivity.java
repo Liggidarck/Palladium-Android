@@ -196,7 +196,7 @@ public class RegisterUserActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable text) {
                 if (text.toString().equals("Root") || text.toString().equals("Исполнитель"))
-                    binding.textInputLayoutPermissionUser.getEditText().setText("All");
+                    binding.textInputLayoutPermissionUser.getEditText().setText(R.string.root_permission);
                 else {
                     binding.textInputLayoutPermissionUser.getEditText().setText("");
 
