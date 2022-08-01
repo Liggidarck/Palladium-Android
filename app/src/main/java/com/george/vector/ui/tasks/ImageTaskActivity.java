@@ -29,6 +29,7 @@ public class ImageTaskActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
         binding = ActivityImageTaskBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

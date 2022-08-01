@@ -17,13 +17,12 @@ import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.data.preferences.UserPreferencesViewModel;
 import com.george.vector.databinding.ActivityLoginBinding;
 import com.george.vector.network.model.User;
+import com.george.vector.network.viewmodel.LoginViewModel;
 import com.george.vector.network.viewmodel.UserViewModel;
 import com.george.vector.ui.users.executor.main.MainExecutorActivity;
 import com.george.vector.ui.users.root.main.MainRootActivity;
 import com.george.vector.ui.users.user.main.MainUserActivity;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -34,9 +33,6 @@ public class LoginActivity extends AppCompatActivity {
     ActivityLoginBinding binding;
     UserPreferencesViewModel userPreferencesViewModel;
     UserViewModel userViewModel;
-
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
 
     TextValidatorUtils textValidator = new TextValidatorUtils();
     NetworkUtils networkUtils = new NetworkUtils();
@@ -51,9 +47,6 @@ public class LoginActivity extends AppCompatActivity {
         userPreferencesViewModel = new ViewModelProvider(this).get(UserPreferencesViewModel.class);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-
         binding.btnLogin.setOnClickListener(v -> {
             String email = Objects.requireNonNull(binding.emailLoginTextLayout.getEditText()).getText().toString();
             String password = Objects.requireNonNull(binding.passwordLoginTextLayout.getEditText()).getText().toString();
@@ -64,26 +57,24 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             if (!validateFields()) {
-                Log.e(TAG_VALIDATE_FILED, "Fields empty");
                 return;
             }
 
-            if (!validateEmail(email)) {
+            if (validateEmail(email)) {
                 Log.e(TAG_VALIDATE_FILED, "Email validation failed");
                 binding.emailLoginTextLayout.setError("Некорректный формат e-mail");
             }
 
-            login(email, password);
+            signIn(email, password);
 
         });
     }
 
-    void login(String login, String password) {
+    void signIn(String login, String password) {
         binding.progressBarAuth.setVisibility(View.VISIBLE);
-        firebaseAuth.signInWithEmailAndPassword(login, password).addOnCompleteListener(authResultTask -> {
-            if (authResultTask.isSuccessful()) {
-                String userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-                userViewModel.getUser(userId).observe(LoginActivity.this, user -> {
+        LoginViewModel loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        loginViewModel.signIn(login, password).observe(this, id ->
+                userViewModel.getUser(id).observe(LoginActivity.this, user -> {
                     String name = user.getName();
                     String lastName = user.getLast_name();
                     String patronymic = user.getPatronymic();
@@ -96,9 +87,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     binding.progressBarAuth.setVisibility(View.INVISIBLE);
                     startApp(role);
-                });
-            }
-        });
+                })
+        );
     }
 
     void startApp(@NotNull String role) {

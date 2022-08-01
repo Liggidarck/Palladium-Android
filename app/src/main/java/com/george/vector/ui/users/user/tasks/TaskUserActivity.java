@@ -68,12 +68,12 @@ public class TaskUserActivity extends AppCompatActivity {
             binding.textViewAddressTaskUser.setText(task.getAddress());
             binding.textViewFloorTaskUser.setText(task.getFloor());
             binding.textViewCabinetTaskUser.setText(task.getCabinet());
-            binding.textViewNameTaskUser.setText(cabinet);
+            binding.textViewNameTaskUser.setText(task.getName_task());
             binding.textViewCommentTaskUser.setText(comment);
             binding.textViewDateCreateTaskUser.setText(dateCreateText);
             binding.textViewStatusTaskUser.setText(task.getStatus());
             binding.textViewEmailCreatorTaskUser.setText(task.getEmail_creator());
-            binding.textViewFullNameCreatorUser.setText(task.getFullNameExecutor());
+            binding.textViewFullNameCreatorUser.setText(task.getNameCreator());
 
             if (image != null) {
                 Fragment imageFragment = new FragmentImageTask();

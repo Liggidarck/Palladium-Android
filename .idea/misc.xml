@@ -208,6 +208,7 @@
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/xml/executor_preferences.xml" value="0.3625" />
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/xml/root_preferences.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/GeorgeFilatov/AndroidStudioProjects/Palladium-Android/app/src/main/res/xml/user_preferences.xml" value="0.3625" />
+        <entry key="app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.3055" />
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.2935" />
         <entry key="app/src/main/res/layout/activity_add_task_root.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/activity_add_task_user.xml" value="0.35104166666666664" />
@@ -219,7 +220,9 @@
         <entry key="app/src/main/res/layout/activity_folder_root.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/activity_folder_user.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/activity_image_task.xml" value="0.35052083333333334" />
+        <entry key="app/src/main/res/layout/activity_list_users.xml" value="0.35052083333333334" />
         <entry key="app/src/main/res/layout/activity_loading.xml" value="0.153125" />
+        <entry key="app/src/main/res/layout/activity_location_folder.xml" value="0.35052083333333334" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/activity_main_executor.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/activity_main_user.xml" value="0.35104166666666664" />
@@ -243,6 +246,7 @@
         <entry key="app/src/main/res/layout/fragment_full_help_data.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_help_app.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_help_user.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/fragment_history_user.xml" value="0.35052083333333334" />
         <entry key="app/src/main/res/layout/fragment_image_task.xml" value="0.35052083333333334" />
         <entry key="app/src/main/res/layout/fragment_ost_executor.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_ost_root.xml" value="0.35104166666666664" />
@@ -256,6 +260,7 @@
         <entry key="app/src/main/res/layout/fragment_text_help_user.xml" value="0.35052083333333334" />
         <entry key="app/src/main/res/layout/fragment_text_root.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_text_user.xml" value="0.35052083333333334" />
+        <entry key="app/src/main/res/layout/fragment_urgent_request.xml" value="0.35052083333333334" />
         <entry key="app/src/main/res/layout/fragment_user_home.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/profile_bottom_sheet.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/settings_executor_bottom_sheet.xml" value="0.35104166666666664" />

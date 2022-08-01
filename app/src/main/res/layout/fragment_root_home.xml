@@ -57,8 +57,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:textColor="@color/white"
-                            android:textSize="16sp" />
+                            android:textColor="?attr/textColor" />
 
                     </RelativeLayout>
 
@@ -79,6 +78,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/text_name_root"
                         android:layout_marginStart="10dp"
+                        android:textColor="?attr/textColor"
                         android:layout_toEndOf="@+id/ava_root_home" />
 
 
@@ -144,9 +144,9 @@
             app:liftOnScroll="true">
 
             <com.google.android.material.appbar.MaterialToolbar
+                style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/blue_primary"
                 app:layout_collapseMode="pin"
                 app:title="@string/main"
                 app:titleTextColor="@android:color/white" />

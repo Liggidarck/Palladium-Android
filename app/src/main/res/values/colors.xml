@@ -6,9 +6,11 @@
     <color name="blue_dark">#0f8ff7</color>
     <color name="blue">#80bfff</color>
 
+    <color name="blue_night">#245c8a</color>
+    <color name="blue_deep">#0e2b42</color>
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
 
     <color name="ic_launcher_background">#FFFFFF</color>
 

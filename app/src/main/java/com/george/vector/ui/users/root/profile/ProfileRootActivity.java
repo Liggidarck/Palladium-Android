@@ -3,13 +3,6 @@ package com.george.vector.ui.users.root.profile;
 import static com.george.vector.common.utils.consts.Keys.EMAIL;
 import static com.george.vector.common.utils.consts.Keys.PERMISSION;
 import static com.george.vector.common.utils.consts.Keys.TOPIC_NEW_TASKS_CREATE;
-import static com.george.vector.common.utils.consts.Keys.USER_NOTIFICATIONS_OPTIONS;
-import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_EMAIL;
-import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_LAST_NAME;
-import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_NAME;
-import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_PATRONYMIC;
-import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_PERMISSION;
-import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_ROLE;
 
 import android.content.Intent;
 import android.os.Bundle;

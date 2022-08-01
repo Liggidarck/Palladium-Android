@@ -1,25 +1,15 @@
 package com.george.vector.ui.auth;
 
-import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES;
-import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_EMAIL;
-import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_LAST_NAME;
-import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_NAME;
-import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_PATRONYMIC;
-import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_PERMISSION;
-import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_ROLE;
-import static com.george.vector.common.utils.consts.Logs.TAG_LOADING_ACTIVITY;
-
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.george.vector.data.preferences.UserPreferencesViewModel;
 import com.george.vector.databinding.ActivityLoadingBinding;
 import com.george.vector.ui.users.executor.main.MainExecutorActivity;
 import com.george.vector.ui.users.root.main.MainRootActivity;
@@ -29,8 +19,6 @@ import com.google.firebase.auth.FirebaseAuth;
 public class LoadingActivity extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth;
-
-    String name, lastName, patronymic, email, permission, role;
 
     ActivityLoadingBinding loadingBinding;
 
@@ -44,21 +32,16 @@ public class LoadingActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        SharedPreferences mDataUser;
-        mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-
-        name = mDataUser.getString(USER_PREFERENCES_NAME, "");
-        lastName = mDataUser.getString(USER_PREFERENCES_LAST_NAME, "");
-        patronymic = mDataUser.getString(USER_PREFERENCES_PATRONYMIC, "");
-        email = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
-        permission = mDataUser.getString(USER_PREFERENCES_PERMISSION, "");
-        role = mDataUser.getString(USER_PREFERENCES_ROLE, "");
-
-        Log.d(TAG_LOADING_ACTIVITY, "firebaseAuth id: " + firebaseAuth.getUid());
-        Log.d(TAG_LOADING_ACTIVITY, "name_user: " + name);
+        UserPreferencesViewModel preferencesViewModel = new ViewModelProvider(this).get(UserPreferencesViewModel.class);
+        String name = preferencesViewModel.getUser().getName();
+        String lastname = preferencesViewModel.getUser().getLast_name();
+        String patronymic = preferencesViewModel.getUser().getPatronymic();
+        String email = preferencesViewModel.getUser().getEmail();
+        String permission = preferencesViewModel.getUser().getPermission();
+        String role = preferencesViewModel.getUser().getRole();
 
         if(firebaseAuth.getCurrentUser() != null &
-                (name.equals("") || lastName.equals("") || patronymic.equals("") || email.equals("")
+                (name.equals("") || lastname.equals("") || patronymic.equals("") || email.equals("")
                         || permission.equals("") || role.equals(""))) {
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle("Внимание!")

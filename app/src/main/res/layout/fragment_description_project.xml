@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -61,7 +61,7 @@
                             android:layout_marginStart="20dp"
                             android:layout_toEndOf="@+id/about_app_layout"
                             android:text="Скачать полный текст работы"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/textColor"
                             android:textSize="20sp" />
 
                     </RelativeLayout>
@@ -71,22 +71,21 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Введение"
-                    android:textColor="@color/black"
-                    android:textSize="30sp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
-                    android:textStyle="bold"/>
+                    android:text="Введение"
+                    android:textColor="?attr/textColor"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/description_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Placeholder"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
-                    android:textColor="@color/black"/>
-
+                    android:text="Placeholder"
+                    android:textColor="?attr/textColor" />
 
             </LinearLayout>
 
@@ -102,10 +101,10 @@
                 android:id="@+id/toolbar_description_project"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/blue_primary"
+                style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 app:layout_collapseMode="pin"
-                app:title="@string/app_name"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+                app:title="@string/app_name"
                 app:titleTextColor="@android:color/white" />
 
         </com.google.android.material.appbar.AppBarLayout>

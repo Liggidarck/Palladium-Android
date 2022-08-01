@@ -101,7 +101,7 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
                 return;
             }
 
-            if (networkUtils.isOnline(AddTaskUserActivity.this)) {
+            if (!networkUtils.isOnline(AddTaskUserActivity.this)) {
                 showDialogNoInternet();
                 return;
             }
@@ -136,13 +136,13 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
                 null, fullNameCreator);
 
         taskViewModel.createTask(task);
+        onBackPressed();
     }
 
     boolean validateFields() {
         return textValidator.isEmptyField(address, binding.textInputLayoutAddress) &
                 textValidator.isEmptyField(floor, binding.textInputLayoutFloor) &
                 textValidator.isEmptyField(cabinet, binding.textInputLayoutCabinet) &
-                textValidator.isEmptyField(letter, binding.textInputLayoutCabinetLiterUser) &
                 textValidator.isEmptyField(nameTask, binding.textInputLayoutNameTask);
     }
 
