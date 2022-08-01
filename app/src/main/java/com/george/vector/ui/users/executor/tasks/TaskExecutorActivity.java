@@ -1,9 +1,7 @@
 package com.george.vector.ui.users.executor.tasks;
 
 import static com.george.vector.common.utils.consts.Keys.COLLECTION;
-import static com.george.vector.common.utils.consts.Keys.EMAIL;
 import static com.george.vector.common.utils.consts.Keys.ID;
-import static com.george.vector.common.utils.consts.Keys.LOCATION;
 import static com.george.vector.common.utils.consts.Logs.TAG_TASK_EXECUTOR_FRAGMENT;
 
 import android.content.Context;
@@ -30,7 +28,6 @@ public class TaskExecutorActivity extends AppCompatActivity {
 
     String id;
     String collection;
-    String location;
     String cabinet;
     String letter;
     String status;
@@ -38,7 +35,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
     String timeCreate;
     String dateDone;
     String image;
-    String emailMainActivity;
+
     boolean urgent;
 
     ActivityTaskExecutorBinding taskExecutorBinding;
@@ -53,8 +50,6 @@ public class TaskExecutorActivity extends AppCompatActivity {
         Bundle arguments = getIntent().getExtras();
         id = arguments.getString(ID);
         collection = arguments.getString(COLLECTION);
-        location = arguments.getString(LOCATION);
-        emailMainActivity = arguments.getString(EMAIL);
 
         TaskViewModel taskViewModel = new ViewModelProvider(
                 this,
@@ -67,8 +62,6 @@ public class TaskExecutorActivity extends AppCompatActivity {
             Intent intent = new Intent(this, EditTaskExecutorActivity.class);
             intent.putExtra(ID, id);
             intent.putExtra(COLLECTION, collection);
-            intent.putExtra(LOCATION, location);
-            intent.putExtra(EMAIL, emailMainActivity);
             startActivity(intent);
         });
 
@@ -107,20 +100,16 @@ public class TaskExecutorActivity extends AppCompatActivity {
             }
 
             if (image != null) {
-                Fragment image_fragment = new FragmentImageTask();
-
+                Fragment fragmentImageTask = new FragmentImageTask();
                 Bundle bundle = new Bundle();
                 bundle.putString("image_id", image);
                 bundle.putString(ID, id);
                 bundle.putString(COLLECTION, collection);
-                bundle.putString(LOCATION, location);
-                bundle.putString(EMAIL, "email");
-
-                image_fragment.setArguments(bundle);
+                fragmentImageTask.setArguments(bundle);
 
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.frame_image_task_executor, image_fragment)
+                        .replace(R.id.frame_image_task_executor, fragmentImageTask)
                         .commit();
             }
 

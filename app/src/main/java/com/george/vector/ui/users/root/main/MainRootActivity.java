@@ -1,7 +1,6 @@
 package com.george.vector.ui.users.root.main;
 
 import static com.george.vector.common.utils.consts.Keys.TOPIC_NEW_TASKS_CREATE;
-import static com.george.vector.common.utils.consts.Logs.TAG_MAIN_ROOT_ACTIVITY;
 import static com.george.vector.common.utils.consts.Logs.TAG_NOTIFICATIONS;
 
 import android.annotation.SuppressLint;
@@ -17,7 +16,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.george.vector.R;
 import com.george.vector.common.notifications.SendNotification;
-import com.george.vector.data.preferences.UserPreferencesViewModel;
+import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityRootMainBinding;
 import com.george.vector.network.model.User;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -34,7 +33,7 @@ public class MainRootActivity extends AppCompatActivity {
         binding = ActivityRootMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        UserPreferencesViewModel preferencesViewModel = new ViewModelProvider(this).get(UserPreferencesViewModel.class);
+        UserDataViewModel preferencesViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 
         NavController navController = Navigation.findNavController(this, R.id.navHostFragmentActivityRootMain);
         NavigationUI.setupWithNavController(binding.bottomRootNavigation, navController);

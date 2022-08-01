@@ -21,4 +21,8 @@ public class LoginViewModel extends AndroidViewModel {
         return repository.signIn(email, password);
     }
 
+    public MutableLiveData<String> getUserId() {
+        return repository.getUserId();
+    }
+
 }

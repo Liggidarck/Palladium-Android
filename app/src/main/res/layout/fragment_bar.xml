@@ -2,26 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/barSchool"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="20dp"
-        app:cardElevation="3dp">
+        android:layout_marginTop="5dp"
+        app:cardElevation="5dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:background="?attr/grayColor">
+            android:padding="20dp">
 
             <RelativeLayout
-                android:id="@+id/ava_folder_1"
+                android:id="@+id/avatarBarSchool"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" >
 
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
-                android:layout_toEndOf="@+id/ava_folder_1"
+                android:layout_toEndOf="@+id/avatarBarSchool"
                 android:text="@string/bar_text"
                 android:textAppearance="?attr/textAppearanceHeadline6" />
 
@@ -58,7 +58,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="20dp"
-        app:cardElevation="3dp">
+        app:cardElevation="5dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -67,7 +67,7 @@
             android:background="?attr/grayColor">
 
             <RelativeLayout
-                android:id="@+id/ava_folder_2"
+                android:id="@+id/avatarBarRucheek"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" >
 
@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/bar_stream_text"
                 android:textAppearance="?attr/textAppearanceHeadline6"
-                android:layout_toEndOf="@+id/ava_folder_2"
+                android:layout_toEndOf="@+id/avatarBarRucheek"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"/>
 
@@ -104,7 +104,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="20dp"
-        app:cardElevation="3dp">
+        app:cardElevation="5dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -113,7 +113,7 @@
             android:background="?attr/grayColor">
 
             <RelativeLayout
-                android:id="@+id/ava_folder_3"
+                android:id="@+id/avatarBarZvezdochka"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" >
 
@@ -136,7 +136,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/bar_star_text"
                 android:textAppearance="?attr/textAppearanceHeadline6"
-                android:layout_toEndOf="@+id/ava_folder_3"
+                android:layout_toEndOf="@+id/avatarBarZvezdochka"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"/>
 
@@ -146,7 +146,6 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
-
+        android:layout_height="30dp" />
 
 </LinearLayout>

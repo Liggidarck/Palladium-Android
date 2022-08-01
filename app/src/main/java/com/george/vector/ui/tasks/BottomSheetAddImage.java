@@ -24,9 +24,8 @@ public class BottomSheetAddImage extends BottomSheetDialogFragment {
         binding = BottomSheetAddImageBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        binding.layoutNewPhotoBottomSheet.setOnClickListener(v -> listener.getPhotoFromDevice("new photo"));
-
-        binding.layoutFolderBottomSheet.setOnClickListener(v -> listener.getPhotoFromDevice("existing photo"));
+        binding.newPhoto.setOnClickListener(v -> listener.getPhotoFromDevice("new photo"));
+        binding.folder.setOnClickListener(v -> listener.getPhotoFromDevice("existing photo"));
 
         return view;
     }

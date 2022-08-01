@@ -1,9 +1,7 @@
 package com.george.vector.ui.users.user.main.fragments.home;
 
 import static com.george.vector.common.utils.consts.Keys.COLLECTION;
-import static com.george.vector.common.utils.consts.Keys.EMAIL;
 import static com.george.vector.common.utils.consts.Keys.ID;
-import static com.george.vector.common.utils.consts.Keys.PERMISSION;
 import static com.george.vector.common.utils.consts.Logs.TAG_HOME_USER_FRAGMENT;
 
 import android.content.Intent;
@@ -20,7 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.george.vector.data.preferences.UserPreferencesViewModel;
+import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.FragmentUserHomeBinding;
 import com.george.vector.network.model.Task;
 import com.george.vector.ui.adapter.TaskAdapter;
@@ -43,7 +41,7 @@ public class FragmentUserHome extends Fragment {
         homeBinding = FragmentUserHomeBinding.inflate(inflater, container, false);
         View view = homeBinding.getRoot();
 
-        UserPreferencesViewModel userPrefViewModel = new ViewModelProvider(this).get(UserPreferencesViewModel.class);
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         email = userPrefViewModel.getUser().getEmail();
         permission = userPrefViewModel.getUser().getPermission();
 
@@ -76,16 +74,12 @@ public class FragmentUserHome extends Fragment {
             Intent intent = new Intent(FragmentUserHome.this.getContext(), TaskUserActivity.class);
             intent.putExtra(ID, id);
             intent.putExtra(COLLECTION, permission);
-            intent.putExtra(EMAIL, email);
             startActivity(intent);
         });
 
-        homeBinding.createTaskUser.setOnClickListener(v -> {
-            Intent intent = new Intent(FragmentUserHome.this.getContext(), AddTaskUserActivity.class);
-            intent.putExtra(PERMISSION, permission);
-            intent.putExtra(EMAIL, email);
-            startActivity(intent);
-        });
+        homeBinding.createTaskUser.setOnClickListener(v ->
+                startActivity(new Intent(FragmentUserHome.this.getContext(), AddTaskUserActivity.class))
+        );
 
         return view;
     }

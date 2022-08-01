@@ -12,11 +12,19 @@ public class LoginRepository {
         firebaseAuth = FirebaseAuth.getInstance();
     }
 
+    public MutableLiveData<String > getUserId() {
+        MutableLiveData<String> userId = new MutableLiveData<>();
+        userId.setValue(firebaseAuth.getCurrentUser().getUid());
+        return userId;
+    }
+
     public MutableLiveData<String> signIn(String email, String password) {
         MutableLiveData<String> id = new MutableLiveData<>();
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-            String userId = firebaseAuth.getCurrentUser().getUid();
-            id.setValue(userId);
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(documentReference -> {
+            if (documentReference.isSuccessful()) {
+                String userId = firebaseAuth.getCurrentUser().getUid();
+                id.setValue(userId);
+            }
         });
         return id;
     }

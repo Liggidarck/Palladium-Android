@@ -1,15 +1,14 @@
 package com.george.vector.ui.users.executor.tasks;
 
 import static com.george.vector.common.utils.consts.Keys.COLLECTION;
-import static com.george.vector.common.utils.consts.Keys.EMAIL;
 import static com.george.vector.common.utils.consts.Keys.ID;
-import static com.george.vector.common.utils.consts.Keys.LOCATION;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 import static java.util.Objects.requireNonNull;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
@@ -18,16 +17,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.R;
 import com.george.vector.common.utils.NetworkUtils;
+import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityEditTaskExecutorBinding;
 import com.george.vector.network.model.Task;
 import com.george.vector.network.viewmodel.TaskViewModel;
+import com.george.vector.network.viewmodel.ViewModelFactory;
 import com.george.vector.ui.users.executor.main.MainExecutorActivity;
 
 public class EditTaskExecutorActivity extends AppCompatActivity {
 
     String id;
     String collection;
-    String location;
     String comment;
     String dateCreate;
     String timeCreate;
@@ -36,13 +36,13 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
     String fullNameExecutor;
     String emailCreator;
     String nameCreator;
-    String emailMailActivity;
     boolean urgent;
 
     TaskViewModel taskViewModel;
 
     ActivityEditTaskExecutorBinding binding;
     NetworkUtils networkUtils = new NetworkUtils();
+    public static final String TAG = EditTaskExecutorActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +54,16 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         Bundle arguments = getIntent().getExtras();
         id = arguments.getString(ID);
         collection = arguments.getString(COLLECTION);
-        location = arguments.getString(LOCATION);
-        emailMailActivity = arguments.getString(EMAIL);
 
-        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+        Log.d(TAG, "onCreate: id: " + id);
+
+        taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                this.getApplication(),
+                collection)
+        ).get(TaskViewModel.class);
+
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+        email = userPrefViewModel.getUser().getEmail();
 
         binding.toolbarEditTaskExecutor.setNavigationOnClickListener(v -> onBackPressed());
 
@@ -70,6 +76,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
             nameCreator = task.getNameCreator();
             urgent = task.getUrgent();
             image = task.getImage();
+            comment = task.getComment();
 
             requireNonNull(binding.textAddress.getEditText()).setText(task.getAddress());
             requireNonNull(binding.textFloor.getEditText()).setText(task.getFloor());
@@ -85,7 +92,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
             else
                 requireNonNull(binding.textComment.getEditText()).setText(comment);
 
-            initializeFields(location);
+            initializeFields(collection);
         });
 
         binding.progressEditTaskExecutor.setVisibility(View.INVISIBLE);
@@ -118,10 +125,9 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
                 updateExecutor, updateStatus, timeCreate, email, urgent, updateImage,
                 fullNameExecutor, nameCreator);
 
-        taskViewModel.createTask(task);
+        taskViewModel.updateTask(id, task);
 
         Intent intent = new Intent(this, MainExecutorActivity.class);
-        intent.putExtra(EMAIL, emailMailActivity);
         startActivity(intent);
     }
 
@@ -137,34 +143,34 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    void initializeFields(String location) {
-        if (location.equals(OST_SCHOOL)) {
-            String[] items = getResources().getStringArray(R.array.addressesOstSchool);
+    void initializeFields(String collection) {
+        if (collection.equals(OST_SCHOOL)) {
+            String[] itemsAddresses = getResources().getStringArray(R.array.addressesOstSchool);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     EditTaskExecutorActivity.this,
                     R.layout.dropdown_menu_categories,
-                    items
+                    itemsAddresses
             );
             binding.autoCompleteAddress.setAdapter(adapter);
         }
 
-        String[] items_status = getResources().getStringArray(R.array.status);
+        String[] itemsStatus = getResources().getStringArray(R.array.status);
         ArrayAdapter<String> adapter_status = new ArrayAdapter<>(
                 EditTaskExecutorActivity.this,
                 R.layout.dropdown_menu_categories,
-                items_status
+                itemsStatus
         );
 
         binding.autoCompleteStatus.setAdapter(adapter_status);
 
-        String[] items_letter = getResources().getStringArray(R.array.letter);
-        ArrayAdapter<String> adapter_letter = new ArrayAdapter<>(
+        String[] itemsLetter = getResources().getStringArray(R.array.letter);
+        ArrayAdapter<String> adapterLetter = new ArrayAdapter<>(
                 EditTaskExecutorActivity.this,
                 R.layout.dropdown_menu_categories,
-                items_letter
+                itemsLetter
         );
 
-        binding.autoCompleteLetter.setAdapter(adapter_letter);
+        binding.autoCompleteLetter.setAdapter(adapterLetter);
 
     }
 

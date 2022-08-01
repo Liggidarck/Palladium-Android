@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
-import com.george.vector.data.preferences.UserPreferencesViewModel;
+import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.FragmentRootHomeBinding;
 import com.george.vector.ui.users.root.profile.ProfileRootActivity;
 import com.george.vector.ui.users.root.tasks.BottomSheetAddTask;
@@ -40,7 +40,7 @@ public class FragmentRootHome extends Fragment {
                 .getDefaultSharedPreferences(FragmentRootHome.this.getContext())
                 .getString("default_root_location", OST);
 
-        UserPreferencesViewModel userPrefViewModel = new ViewModelProvider(this).get(UserPreferencesViewModel.class);
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         String nameUser = userPrefViewModel.getUser().getName();
         String lastnameUser = userPrefViewModel.getUser().getLast_name();
         email = userPrefViewModel.getUser().getEmail();

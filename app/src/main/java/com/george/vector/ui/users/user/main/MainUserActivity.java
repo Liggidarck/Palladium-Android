@@ -12,7 +12,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import com.george.vector.R;
-import com.george.vector.data.preferences.UserPreferencesViewModel;
+import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityMainUserBinding;
 import com.george.vector.network.model.User;
 import com.george.vector.ui.auth.LoginActivity;
@@ -40,7 +40,7 @@ public class MainUserActivity extends AppCompatActivity implements BottomSheetPr
 
     @Override
     public void getButton(String button) {
-        UserPreferencesViewModel userPrefViewModel = new ViewModelProvider(this).get(UserPreferencesViewModel.class);
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 
         if (button.equals("logoutBtnUser")) {
             AlertDialog dialog = new AlertDialog.Builder(this)

@@ -1,8 +1,7 @@
 package com.george.vector.ui.users.executor.main;
 
-import static com.george.vector.common.utils.consts.Keys.EMAIL;
+import static com.george.vector.common.utils.consts.Keys.COLLECTION;
 import static com.george.vector.common.utils.consts.Keys.FOLDER;
-import static com.george.vector.common.utils.consts.Keys.LOCATION;
 
 import android.os.Bundle;
 
@@ -15,7 +14,7 @@ import com.george.vector.ui.users.executor.tasks.FragmentExecutorTasks;
 
 public class ExecutorTasksActivity extends AppCompatActivity {
 
-    String location, folder, email;
+    String collection, folder, email;
     ActivityExecutorTasksBinding tasksBinding;
 
     @Override
@@ -26,12 +25,11 @@ public class ExecutorTasksActivity extends AppCompatActivity {
         setContentView(tasksBinding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        location = arguments.getString(LOCATION);
+        collection = arguments.getString(COLLECTION);
         folder = arguments.getString(FOLDER);
-        email = arguments.getString(EMAIL);
 
         String textToolbar = null;
-        switch (location) {
+        switch (collection) {
             case "ost_school":
                 textToolbar = getString(R.string.ost_text);
                 break;
@@ -57,20 +55,19 @@ public class ExecutorTasksActivity extends AppCompatActivity {
                 break;
         }
 
-        tasksBinding.toolbarTasksExecutorActivity.setNavigationOnClickListener(v -> onBackPressed());
-        tasksBinding.toolbarTasksExecutorActivity.setTitle(textToolbar);
+        tasksBinding.toolbarTasks.setNavigationOnClickListener(v -> onBackPressed());
+        tasksBinding.toolbarTasks.setTitle(textToolbar);
 
-        Fragment currentFragment = new FragmentExecutorTasks();
+        Fragment fragmentTasks = new FragmentExecutorTasks();
 
         Bundle bundle = new Bundle();
-        bundle.putString(LOCATION, location);
+        bundle.putString(COLLECTION, collection);
         bundle.putString(FOLDER, folder);
-        bundle.putString(EMAIL, this.email);
-        currentFragment.setArguments(bundle);
+        fragmentTasks.setArguments(bundle);
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.frame_folder_executor, currentFragment)
+                .replace(R.id.frameFolderTasks, fragmentTasks)
                 .commit();
     }
 }

@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.george.vector.data.preferences.UserPreferencesViewModel;
+import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityLoadingBinding;
 import com.george.vector.ui.users.executor.main.MainExecutorActivity;
 import com.george.vector.ui.users.root.main.MainRootActivity;
@@ -32,7 +32,7 @@ public class LoadingActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        UserPreferencesViewModel preferencesViewModel = new ViewModelProvider(this).get(UserPreferencesViewModel.class);
+        UserDataViewModel preferencesViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         String name = preferencesViewModel.getUser().getName();
         String lastname = preferencesViewModel.getUser().getLast_name();
         String patronymic = preferencesViewModel.getUser().getPatronymic();

@@ -14,16 +14,10 @@ import com.george.vector.databinding.ActivityEditDataUserBinding;
 import com.george.vector.network.model.User;
 import com.george.vector.network.viewmodel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class EditDataUserActivity extends AppCompatActivity {
 
     ActivityEditDataUserBinding binding;
-    UserViewModel userViewModel;
-
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
-
     TextValidatorUtils textValidator = new TextValidatorUtils();
 
     String permissionUser;
@@ -35,15 +29,14 @@ public class EditDataUserActivity extends AppCompatActivity {
         binding = ActivityEditDataUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         binding.toolbarEditDataUser.setNavigationOnClickListener(v -> onBackPressed());
 
         String userId = requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         userViewModel.getUser(userId).observe(this, user -> {
+            binding.progressBarEditDataUser.setVisibility(View.VISIBLE);
             requireNonNull(binding.textNameUser.getEditText()).setText(user.getName());
             requireNonNull(binding.textLastNameUser.getEditText()).setText(user.getLast_name());
             requireNonNull(binding.textPatronymicUser.getEditText()).setText(user.getPatronymic());
@@ -51,9 +44,11 @@ public class EditDataUserActivity extends AppCompatActivity {
             requireNonNull(binding.textRoleUser.getEditText()).setText(user.getRole());
             requireNonNull(binding.textPasswordUser.getEditText()).setText(user.getPassword());
             permissionUser = user.getPermission();
+            binding.progressBarEditDataUser.setVisibility(View.INVISIBLE);
         });
 
         binding.btnSaveUser.setOnClickListener(v -> {
+            binding.progressBarEditDataUser.setVisibility(View.VISIBLE);
             String nameUser = requireNonNull(binding.textNameUser.getEditText()).getText().toString();
             String lastNameUser = requireNonNull(binding.textLastNameUser.getEditText()).getText().toString();
             String patronymicUser = requireNonNull(binding.textPatronymicUser.getEditText()).getText().toString();
@@ -68,7 +63,10 @@ public class EditDataUserActivity extends AppCompatActivity {
             binding.progressBarEditDataUser.setVisibility(View.VISIBLE);
             userViewModel.updateUser(userId, new User(nameUser, lastNameUser, patronymicUser,
                     emailUser, roleUser, permissionUser, password));
+            binding.progressBarEditDataUser.setVisibility(View.INVISIBLE);
+            onBackPressed();
         });
+
     }
 
     boolean validateFields() {

@@ -1,8 +1,7 @@
 package com.george.vector.ui.users.root.tasks;
 
-import static com.george.vector.common.utils.consts.Keys.EMAIL;
+import static com.george.vector.common.utils.consts.Keys.COLLECTION;
 import static com.george.vector.common.utils.consts.Keys.ID;
-import static com.george.vector.common.utils.consts.Keys.LOCATION;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.utils.consts.Logs.TAG_STATE_TASK;
 import static java.util.Objects.requireNonNull;
@@ -37,7 +36,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
     private Calendar datePickCalendar;
 
-    private String id, comment, dateCreate, timeCreate, emailCreator, collection, userEmail, image, nameCreator;
+    private String id, comment, dateCreate, timeCreate, emailCreator, collection, image, nameCreator;
 
     private final TextValidatorUtils textValidatorUtils = new TextValidatorUtils();
     private final NetworkUtils networkUtils = new NetworkUtils();
@@ -58,8 +57,8 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.getString(ID);
-        collection = arguments.getString(LOCATION);
-        userEmail = arguments.getString(EMAIL);
+        collection = arguments.getString(COLLECTION);
+
         String bufferSizePreference = PreferenceManager
                 .getDefaultSharedPreferences(EditTaskRootActivity.this)
                 .getString("buffer_size", "2");
@@ -150,9 +149,7 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
         taskViewModel.updateTask(id, task);
 
-        Intent intent = new Intent(this, MainRootActivity.class);
-        intent.putExtra(EMAIL, userEmail);
-        startActivity(intent);
+        startActivity(new Intent(this, MainRootActivity.class));
     }
 
     void showDialog() {
@@ -161,11 +158,8 @@ public class EditTaskRootActivity extends AppCompatActivity {
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_no_connection))
                 .setPositiveButton(getText(R.string.save), (dialog, id) -> updateTask(collection))
-                .setNegativeButton(android.R.string.cancel, (dialog, id) -> {
-                    Intent intent = new Intent(this, MainRootActivity.class);
-                    intent.putExtra(EMAIL, userEmail);
-                    startActivity(intent);
-                });
+                .setNegativeButton(android.R.string.cancel, (dialog, id) ->
+                        startActivity(new Intent(this, MainRootActivity.class)));
 
         AlertDialog dialog = builder.create();
         dialog.show();

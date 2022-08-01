@@ -1,9 +1,7 @@
 package com.george.vector.ui.users.user.tasks;
 
 import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
-import static com.george.vector.common.utils.consts.Keys.EMAIL;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
-import static com.george.vector.common.utils.consts.Keys.PERMISSION;
 import static com.george.vector.common.utils.consts.Keys.PERMISSION_CAMERA_CODE;
 import static com.george.vector.common.utils.consts.Keys.PERMISSION_GALLERY_CODE;
 import static com.george.vector.common.utils.consts.Logs.TAG_ADD_TASK_USER_ACTIVITY;
@@ -30,7 +28,7 @@ import com.george.vector.R;
 import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.common.utils.TimeUtils;
-import com.george.vector.data.preferences.UserPreferencesViewModel;
+import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityAddTaskUserBinding;
 import com.george.vector.network.model.Task;
 import com.george.vector.network.viewmodel.TaskViewModel;
@@ -74,14 +72,14 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
         binding = ActivityAddTaskUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        Bundle arguments = getIntent().getExtras();
-        permission = arguments.getString(PERMISSION);
-        email = arguments.getString(EMAIL);
+        UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+        permission = userDataViewModel.getUser().getPermission();
+        email = userDataViewModel.getUser().getEmail();
 
         Log.i(TAG_ADD_TASK_USER_ACTIVITY, "permission: " + permission);
         Log.d(TAG_ADD_TASK_USER_ACTIVITY, "email: " + email);
 
-        UserPreferencesViewModel userPrefViewModel = new ViewModelProvider(this).get(UserPreferencesViewModel.class);
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         String nameUser = userPrefViewModel.getUser().getName();
         String lastNameUser = userPrefViewModel.getUser().getLast_name();
         String patronymicUser = userPrefViewModel.getUser().getPatronymic();

@@ -1,9 +1,7 @@
 package com.george.vector.ui.users.user.tasks;
 
 import static com.george.vector.common.utils.consts.Keys.COLLECTION;
-import static com.george.vector.common.utils.consts.Keys.EMAIL;
 import static com.george.vector.common.utils.consts.Keys.ID;
-import static com.george.vector.common.utils.consts.Keys.LOCATION;
 
 import android.os.Bundle;
 import android.view.View;
@@ -81,8 +79,7 @@ public class TaskUserActivity extends AppCompatActivity {
                 bundle.putString("image_id", image);
                 bundle.putString(ID, id);
                 bundle.putString(COLLECTION, collection);
-                bundle.putString(LOCATION, collection);
-                bundle.putString(EMAIL, "null");
+                bundle.putString(COLLECTION, collection);
                 imageFragment.setArguments(bundle);
 
                 getSupportFragmentManager()

@@ -1,7 +1,5 @@
 package com.george.vector.network.repository;
 
-import static com.george.vector.common.utils.consts.Keys.EMAIL;
-import static com.george.vector.common.utils.consts.Keys.PERMISSION;
 import static com.george.vector.common.utils.consts.Keys.ROLE;
 
 import androidx.lifecycle.MutableLiveData;
@@ -21,6 +19,10 @@ public class UserRepository {
     public UserRepository(String collection) {
         firebaseFirestore = FirebaseFirestore.getInstance();
         this.collection = collection;
+    }
+
+    public void saveUser(User user) {
+        firebaseFirestore.collection(collection).add(user);
     }
 
     public void updateUser(String id, User user) {
@@ -44,8 +46,8 @@ public class UserRepository {
                    String lastName = value.getString("last_name");
                    String patronymic = value.getString("patronymic");
                    String role = value.getString(ROLE);
-                   String email = value.getString(EMAIL);
-                   String permission = value.getString(PERMISSION);
+                   String email = value.getString("email");
+                   String permission = value.getString("permission");
                    String password = value.getString("password");
                    user.setValue(new User(name, lastName, patronymic, email, role, permission, password));
 

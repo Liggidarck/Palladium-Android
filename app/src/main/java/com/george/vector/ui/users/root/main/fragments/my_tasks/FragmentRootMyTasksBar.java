@@ -9,23 +9,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.george.vector.databinding.FragmentBarRootBinding;
+import com.george.vector.databinding.FragmentBarBinding;
 
 public class FragmentRootMyTasksBar extends Fragment {
 
-    FragmentBarRootBinding barRootBinding;
+    FragmentBarBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        barRootBinding = FragmentBarRootBinding.inflate(inflater, container, false);
+        binding = FragmentBarBinding.inflate(inflater, container, false);
 
-        return barRootBinding.getRoot();
+        return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        barRootBinding = null;
+        binding = null;
     }
 }

@@ -1,11 +1,9 @@
 package com.george.vector.ui.auth;
 
 import static com.george.vector.common.utils.TextValidatorUtils.validateEmail;
-import static com.george.vector.common.utils.consts.Logs.TAG_VALIDATE_FILED;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.george.vector.R;
 import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.common.utils.TextValidatorUtils;
-import com.george.vector.data.preferences.UserPreferencesViewModel;
+import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityLoginBinding;
 import com.george.vector.network.model.User;
 import com.george.vector.network.viewmodel.LoginViewModel;
@@ -31,7 +29,7 @@ import java.util.Objects;
 public class LoginActivity extends AppCompatActivity {
 
     ActivityLoginBinding binding;
-    UserPreferencesViewModel userPreferencesViewModel;
+    UserDataViewModel userDataViewModel;
     UserViewModel userViewModel;
 
     TextValidatorUtils textValidator = new TextValidatorUtils();
@@ -44,12 +42,12 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        userPreferencesViewModel = new ViewModelProvider(this).get(UserPreferencesViewModel.class);
+        userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         binding.btnLogin.setOnClickListener(v -> {
-            String email = Objects.requireNonNull(binding.emailLoginTextLayout.getEditText()).getText().toString();
-            String password = Objects.requireNonNull(binding.passwordLoginTextLayout.getEditText()).getText().toString();
+            String email = Objects.requireNonNull(binding.textEmail.getEditText()).getText().toString();
+            String password = Objects.requireNonNull(binding.textPassword.getEditText()).getText().toString();
 
             if (!networkUtils.isOnline(this)) {
                 onStart();
@@ -61,8 +59,8 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             if (validateEmail(email)) {
-                Log.e(TAG_VALIDATE_FILED, "Email validation failed");
-                binding.emailLoginTextLayout.setError("Некорректный формат e-mail");
+                binding.textEmail.setError("Некорректный формат e-mail");
+                return;
             }
 
             signIn(email, password);
@@ -82,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                     String email = user.getEmail();
                     String permission = user.getPermission();
 
-                    userPreferencesViewModel.saveUser(new User(name, lastName, patronymic,
+                    userDataViewModel.saveUser(new User(name, lastName, patronymic,
                             email, role, permission, password));
 
                     binding.progressBarAuth.setVisibility(View.INVISIBLE);
@@ -114,10 +112,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     boolean validateFields() {
-        String email = binding.emailLoginTextLayout.getEditText().getText().toString();
-        String password = binding.passwordLoginTextLayout.getEditText().getText().toString();
-        return textValidator.isEmptyField(email, binding.emailLoginTextLayout) &
-                textValidator.isEmptyField(password, binding.passwordLoginTextLayout);
+        String email = binding.textEmail.getEditText().getText().toString();
+        String password = binding.textPassword.getEditText().getText().toString();
+        return textValidator.isEmptyField(email, binding.textEmail) &
+                textValidator.isEmptyField(password, binding.textPassword);
     }
 
 }

@@ -1,7 +1,6 @@
 package com.george.vector.ui.users.executor.main.fragments;
 
-import static com.george.vector.common.utils.consts.Keys.EMAIL;
-import static com.george.vector.common.utils.consts.Keys.LOCATION;
+import static com.george.vector.common.utils.consts.Keys.COLLECTION;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 
 import android.content.Intent;
@@ -14,27 +13,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.george.vector.databinding.FragmentOstExecutorBinding;
+import com.george.vector.databinding.FragmentOstBinding;
 import com.george.vector.ui.users.executor.main.FolderExecutorActivity;
 
 public class FragmentOstExecutor extends Fragment {
 
-    FragmentOstExecutorBinding executorBinding;
+    FragmentOstBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        executorBinding = FragmentOstExecutorBinding.inflate(inflater, container, false);
-        View view = executorBinding.getRoot();
+        binding = FragmentOstBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        Bundle args = getArguments();
-        assert args != null;
-        String email = args.getString(EMAIL);
-
-        executorBinding.ostSchoolExecutor.setOnClickListener(v -> {
+        binding.ostSchool.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentOstExecutor.this.getContext(), FolderExecutorActivity.class);
-            intent.putExtra(LOCATION, OST_SCHOOL);
-            intent.putExtra(EMAIL, email);
+            intent.putExtra(COLLECTION, OST_SCHOOL);
             startActivity(intent);
         });
 

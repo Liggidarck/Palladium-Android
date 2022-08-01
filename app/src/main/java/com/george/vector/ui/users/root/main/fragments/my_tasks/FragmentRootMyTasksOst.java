@@ -1,8 +1,7 @@
 package com.george.vector.ui.users.root.main.fragments.my_tasks;
 
-import static com.george.vector.common.utils.consts.Keys.EMAIL;
+import static com.george.vector.common.utils.consts.Keys.COLLECTION;
 import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
-import static com.george.vector.common.utils.consts.Keys.LOCATION;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 
 import android.content.Intent;
@@ -15,27 +14,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.george.vector.databinding.FragmentOstRootBinding;
+import com.george.vector.databinding.FragmentOstBinding;
 import com.george.vector.ui.users.root.folders.LocationFolderActivity;
 
 public class FragmentRootMyTasksOst extends Fragment {
 
-    FragmentOstRootBinding ostRootBinding;
+    FragmentOstBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ostRootBinding = FragmentOstRootBinding.inflate(inflater, container, false);
-        View view = ostRootBinding.getRoot();
+        binding = FragmentOstBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        Bundle args = getArguments();
-        assert args != null;
-        String email = args.getString(EMAIL);
-
-        ostRootBinding.ostSchoolRoot.setOnClickListener(v -> {
+        binding.ostSchool.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentRootMyTasksOst.this.getContext(), LocationFolderActivity.class);
-            intent.putExtra(LOCATION, OST_SCHOOL);
-            intent.putExtra(EMAIL, email);
+            intent.putExtra(COLLECTION, OST_SCHOOL);
             intent.putExtra(EXECUTOR_EMAIL, "work");
             startActivity(intent);
         });
@@ -46,6 +40,6 @@ public class FragmentRootMyTasksOst extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ostRootBinding = null;
+        binding = null;
     }
 }

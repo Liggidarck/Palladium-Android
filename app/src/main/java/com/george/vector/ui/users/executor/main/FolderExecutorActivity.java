@@ -1,23 +1,22 @@
 package com.george.vector.ui.users.executor.main;
 
+import static com.george.vector.common.utils.consts.Keys.COLLECTION;
 import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
-import static com.george.vector.common.utils.consts.Keys.EMAIL;
 import static com.george.vector.common.utils.consts.Keys.FOLDER;
 import static com.george.vector.common.utils.consts.Keys.IN_PROGRESS_TASKS;
-import static com.george.vector.common.utils.consts.Keys.LOCATION;
 import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
 import com.george.vector.databinding.ActivityFolderExecutorBinding;
 
 public class FolderExecutorActivity extends AppCompatActivity {
 
-    String location, email;
+    String collection;
     ActivityFolderExecutorBinding executorBinding;
 
     @Override
@@ -28,11 +27,10 @@ public class FolderExecutorActivity extends AppCompatActivity {
         setContentView(executorBinding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        location = arguments.getString(LOCATION);
-        email = arguments.getString(EMAIL);
+        collection = arguments.getString(COLLECTION);
 
         String textToolbar = null;
-        switch (location) {
+        switch (collection) {
             case "ost_school":
                 textToolbar = getString(R.string.ost_text);
                 break;
@@ -58,30 +56,27 @@ public class FolderExecutorActivity extends AppCompatActivity {
                 break;
         }
 
-        executorBinding.toolbarFolderExecutorActivity.setNavigationOnClickListener(v -> onBackPressed());
-        executorBinding.toolbarFolderExecutorActivity.setTitle(textToolbar);
+        executorBinding.toolbarFolder.setNavigationOnClickListener(v -> onBackPressed());
+        executorBinding.toolbarFolder.setTitle(textToolbar);
 
-        executorBinding.newTasksCardExecutor.setOnClickListener(v -> {
+        executorBinding.cardNewTasks.setOnClickListener(v -> {
             Intent intent = new Intent(this, ExecutorTasksActivity.class);
-            intent.putExtra(LOCATION, location);
+            intent.putExtra(COLLECTION, collection);
             intent.putExtra(FOLDER, NEW_TASKS);
-            intent.putExtra(EMAIL, email);
             startActivity(intent);
         });
 
-        executorBinding.completedTasksCardExecutor.setOnClickListener(v -> {
+        executorBinding.cardCompletedTasks.setOnClickListener(v -> {
             Intent intent = new Intent(this, ExecutorTasksActivity.class);
-            intent.putExtra(LOCATION, location);
+            intent.putExtra(COLLECTION, collection);
             intent.putExtra(FOLDER, COMPLETED_TASKS);
-            intent.putExtra(EMAIL, email);
             startActivity(intent);
         });
 
-        executorBinding.inProgressTasksCardExecutor.setOnClickListener(v -> {
+        executorBinding.cardInProgressTasks.setOnClickListener(v -> {
             Intent intent = new Intent(this, ExecutorTasksActivity.class);
-            intent.putExtra(LOCATION, location);
+            intent.putExtra(COLLECTION, collection);
             intent.putExtra(FOLDER, IN_PROGRESS_TASKS);
-            intent.putExtra(EMAIL, email);
             startActivity(intent);
         });
 

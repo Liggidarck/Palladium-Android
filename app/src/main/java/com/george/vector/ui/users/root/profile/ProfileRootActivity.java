@@ -1,7 +1,5 @@
 package com.george.vector.ui.users.root.profile;
 
-import static com.george.vector.common.utils.consts.Keys.EMAIL;
-import static com.george.vector.common.utils.consts.Keys.PERMISSION;
 import static com.george.vector.common.utils.consts.Keys.TOPIC_NEW_TASKS_CREATE;
 
 import android.content.Intent;
@@ -13,31 +11,29 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.BuildConfig;
 import com.george.vector.R;
-import com.george.vector.data.preferences.UserPreferencesViewModel;
+import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.databinding.ActivityProfileRootBinding;
 import com.george.vector.network.model.User;
 import com.george.vector.ui.auth.LoginActivity;
 import com.george.vector.ui.settings.SettingsActivity;
-import com.george.vector.databinding.ActivityProfileRootBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class ProfileRootActivity extends AppCompatActivity {
 
-    FirebaseAuth firebaseAuth;
-
     String name, lastname, patronymic, email, role, permission;
-    ActivityProfileRootBinding profileBinding;
+    ActivityProfileRootBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
-        profileBinding = ActivityProfileRootBinding.inflate(getLayoutInflater());
-        setContentView(profileBinding.getRoot());
+        binding = ActivityProfileRootBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
-        UserPreferencesViewModel userPrefViewModel = new ViewModelProvider(this).get(UserPreferencesViewModel.class);
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         User user = userPrefViewModel.getUser();
         name = user.getName();
         lastname = user.getLast_name();
@@ -49,22 +45,21 @@ public class ProfileRootActivity extends AppCompatActivity {
         String charName = Character.toString(name.charAt(0));
         String charLastname = Character.toString(lastname.charAt(0));
 
-        profileBinding.nameRootProfile.setText(String.format("%s %s", name, lastname));
-        profileBinding.avaRootProfile.setText(String.format("%s%s", charName, charLastname));
-        profileBinding.externalDataUser.setText(String.format("%s %s", email, role));
+        binding.nameRootProfile.setText(String.format("%s %s", name, lastname));
+        binding.avaRootProfile.setText(String.format("%s%s", charName, charLastname));
+        binding.externalDataUser.setText(String.format("%s %s", email, role));
 
-        profileBinding.toolbarProfileRoot.setNavigationOnClickListener(v -> onBackPressed());
-        profileBinding.layoutNewPersonProfile.setOnClickListener(v -> startActivity(new Intent(ProfileRootActivity.this, RegisterUserActivity.class)));
-        profileBinding.layoutEditPersonProfile.setOnClickListener(v -> startActivity(new Intent(ProfileRootActivity.this, ListUsersActivity.class)));
+        binding.toolbarProfileRoot.setNavigationOnClickListener(v -> onBackPressed());
+        binding.layoutNewPersonProfile.setOnClickListener(v ->
+                startActivity(new Intent(ProfileRootActivity.this, RegisterUserActivity.class)));
+        binding.layoutEditPersonProfile.setOnClickListener(v ->
+                startActivity(new Intent(ProfileRootActivity.this, ListUsersActivity.class)));
 
-        profileBinding.settingsProfileBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfileRootActivity.this, SettingsActivity.class);
-            intent.putExtra(PERMISSION, "root");
-            intent.putExtra(EMAIL, "null");
-            startActivity(intent);
-        });
+        binding.settingsProfileBtn.setOnClickListener(v ->
+            startActivity(new Intent(ProfileRootActivity.this, SettingsActivity.class))
+        );
 
-        profileBinding.logoutBtn.setOnClickListener(v -> {
+        binding.logoutBtn.setOnClickListener(v -> {
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle(getString(R.string.warning))
                     .setMessage("Вы действительно хотите выйти из аккаунта?")
@@ -83,6 +78,6 @@ public class ProfileRootActivity extends AppCompatActivity {
         });
 
         String versionName = "Версия: " + BuildConfig.VERSION_NAME;
-        profileBinding.versionAppTextView.setText(versionName);
+        binding.versionAppTextView.setText(versionName);
     }
 }

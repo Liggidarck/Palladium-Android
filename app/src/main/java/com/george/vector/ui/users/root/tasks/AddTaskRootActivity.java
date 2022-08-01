@@ -1,7 +1,7 @@
 package com.george.vector.ui.users.root.tasks;
 
 import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
-import static com.george.vector.common.utils.consts.Keys.LOCATION;
+import static com.george.vector.common.utils.consts.Keys.COLLECTION;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.PERMISSION_CAMERA_CODE;
 import static com.george.vector.common.utils.consts.Keys.PERMISSION_GALLERY_CODE;
@@ -30,7 +30,7 @@ import com.george.vector.common.utils.DialogsUtils;
 import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.common.utils.TimeUtils;
-import com.george.vector.data.preferences.UserPreferencesViewModel;
+import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityAddTaskRootBinding;
 import com.george.vector.network.model.Task;
 import com.george.vector.network.viewmodel.TaskViewModel;
@@ -46,10 +46,10 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
     private ActivityAddTaskRootBinding binding;
     private TaskViewModel taskViewModel;
-    private UserPreferencesViewModel userPrefViewModel;
+    private UserDataViewModel userPrefViewModel;
 
     String address, floor, cabinet, letter, taskName, dateComplete, taskStatus,
-            comment, fullNameExecutor, emailExecutor, location, emailCreator, fullNameCreator;
+            comment, fullNameExecutor, emailExecutor, collection, emailCreator, fullNameCreator;
     boolean urgent;
     private Uri fileUri;
 
@@ -82,14 +82,14 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         setContentView(binding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        location = arguments.get(LOCATION).toString();
+        collection = arguments.get(COLLECTION).toString();
 
         taskViewModel = new ViewModelProvider(this, new ViewModelFactory(this
-                .getApplication(), location)).get(TaskViewModel.class);
-        userPrefViewModel = new ViewModelProvider(this).get(UserPreferencesViewModel.class);
+                .getApplication(), collection)).get(TaskViewModel.class);
+        userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 
         getUserData();
-        initFields(location);
+        initFields(collection);
 
         binding.toolbarAddEditTask.setNavigationOnClickListener(v -> onBackPressed());
 

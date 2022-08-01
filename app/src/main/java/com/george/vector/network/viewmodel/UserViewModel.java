@@ -28,4 +28,8 @@ public class UserViewModel extends AndroidViewModel {
         repository.updateUser(id, user);
     }
 
+    public void saveUser(User user) {
+        repository.saveUser(user);
+    }
+
 }

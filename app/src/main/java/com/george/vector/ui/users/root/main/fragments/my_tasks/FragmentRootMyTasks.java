@@ -1,13 +1,8 @@
 package com.george.vector.ui.users.root.main.fragments.my_tasks;
 
-import static com.george.vector.common.utils.consts.Keys.EMAIL;
 import static com.george.vector.common.utils.consts.Keys.OST;
-import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES;
-import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_EMAIL;
 import static com.george.vector.common.utils.consts.Logs.TAG_TASK_ROOT_FRAGMENT;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,7 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
-import com.george.vector.data.preferences.UserPreferencesViewModel;
+import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.FragmentRootTasksBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +32,7 @@ public class FragmentRootMyTasks extends Fragment {
         rootTasksBinding = FragmentRootTasksBinding.inflate(inflater, container, false);
         View view = rootTasksBinding.getRoot();
 
-        UserPreferencesViewModel userPrefViewModel = new ViewModelProvider(this).get(UserPreferencesViewModel.class);
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         email = userPrefViewModel.getUser().getEmail();
 
         zone = PreferenceManager.getDefaultSharedPreferences(FragmentRootMyTasks.this.getContext()).getString("default_root_location", OST);
@@ -76,11 +71,6 @@ public class FragmentRootMyTasks extends Fragment {
             case "ost":
                 Log.i(TAG_TASK_ROOT_FRAGMENT, "Запуск фрагмента Осафьево");
                 currentFragment = new FragmentRootMyTasksOst();
-
-                Bundle email = new Bundle();
-                email.putString(EMAIL, this.email);
-                currentFragment.setArguments(email);
-
                 break;
             case "bar":
                 Log.i(TAG_TASK_ROOT_FRAGMENT, "Запуск фрагмента Барыши");

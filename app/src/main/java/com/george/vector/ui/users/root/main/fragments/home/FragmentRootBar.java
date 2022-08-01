@@ -1,15 +1,10 @@
 package com.george.vector.ui.users.root.main.fragments.home;
 
 import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
-import static com.george.vector.common.utils.consts.Keys.EMAIL;
+import static com.george.vector.common.utils.consts.Keys.COLLECTION;
 import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
-import static com.george.vector.common.utils.consts.Keys.LOCATION;
-import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES;
-import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_EMAIL;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,28 +15,27 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.george.vector.data.preferences.UserPreferencesViewModel;
-import com.george.vector.databinding.FragmentBarRootBinding;
+import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.databinding.FragmentBarBinding;
 import com.george.vector.ui.users.root.folders.LocationFolderActivity;
 
 public class FragmentRootBar extends Fragment {
 
-    FragmentBarRootBinding barRootBinding;
+    FragmentBarBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        barRootBinding = FragmentBarRootBinding.inflate(inflater, container, false);
-        View view = barRootBinding.getRoot();
+        binding = FragmentBarBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        UserPreferencesViewModel userPrefViewModel = new ViewModelProvider(this).get(UserPreferencesViewModel.class);
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         String email = userPrefViewModel.getUser().getEmail();
 
-        barRootBinding.barSchoolRoot.setOnClickListener(v -> {
+        binding.barSchool.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentRootBar.this.getContext(), LocationFolderActivity.class);
-            intent.putExtra(LOCATION, BAR_SCHOOL);
+            intent.putExtra(COLLECTION, BAR_SCHOOL);
             intent.putExtra(EXECUTOR_EMAIL, "root");
-            intent.putExtra(EMAIL, email);
             startActivity(intent);
         });
 
@@ -51,6 +45,6 @@ public class FragmentRootBar extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        barRootBinding = null;
+        binding = null;
     }
 }

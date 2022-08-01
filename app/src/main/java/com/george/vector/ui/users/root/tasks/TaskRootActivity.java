@@ -1,9 +1,7 @@
 package com.george.vector.ui.users.root.tasks;
 
 import static com.george.vector.common.utils.consts.Keys.COLLECTION;
-import static com.george.vector.common.utils.consts.Keys.EMAIL;
 import static com.george.vector.common.utils.consts.Keys.ID;
-import static com.george.vector.common.utils.consts.Keys.LOCATION;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -39,8 +37,7 @@ public class TaskRootActivity extends AppCompatActivity {
     private String status;
     private String dateCreate;
     private String timeCreate;
-    private String location;
-    private String email;
+    private String collection;
     private String imageId;
     private String emailCreator;
     private String emailExecutor;
@@ -66,7 +63,7 @@ public class TaskRootActivity extends AppCompatActivity {
 
         taskViewModel = new ViewModelProvider(
                 this,
-                new ViewModelFactory(TaskRootActivity.this.getApplication(), location)
+                new ViewModelFactory(TaskRootActivity.this.getApplication(), collection)
         ).get(TaskViewModel.class);
 
         setSupportActionBar(binding.topAppBarTasksRoot);
@@ -75,19 +72,17 @@ public class TaskRootActivity extends AppCompatActivity {
         binding.editTaskRootBtn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskRootActivity.class);
             intent.putExtra(ID, id);
-            intent.putExtra(LOCATION, location);
-            intent.putExtra(EMAIL, email);
+            intent.putExtra(COLLECTION, collection);
             startActivity(intent);
         });
 
-        getTask(location, id);
+        getTask(collection, id);
     }
 
     private void initData() {
         Bundle arguments = getIntent().getExtras();
         id = arguments.getString(ID);
-        location = arguments.getString(LOCATION);
-        email = arguments.getString(EMAIL);
+        collection = arguments.getString(COLLECTION);
         confirmDelete = PreferenceManager
                 .getDefaultSharedPreferences(this)
                 .getBoolean("confirm_before_deleting_root", true);
@@ -163,8 +158,7 @@ public class TaskRootActivity extends AppCompatActivity {
                 bundle.putString("image_id", imageId);
                 bundle.putString(ID, id);
                 bundle.putString(COLLECTION, collection);
-                bundle.putString(LOCATION, location);
-                bundle.putString(EMAIL, email);
+                bundle.putString(COLLECTION, this.collection);
                 imageFragment.setArguments(bundle);
 
                 getSupportFragmentManager()

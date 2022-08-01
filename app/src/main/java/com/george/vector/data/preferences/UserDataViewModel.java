@@ -7,11 +7,11 @@ import androidx.lifecycle.AndroidViewModel;
 
 import com.george.vector.network.model.User;
 
-public class UserPreferencesViewModel extends AndroidViewModel {
+public class UserDataViewModel extends AndroidViewModel {
 
     UserPreferencesRepository repository;
 
-    public UserPreferencesViewModel(@NonNull Application application) {
+    public UserDataViewModel(@NonNull Application application) {
         super(application);
         repository = new UserPreferencesRepository(application);
     }

@@ -9,7 +9,7 @@
     android:orientation="vertical">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar_folder_executor_activity"
+        android:id="@+id/toolbarFolder"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:titleTextColor="@android:color/white"
@@ -18,7 +18,7 @@
         android:background="@color/blue_primary" />
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/new_tasks_card_executor"
+        android:id="@+id/cardNewTasks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -64,7 +64,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/in_progress_tasks_card_executor"
+        android:id="@+id/cardInProgressTasks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -110,7 +110,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/completed_tasks_card_executor"
+        android:id="@+id/cardCompletedTasks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"

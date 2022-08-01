@@ -1,18 +1,17 @@
 package com.george.vector.ui.users.root.folders;
 
 import static com.george.vector.common.utils.consts.Keys.ARCHIVE_TASKS;
+import static com.george.vector.common.utils.consts.Keys.COLLECTION;
 import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
-import static com.george.vector.common.utils.consts.Keys.EMAIL;
 import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
 import static com.george.vector.common.utils.consts.Keys.FOLDER;
 import static com.george.vector.common.utils.consts.Keys.IN_PROGRESS_TASKS;
-import static com.george.vector.common.utils.consts.Keys.LOCATION;
 import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
+
+import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
-import android.os.Bundle;
 
 import com.george.vector.R;
 import com.george.vector.databinding.ActivityFolderRootBinding;
@@ -32,10 +31,9 @@ public class FolderRootActivity extends AppCompatActivity {
         setContentView(folderRootBinding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        String location = arguments.getString(LOCATION);
+        String collection = arguments.getString(COLLECTION);
         String folder = arguments.getString(FOLDER);
         String executed = arguments.getString(EXECUTOR_EMAIL);
-        String email = arguments.getString(EMAIL);
 
         if(folder.equals(NEW_TASKS))
             textToolbar = getString(R.string.new_tasks_text);
@@ -54,10 +52,9 @@ public class FolderRootActivity extends AppCompatActivity {
 
         Fragment currentFragment = new FragmentTasksRoot();
         Bundle bundle = new Bundle();
-        bundle.putString(LOCATION, location);
+        bundle.putString(COLLECTION, collection);
         bundle.putString(FOLDER, folder);
         bundle.putString(EXECUTOR_EMAIL, executed);
-        bundle.putString(EMAIL, email);
         currentFragment.setArguments(bundle);
 
         getSupportFragmentManager()

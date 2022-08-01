@@ -1,8 +1,5 @@
 package com.george.vector.ui.users.user.main.fragments.home;
 
-import static com.george.vector.common.utils.consts.Keys.EMAIL;
-import static com.george.vector.common.utils.consts.Keys.PERMISSION;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.george.vector.data.preferences.UserPreferencesViewModel;
+import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ProfileUserBottomSheetBinding;
 import com.george.vector.ui.settings.SettingsActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -31,7 +28,7 @@ public class BottomSheetProfileUser extends BottomSheetDialogFragment {
         binding = ProfileUserBottomSheetBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        UserPreferencesViewModel userPrefViewModel = new ViewModelProvider(this).get(UserPreferencesViewModel.class);
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         String nameUser = userPrefViewModel.getUser().getName();
         String lastNameUser = userPrefViewModel.getUser().getLast_name();
         String email = userPrefViewModel.getUser().getEmail();
@@ -43,12 +40,9 @@ public class BottomSheetProfileUser extends BottomSheetDialogFragment {
         binding.textEmailUser.setText(email);
         binding.textViewNameAva.setText(String.format("%s%s", charName, charLastname));
 
-        binding.settingsBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(BottomSheetProfileUser.this.getContext(), SettingsActivity.class);
-            intent.putExtra(PERMISSION, "user");
-            intent.putExtra(EMAIL, "null");
-            startActivity(intent);
-        });
+        binding.settingsBtn.setOnClickListener(v ->
+                startActivity(new Intent(BottomSheetProfileUser.this.getContext(), SettingsActivity.class))
+        );
 
         binding.logoutBtnUser.setOnClickListener(v -> listener.getButton("logoutBtnUser"));
 

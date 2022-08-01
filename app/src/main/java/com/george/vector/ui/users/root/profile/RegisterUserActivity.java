@@ -126,11 +126,9 @@ public class RegisterUserActivity extends AppCompatActivity {
                         if (permission.equals("ОП Звездочка"))
                             permission = "bar_star";
 
-                        Log.d(TAG_REGISTER_ACTIVITY, "permission: " + permission);
-
 
                         userID = Objects.requireNonNull(mAuth2.getCurrentUser()).getUid();
-                        userViewModel.updateUser(userID, new User(name, lastname, patronymic,
+                        userViewModel.saveUser(new User(name, lastname, patronymic,
                                 email, role, permission, password));
 
                         onBackPressed();
