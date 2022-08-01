@@ -1,6 +1,6 @@
 package com.george.vector.ui.users.executor.main.fragments;
 
-import static com.george.vector.common.consts.Keys.EMAIL;
+import static com.george.vector.common.utils.consts.Keys.EMAIL;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

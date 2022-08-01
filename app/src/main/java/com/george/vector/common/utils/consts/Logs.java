@@ -1,4 +1,4 @@
-package com.george.vector.common.consts;
+package com.george.vector.common.utils.consts;
 
 public class Logs {
 

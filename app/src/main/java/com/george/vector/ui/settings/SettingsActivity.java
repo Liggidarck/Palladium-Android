@@ -1,6 +1,6 @@
 package com.george.vector.ui.settings;
 
-import static com.george.vector.common.consts.Keys.PERMISSION;
+import static com.george.vector.common.utils.consts.Keys.PERMISSION;
 
 import android.os.Bundle;
 

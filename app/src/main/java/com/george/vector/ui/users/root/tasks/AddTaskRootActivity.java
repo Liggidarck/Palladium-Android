@@ -1,29 +1,21 @@
 package com.george.vector.ui.users.root.tasks;
 
-import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
-import static com.george.vector.common.consts.Keys.LOCATION;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL;
-import static com.george.vector.common.consts.Keys.PERMISSION_CAMERA_CODE;
-import static com.george.vector.common.consts.Keys.PERMISSION_GALLERY_CODE;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PATRONYMIC;
+import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
+import static com.george.vector.common.utils.consts.Keys.LOCATION;
+import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
+import static com.george.vector.common.utils.consts.Keys.PERMISSION_CAMERA_CODE;
+import static com.george.vector.common.utils.consts.Keys.PERMISSION_GALLERY_CODE;
 import static java.util.Objects.requireNonNull;
 
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -34,15 +26,16 @@ import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.R;
-import com.george.vector.common.utils.TextValidator;
-import com.george.vector.common.utils.Utils;
+import com.george.vector.common.utils.DialogsUtils;
+import com.george.vector.common.utils.NetworkUtils;
+import com.george.vector.common.utils.TextValidatorUtils;
+import com.george.vector.common.utils.TimeUtils;
+import com.george.vector.data.preferences.UserPreferencesViewModel;
 import com.george.vector.databinding.ActivityAddTaskRootBinding;
 import com.george.vector.network.model.Task;
 import com.george.vector.network.viewmodel.TaskViewModel;
 import com.george.vector.network.viewmodel.ViewModelFactory;
 import com.george.vector.ui.tasks.BottomSheetAddImage;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -51,35 +44,35 @@ import java.util.Locale;
 
 public class AddTaskRootActivity extends AppCompatActivity implements BottomSheetAddImage.StateListener {
 
-    ActivityAddTaskRootBinding binding;
-
-    SharedPreferences preferences;
-    StorageReference storageReference;
-    FirebaseStorage firebaseStorage;
+    private ActivityAddTaskRootBinding binding;
+    private TaskViewModel taskViewModel;
+    private UserPreferencesViewModel userPrefViewModel;
 
     String address, floor, cabinet, letter, taskName, dateComplete, taskStatus,
             comment, fullNameExecutor, emailExecutor, location, emailCreator, fullNameCreator;
     boolean urgent;
-
     private Uri fileUri;
 
-    Calendar datePickCalendar;
-
-    ActivityResultLauncher<String> selectPictureLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
+    private final ActivityResultLauncher<String> selectPictureLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
             uri -> {
                 fileUri = uri;
                 binding.imageViewTask.setImageURI(fileUri);
             });
 
-    ActivityResultLauncher<Uri> cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicture(),
+    private final ActivityResultLauncher<Uri> cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicture(),
             result -> {
                 if (result) {
                     binding.imageViewTask.setImageURI(fileUri);
                 }
             });
 
-    BottomSheetAddImage addImage = new BottomSheetAddImage();
-    Utils utils = new Utils();
+    private final BottomSheetAddImage addImage = new BottomSheetAddImage();
+    private Calendar datePickCalendar;
+
+    private final TextValidatorUtils textValidatorUtils = new TextValidatorUtils();
+    private final NetworkUtils networkUtils = new NetworkUtils();
+    private final TimeUtils timeUtils = new TimeUtils();
+    private final DialogsUtils dialogsUtils = new DialogsUtils();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,12 +81,12 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         binding = ActivityAddTaskRootBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
-        preferences = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-
         Bundle arguments = getIntent().getExtras();
         location = arguments.get(LOCATION).toString();
+
+        taskViewModel = new ViewModelProvider(this, new ViewModelFactory(this
+                .getApplication(), location)).get(TaskViewModel.class);
+        userPrefViewModel = new ViewModelProvider(this).get(UserPreferencesViewModel.class);
 
         getUserData();
         initFields(location);
@@ -101,7 +94,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         binding.toolbarAddEditTask.setNavigationOnClickListener(v -> onBackPressed());
 
         binding.addExecutorBtn.setOnClickListener(v ->
-                utils.showAddExecutorDialog(AddTaskRootActivity.this, binding.taskEmailExecutor,
+                dialogsUtils.showAddExecutorDialog(AddTaskRootActivity.this, binding.taskEmailExecutor,
                         binding.taskNameExecutor));
 
         binding.cardImage.setOnClickListener(v -> addImage.show(getSupportFragmentManager(), "BottomSheetAddImage"));
@@ -123,7 +116,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
                 return;
             }
 
-            if (!utils.isOnline(AddTaskRootActivity.this)) {
+            if (!networkUtils.isOnline(AddTaskRootActivity.this)) {
                 showDialogNoInternet();
                 return;
             }
@@ -133,18 +126,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
     }
 
-    private void getUserData() {
-        String nameUser = preferences.getString(USER_PREFERENCES_NAME, "");
-        String lastnameUser = preferences.getString(USER_PREFERENCES_LAST_NAME, "");
-        String patronymicUser = preferences.getString(USER_PREFERENCES_PATRONYMIC, "");
-        emailCreator = preferences.getString(USER_PREFERENCES_EMAIL, "");
-        fullNameCreator = nameUser + " " + lastnameUser + " " + patronymicUser;
-    }
-
     private void saveTask() {
-        TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(this
-                .getApplication(), location)).get(TaskViewModel.class);
-
         String image;
 
         if (fileUri != null)
@@ -152,8 +134,8 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         else
             image = null;
 
-        String dateCreate = utils.getDate();
-        String timeCreate = utils.getTime();
+        String dateCreate = timeUtils.getDate();
+        String timeCreate = timeUtils.getTime();
 
         if (comment.isEmpty())
             comment = "Нет коментария к заявке";
@@ -165,6 +147,14 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         taskViewModel.createTask(task);
 
         onBackPressed();
+    }
+
+    private void getUserData() {
+        String nameUser = userPrefViewModel.getUser().getName();
+        String lastnameUser = userPrefViewModel.getUser().getLast_name();
+        String patronymicUser = userPrefViewModel.getUser().getPatronymic();
+        emailCreator = userPrefViewModel.getUser().getEmail();
+        fullNameCreator = nameUser + " " + lastnameUser + " " + patronymicUser;
     }
 
     void showDialogNoInternet() {
@@ -230,48 +220,33 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
             setDate();
         };
 
-        binding.taskDateComplete.getEditText().setOnClickListener(v -> new DatePickerDialog(AddTaskRootActivity.this, date, datePickCalendar
-                .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
-
-        binding.taskCabinet.getEditText().addTextChangedListener(
-                new TextValidator(binding.taskCabinet.getEditText()) {
-            @Override
-            public void validate(TextView textView, String text) {
-                utils.validateNumberField(text, binding.taskCabinet, binding.doneBtn, 3);
-            }
-        });
+        binding.taskDateComplete.getEditText().setOnClickListener(v ->
+                new DatePickerDialog(AddTaskRootActivity.this, date,
+                        datePickCalendar.get(Calendar.YEAR),
+                        datePickCalendar.get(Calendar.MONTH),
+                        datePickCalendar.get(Calendar.DAY_OF_MONTH))
+                        .show()
+        );
 
     }
 
     void setDate() {
         String date_text = "dd.MM.yyyy";
-        SimpleDateFormat sdf = new SimpleDateFormat(date_text, Locale.US);
+        SimpleDateFormat format = new SimpleDateFormat(date_text, Locale.US);
 
-        requireNonNull(binding.taskDateComplete.getEditText()).setText(sdf.format(datePickCalendar.getTime()));
+        requireNonNull(binding.taskDateComplete.getEditText()).setText(format.format(datePickCalendar.getTime()));
     }
 
     boolean validateFields() {
-        Utils utils = new Utils();
-
-        utils.clearError(binding.taskAddress);
-        utils.clearError(binding.taskFloor);
-        utils.clearError(binding.taskCabinet);
-        utils.clearError(binding.taskName);
-        utils.clearError(binding.taskDateComplete);
-        utils.clearError(binding.taskEmailExecutor);
-        utils.clearError(binding.taskStatus);
-        utils.clearError(binding.taskNameExecutor);
-
-        boolean checkAddress = utils.validateField(address, binding.taskAddress);
-        boolean checkNameTask = utils.validateField(taskName, binding.taskName);
-        boolean checkFloor = utils.validateField(floor, binding.taskFloor);
-        boolean checkCabinet = utils.validateField(cabinet, binding.taskCabinet);
-        boolean checkDateTask = utils.validateField(dateComplete, binding.taskDateComplete);
-        boolean checkExecutor = utils.validateField(emailExecutor, binding.taskEmailExecutor);
-        boolean checkStatus = utils.validateField(taskStatus, binding.taskStatus);
-        boolean checkNameExecutor = utils.validateField(fullNameExecutor, binding.taskNameExecutor);
-
-        return checkAddress & checkFloor & checkCabinet & checkNameTask & checkDateTask & checkExecutor & checkStatus & checkNameExecutor;
+        return textValidatorUtils.isEmptyField(address, binding.taskAddress) &
+                textValidatorUtils.isEmptyField(floor, binding.taskFloor) &
+                textValidatorUtils.isEmptyField(cabinet, binding.taskCabinet) &
+                textValidatorUtils.isEmptyField(taskName, binding.taskName) &
+                textValidatorUtils.isEmptyField(dateComplete, binding.taskDateComplete) &
+                textValidatorUtils.isEmptyField(emailExecutor, binding.taskEmailExecutor) &
+                textValidatorUtils.isEmptyField(taskStatus, binding.taskStatus) &
+                textValidatorUtils.isEmptyField(fullNameExecutor, binding.taskNameExecutor)&
+                textValidatorUtils.validateNumberField(cabinet, binding.taskCabinet, 3);
     }
 
     @Override

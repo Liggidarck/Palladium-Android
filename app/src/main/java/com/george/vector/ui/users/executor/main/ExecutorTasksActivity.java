@@ -1,8 +1,8 @@
 package com.george.vector.ui.users.executor.main;
 
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.FOLDER;
-import static com.george.vector.common.consts.Keys.LOCATION;
+import static com.george.vector.common.utils.consts.Keys.EMAIL;
+import static com.george.vector.common.utils.consts.Keys.FOLDER;
+import static com.george.vector.common.utils.consts.Keys.LOCATION;
 
 import android.os.Bundle;
 

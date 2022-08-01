@@ -1,42 +1,28 @@
 package com.george.vector.ui.auth;
 
+import static com.george.vector.common.utils.TextValidatorUtils.validateEmail;
+import static com.george.vector.common.utils.consts.Logs.TAG_VALIDATE_FILED;
 
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.PERMISSION;
-import static com.george.vector.common.consts.Keys.ROLE;
-import static com.george.vector.common.consts.Keys.USERS;
-import static com.george.vector.common.consts.Keys.USER_NOTIFICATIONS_OPTIONS;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PATRONYMIC;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PERMISSION;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_ROLE;
-import static com.george.vector.common.consts.Logs.TAG_LOGIN_ACTIVITY;
-import static com.george.vector.common.consts.Logs.TAG_VALIDATE_FILED;
-import static com.george.vector.common.utils.Utils.validateEmail;
-
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.R;
-import com.george.vector.common.utils.Utils;
+import com.george.vector.common.utils.NetworkUtils;
+import com.george.vector.common.utils.TextValidatorUtils;
+import com.george.vector.data.preferences.UserPreferencesViewModel;
 import com.george.vector.databinding.ActivityLoginBinding;
+import com.george.vector.network.model.User;
+import com.george.vector.network.viewmodel.UserViewModel;
 import com.george.vector.ui.users.executor.main.MainExecutorActivity;
 import com.george.vector.ui.users.root.main.MainRootActivity;
 import com.george.vector.ui.users.user.main.MainUserActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
@@ -45,29 +31,34 @@ import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
-    ActivityLoginBinding loginBinding;
-    SharedPreferences sharedPreferences;
+    ActivityLoginBinding binding;
+    UserPreferencesViewModel userPreferencesViewModel;
+    UserViewModel userViewModel;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 
-    String email, password, userId;
+    TextValidatorUtils textValidator = new TextValidatorUtils();
+    NetworkUtils networkUtils = new NetworkUtils();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
-        loginBinding = ActivityLoginBinding.inflate(getLayoutInflater());
-        setContentView(loginBinding.getRoot());
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        userPreferencesViewModel = new ViewModelProvider(this).get(UserPreferencesViewModel.class);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        loginBinding.btnLogin.setOnClickListener(v -> {
-            email = Objects.requireNonNull(loginBinding.emailLoginTextLayout.getEditText()).getText().toString();
-            password = Objects.requireNonNull(loginBinding.passwordLoginTextLayout.getEditText()).getText().toString();
+        binding.btnLogin.setOnClickListener(v -> {
+            String email = Objects.requireNonNull(binding.emailLoginTextLayout.getEditText()).getText().toString();
+            String password = Objects.requireNonNull(binding.passwordLoginTextLayout.getEditText()).getText().toString();
 
-            if (!isOnline()) {
+            if (!networkUtils.isOnline(this)) {
                 onStart();
                 return;
             }
@@ -79,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
 
             if (!validateEmail(email)) {
                 Log.e(TAG_VALIDATE_FILED, "Email validation failed");
-                loginBinding.emailLoginTextLayout.setError("Некорректный формат e-mail");
+                binding.emailLoginTextLayout.setError("Некорректный формат e-mail");
             }
 
             login(email, password);
@@ -88,47 +79,25 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void login(String login, String password) {
-        loginBinding.progressBarAuth.setVisibility(View.VISIBLE);
-        sharedPreferences = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        binding.progressBarAuth.setVisibility(View.VISIBLE);
+        firebaseAuth.signInWithEmailAndPassword(login, password).addOnCompleteListener(authResultTask -> {
+            if (authResultTask.isSuccessful()) {
+                String userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+                userViewModel.getUser(userId).observe(LoginActivity.this, user -> {
+                    String name = user.getName();
+                    String lastName = user.getLast_name();
+                    String patronymic = user.getPatronymic();
+                    String role = user.getRole();
+                    String email = user.getEmail();
+                    String permission = user.getPermission();
 
-        firebaseAuth.signInWithEmailAndPassword(login, password).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Log.d(TAG_LOGIN_ACTIVITY, "Login success");
+                    userPreferencesViewModel.saveUser(new User(name, lastName, patronymic,
+                            email, role, permission, password));
 
-                userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-
-                DocumentReference documentReference = firebaseFirestore.collection(USERS).document(userId);
-                documentReference.addSnapshotListener(this, (value, error) -> {
-                    assert value != null;
-
-                    String name = value.getString("name");
-                    String last_name = value.getString("last_name");
-                    String patronymic = value.getString("patronymic");
-                    String role = value.getString(ROLE);
-                    String email = value.getString(EMAIL);
-                    String permission = value.getString(PERMISSION);
-
-                    editor.putString(USER_PREFERENCES_NAME, name);
-                    editor.putString(USER_PREFERENCES_LAST_NAME, last_name);
-                    editor.putString(USER_PREFERENCES_PATRONYMIC, patronymic);
-                    editor.putString(USER_PREFERENCES_EMAIL, email);
-                    editor.putString(USER_PREFERENCES_ROLE, role);
-                    editor.putString(USER_PREFERENCES_PERMISSION, permission);
-                    editor.putBoolean(USER_NOTIFICATIONS_OPTIONS, false);
-
-                    editor.apply();
-
-                    assert role != null;
+                    binding.progressBarAuth.setVisibility(View.INVISIBLE);
                     startApp(role);
-                    loginBinding.progressBarAuth.setVisibility(View.INVISIBLE);
                 });
-
             }
-
-        }).addOnFailureListener(e -> {
-            loginBinding.progressBarAuth.setVisibility(View.INVISIBLE);
-            Snackbar.make(loginBinding.coordinatorLoginActivity, e.toString(), Snackbar.LENGTH_LONG).show();
         });
     }
 
@@ -145,33 +114,20 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    public boolean isOnline() {
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
-    }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        if (!isOnline())
-            Snackbar.make(findViewById(R.id.coordinator_login_activity), getString(R.string.error_no_connection), Snackbar.LENGTH_LONG)
-                    .setAction("Повторить", v -> {
-                        Log.i(TAG_LOGIN_ACTIVITY, "Update status: " + isOnline());
-                        onStart();
-                    }).show();
+        if (!networkUtils.isOnline(LoginActivity.this))
+            Snackbar.make(findViewById(R.id.coordinator_login_activity),
+                    getString(R.string.error_no_connection), Snackbar.LENGTH_LONG).show();
     }
 
     boolean validateFields() {
-        Utils utils = new Utils();
-
-        utils.clearError(loginBinding.emailLoginTextLayout);
-        utils.clearError(loginBinding.passwordLoginTextLayout);
-
-        boolean checkEmail = utils.validateField(email, loginBinding.emailLoginTextLayout);
-        boolean checkPassword = utils.validateField(password, loginBinding.passwordLoginTextLayout);
-        return checkEmail & checkPassword;
+        String email = binding.emailLoginTextLayout.getEditText().getText().toString();
+        String password = binding.passwordLoginTextLayout.getEditText().getText().toString();
+        return textValidator.isEmptyField(email, binding.emailLoginTextLayout) &
+                textValidator.isEmptyField(password, binding.passwordLoginTextLayout);
     }
 
 }

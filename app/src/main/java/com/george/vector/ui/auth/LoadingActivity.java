@@ -1,13 +1,13 @@
 package com.george.vector.ui.auth;
 
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PATRONYMIC;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PERMISSION;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_ROLE;
-import static com.george.vector.common.consts.Logs.TAG_LOADING_ACTIVITY;
+import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES;
+import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_EMAIL;
+import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_LAST_NAME;
+import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_NAME;
+import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_PATRONYMIC;
+import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_PERMISSION;
+import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_ROLE;
+import static com.george.vector.common.utils.consts.Logs.TAG_LOADING_ACTIVITY;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,12 +25,10 @@ import com.george.vector.ui.users.executor.main.MainExecutorActivity;
 import com.george.vector.ui.users.root.main.MainRootActivity;
 import com.george.vector.ui.users.user.main.MainUserActivity;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoadingActivity extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
 
     String name, lastName, patronymic, email, permission, role;
 
@@ -45,7 +43,6 @@ public class LoadingActivity extends AppCompatActivity {
         setContentView(loadingBinding.getRoot());
 
         firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
 
         SharedPreferences mDataUser;
         mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);

@@ -1,7 +1,7 @@
 package com.george.vector.ui.users.executor.main;
 
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.PERMISSION;
+import static com.george.vector.common.utils.consts.Keys.EMAIL;
+import static com.george.vector.common.utils.consts.Keys.PERMISSION;
 
 import android.content.Intent;
 import android.os.Bundle;

@@ -1,11 +1,11 @@
 package com.george.vector.ui.users.executor.main;
 
-import static com.george.vector.common.consts.Keys.COMPLETED_TASKS;
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.FOLDER;
-import static com.george.vector.common.consts.Keys.IN_PROGRESS_TASKS;
-import static com.george.vector.common.consts.Keys.LOCATION;
-import static com.george.vector.common.consts.Keys.NEW_TASKS;
+import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
+import static com.george.vector.common.utils.consts.Keys.EMAIL;
+import static com.george.vector.common.utils.consts.Keys.FOLDER;
+import static com.george.vector.common.utils.consts.Keys.IN_PROGRESS_TASKS;
+import static com.george.vector.common.utils.consts.Keys.LOCATION;
+import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
 
 import androidx.appcompat.app.AppCompatActivity;
 

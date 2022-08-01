@@ -7,15 +7,20 @@ public class User {
     private String patronymic;
     private String email;
     private String role;
+    private String permission;
+    private String password;
 
-    public User(){}
+    public User() {
+    }
 
-    public User(String  name, String last_name, String patronymic, String email, String role){
+    public User(String name, String last_name, String patronymic, String email, String role, String permission, String password) {
         this.name = name;
         this.last_name = last_name;
         this.patronymic = patronymic;
         this.email = email;
         this.role = role;
+        this.permission = permission;
+        this.password = password;
     }
 
     public String getName() {
@@ -36,5 +41,13 @@ public class User {
 
     public String getRole() {
         return role;
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

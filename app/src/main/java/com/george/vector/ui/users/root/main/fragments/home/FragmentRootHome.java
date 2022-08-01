@@ -1,15 +1,9 @@
 package com.george.vector.ui.users.root.main.fragments.home;
 
-import static com.george.vector.common.consts.Keys.OST;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
-import static com.george.vector.common.consts.Logs.TAG_HOME_ROOT_FRAGMENT;
+import static com.george.vector.common.utils.consts.Keys.OST;
+import static com.george.vector.common.utils.consts.Logs.TAG_HOME_ROOT_FRAGMENT;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,13 +13,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
+import com.george.vector.data.preferences.UserPreferencesViewModel;
 import com.george.vector.databinding.FragmentRootHomeBinding;
 import com.george.vector.ui.users.root.profile.ProfileRootActivity;
 import com.george.vector.ui.users.root.tasks.BottomSheetAddTask;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -33,9 +28,6 @@ public class FragmentRootHome extends Fragment {
 
     String zone, email;
 
-    FirebaseFirestore firebaseFirestore;
-
-    SharedPreferences sharedPreferences;
     FragmentRootHomeBinding homeBinding;
 
     @Nullable
@@ -44,16 +36,14 @@ public class FragmentRootHome extends Fragment {
         homeBinding = FragmentRootHomeBinding.inflate(inflater, container, false);
         View view = homeBinding.getRoot();
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
-
         zone = PreferenceManager
                 .getDefaultSharedPreferences(FragmentRootHome.this.getContext())
                 .getString("default_root_location", OST);
 
-        sharedPreferences = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-        String nameUser = sharedPreferences.getString(USER_PREFERENCES_NAME, "");
-        String lastnameUser = sharedPreferences.getString(USER_PREFERENCES_LAST_NAME, "");
-        email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
+        UserPreferencesViewModel userPrefViewModel = new ViewModelProvider(this).get(UserPreferencesViewModel.class);
+        String nameUser = userPrefViewModel.getUser().getName();
+        String lastnameUser = userPrefViewModel.getUser().getLast_name();
+        email = userPrefViewModel.getUser().getEmail();
 
         String _name = Character.toString(nameUser.charAt(0));
         String _last_name = Character.toString(lastnameUser.charAt(0));

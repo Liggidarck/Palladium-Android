@@ -45,11 +45,6 @@ public class TaskAdapter extends FirestoreRecyclerAdapter<Task, TaskAdapter.Task
         return new TaskHolder(v);
     }
 
-    public void deleteItem(int position) {
-        getSnapshots().getSnapshot(position).getReference().delete();
-    }
-
-
     class TaskHolder extends RecyclerView.ViewHolder {
 
         final TextView textViewTitle;

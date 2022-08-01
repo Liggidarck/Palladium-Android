@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class FragmentDevelopApp extends Fragment {
 
     FragmentDevelopAppBinding binding;
-    ArrayList<Release> releases = new ArrayList<>();
+    final ArrayList<Release> releases = new ArrayList<>();
     public static final String TAG = "FragmentDevelopApp";
 
     /**

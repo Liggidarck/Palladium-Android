@@ -1,14 +1,15 @@
 package com.george.vector.ui.users.executor.main;
 
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.OST;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
-import static com.george.vector.common.consts.Logs.TAG_MAIN_EXECUTOR_ACTIVITY;
+import static com.george.vector.common.utils.consts.Keys.EMAIL;
+import static com.george.vector.common.utils.consts.Keys.OST;
+import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES;
+import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_EMAIL;
+import static com.george.vector.common.utils.consts.Logs.TAG_MAIN_EXECUTOR_ACTIVITY;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import android.content.Context;
@@ -24,6 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.george.vector.R;
+import com.george.vector.data.preferences.UserPreferencesViewModel;
 import com.george.vector.databinding.ActivityMainExecutorBinding;
 import com.george.vector.ui.users.executor.main.fragments.FragmentBarExecutor;
 import com.george.vector.ui.users.executor.main.fragments.FragmentOstExecutor;
@@ -35,7 +37,6 @@ public class MainExecutorActivity extends AppCompatActivity {
 
     String zone, email;
     ActivityMainExecutorBinding executorBinding;
-    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +45,8 @@ public class MainExecutorActivity extends AppCompatActivity {
         executorBinding = ActivityMainExecutorBinding.inflate(getLayoutInflater());
         setContentView(executorBinding.getRoot());
 
-        sharedPreferences = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-
-        email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
+        UserPreferencesViewModel userPrefViewModel = new ViewModelProvider(this).get(UserPreferencesViewModel.class);
+        email = userPrefViewModel.getUser().getEmail();
         zone = PreferenceManager.getDefaultSharedPreferences(this).getString("default_executor_location", OST);
 
         executorBinding.technicalSupportExecutor.setOnClickListener(v -> {

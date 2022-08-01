@@ -1,27 +1,27 @@
 package com.george.vector.ui.users.root.profile;
 
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.PERMISSION;
-import static com.george.vector.common.consts.Keys.TOPIC_NEW_TASKS_CREATE;
-import static com.george.vector.common.consts.Keys.USER_NOTIFICATIONS_OPTIONS;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_LAST_NAME;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_NAME;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PATRONYMIC;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_PERMISSION;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_ROLE;
+import static com.george.vector.common.utils.consts.Keys.EMAIL;
+import static com.george.vector.common.utils.consts.Keys.PERMISSION;
+import static com.george.vector.common.utils.consts.Keys.TOPIC_NEW_TASKS_CREATE;
+import static com.george.vector.common.utils.consts.Keys.USER_NOTIFICATIONS_OPTIONS;
+import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_EMAIL;
+import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_LAST_NAME;
+import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_NAME;
+import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_PATRONYMIC;
+import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_PERMISSION;
+import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_ROLE;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.BuildConfig;
 import com.george.vector.R;
+import com.george.vector.data.preferences.UserPreferencesViewModel;
+import com.george.vector.network.model.User;
 import com.george.vector.ui.auth.LoginActivity;
 import com.george.vector.ui.settings.SettingsActivity;
 import com.george.vector.databinding.ActivityProfileRootBinding;
@@ -32,9 +32,7 @@ public class ProfileRootActivity extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth;
 
-    SharedPreferences mDataUser;
-    String name, lastName, patronymic, email, role, permission;
-
+    String name, lastname, patronymic, email, role, permission;
     ActivityProfileRootBinding profileBinding;
 
     @Override
@@ -46,21 +44,20 @@ public class ProfileRootActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        mDataUser = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = mDataUser.edit();
+        UserPreferencesViewModel userPrefViewModel = new ViewModelProvider(this).get(UserPreferencesViewModel.class);
+        User user = userPrefViewModel.getUser();
+        name = user.getName();
+        lastname = user.getLast_name();
+        patronymic = user.getPatronymic();
+        email = user.getEmail();
+        role = user.getRole();
+        permission = user.getPermission();
 
-        name = mDataUser.getString(USER_PREFERENCES_NAME, "");
-        lastName = mDataUser.getString(USER_PREFERENCES_LAST_NAME, "");
-        patronymic = mDataUser.getString(USER_PREFERENCES_PATRONYMIC, "");
-        email = mDataUser.getString(USER_PREFERENCES_EMAIL, "");
-        role = mDataUser.getString(USER_PREFERENCES_ROLE, "");
-        permission = mDataUser.getString(USER_PREFERENCES_PERMISSION, "");
+        String charName = Character.toString(name.charAt(0));
+        String charLastname = Character.toString(lastname.charAt(0));
 
-        String _name = Character.toString(name.charAt(0));
-        String _last_name = Character.toString(lastName.charAt(0));
-
-        profileBinding.nameRootProfile.setText(String.format("%s %s", name, lastName));
-        profileBinding.avaRootProfile.setText(String.format("%s%s", _name, _last_name));
+        profileBinding.nameRootProfile.setText(String.format("%s %s", name, lastname));
+        profileBinding.avaRootProfile.setText(String.format("%s%s", charName, charLastname));
         profileBinding.externalDataUser.setText(String.format("%s %s", email, role));
 
         profileBinding.toolbarProfileRoot.setNavigationOnClickListener(v -> onBackPressed());
@@ -80,18 +77,8 @@ public class ProfileRootActivity extends AppCompatActivity {
                     .setMessage("Вы действительно хотите выйти из аккаунта?")
                     .setPositiveButton("ok", (dialog1, which) -> {
                         firebaseAuth.signOut();
-
-                        editor.putString(USER_PREFERENCES_NAME, "");
-                        editor.putString(USER_PREFERENCES_LAST_NAME, "");
-                        editor.putString(USER_PREFERENCES_PATRONYMIC, "");
-                        editor.putString(USER_PREFERENCES_EMAIL, "");
-                        editor.putString(USER_PREFERENCES_ROLE, "");
-                        editor.putString(USER_PREFERENCES_PERMISSION, "");
-                        editor.putBoolean(USER_NOTIFICATIONS_OPTIONS, false);
-                        editor.apply();
-
+                        userPrefViewModel.saveUser(new User("", "", "", "", "", "", ""));
                         FirebaseMessaging.getInstance().unsubscribeFromTopic(TOPIC_NEW_TASKS_CREATE);
-
                         startActivity(new Intent(this, LoginActivity.class));
                         finish();
                     })

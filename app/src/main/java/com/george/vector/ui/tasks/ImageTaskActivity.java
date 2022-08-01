@@ -1,8 +1,7 @@
 package com.george.vector.ui.tasks;
 
-import static com.george.vector.common.consts.Keys.COLLECTION;
-import static com.george.vector.common.consts.Keys.ID;
-import static com.george.vector.common.consts.Keys.LOCATION;
+import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ID;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -21,7 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ImageTaskActivity extends AppCompatActivity {
 
-    String id, collection, location, image;
+    String id, collection, image;
 
     ActivityImageTaskBinding binding;
     FirebaseFirestore firebaseFirestore;
@@ -39,7 +38,6 @@ public class ImageTaskActivity extends AppCompatActivity {
         Bundle arguments = getIntent().getExtras();
         id = arguments.getString(ID);
         collection = arguments.getString(COLLECTION);
-        location = arguments.getString(LOCATION);
 
         TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
                 this.getApplication(),

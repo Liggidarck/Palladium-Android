@@ -1,7 +1,10 @@
 package com.george.vector.network.repository;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.george.vector.network.model.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -10,9 +13,12 @@ import java.util.Map;
 public class TaskRepository {
 
     final CollectionReference collectionReference;
+    DocumentReference documentReference;
+    String collection;
 
     public TaskRepository(String collection) {
         collectionReference = FirebaseFirestore.getInstance().collection(collection);
+        this.collection = collection;
     }
 
     public void createTask(Task task) {
@@ -44,6 +50,36 @@ public class TaskRepository {
 
     public void deleteTask(String id) {
         collectionReference.document(id).delete();
+    }
+
+    public MutableLiveData<Task> getTask(String id) {
+        MutableLiveData<Task> taskMutable = new MutableLiveData<>();
+        documentReference = FirebaseFirestore.getInstance().collection(collection).document(id);
+        documentReference.addSnapshotListener((value, error) -> {
+            String address = value.getString("address");
+            String floor = value.getString("floor");
+            String cabinet = value.getString("cabinet");
+            String letter = value.getString("litera");
+            String nameTask = value.getString("name_task");
+            String comment = value.getString("comment");
+            String status = value.getString("status");
+            String dateCreate = value.getString("date_create");
+            String timeCreate = value.getString("time_create");
+            String imageId = value.getString("image");
+            String emailCreator = value.getString("email_creator");
+            String emailExecutor = value.getString("executor");
+            String dateDone = value.getString("date_done");
+            String fullNameExecutor = value.getString("fullNameExecutor");
+            String fullNameCreator = value.getString("nameCreator");
+            boolean urgent = value.getBoolean("urgent");
+            Task task = new Task(nameTask, address, dateCreate, floor,
+                    cabinet, letter, comment, dateDone, emailExecutor, status,
+                    timeCreate, emailCreator, urgent, imageId, fullNameExecutor, fullNameCreator);
+
+            taskMutable.setValue(task);
+        });
+
+        return taskMutable;
     }
 
 }

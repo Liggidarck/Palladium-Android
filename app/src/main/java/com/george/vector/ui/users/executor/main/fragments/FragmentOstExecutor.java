@@ -1,8 +1,8 @@
 package com.george.vector.ui.users.executor.main.fragments;
 
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.LOCATION;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL;
+import static com.george.vector.common.utils.consts.Keys.EMAIL;
+import static com.george.vector.common.utils.consts.Keys.LOCATION;
+import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 
 import android.content.Intent;
 import android.os.Bundle;

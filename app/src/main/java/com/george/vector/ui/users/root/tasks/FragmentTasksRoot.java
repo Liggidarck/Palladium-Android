@@ -1,12 +1,12 @@
 package com.george.vector.ui.users.root.tasks;
 
-import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.EXECUTOR_EMAIL;
-import static com.george.vector.common.consts.Keys.FOLDER;
-import static com.george.vector.common.consts.Keys.ID;
-import static com.george.vector.common.consts.Keys.LOCATION;
-import static com.george.vector.common.consts.Logs.TAG_TASK_ROOT_FRAGMENT;
+import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
+import static com.george.vector.common.utils.consts.Keys.EMAIL;
+import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
+import static com.george.vector.common.utils.consts.Keys.FOLDER;
+import static com.george.vector.common.utils.consts.Keys.ID;
+import static com.george.vector.common.utils.consts.Keys.LOCATION;
+import static com.george.vector.common.utils.consts.Logs.TAG_TASK_ROOT_FRAGMENT;
 
 import android.content.Intent;
 import android.os.Bundle;

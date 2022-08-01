@@ -1,11 +1,11 @@
 package com.george.vector.ui.users.root.main.fragments.home;
 
-import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.EXECUTOR_EMAIL;
-import static com.george.vector.common.consts.Keys.LOCATION;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES;
-import static com.george.vector.common.consts.Keys.USER_PREFERENCES_EMAIL;
+import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
+import static com.george.vector.common.utils.consts.Keys.EMAIL;
+import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
+import static com.george.vector.common.utils.consts.Keys.LOCATION;
+import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES;
+import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES_EMAIL;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +18,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.george.vector.data.preferences.UserPreferencesViewModel;
 import com.george.vector.databinding.FragmentBarRootBinding;
 import com.george.vector.ui.users.root.folders.LocationFolderActivity;
 
@@ -26,16 +28,14 @@ public class FragmentRootBar extends Fragment {
 
     FragmentBarRootBinding barRootBinding;
 
-    SharedPreferences sharedPreferences;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         barRootBinding = FragmentBarRootBinding.inflate(inflater, container, false);
         View view = barRootBinding.getRoot();
 
-        sharedPreferences = getActivity().getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
-        String email = sharedPreferences.getString(USER_PREFERENCES_EMAIL, "");
+        UserPreferencesViewModel userPrefViewModel = new ViewModelProvider(this).get(UserPreferencesViewModel.class);
+        String email = userPrefViewModel.getUser().getEmail();
 
         barRootBinding.barSchoolRoot.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentRootBar.this.getContext(), LocationFolderActivity.class);

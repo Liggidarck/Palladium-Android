@@ -1,12 +1,12 @@
 package com.george.vector.ui.users.user.tasks;
 
-import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
-import static com.george.vector.common.consts.Keys.COLLECTION;
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.FOLDER;
-import static com.george.vector.common.consts.Keys.ID;
-import static com.george.vector.common.consts.Keys.PERMISSION;
-import static com.george.vector.common.consts.Logs.TAG_TASK_USER_ACTIVITY;
+import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
+import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.EMAIL;
+import static com.george.vector.common.utils.consts.Keys.FOLDER;
+import static com.george.vector.common.utils.consts.Keys.ID;
+import static com.george.vector.common.utils.consts.Keys.PERMISSION;
+import static com.george.vector.common.utils.consts.Logs.TAG_TASK_USER_ACTIVITY;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,10 +45,6 @@ public class FragmentTasksUser extends Fragment {
         String email = args.getString(EMAIL);
         String permission = args.getString(PERMISSION);
         String folder = args.getString(FOLDER);
-
-        Log.d(TAG_TASK_USER_ACTIVITY, "email: " + email);
-        Log.d(TAG_TASK_USER_ACTIVITY, "permission: " + permission);
-        Log.d(TAG_TASK_USER_ACTIVITY, "folder: " + folder);
 
         if(permission.equals(BAR_SCHOOL)) {
             userBinding.chipNewSchoolTasksUser.setVisibility(View.INVISIBLE);

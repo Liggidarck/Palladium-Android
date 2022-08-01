@@ -1,9 +1,9 @@
 package com.george.vector.ui.users.root.main.fragments.my_tasks;
 
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.EXECUTOR_EMAIL;
-import static com.george.vector.common.consts.Keys.LOCATION;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL;
+import static com.george.vector.common.utils.consts.Keys.EMAIL;
+import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
+import static com.george.vector.common.utils.consts.Keys.LOCATION;
+import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 
 import android.content.Intent;
 import android.os.Bundle;

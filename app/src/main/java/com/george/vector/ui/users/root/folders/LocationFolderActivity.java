@@ -1,15 +1,15 @@
 package com.george.vector.ui.users.root.folders;
 
-import static com.george.vector.common.consts.Keys.ARCHIVE_TASKS;
-import static com.george.vector.common.consts.Keys.BAR_SCHOOL;
-import static com.george.vector.common.consts.Keys.COMPLETED_TASKS;
-import static com.george.vector.common.consts.Keys.EMAIL;
-import static com.george.vector.common.consts.Keys.EXECUTOR_EMAIL;
-import static com.george.vector.common.consts.Keys.FOLDER;
-import static com.george.vector.common.consts.Keys.IN_PROGRESS_TASKS;
-import static com.george.vector.common.consts.Keys.LOCATION;
-import static com.george.vector.common.consts.Keys.NEW_TASKS;
-import static com.george.vector.common.consts.Keys.OST_SCHOOL;
+import static com.george.vector.common.utils.consts.Keys.ARCHIVE_TASKS;
+import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
+import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
+import static com.george.vector.common.utils.consts.Keys.EMAIL;
+import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
+import static com.george.vector.common.utils.consts.Keys.FOLDER;
+import static com.george.vector.common.utils.consts.Keys.IN_PROGRESS_TASKS;
+import static com.george.vector.common.utils.consts.Keys.LOCATION;
+import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
+import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 
 import android.content.Intent;
 import android.os.Bundle;

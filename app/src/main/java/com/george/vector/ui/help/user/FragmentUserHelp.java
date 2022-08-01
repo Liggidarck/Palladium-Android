@@ -19,7 +19,7 @@ import com.george.vector.databinding.FragmentHelpUserBinding;
 public class FragmentUserHelp extends Fragment {
 
     FragmentHelpUserBinding binding;
-    Bundle bundle = new Bundle();
+    final Bundle bundle = new Bundle();
 
     @Nullable
     @Override
