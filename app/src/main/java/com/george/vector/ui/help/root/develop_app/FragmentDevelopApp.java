@@ -28,6 +28,8 @@ public class FragmentDevelopApp extends Fragment {
         binding = FragmentDevelopAppBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
+        binding.developToolbar.setOnClickListener(v -> requireActivity().onBackPressed());
+
         releases.add(new Release("Palladium alfa.1", "13 июня 2021", "Основные изменения\n" +
                 "\n" +
                 "- Добавлен логин пользователя.\n" +

@@ -29,18 +29,19 @@ public class FragmentHelpTextApp extends Fragment {
         rootBinding = FragmentTextRootBinding.inflate(inflater, container, false);
         userBinding = FragmentTextUserBinding.inflate(inflater, container, false);
 
+        userBinding.toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
+        rootBinding.toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
+        executorBinding.toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
+
         if(user.equals("user")) {
-            userBinding.toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
             return userBinding.getRoot();
         }
 
         if(user.equals("root")) {
-            rootBinding.toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
             return rootBinding.getRoot();
         }
 
         if(user.equals("executor")) {
-            executorBinding.toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
             return executorBinding.getRoot();
         }
 
