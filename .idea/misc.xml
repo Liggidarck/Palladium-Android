@@ -286,7 +286,7 @@
         <entry key="app/src/main/res/layout/fragment_tasks_user.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_text_executor.xml" value="0.35052083333333334" />
         <entry key="app/src/main/res/layout/fragment_text_help_user.xml" value="0.35052083333333334" />
-        <entry key="app/src/main/res/layout/fragment_text_root.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_text_root.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_text_user.xml" value="0.35052083333333334" />
         <entry key="app/src/main/res/layout/fragment_urgent_request.xml" value="0.35052083333333334" />
         <entry key="app/src/main/res/layout/fragment_user_home.xml" value="0.35104166666666664" />
