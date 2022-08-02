@@ -10,7 +10,7 @@ apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
 
 android {
     compileSdkVersion 33
-    buildToolsVersion '33'
+    buildToolsVersion '33.0.0'
 
     buildFeatures {
         viewBinding true
@@ -20,8 +20,8 @@ android {
         applicationId "com.george.vector"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 1501
-        versionName "1.5.1"
+        versionCode 1502
+        versionName "1.5.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -61,7 +61,11 @@ dependencies {
     implementation 'com.google.android.material:material:1.7.0-alpha03'
 
     //Firebase Main
-    implementation platform('com.google.firebase:firebase-bom:28.4.1')
+    implementation platform('com.google.firebase:firebase-bom:30.2.0')
+    implementation 'com.google.firebase:firebase-core'
+    implementation('com.google.firebase:firebase-auth') {
+        exclude module: "play-services-safetynet"
+    }
     implementation 'com.google.firebase:firebase-auth:21.0.6'
     implementation 'com.google.firebase:firebase-firestore:24.2.1'
 
