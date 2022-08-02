@@ -24,6 +24,8 @@ public class FragmentDescriptionProject extends Fragment {
         binding = FragmentDescriptionProjectBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
+        binding.toolbarDescriptionProject.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
+
         binding.downloadFullText.setOnClickListener(v -> {
             String url = getString(R.string.url_full_document);
             Intent intent = new Intent(Intent.ACTION_VIEW);

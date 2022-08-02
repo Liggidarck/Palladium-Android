@@ -30,6 +30,8 @@ public class FragmentHelpTextApp extends Fragment {
         userBinding = FragmentTextUserBinding.inflate(inflater, container, false);
 
         userBinding.toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
+        rootBinding.toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
+        executorBinding.toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
 
         if(user.equals("user")) {
             return userBinding.getRoot();

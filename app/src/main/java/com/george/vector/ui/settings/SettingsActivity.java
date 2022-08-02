@@ -28,13 +28,13 @@ public class SettingsActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
 
-            if (role.equals("root"))
+            if (role.equals("Root"))
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.settings_frame, new SettingsRootFragment())
                         .commit();
 
-            if (role.equals("user"))
+            if (role.equals("Пользователь"))
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.settings_frame, new SettingsUserFragment())

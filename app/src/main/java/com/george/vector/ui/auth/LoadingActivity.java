@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.george.vector.R;
 import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityLoadingBinding;
 import com.george.vector.ui.users.executor.main.MainExecutorActivity;
@@ -48,7 +49,7 @@ public class LoadingActivity extends AppCompatActivity {
                     .setMessage("Необходимо войти в аккаунт снова. Если вы не помните совой логин, обратитесь в техническую поддрежку")
                     .setNegativeButton("Помощь", (dialog1, which) -> {
 
-                        Intent intent = new Intent("android.intent.action.SENDTO", Uri.fromParts("mailto", "georgyfilatov@yandex.ru", null));
+                        Intent intent = new Intent("android.intent.action.SENDTO", Uri.fromParts("mailto", getString(R.string.email_developer), null));
                         intent.putExtra("android.intent.extra.SUBJECT", "Помощь с восстановлением доступа к приложению");
                         startActivity(Intent.createChooser(intent, "Выберите приложение для отправки электронного письма разработчику приложения"));
 
