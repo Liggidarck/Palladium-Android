@@ -25,6 +25,8 @@ public class LoginRepository {
                 String userId = firebaseAuth.getCurrentUser().getUid();
                 id.setValue(userId);
             }
+        }).addOnFailureListener(e -> {
+            id.setValue("error");
         });
         return id;
     }

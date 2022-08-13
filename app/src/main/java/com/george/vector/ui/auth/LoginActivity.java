@@ -71,22 +71,31 @@ public class LoginActivity extends AppCompatActivity {
     void signIn(String login, String password) {
         binding.progressBarAuth.setVisibility(View.VISIBLE);
         LoginViewModel loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-        loginViewModel.signIn(login, password).observe(this, id ->
-                userViewModel.getUser(id).observe(LoginActivity.this, user -> {
-                    String name = user.getName();
-                    String lastName = user.getLast_name();
-                    String patronymic = user.getPatronymic();
-                    String role = user.getRole();
-                    String email = user.getEmail();
-                    String permission = user.getPermission();
 
-                    userDataViewModel.saveUser(new User(name, lastName, patronymic,
-                            email, role, permission, password));
+        loginViewModel.signIn(login, password).observe(this, id -> {
+            if (id.equals("error")) {
+                Snackbar.make(binding.coordinatorLoginActivity, "Ошибка. Пользователь не найден",
+                                Snackbar.LENGTH_LONG)
+                        .show();
+                binding.progressBarAuth.setVisibility(View.INVISIBLE);
+                return;
+            }
 
-                    binding.progressBarAuth.setVisibility(View.INVISIBLE);
-                    startApp(role);
-                })
-        );
+            userViewModel.getUser(id).observe(LoginActivity.this, user -> {
+                String name = user.getName();
+                String lastName = user.getLast_name();
+                String patronymic = user.getPatronymic();
+                String role = user.getRole();
+                String email = user.getEmail();
+                String permission = user.getPermission();
+
+                userDataViewModel.saveUser(new User(name, lastName, patronymic,
+                        email, role, permission, password));
+
+                binding.progressBarAuth.setVisibility(View.INVISIBLE);
+                startApp(role);
+            });
+        });
     }
 
     void startApp(@NotNull String role) {

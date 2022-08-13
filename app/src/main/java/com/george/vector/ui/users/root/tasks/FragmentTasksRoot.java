@@ -37,6 +37,8 @@ public class FragmentTasksRoot extends Fragment {
     TaskAdapter taskAdapter;
     FragmentTasksRootBinding binding;
 
+    public static final String TAG = FragmentTasksRoot.class.getSimpleName();
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
