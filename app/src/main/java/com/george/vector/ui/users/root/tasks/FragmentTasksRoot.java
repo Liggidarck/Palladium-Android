@@ -5,6 +5,7 @@ import static com.george.vector.common.utils.consts.Keys.COLLECTION;
 import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
 import static com.george.vector.common.utils.consts.Keys.FOLDER;
 import static com.george.vector.common.utils.consts.Keys.ID;
+import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.utils.consts.Logs.TAG_TASK_ROOT_FRAGMENT;
 
 import android.content.Intent;
@@ -54,7 +55,7 @@ public class FragmentTasksRoot extends Fragment {
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         email = userPrefViewModel.getUser().getEmail();
 
-        if (collections.equals(BAR_SCHOOL)) {
+        if (!collections.equals(OST_SCHOOL)) {
             binding.chipNewSchoolTasksRoot.setVisibility(View.INVISIBLE);
             binding.chipOldSchoolTasksRoot.setVisibility(View.INVISIBLE);
         }
@@ -73,14 +74,10 @@ public class FragmentTasksRoot extends Fragment {
 
         taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
-
-            Log.d(TAG_TASK_ROOT_FRAGMENT, String.format("position: %d id: %s", position, id));
-
             Intent intent = new Intent(FragmentTasksRoot.this.getContext(), TaskRootActivity.class);
             intent.putExtra(ID, id);
             intent.putExtra(COLLECTION, collections);
             startActivity(intent);
-
         });
     }
 

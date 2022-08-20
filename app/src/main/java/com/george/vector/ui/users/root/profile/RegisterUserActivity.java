@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.george.vector.BuildConfig;
 import com.george.vector.R;
 import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.databinding.ActivityRegisterUserBinding;
@@ -60,7 +61,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         try {
             FirebaseOptions firebaseOptions = new FirebaseOptions.Builder()
                     .setDatabaseUrl("https://school-2122.firebaseio.com")
-                    .setApiKey("AIzaSyAAaS5-aMMTMBa6BWNBbM_0FHnlO5Ql328")
+                    .setApiKey(BuildConfig.API_KEY)
                     .setApplicationId("school-2122")
                     .build();
 

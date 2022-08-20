@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.george.vector.R;
 import com.george.vector.databinding.FragmentHelpAppBinding;
@@ -29,8 +30,7 @@ public class FragmentHelpApp extends Fragment {
         Bundle bundle = new Bundle();
 
         NavController navController =
-                Navigation.findNavController(FragmentHelpApp.this.requireActivity(),
-                        R.id.navHostFragmentActivityRootMain);
+                NavHostFragment.findNavController(this);
 
         binding.toolbarHelpApp.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
 

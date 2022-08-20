@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.george.vector.R;
 import com.george.vector.databinding.FragmentAboutProjectBinding;
@@ -29,8 +30,7 @@ public class FragmentAboutProject extends Fragment {
         binding.toolbarAboutProject.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
 
         NavController navController =
-                Navigation.findNavController(FragmentAboutProject.this.requireActivity(),
-                        R.id.navHostFragmentActivityRootMain);
+                NavHostFragment.findNavController(this);
 
         binding.cardPrivacyPolicy.setOnClickListener(v -> {
             String url = "https://drive.google.com/file/d/1g0l1gDULwpHrEWLNo2-d8QQE0LvydXpR/view?usp=sharing";

@@ -46,7 +46,7 @@ public class TaskViewModel extends AndroidViewModel {
 
     public void createTask(Task task) {
         repository.createTask(task);
-//        sendNotification(task.getUrgent(), task.getName_task());
+        sendNotification(task.getUrgent(), task.getName_task());
     }
 
     public void updateTask(String id, Task task) {
@@ -73,7 +73,6 @@ public class TaskViewModel extends AndroidViewModel {
 
         SendNotification sendNotification = new SendNotification();
         sendNotification.sendNotification(title, taskName, TOPIC_NEW_TASKS_CREATE);
-
     }
 
     public String uploadImage(Uri fileUri, Context context) {
