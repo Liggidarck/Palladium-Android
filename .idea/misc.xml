@@ -265,6 +265,7 @@
         <entry key="app/src/main/res/layout/dialog_choose_executor.xml" value="0.35052083333333334" />
         <entry key="app/src/main/res/layout/edit_user_activity.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_about_project.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/fragment_bar.xml" value="0.35052083333333334" />
         <entry key="app/src/main/res/layout/fragment_bar_executor.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_bar_root.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_data_help.xml" value="0.20092592592592592" />
@@ -276,6 +277,7 @@
         <entry key="app/src/main/res/layout/fragment_help_user.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_history_user.xml" value="0.35052083333333334" />
         <entry key="app/src/main/res/layout/fragment_image_task.xml" value="0.35052083333333334" />
+        <entry key="app/src/main/res/layout/fragment_ost.xml" value="0.35052083333333334" />
         <entry key="app/src/main/res/layout/fragment_ost_executor.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_ost_root.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_profile_user.xml" value="0.35104166666666664" />

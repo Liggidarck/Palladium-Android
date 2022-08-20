@@ -17,7 +17,7 @@ import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.databinding.EditUserActivityBinding;
 import com.george.vector.network.model.User;
-import com.george.vector.network.viewmodel.UserViewModel;
+import com.george.vector.ui.viewmodel.UserViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 public class EditUserActivity extends AppCompatActivity {

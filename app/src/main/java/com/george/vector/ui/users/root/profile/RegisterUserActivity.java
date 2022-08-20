@@ -19,7 +19,7 @@ import com.george.vector.R;
 import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.databinding.ActivityRegisterUserBinding;
 import com.george.vector.network.model.User;
-import com.george.vector.network.viewmodel.UserViewModel;
+import com.george.vector.ui.viewmodel.UserViewModel;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;

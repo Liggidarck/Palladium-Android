@@ -21,7 +21,12 @@ public class Keys {
     public static final String USERS = "users";
     public static final String OST = "ost";
     public static final String OST_SCHOOL = "ost_school";
+    public static final String OST_AIST = "ost_aist";
+    public static final String OST_YAGODKA = "ost_yagodka";
+
     public static final String BAR_SCHOOL = "bar_school";
+    public static final String BAR_RUCHEEK = "bar_rucheek";
+    public static final String BAR_ZVEZDOCHKA = "bar_zvezdochka";
 
     public static final String NEW_TASKS = "Новая заявка";
     public static final String IN_PROGRESS_TASKS = "В работе";

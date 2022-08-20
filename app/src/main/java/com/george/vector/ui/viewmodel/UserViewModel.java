@@ -1,4 +1,4 @@
-package com.george.vector.network.viewmodel;
+package com.george.vector.ui.viewmodel;
 
 import static com.george.vector.common.utils.consts.Keys.USERS;
 

@@ -1,4 +1,4 @@
-package com.george.vector.network.viewmodel;
+package com.george.vector.ui.viewmodel;
 
 import android.app.Application;
 

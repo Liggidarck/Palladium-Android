@@ -24,8 +24,8 @@ import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.databinding.ActivityAddTaskRootBinding;
 import com.george.vector.network.model.Task;
-import com.george.vector.network.viewmodel.TaskViewModel;
-import com.george.vector.network.viewmodel.ViewModelFactory;
+import com.george.vector.ui.viewmodel.TaskViewModel;
+import com.george.vector.ui.viewmodel.ViewModelFactory;
 import com.george.vector.ui.users.root.main.MainRootActivity;
 
 import java.text.SimpleDateFormat;
@@ -63,12 +63,10 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 .getDefaultSharedPreferences(EditTaskRootActivity.this)
                 .getString("buffer_size", "2");
 
-        initializeFields(collection);
-
-        taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
-                this.getApplication(),
-                collection))
-                .get(TaskViewModel.class);
+        taskViewModel = new ViewModelProvider(this,
+                new ViewModelFactory(this.getApplication(),
+                collection)
+        ).get(TaskViewModel.class);
 
         int bufferSize = Integer.parseInt(bufferSizePreference);
 
@@ -120,6 +118,8 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
             if (image != null)
                 taskViewModel.setImage(image, binding.progressBarAddEditTask, binding.imageViewTask, bufferSize);
+
+            initializeFields(collection);
 
         });
         binding.progressBarAddEditTask.setVisibility(View.INVISIBLE);

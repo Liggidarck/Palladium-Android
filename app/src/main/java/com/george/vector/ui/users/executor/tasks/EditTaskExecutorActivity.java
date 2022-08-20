@@ -20,8 +20,8 @@ import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityEditTaskExecutorBinding;
 import com.george.vector.network.model.Task;
-import com.george.vector.network.viewmodel.TaskViewModel;
-import com.george.vector.network.viewmodel.ViewModelFactory;
+import com.george.vector.ui.viewmodel.TaskViewModel;
+import com.george.vector.ui.viewmodel.ViewModelFactory;
 import com.george.vector.ui.users.executor.main.MainExecutorActivity;
 
 public class EditTaskExecutorActivity extends AppCompatActivity {

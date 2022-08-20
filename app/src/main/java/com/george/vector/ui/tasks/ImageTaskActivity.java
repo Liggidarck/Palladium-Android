@@ -4,7 +4,6 @@ import static com.george.vector.common.utils.consts.Keys.COLLECTION;
 import static com.george.vector.common.utils.consts.Keys.ID;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,8 +12,8 @@ import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
 import com.george.vector.databinding.ActivityImageTaskBinding;
-import com.george.vector.network.viewmodel.TaskViewModel;
-import com.george.vector.network.viewmodel.ViewModelFactory;
+import com.george.vector.ui.viewmodel.TaskViewModel;
+import com.george.vector.ui.viewmodel.ViewModelFactory;
 
 public class ImageTaskActivity extends AppCompatActivity {
 

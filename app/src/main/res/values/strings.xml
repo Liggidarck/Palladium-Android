@@ -47,7 +47,12 @@
     <string name="ost_text">ОП «Остафьевская»</string>
     <string name="bar_text"> ОП «Барыши»</string>
 
-    <string name="bar_school_address">Улица Местечко Барыши дом 25</string>
+    <string name="bar_school_address">Местечко Барыши, 25</string>
+    <string name="bar_rucheek_address">Местечко Барыши, 37</string>
+    <string name="bar_zvezdochka_address">Барышевская Роща, 16</string>
+
+    <string name="ost_aist_address">Остафьевская улица, 2</string>
+    <string name="ost_yagodka_address">Берёзовая улица, 2</string>
 
     <string name="users_text">Пользователи</string>
     <string name="add_new_user">Добавить нового пользователя</string>

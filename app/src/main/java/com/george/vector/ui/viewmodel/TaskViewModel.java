@@ -1,4 +1,4 @@
-package com.george.vector.network.viewmodel;
+package com.george.vector.ui.viewmodel;
 
 import static com.george.vector.common.utils.consts.Keys.TOPIC_NEW_TASKS_CREATE;
 
@@ -46,7 +46,7 @@ public class TaskViewModel extends AndroidViewModel {
 
     public void createTask(Task task) {
         repository.createTask(task);
-        sendNotification(task.getUrgent(), task.getName_task());
+//        sendNotification(task.getUrgent(), task.getName_task());
     }
 
     public void updateTask(String id, Task task) {

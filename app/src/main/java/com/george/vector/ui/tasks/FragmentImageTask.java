@@ -17,8 +17,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.databinding.FragmentImageTaskBinding;
-import com.george.vector.network.viewmodel.TaskViewModel;
-import com.george.vector.network.viewmodel.ViewModelFactory;
+import com.george.vector.ui.viewmodel.TaskViewModel;
+import com.george.vector.ui.viewmodel.ViewModelFactory;
 
 public class FragmentImageTask extends Fragment {
 

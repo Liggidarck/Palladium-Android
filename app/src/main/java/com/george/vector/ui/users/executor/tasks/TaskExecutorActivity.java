@@ -18,8 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.R;
 import com.george.vector.databinding.ActivityTaskExecutorBinding;
-import com.george.vector.network.viewmodel.TaskViewModel;
-import com.george.vector.network.viewmodel.ViewModelFactory;
+import com.george.vector.ui.viewmodel.TaskViewModel;
+import com.george.vector.ui.viewmodel.ViewModelFactory;
 import com.george.vector.ui.tasks.FragmentImageTask;
 import com.george.vector.ui.tasks.FragmentUrgentRequest;
 import com.google.android.material.snackbar.Snackbar;

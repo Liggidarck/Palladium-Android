@@ -31,8 +31,8 @@ import com.george.vector.common.utils.TimeUtils;
 import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityAddTaskUserBinding;
 import com.george.vector.network.model.Task;
-import com.george.vector.network.viewmodel.TaskViewModel;
-import com.george.vector.network.viewmodel.ViewModelFactory;
+import com.george.vector.ui.viewmodel.TaskViewModel;
+import com.george.vector.ui.viewmodel.ViewModelFactory;
 import com.george.vector.ui.tasks.BottomSheetAddImage;
 
 import java.io.File;

@@ -1,8 +1,12 @@
 package com.george.vector.ui.users.root.tasks;
 
+import static com.george.vector.common.utils.consts.Keys.BAR_RUCHEEK;
 import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
+import static com.george.vector.common.utils.consts.Keys.BAR_ZVEZDOCHKA;
 import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.OST_AIST;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
+import static com.george.vector.common.utils.consts.Keys.OST_YAGODKA;
 import static com.george.vector.common.utils.consts.Keys.PERMISSION_CAMERA_CODE;
 import static com.george.vector.common.utils.consts.Keys.PERMISSION_GALLERY_CODE;
 import static java.util.Objects.requireNonNull;
@@ -33,8 +37,8 @@ import com.george.vector.common.utils.TimeUtils;
 import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityAddTaskRootBinding;
 import com.george.vector.network.model.Task;
-import com.george.vector.network.viewmodel.TaskViewModel;
-import com.george.vector.network.viewmodel.ViewModelFactory;
+import com.george.vector.ui.viewmodel.TaskViewModel;
+import com.george.vector.ui.viewmodel.ViewModelFactory;
 import com.george.vector.ui.tasks.BottomSheetAddImage;
 
 import java.io.File;
@@ -183,34 +187,46 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
         }
 
+        if (location.equals(OST_AIST))
+            binding.taskAddress.getEditText().setText(getString(R.string.ost_aist_address));
+
+        if (location.equals(OST_YAGODKA))
+            binding.taskAddress.getEditText().setText(getString(R.string.ost_yagodka_address));
+
         if (location.equals(BAR_SCHOOL))
-            requireNonNull(binding.taskAddress.getEditText()).setText(getText(R.string.bar_school_address));
+            binding.taskAddress.getEditText().setText(getString(R.string.bar_school_address));
 
-        String[] floors_basic_school = getResources().getStringArray(R.array.floors);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+        if (location.equals(BAR_RUCHEEK))
+            binding.taskAddress.getEditText().setText(getString(R.string.bar_rucheek_address));
+
+        if (location.equals(BAR_ZVEZDOCHKA))
+            binding.taskAddress.getEditText().setText(getString(R.string.bar_zvezdochka_address));
+
+        String[] floors = getResources().getStringArray(R.array.floors);
+        ArrayAdapter<String> floorsAdapter = new ArrayAdapter<>(
                 AddTaskRootActivity.this,
                 R.layout.dropdown_menu_categories,
-                floors_basic_school
+                floors
         );
-        binding.floorAutoComplete.setAdapter(arrayAdapter);
+        binding.floorAutoComplete.setAdapter(floorsAdapter);
 
-        String[] items_status = getResources().getStringArray(R.array.status);
-        ArrayAdapter<String> adapter_status = new ArrayAdapter<>(
+        String[] itemsStatus = getResources().getStringArray(R.array.status);
+        ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(
                 AddTaskRootActivity.this,
                 R.layout.dropdown_menu_categories,
-                items_status
+                itemsStatus
         );
 
-        binding.statusAutoComplete.setAdapter(adapter_status);
+        binding.statusAutoComplete.setAdapter(statusAdapter);
 
         String[] itemsLetter = getResources().getStringArray(R.array.letter);
-        ArrayAdapter<String> adapterLetter = new ArrayAdapter<>(
+        ArrayAdapter<String> letterAdapter = new ArrayAdapter<>(
                 AddTaskRootActivity.this,
                 R.layout.dropdown_menu_categories,
                 itemsLetter
         );
 
-        binding.letterAutoComplete.setAdapter(adapterLetter);
+        binding.letterAutoComplete.setAdapter(letterAdapter);
 
         datePickCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
@@ -245,7 +261,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
                 textValidatorUtils.isEmptyField(dateComplete, binding.taskDateComplete) &
                 textValidatorUtils.isEmptyField(emailExecutor, binding.taskEmailExecutor) &
                 textValidatorUtils.isEmptyField(taskStatus, binding.taskStatus) &
-                textValidatorUtils.isEmptyField(fullNameExecutor, binding.taskNameExecutor)&
+                textValidatorUtils.isEmptyField(fullNameExecutor, binding.taskNameExecutor) &
                 textValidatorUtils.validateNumberField(cabinet, binding.taskCabinet, 3);
     }
 

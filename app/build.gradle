@@ -58,7 +58,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.1'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.1'
     implementation "androidx.core:core-splashscreen:1.0.0"
-    implementation 'com.google.android.material:material:1.7.0-alpha03'
+    implementation 'com.google.android.material:material:1.7.0-beta01'
 
     //Firebase Main
     implementation platform('com.google.firebase:firebase-bom:30.2.0')
@@ -66,11 +66,11 @@ dependencies {
     implementation('com.google.firebase:firebase-auth') {
         exclude module: "play-services-safetynet"
     }
-    implementation 'com.google.firebase:firebase-auth:21.0.6'
-    implementation 'com.google.firebase:firebase-firestore:24.2.1'
+    implementation 'com.google.firebase:firebase-auth:21.0.7'
+    implementation 'com.google.firebase:firebase-firestore:24.2.2'
 
     // FCM
-    implementation 'com.google.firebase:firebase-messaging:23.0.6'
+    implementation 'com.google.firebase:firebase-messaging:23.0.7'
 
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
