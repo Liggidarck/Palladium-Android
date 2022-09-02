@@ -14,6 +14,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.bumptech.glide.Glide;
 import com.george.vector.R;
 import com.george.vector.databinding.FragmentAboutProjectBinding;
 
@@ -49,6 +50,11 @@ public class FragmentAboutProject extends Fragment {
         binding.cardDescriptionProject.setOnClickListener(v -> navController.navigate(R.id.actionFragmentAboutProjectToFragmentDescriptionProject));
 
         binding.cardDevelopApp.setOnClickListener(v -> navController.navigate(R.id.actionFragmentAboutProjectToFragmentDevelopApp));
+
+        Glide.with(this)
+                .load("https://images.unsplash.com/photo-1562408590-e32931084e23?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80")
+                .centerCrop()
+                .into(binding.imageDevelopApp);
 
         return view;
     }

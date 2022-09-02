@@ -158,7 +158,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         String lastnameUser = userPrefViewModel.getUser().getLast_name();
         String patronymicUser = userPrefViewModel.getUser().getPatronymic();
         emailCreator = userPrefViewModel.getUser().getEmail();
-        fullNameCreator = nameUser + " " + lastnameUser + " " + patronymicUser;
+        fullNameCreator =  lastnameUser + " " + nameUser + " " + patronymicUser;
     }
 
     void showDialogNoInternet() {
