@@ -57,13 +57,15 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
     boolean urgent;
     private Uri fileUri;
 
-    private final ActivityResultLauncher<String> selectPictureLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
+    private final ActivityResultLauncher<String> selectPictureLauncher = registerForActivityResult(
+            new ActivityResultContracts.GetContent(),
             uri -> {
                 fileUri = uri;
                 binding.imageViewTask.setImageURI(fileUri);
             });
 
-    private final ActivityResultLauncher<Uri> cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicture(),
+    private final ActivityResultLauncher<Uri> cameraLauncher = registerForActivityResult(
+            new ActivityResultContracts.TakePicture(),
             result -> {
                 if (result) {
                     binding.imageViewTask.setImageURI(fileUri);
@@ -88,8 +90,9 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         Bundle arguments = getIntent().getExtras();
         collection = arguments.get(COLLECTION).toString();
 
-        taskViewModel = new ViewModelProvider(this, new ViewModelFactory(this
-                .getApplication(), collection)).get(TaskViewModel.class);
+        taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                this.getApplication(), collection)
+        ).get(TaskViewModel.class);
         userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 
         getUserData();
@@ -158,7 +161,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         String lastnameUser = userPrefViewModel.getUser().getLast_name();
         String patronymicUser = userPrefViewModel.getUser().getPatronymic();
         emailCreator = userPrefViewModel.getUser().getEmail();
-        fullNameCreator =  lastnameUser + " " + nameUser + " " + patronymicUser;
+        fullNameCreator = lastnameUser + " " + nameUser + " " + patronymicUser;
     }
 
     void showDialogNoInternet() {

@@ -3,18 +3,27 @@ package com.george.vector.ui.users.root.tasks;
 import static com.george.vector.common.utils.consts.Keys.COLLECTION;
 import static com.george.vector.common.utils.consts.Keys.ID;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
-import static com.george.vector.common.utils.consts.Logs.TAG_STATE_TASK;
+import static com.george.vector.common.utils.consts.Keys.PERMISSION_CAMERA_CODE;
+import static com.george.vector.common.utils.consts.Keys.PERMISSION_GALLERY_CODE;
 import static java.util.Objects.requireNonNull;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
@@ -24,27 +33,47 @@ import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.databinding.ActivityAddTaskRootBinding;
 import com.george.vector.network.model.Task;
+import com.george.vector.ui.tasks.BottomSheetAddImage;
+import com.george.vector.ui.users.root.main.MainRootActivity;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
-import com.george.vector.ui.users.root.main.MainRootActivity;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class EditTaskRootActivity extends AppCompatActivity {
+public class EditTaskRootActivity extends AppCompatActivity implements BottomSheetAddImage.StateListener {
 
-    private Calendar datePickCalendar;
+    private ActivityAddTaskRootBinding binding;
 
     private String id, comment, dateCreate, timeCreate, emailCreator, collection, image, nameCreator;
+
+    private Calendar datePickCalendar;
+    private Uri fileUri;
+
+    private TaskViewModel taskViewModel;
 
     private final TextValidatorUtils textValidatorUtils = new TextValidatorUtils();
     private final NetworkUtils networkUtils = new NetworkUtils();
     private final DialogsUtils dialogsUtils = new DialogsUtils();
+    private final BottomSheetAddImage addImage = new BottomSheetAddImage();
 
-    private ActivityAddTaskRootBinding binding;
+    private final ActivityResultLauncher<String> selectPictureLauncher = registerForActivityResult(
+            new ActivityResultContracts.GetContent(),
+            uri -> {
+                fileUri = uri;
+                binding.imageViewTask.setImageURI(fileUri);
+            });
 
-    private TaskViewModel taskViewModel;
+    private final ActivityResultLauncher<Uri> cameraLauncher = registerForActivityResult(
+            new ActivityResultContracts.TakePicture(),
+            result -> {
+                if (result) {
+                    binding.imageViewTask.setImageURI(fileUri);
+                }
+            });
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,13 +94,11 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
         taskViewModel = new ViewModelProvider(this,
                 new ViewModelFactory(this.getApplication(),
-                collection)
+                        collection)
         ).get(TaskViewModel.class);
 
         int bufferSize = Integer.parseInt(bufferSizePreference);
 
-        binding.addExecutorBtn.setOnClickListener(v -> dialogsUtils.showAddExecutorDialog(EditTaskRootActivity.this,
-                binding.taskEmailExecutor, binding.taskNameExecutor));
 
         getTask(bufferSize);
 
@@ -87,6 +114,9 @@ public class EditTaskRootActivity extends AppCompatActivity {
 
             updateTask(collection);
         });
+
+        binding.addExecutorBtn.setOnClickListener(v -> dialogsUtils.showAddExecutorDialog(EditTaskRootActivity.this,
+                binding.taskEmailExecutor, binding.taskNameExecutor));
     }
 
     private void getTask(int bufferSize) {
@@ -116,8 +146,11 @@ public class EditTaskRootActivity extends AppCompatActivity {
             else
                 requireNonNull(binding.taskComment.getEditText()).setText(comment);
 
-            if (image != null)
+            if (image == null) {
+                binding.cardImage.setOnClickListener(v -> addImage.show(getSupportFragmentManager(), "BottomSheetAddImage"));
+            } else {
                 taskViewModel.setImage(image, binding.progressBarAddEditTask, binding.imageViewTask, bufferSize);
+            }
 
             initializeFields(collection);
 
@@ -126,7 +159,13 @@ public class EditTaskRootActivity extends AppCompatActivity {
     }
 
     void updateTask(String collection) {
-        String updateImage = image;
+        String updateImage;
+
+        if (fileUri != null)
+            updateImage = taskViewModel.uploadImage(fileUri, EditTaskRootActivity.this);
+        else
+            updateImage = image;
+
         String updateAddress = requireNonNull(binding.taskAddress.getEditText()).getText().toString();
         String updateFloor = requireNonNull(binding.taskFloor.getEditText()).getText().toString();
         String updateCabinet = requireNonNull(binding.taskCabinet.getEditText()).getText().toString();
@@ -139,7 +178,6 @@ public class EditTaskRootActivity extends AppCompatActivity {
         String updateStatus = requireNonNull(binding.taskStatus.getEditText()).getText().toString();
         boolean updateUrgent = binding.urgentCheckBox.isChecked();
 
-        Log.d(TAG_STATE_TASK, "Save new task");
         Task task = new Task(updateName, updateAddress, dateCreate, updateFloor, updateCabinet,
                 updateLetter, updateComment, updateDateComplete, updateExecutor, updateStatus, timeCreate,
                 emailCreator, updateUrgent, updateImage, updateNameExecutor, nameCreator);
@@ -182,8 +220,59 @@ public class EditTaskRootActivity extends AppCompatActivity {
                 textValidatorUtils.isEmptyField(dateComplete, binding.taskDateComplete) &
                 textValidatorUtils.isEmptyField(emailExecutor, binding.taskEmailExecutor) &
                 textValidatorUtils.isEmptyField(taskStatus, binding.taskStatus) &
-                textValidatorUtils.isEmptyField(fullNameExecutor, binding.taskNameExecutor)&
+                textValidatorUtils.isEmptyField(fullNameExecutor, binding.taskNameExecutor) &
                 textValidatorUtils.validateNumberField(cabinet, binding.taskCabinet, 3);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case PERMISSION_GALLERY_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    selectPictureLauncher.launch("image/*");
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                    builder.setTitle(getText(R.string.warning))
+                            .setMessage(getString(R.string.permission_gallery))
+                            .setPositiveButton("Настройки", (dialog, id) ->
+                                    startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                            Uri.fromParts("package", getPackageName(), null))))
+                            .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.cancel());
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+
+                break;
+
+            case PERMISSION_CAMERA_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    File file = new File(getFilesDir(), "picFromCamera");
+                    fileUri = FileProvider.getUriForFile(
+                            this,
+                            getApplicationContext().getPackageName() + ".provider",
+                            file);
+                    cameraLauncher.launch(fileUri);
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                    builder.setTitle(getText(R.string.warning))
+                            .setMessage(getString(R.string.permission_camera))
+                            .setPositiveButton("Настройки", (dialog, id) ->
+                                    startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                            Uri.fromParts("package", getPackageName(), null))))
+                            .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.cancel());
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+
+                break;
+        }
+
     }
 
     void initializeFields(String location) {
@@ -244,5 +333,29 @@ public class EditTaskRootActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat(date_text, Locale.US);
 
         requireNonNull(binding.taskDateComplete.getEditText()).setText(sdf.format(datePickCalendar.getTime()));
+    }
+
+    @Override
+    public void getPhotoFromDevice(String button) {
+        if (button.equals("new photo")) {
+            ActivityCompat.requestPermissions(
+                    EditTaskRootActivity.this,
+                    new String[]{
+                            Manifest.permission.CAMERA,
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    }, PERMISSION_CAMERA_CODE);
+            addImage.dismiss();
+        }
+
+        if (button.equals("existing photo")) {
+            ActivityCompat.requestPermissions(
+                    EditTaskRootActivity.this,
+                    new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    }, PERMISSION_GALLERY_CODE);
+            addImage.dismiss();
+        }
     }
 }
