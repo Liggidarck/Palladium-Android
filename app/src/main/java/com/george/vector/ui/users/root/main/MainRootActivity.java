@@ -9,10 +9,12 @@ import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
+import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
 import com.george.vector.common.notifications.SendNotification;
@@ -28,6 +30,20 @@ public class MainRootActivity extends AppCompatActivity {
     @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        boolean theme = PreferenceManager
+                .getDefaultSharedPreferences(this)
+                .getBoolean("root_dark_theme", false);
+
+        if(theme) {
+            AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_YES);
+        }
+
+        if(!theme) {
+            AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
         setTheme(R.style.MainActivity);
         super.onCreate(savedInstanceState);
         binding = ActivityRootMainBinding.inflate(getLayoutInflater());

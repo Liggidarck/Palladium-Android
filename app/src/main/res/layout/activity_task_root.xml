@@ -79,9 +79,8 @@
                         android:id="@+id/text_view_comment_task_root"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/product_sans_light"
                         android:text="@string/no_comment"
-                        android:textColor="#999999"
+                        android:textColor="?attr/textColor"
                         android:textSize="15sp" />
 
 

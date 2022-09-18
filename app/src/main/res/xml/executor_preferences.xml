@@ -10,6 +10,10 @@
             android:key="default_executor_location"
             android:title="Место по умолчанию"
             app:defaultValue="ost" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="executor_dark_theme"
+            android:title="Тёмная тема" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/tasks">

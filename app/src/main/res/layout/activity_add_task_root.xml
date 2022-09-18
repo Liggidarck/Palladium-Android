@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".ui.users.root.tasks.AddTaskRootActivity">
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/addEditTaskCoordinator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/doneBtn"
+        android:layout_marginBottom="20dp"/>
+
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarAddEditTask"
         style="@style/Widget.MaterialComponents.Toolbar.Primary"
@@ -140,13 +147,23 @@
 
             </LinearLayout>
 
+            <Button
+                android:id="@+id/addImageBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Прикрепить изображение"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/taskName"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
                 android:hint="@string/name_task"
                 app:endIconMode="clear_text"
@@ -156,7 +173,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine" />
+                    android:inputType="textCapSentences" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -177,7 +194,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine" />
+                    android:inputType="textCapSentences" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -233,26 +250,14 @@
                 android:layout_marginTop="5dp"
                 android:text="@string/urgent_task" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/taskEmailExecutor"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <Button
+                android:id="@+id/addExecutorBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
-                android:hint="@string/login_executor"
-                app:errorEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:inputType="none"
-                    android:longClickable="false" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                android:text="@string/set_executor" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/taskNameExecutor"
@@ -275,14 +280,26 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
-                android:id="@+id/addExecutorBtn"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/taskEmailExecutor"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
-                android:text="@string/set_executor" />
+                android:hint="@string/login_executor"
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:longClickable="false" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardImage"

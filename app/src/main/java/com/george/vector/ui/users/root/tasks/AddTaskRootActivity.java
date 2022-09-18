@@ -40,6 +40,7 @@ import com.george.vector.network.model.Task;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
 import com.george.vector.ui.tasks.BottomSheetAddImage;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -62,6 +63,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
             uri -> {
                 fileUri = uri;
                 binding.imageViewTask.setImageURI(fileUri);
+                Snackbar.make(binding.addEditTaskCoordinator, "Ваше изображение отображено в коне формы заявки", Snackbar.LENGTH_SHORT).show();
             });
 
     private final ActivityResultLauncher<Uri> cameraLauncher = registerForActivityResult(
@@ -69,6 +71,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
             result -> {
                 if (result) {
                     binding.imageViewTask.setImageURI(fileUri);
+                    Snackbar.make(binding.addEditTaskCoordinator, "Ваше изображение отображено в коне формы заявки", Snackbar.LENGTH_SHORT).show();
                 }
             });
 
@@ -104,7 +107,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
                 dialogsUtils.showAddExecutorDialog(AddTaskRootActivity.this, binding.taskEmailExecutor,
                         binding.taskNameExecutor));
 
-        binding.cardImage.setOnClickListener(v -> addImage.show(getSupportFragmentManager(), "BottomSheetAddImage"));
+        binding.addImageBtn.setOnClickListener(v -> addImage.show(getSupportFragmentManager(), "BottomSheetAddImage"));
 
         binding.doneBtn.setOnClickListener(v -> {
             address = requireNonNull(binding.taskAddress.getEditText()).getText().toString();
@@ -213,14 +216,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         );
         binding.floorAutoComplete.setAdapter(floorsAdapter);
 
-        String[] itemsStatus = getResources().getStringArray(R.array.status);
-        ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(
-                AddTaskRootActivity.this,
-                R.layout.dropdown_menu_categories,
-                itemsStatus
-        );
-
-        binding.statusAutoComplete.setAdapter(statusAdapter);
+        binding.taskStatus.getEditText().setText("Новая заявка");
 
         String[] itemsLetter = getResources().getStringArray(R.array.letter);
         ArrayAdapter<String> letterAdapter = new ArrayAdapter<>(

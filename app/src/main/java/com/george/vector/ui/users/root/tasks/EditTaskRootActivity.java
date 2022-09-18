@@ -37,6 +37,7 @@ import com.george.vector.ui.tasks.BottomSheetAddImage;
 import com.george.vector.ui.users.root.main.MainRootActivity;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -64,6 +65,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
             uri -> {
                 fileUri = uri;
                 binding.imageViewTask.setImageURI(fileUri);
+                Snackbar.make(binding.addEditTaskCoordinator, "Ваше изображение отображено в коне формы заявки", Snackbar.LENGTH_SHORT).show();
             });
 
     private final ActivityResultLauncher<Uri> cameraLauncher = registerForActivityResult(
@@ -71,6 +73,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
             result -> {
                 if (result) {
                     binding.imageViewTask.setImageURI(fileUri);
+                    Snackbar.make(binding.addEditTaskCoordinator, "Ваше изображение отображено в коне формы заявки", Snackbar.LENGTH_SHORT).show();
                 }
             });
 
@@ -147,8 +150,9 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
                 requireNonNull(binding.taskComment.getEditText()).setText(comment);
 
             if (image == null) {
-                binding.cardImage.setOnClickListener(v -> addImage.show(getSupportFragmentManager(), "BottomSheetAddImage"));
+                binding.addImageBtn.setOnClickListener(v -> addImage.show(getSupportFragmentManager(), "BottomSheetAddImage"));
             } else {
+                binding.addImageBtn.setEnabled(false);
                 taskViewModel.setImage(image, binding.progressBarAddEditTask, binding.imageViewTask, bufferSize);
             }
 

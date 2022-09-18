@@ -5,6 +5,7 @@ import static com.george.vector.common.utils.consts.Logs.TAG_MAIN_EXECUTOR_ACTIV
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
@@ -36,6 +37,20 @@ public class MainExecutorActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        boolean theme = PreferenceManager
+                .getDefaultSharedPreferences(this)
+                .getBoolean("executor_dark_theme", false);
+
+        if(theme) {
+            AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_YES);
+        }
+
+        if(!theme) {
+            AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
         setTheme(R.style.MainActivity);
         super.onCreate(savedInstanceState);
         executorBinding = ActivityMainExecutorBinding.inflate(getLayoutInflater());

@@ -6,10 +6,12 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
+import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
 import com.george.vector.data.preferences.UserDataViewModel;
@@ -27,6 +29,20 @@ public class MainUserActivity extends AppCompatActivity implements BottomSheetPr
     @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        boolean theme = PreferenceManager
+                .getDefaultSharedPreferences(this)
+                .getBoolean("user_dark_theme", false);
+
+        if(theme) {
+            AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_YES);
+        }
+
+        if(!theme) {
+            AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
         setTheme(R.style.MainActivity);
         super.onCreate(savedInstanceState);
         binding = ActivityMainUserBinding.inflate(getLayoutInflater());
