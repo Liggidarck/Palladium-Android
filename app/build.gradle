@@ -16,6 +16,12 @@ android {
         viewBinding true
     }
 
+    bundle {
+        storeArchive {
+            enable = false
+        }
+    }
+
     defaultConfig {
         applicationId "com.george.vector"
         minSdkVersion 21
