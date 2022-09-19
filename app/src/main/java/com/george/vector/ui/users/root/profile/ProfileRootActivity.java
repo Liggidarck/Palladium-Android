@@ -1,9 +1,12 @@
 package com.george.vector.ui.users.root.profile;
 
+import static com.george.vector.common.utils.consts.Keys.TOPIC_DEVELOP;
 import static com.george.vector.common.utils.consts.Keys.TOPIC_NEW_TASKS_CREATE;
+import static com.george.vector.common.utils.consts.Logs.TAG_NOTIFICATIONS;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.BuildConfig;
 import com.george.vector.R;
+import com.george.vector.common.notifications.SendNotification;
 import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityProfileRootBinding;
 import com.george.vector.network.model.User;
@@ -79,5 +83,13 @@ public class ProfileRootActivity extends AppCompatActivity {
 
         String versionName = "Версия: " + BuildConfig.VERSION_NAME;
         binding.versionAppTextView.setText(versionName);
+
+        binding.developActivity.setOnClickListener(v -> {
+            FirebaseMessaging.getInstance().subscribeToTopic(TOPIC_DEVELOP);
+
+            SendNotification sendNotification = new SendNotification();
+            sendNotification.sendNotification("NOTIFICATION FOR ADMINS",
+                    "THIS IS DEVELOP CHANNEL", "", "", TOPIC_DEVELOP);
+        });
     }
 }

@@ -67,11 +67,9 @@ public class MainRootActivity extends AppCompatActivity {
                         Log.d(TAG_NOTIFICATIONS, "Notifications state: " + notifications);
 
                         SendNotification sendNotification = new SendNotification();
-                        sendNotification.sendNotification(
-                                "Новый пользователь зарегестрирован на получение уведомлений",
-                                nameUser + " " + lastNameUser,
-                                TOPIC_NEW_TASKS_CREATE
-                        );
+                        sendNotification.sendNotification("Новый пользователь зарегестрирован на получение уведомлений",
+                                nameUser + " " + lastNameUser, "", "", TOPIC_NEW_TASKS_CREATE);
+
                     })
                     .setCancelable(false)
                     .create();

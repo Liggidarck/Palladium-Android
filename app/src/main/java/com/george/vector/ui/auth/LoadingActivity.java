@@ -1,8 +1,12 @@
 package com.george.vector.ui.auth;
 
+import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ID;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,8 +18,11 @@ import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityLoadingBinding;
 import com.george.vector.ui.users.executor.main.MainExecutorActivity;
 import com.george.vector.ui.users.root.main.MainRootActivity;
+import com.george.vector.ui.users.root.tasks.TaskRootActivity;
 import com.george.vector.ui.users.user.main.MainUserActivity;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.io.IOException;
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -31,6 +38,21 @@ public class LoadingActivity extends AppCompatActivity {
         loadingBinding = ActivityLoadingBinding.inflate(getLayoutInflater());
         setContentView(loadingBinding.getRoot());
 
+        try {
+            Bundle arguments = getIntent().getExtras();
+            String id = arguments.getString(ID);
+            String collection = arguments.getString(COLLECTION);
+            if (!id.equals(null) || !collection.equals(null)) {
+                Log.d("LOading", id);
+                Intent intent = new Intent(this, TaskRootActivity.class);
+                intent.putExtra("id", id);
+                intent.putExtra("collection", collection);
+                startActivity(intent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         firebaseAuth = FirebaseAuth.getInstance();
 
         UserDataViewModel preferencesViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
@@ -41,7 +63,7 @@ public class LoadingActivity extends AppCompatActivity {
         String permission = preferencesViewModel.getUser().getPermission();
         String role = preferencesViewModel.getUser().getRole();
 
-        if(firebaseAuth.getCurrentUser() != null &
+        if (firebaseAuth.getCurrentUser() != null &
                 (name.equals("") || lastname.equals("") || patronymic.equals("") || email.equals("")
                         || permission.equals("") || role.equals(""))) {
             AlertDialog dialog = new AlertDialog.Builder(this)
@@ -66,7 +88,7 @@ public class LoadingActivity extends AppCompatActivity {
             startApp(role);
         }
 
-        if(firebaseAuth.getCurrentUser() == null & role.equals("")) {
+        if (firebaseAuth.getCurrentUser() == null & role.equals("")) {
             startActivity(new Intent(this, LoginActivity.class));
         }
 

@@ -37,5 +37,6 @@ public class Keys {
     public static final int PERMISSION_CAMERA_CODE = 2;
 
     public static final String TOPIC_NEW_TASKS_CREATE = "/topics/new_tasks_create";
+    public static final String TOPIC_DEVELOP = "/topics/develop";
 
 }

@@ -1,7 +1,5 @@
 package com.george.vector.ui.viewmodel;
 
-import static com.george.vector.common.utils.consts.Keys.TOPIC_NEW_TASKS_CREATE;
-
 import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -17,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.george.vector.common.notifications.SendNotification;
 import com.george.vector.network.model.Task;
 import com.george.vector.network.repository.TaskRepository;
 import com.google.firebase.storage.FirebaseStorage;
@@ -46,7 +43,6 @@ public class TaskViewModel extends AndroidViewModel {
 
     public void createTask(Task task) {
         repository.createTask(task);
-        sendNotification(task.getUrgent(), task.getName_task());
     }
 
     public void updateTask(String id, Task task) {
@@ -63,17 +59,6 @@ public class TaskViewModel extends AndroidViewModel {
         repository.deleteTask(id);
     }
 
-    void sendNotification(boolean urgent, String taskName) {
-        String title;
-
-        if (urgent)
-            title = "Созданна новая срочная заявка";
-        else
-            title = "Созданна новая заявка";
-
-        SendNotification sendNotification = new SendNotification();
-        sendNotification.sendNotification(title, taskName, TOPIC_NEW_TASKS_CREATE);
-    }
 
     public String uploadImage(Uri fileUri, Context context) {
         String nameImage;

@@ -1,8 +1,13 @@
 package com.george.vector.network.repository;
 
+import static com.george.vector.common.utils.consts.Keys.TOPIC_NEW_TASKS_CREATE;
+
 import androidx.lifecycle.MutableLiveData;
 
+import com.george.vector.common.notifications.SendNotification;
 import com.george.vector.network.model.Task;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -20,7 +25,23 @@ public class TaskRepository {
     }
 
     public void createTask(Task task) {
-        firebaseFirestore.collection(collection).add(task);
+        firebaseFirestore.collection(collection).add(task).addOnSuccessListener(documentReference -> {
+            String id = documentReference.getId();
+            sendNotification(task.getUrgent(), task.getName_task(), id, collection);
+        });
+    }
+
+
+    void sendNotification(boolean urgent, String taskName, String taskId, String collection) {
+        String title;
+
+        if (urgent)
+            title = "Созданна новая срочная заявка";
+        else
+            title = "Созданна новая заявка ";
+
+        SendNotification sendNotification = new SendNotification();
+        sendNotification.sendNotification(title, taskName, taskId, collection, TOPIC_NEW_TASKS_CREATE);
     }
 
     public void updateTask(String id, Task task) {

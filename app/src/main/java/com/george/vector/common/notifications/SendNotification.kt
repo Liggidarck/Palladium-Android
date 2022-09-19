@@ -9,9 +9,9 @@ class SendNotification {
 
     private val tag = "SendNotification"
 
-    fun sendNotification(title: String, message: String, TOPIC: String) {
+    fun sendNotification(title: String, message: String, taskId: String, collection: String, TOPIC: String) {
         PushNotification(
-            NotificationData(title, message),
+            NotificationData(title, message, taskId, collection),
             TOPIC
         ).also {
             sendNotificationAPI(it)

@@ -81,8 +81,10 @@ public class TaskRootActivity extends AppCompatActivity {
 
     private void initData() {
         Bundle arguments = getIntent().getExtras();
+
         id = arguments.getString(ID);
         collection = arguments.getString(COLLECTION);
+
         confirmDelete = PreferenceManager
                 .getDefaultSharedPreferences(this)
                 .getBoolean("confirm_before_deleting_root", true);
