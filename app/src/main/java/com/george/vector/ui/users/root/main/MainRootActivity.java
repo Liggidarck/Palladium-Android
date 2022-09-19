@@ -34,14 +34,12 @@ public class MainRootActivity extends AppCompatActivity {
                 .getDefaultSharedPreferences(this)
                 .getBoolean("root_dark_theme", false);
 
-        if(theme) {
-            AppCompatDelegate.setDefaultNightMode(
-                    AppCompatDelegate.MODE_NIGHT_YES);
+        if (theme) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
 
-        if(!theme) {
-            AppCompatDelegate.setDefaultNightMode(
-                    AppCompatDelegate.MODE_NIGHT_NO);
+        if (!theme) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
 
         setTheme(R.style.MainActivity);

@@ -1,18 +1,20 @@
 package com.george.vector.ui.settings;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
 import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.SettingsRootActivityBinding;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     SettingsRootActivityBinding binding;
 
@@ -22,6 +24,10 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = SettingsRootActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        Context context = getApplicationContext();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.registerOnSharedPreferenceChangeListener(this);
 
         UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         String role = userDataViewModel.getUser().getRole();
@@ -50,6 +56,25 @@ public class SettingsActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String tag) {
+        if (tag.equals("root_dark_theme") || tag.equals("user_dark_theme") || tag.equals("executor_dark_theme")) {
+            boolean theme = PreferenceManager
+                    .getDefaultSharedPreferences(this)
+                    .getBoolean("root_dark_theme", false);
+
+            if (theme) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+
+            if (!theme) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+
+            recreate();
+        }
     }
 
 
