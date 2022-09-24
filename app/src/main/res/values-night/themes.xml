@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.Palladium" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
@@ -16,7 +16,7 @@
         <item name="grayColor">#1A1A1A</item>
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">@font/google_sans_medium</item>
     </style>

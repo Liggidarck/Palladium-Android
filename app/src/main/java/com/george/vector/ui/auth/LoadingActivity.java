@@ -43,7 +43,7 @@ public class LoadingActivity extends AppCompatActivity {
             String id = arguments.getString(ID);
             String collection = arguments.getString(COLLECTION);
             if (!id.equals(null) || !collection.equals(null)) {
-                Log.d("LOading", id);
+                Log.d("Loading", id);
                 Intent intent = new Intent(this, TaskRootActivity.class);
                 intent.putExtra("id", id);
                 intent.putExtra("collection", collection);

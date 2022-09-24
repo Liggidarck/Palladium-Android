@@ -71,7 +71,6 @@
         <activity android:name=".ui.users.user.tasks.AddTaskUserActivity" />
         <activity android:name=".ui.users.executor.main.MainExecutorActivity" />
         <activity android:name=".ui.users.user.main.MainUserActivity" />
-        <activity android:name=".ui.users.root.profile.RegisterUserActivity" />
         <activity android:name=".ui.auth.LoginActivity" />
         <activity android:name=".ui.users.root.profile.ProfileRootActivity" />
 

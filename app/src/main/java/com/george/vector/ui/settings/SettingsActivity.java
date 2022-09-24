@@ -60,7 +60,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String tag) {
-        if (tag.equals("root_dark_theme") || tag.equals("user_dark_theme") || tag.equals("executor_dark_theme")) {
+        if (tag.equals("root_dark_theme")) {
             boolean theme = PreferenceManager
                     .getDefaultSharedPreferences(this)
                     .getBoolean("root_dark_theme", false);
@@ -75,6 +75,39 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
 
             recreate();
         }
+
+        if (tag.equals("user_dark_theme")) {
+            boolean theme = PreferenceManager
+                    .getDefaultSharedPreferences(this)
+                    .getBoolean("user_dark_theme", false);
+
+            if (theme) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+
+            if (!theme) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+
+            recreate();
+        }
+
+        if (tag.equals("executor_dark_theme")) {
+            boolean theme = PreferenceManager
+                    .getDefaultSharedPreferences(this)
+                    .getBoolean("user_dark_theme", false);
+
+            if (theme) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+
+            if (!theme) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+
+            recreate();
+        }
+
     }
 
 

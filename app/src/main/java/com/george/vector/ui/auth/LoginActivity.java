@@ -2,11 +2,12 @@ package com.george.vector.ui.auth;
 
 import static com.george.vector.common.utils.TextValidatorUtils.validateEmail;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.R;
@@ -15,11 +16,11 @@ import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityLoginBinding;
 import com.george.vector.network.model.User;
-import com.george.vector.ui.viewmodel.LoginViewModel;
-import com.george.vector.ui.viewmodel.UserViewModel;
 import com.george.vector.ui.users.executor.main.MainExecutorActivity;
 import com.george.vector.ui.users.root.main.MainRootActivity;
 import com.george.vector.ui.users.user.main.MainUserActivity;
+import com.george.vector.ui.viewmodel.LoginViewModel;
+import com.george.vector.ui.viewmodel.UserViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.Theme_Palladium);
+        setTheme(R.style.LoginActivity);
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -69,7 +70,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void signIn(String login, String password) {
-        binding.progressBarAuth.setVisibility(View.VISIBLE);
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Загрузка...");
+        progressDialog.setMessage("Идет поиск пользователя...");
+        progressDialog.show();
+
         LoginViewModel loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         loginViewModel.signIn(login, password).observe(this, id -> {
@@ -77,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                 Snackbar.make(binding.coordinatorLoginActivity, "Ошибка. Пользователь не найден",
                                 Snackbar.LENGTH_LONG)
                         .show();
-                binding.progressBarAuth.setVisibility(View.INVISIBLE);
+                progressDialog.dismiss();
                 return;
             }
 
@@ -92,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                 userDataViewModel.saveUser(new User(name, lastName, patronymic,
                         email, role, permission, password));
 
-                binding.progressBarAuth.setVisibility(View.INVISIBLE);
+                progressDialog.dismiss();
                 startApp(role);
             });
         });

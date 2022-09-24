@@ -16,6 +16,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
+import com.george.vector.BuildConfig;
 import com.george.vector.R;
 import com.george.vector.common.notifications.SendNotification;
 import com.george.vector.data.preferences.UserDataViewModel;
@@ -57,6 +58,7 @@ public class MainRootActivity extends AppCompatActivity {
         String lastNameUser = user.getLast_name();
         boolean notifications = preferencesViewModel.getNotifications();
 
+
         if (!notifications) {
             AlertDialog alertDialog = new AlertDialog.Builder(this)
                     .setTitle("Подключить уведомления")
@@ -75,6 +77,8 @@ public class MainRootActivity extends AppCompatActivity {
                     .create();
             alertDialog.show();
         }
+
+
     }
 
 }

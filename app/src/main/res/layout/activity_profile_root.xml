@@ -89,38 +89,6 @@
                         android:textSize="22sp" />
 
                     <RelativeLayout
-                        android:id="@+id/layout_new_person_profile"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        tools:ignore="UnusedAttribute">
-
-                        <ImageView
-                            android:id="@+id/following_image_sheet"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:layout_centerVertical="true"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginBottom="15dp"
-                            android:src="@drawable/ic_baseline_person_add_24"
-                            app:tint="?attr/colorControlNormal"
-                            tools:ignore="ContentDescription" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="10dp"
-                            android:layout_toEndOf="@id/following_image_sheet"
-                            android:text="@string/add_new_user"
-                            android:textColor="?attr/textColor"
-                            android:textSize="17sp" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
                         android:id="@+id/layout_edit_person_profile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -156,7 +124,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
                         android:text="@string/app"
                         android:textColor="?attr/textColor"
                         android:textSize="22sp" />

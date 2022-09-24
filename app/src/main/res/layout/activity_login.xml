@@ -14,18 +14,10 @@
         app:title="@string/authorization"
         app:titleTextColor="@color/white" />
 
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/progressBarAuth"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbarAuth"
-        android:indeterminate="true"
-        android:visibility="invisible" />
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/progressBarAuth"
+        android:layout_below="@+id/toolbarAuth"
         android:clipToPadding="false"
         android:paddingBottom="100dp">
 

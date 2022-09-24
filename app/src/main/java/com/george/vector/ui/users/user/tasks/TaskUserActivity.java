@@ -54,8 +54,8 @@ public class TaskUserActivity extends AppCompatActivity {
 
         taskViewModel.getTask(id).observe(this, task -> {
             comment = task.getComment();
-            dateCreate = task.getDate_create();
-            timeCreate = task.getTime_create();
+            dateCreate = task.getDateCreate();
+            timeCreate = task.getTimeCreate();
             image = task.getImage();
             letter = task.getLitera();
 
@@ -66,11 +66,11 @@ public class TaskUserActivity extends AppCompatActivity {
             binding.textViewAddressTaskUser.setText(task.getAddress());
             binding.textViewFloorTaskUser.setText(task.getFloor());
             binding.textViewCabinetTaskUser.setText(task.getCabinet());
-            binding.textViewNameTaskUser.setText(task.getName_task());
+            binding.textViewNameTaskUser.setText(task.getNameTask());
             binding.textViewCommentTaskUser.setText(comment);
             binding.textViewDateCreateTaskUser.setText(dateCreateText);
             binding.textViewStatusTaskUser.setText(task.getStatus());
-            binding.textViewEmailCreatorTaskUser.setText(task.getEmail_creator());
+            binding.textViewEmailCreatorTaskUser.setText(task.getEmailCreator());
             binding.textViewFullNameCreatorUser.setText(task.getNameCreator());
 
             if (image != null) {

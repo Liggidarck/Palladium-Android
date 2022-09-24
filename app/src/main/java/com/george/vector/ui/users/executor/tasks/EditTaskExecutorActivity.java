@@ -68,11 +68,11 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         binding.toolbarEditTaskExecutor.setNavigationOnClickListener(v -> onBackPressed());
 
         taskViewModel.getTask(id).observe(this, task -> {
-            dateCreate = task.getDate_create();
-            timeCreate = task.getTime_create();
-            email = task.getEmail_creator();
+            dateCreate = task.getDateCreate();
+            timeCreate = task.getTimeCreate();
+            email = task.getEmailCreator();
             fullNameExecutor = task.getFullNameExecutor();
-            emailCreator = task.getEmail_creator();
+            emailCreator = task.getEmailCreator();
             nameCreator = task.getNameCreator();
             urgent = task.getUrgent();
             image = task.getImage();
@@ -82,9 +82,9 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
             requireNonNull(binding.textFloor.getEditText()).setText(task.getFloor());
             requireNonNull(binding.textCabinet.getEditText()).setText(task.getCabinet());
             requireNonNull(binding.textLetter.getEditText()).setText(task.getLitera());
-            requireNonNull(binding.textNameTask.getEditText()).setText(task.getName_task());
+            requireNonNull(binding.textNameTask.getEditText()).setText(task.getNameTask());
             requireNonNull(binding.textStatus.getEditText()).setText(task.getStatus());
-            requireNonNull(binding.textDateComplete.getEditText()).setText(task.getDate_done());
+            requireNonNull(binding.textDateComplete.getEditText()).setText(task.getDateDone());
             requireNonNull(binding.textExecutor.getEditText()).setText(task.getExecutor());
 
             if (comment.equals("Нет коментария к заявке"))

@@ -127,18 +127,18 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
         taskViewModel.getTask(id).observe(EditTaskRootActivity.this, task -> {
 
             comment = task.getComment();
-            dateCreate = task.getDate_create();
-            timeCreate = task.getTime_create();
+            dateCreate = task.getDateCreate();
+            timeCreate = task.getTimeCreate();
             image = task.getImage();
-            emailCreator = task.getEmail_creator();
+            emailCreator = task.getEmailCreator();
             nameCreator = task.getNameCreator();
 
             requireNonNull(binding.taskAddress.getEditText()).setText(task.getAddress());
             requireNonNull(binding.taskFloor.getEditText()).setText(task.getFloor());
             requireNonNull(binding.taskCabinet.getEditText()).setText(task.getCabinet());
             requireNonNull(binding.taskLetter.getEditText()).setText(task.getLitera());
-            requireNonNull(binding.taskName.getEditText()).setText(task.getName_task());
-            requireNonNull(binding.taskDateComplete.getEditText()).setText(task.getDate_done());
+            requireNonNull(binding.taskName.getEditText()).setText(task.getNameTask());
+            requireNonNull(binding.taskDateComplete.getEditText()).setText(task.getDateDone());
             requireNonNull(binding.taskEmailExecutor.getEditText()).setText(task.getExecutor());
             requireNonNull(binding.taskStatus.getEditText()).setText(task.getStatus());
             requireNonNull(binding.taskNameExecutor.getEditText()).setText(task.getFullNameExecutor());

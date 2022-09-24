@@ -1,16 +1,13 @@
 package com.george.vector.ui.users.root.tasks;
 
-import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.COLLECTION;
 import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
 import static com.george.vector.common.utils.consts.Keys.FOLDER;
 import static com.george.vector.common.utils.consts.Keys.ID;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
-import static com.george.vector.common.utils.consts.Logs.TAG_TASK_ROOT_FRAGMENT;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +22,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.FragmentTasksRootBinding;
-import com.george.vector.ui.adapter.TaskAdapter;
 import com.george.vector.network.model.Task;
+import com.george.vector.ui.adapter.TaskAdapter;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;

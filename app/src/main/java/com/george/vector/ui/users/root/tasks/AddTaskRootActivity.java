@@ -4,6 +4,9 @@ import static com.george.vector.common.utils.consts.Keys.BAR_RUCHEEK;
 import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.BAR_ZVEZDOCHKA;
 import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
+import static com.george.vector.common.utils.consts.Keys.FOLDER;
+import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
 import static com.george.vector.common.utils.consts.Keys.OST_AIST;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.OST_YAGODKA;
@@ -37,6 +40,7 @@ import com.george.vector.common.utils.TimeUtils;
 import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityAddTaskRootBinding;
 import com.george.vector.network.model.Task;
+import com.george.vector.ui.users.root.folders.FolderRootActivity;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
 import com.george.vector.ui.tasks.BottomSheetAddImage;
@@ -156,7 +160,15 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
         taskViewModel.createTask(task);
 
-        onBackPressed();
+        startListTasks();
+    }
+
+    private void startListTasks() {
+        Intent intent = new Intent(this, FolderRootActivity.class);
+        intent.putExtra(COLLECTION, collection);
+        intent.putExtra(FOLDER, NEW_TASKS);
+        intent.putExtra(EXECUTOR_EMAIL, "root");
+        startActivity(intent);
     }
 
     private void getUserData() {

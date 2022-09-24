@@ -68,9 +68,9 @@ public class TaskExecutorActivity extends AppCompatActivity {
         taskViewModel.getTask(id).observe(this, task -> {
             image = task.getImage();
             letter = task.getLitera();
-            dateCreate = task.getDate_create();
-            timeCreate = task.getTime_create();
-            dateDone = task.getDate_done();
+            dateCreate = task.getDateCreate();
+            timeCreate = task.getTimeCreate();
+            dateDone = task.getDateDone();
             cabinet = task.getCabinet();
             urgent = task.getUrgent();
             status = task.getStatus();
@@ -116,12 +116,12 @@ public class TaskExecutorActivity extends AppCompatActivity {
             taskExecutorBinding.textViewAddressTaskExecutor.setText(task.getAddress());
             taskExecutorBinding.textViewFloorTaskExecutor.setText(String.format("%s %s", getText(R.string.floor), task.getFloor()));
             taskExecutorBinding.textViewCabinetTaskExecutor.setText(String.format("%s %s", getText(R.string.cabinet), cabinet));
-            taskExecutorBinding.textViewNameTaskExecutor.setText(task.getName_task());
+            taskExecutorBinding.textViewNameTaskExecutor.setText(task.getNameTask());
             taskExecutorBinding.textViewCommentTaskExecutor.setText(task.getComment());
             taskExecutorBinding.textViewStatusTaskExecutor.setText(status);
             taskExecutorBinding.textViewDateCreateTaskExecutor.setText(dateCreateText);
             taskExecutorBinding.textViewFullNameCreatorExecutor.setText(task.getNameCreator());
-            taskExecutorBinding.textViewEmailCreatorTaskExecutor.setText(task.getEmail_creator());
+            taskExecutorBinding.textViewEmailCreatorTaskExecutor.setText(task.getEmailCreator());
             taskExecutorBinding.textViewFullNameExecutorEX.setText(task.getFullNameExecutor());
             taskExecutorBinding.textViewEmailExecutorTaskExecutor.setText(task.getExecutor());
             if (dateDone == null)

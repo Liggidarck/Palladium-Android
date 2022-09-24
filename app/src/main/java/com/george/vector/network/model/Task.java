@@ -2,56 +2,56 @@ package com.george.vector.network.model;
 
 public class Task {
 
-    private String name_task;
+    private String nameTask;
     private String address;
-    private String date_create;
+    private String dateCreate;
     private String floor;
     private String cabinet;
     private String letter;
     private String comment;
-    private String date_done;
+    private String dateDone;
     private String executor;
     private String status;
     private boolean urgent;
-    private String time_create;
-    private String email_creator;
+    private String timeCreate;
+    private String emailCreator;
     private String image;
-    private String full_name_executor;
-    private String name_creator;
+    private String fullNameExecutor;
+    private String nameCreator;
 
     public Task() {}
 
-    public Task(String name_task, String address, String date_create, String floor,
-                String cabinet, String litera, String comment, String date_done, String executor, String status,
-                String time_create, String email_creator, boolean urgent, String image, String full_name_executor, String name_creator) {
-        this.name_task = name_task;
+    public Task(String nameTask, String address, String dateCreate, String floor,
+                String cabinet, String litera, String comment, String dateDone, String executor, String status,
+                String timeCreate, String emailCreator, boolean urgent, String image, String fullNameExecutor, String nameCreator) {
+        this.nameTask = nameTask;
         this.address = address;
-        this.date_create = date_create;
+        this.dateCreate = dateCreate;
         this.floor = floor;
         this.cabinet = cabinet;
         this.letter = litera;
         this.comment = comment;
-        this.date_done = date_done;
+        this.dateDone = dateDone;
         this.executor = executor;
         this.status = status;
         this.urgent = urgent;
-        this.time_create = time_create;
-        this.email_creator = email_creator;
+        this.timeCreate = timeCreate;
+        this.emailCreator = emailCreator;
         this.image = image;
-        this.full_name_executor = full_name_executor;
-        this.name_creator = name_creator;
+        this.fullNameExecutor = fullNameExecutor;
+        this.nameCreator = nameCreator;
     }
 
-    public String getName_task() {
-        return name_task;
+    public String getNameTask() {
+        return nameTask;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public String getDate_create() {
-        return date_create;
+    public String getDateCreate() {
+        return dateCreate;
     }
 
     public String getFloor() {
@@ -66,8 +66,8 @@ public class Task {
         return comment;
     }
 
-    public String getDate_done() {
-        return date_done;
+    public String getDateDone() {
+        return dateDone;
     }
 
     public String getExecutor() {
@@ -78,12 +78,12 @@ public class Task {
         return status;
     }
 
-    public String getTime_create() {
-        return time_create;
+    public String getTimeCreate() {
+        return timeCreate;
     }
 
-    public String getEmail_creator() {
-        return email_creator;
+    public String getEmailCreator() {
+        return emailCreator;
     }
 
     public String getLitera() {
@@ -99,11 +99,11 @@ public class Task {
     }
 
     public String getFullNameExecutor() {
-        return full_name_executor;
+        return fullNameExecutor;
     }
 
     public String getNameCreator() {
-        return name_creator;
+        return nameCreator;
     }
 
 }

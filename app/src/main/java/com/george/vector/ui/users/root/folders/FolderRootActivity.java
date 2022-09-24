@@ -8,6 +8,8 @@ import static com.george.vector.common.utils.consts.Keys.FOLDER;
 import static com.george.vector.common.utils.consts.Keys.IN_PROGRESS_TASKS;
 import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,11 +17,12 @@ import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
 import com.george.vector.databinding.ActivityFolderRootBinding;
+import com.george.vector.ui.users.root.tasks.AddTaskRootActivity;
 import com.george.vector.ui.users.root.tasks.FragmentTasksRoot;
 
 public class FolderRootActivity extends AppCompatActivity {
 
-    ActivityFolderRootBinding folderRootBinding;
+    ActivityFolderRootBinding binding;
 
     String textToolbar;
 
@@ -27,28 +30,35 @@ public class FolderRootActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
-        folderRootBinding = ActivityFolderRootBinding.inflate(getLayoutInflater());
-        setContentView(folderRootBinding.getRoot());
+        binding = ActivityFolderRootBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
         String collection = arguments.getString(COLLECTION);
         String folder = arguments.getString(FOLDER);
         String executed = arguments.getString(EXECUTOR_EMAIL);
 
-        if(folder.equals(NEW_TASKS))
+        if (folder.equals(NEW_TASKS))
             textToolbar = getString(R.string.new_tasks_text);
 
-        if(folder.equals(IN_PROGRESS_TASKS))
+        if (folder.equals(IN_PROGRESS_TASKS))
             textToolbar = getString(R.string.progress_tasks);
 
-        if(folder.equals(ARCHIVE_TASKS))
+        if (folder.equals(ARCHIVE_TASKS))
             textToolbar = getString(R.string.archive_tasks_text);
 
-        if(folder.equals(COMPLETED_TASKS))
+        if (folder.equals(COMPLETED_TASKS))
             textToolbar = getString(R.string.completed_tasks_text);
 
-        folderRootBinding.toolbarFolderRootActivity.setNavigationOnClickListener(v -> onBackPressed());
-        folderRootBinding.toolbarFolderRootActivity.setTitle(textToolbar);
+        binding.toolbarFolderRootActivity.setNavigationOnClickListener(v -> onBackPressed());
+
+        binding.createTaskRoot.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AddTaskRootActivity.class);
+            intent.putExtra(COLLECTION, collection);
+            startActivity(intent);
+        });
+
+        binding.toolbarFolderRootActivity.setTitle(textToolbar);
 
         Fragment currentFragment = new FragmentTasksRoot();
         Bundle bundle = new Bundle();

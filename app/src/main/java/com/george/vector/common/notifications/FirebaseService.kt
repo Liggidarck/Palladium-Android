@@ -38,7 +38,7 @@ class FirebaseService : FirebaseMessagingService() {
         val intent = Intent(this, LoadingActivity::class.java)
         intent.putExtra("id", message.data["taskId"])
         intent.putExtra("collection", message.data["collection"])
-        intent.action = "showmessage";
+        intent.action = "showmessage"
         intent.apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }

@@ -24,13 +24,13 @@ public class TaskAdapter extends FirestoreRecyclerAdapter<Task, TaskAdapter.Task
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull TaskAdapter.TaskHolder holder, int position, @NonNull Task model) {
-        holder.textViewTitle.setText(model.getName_task());
-        holder.textViewDescription.setText(model.getAddress());
-        holder.textViewPriority.setText(model.getDate_create());
-        holder.textViewTimeCreate.setText(model.getTime_create());
+    protected void onBindViewHolder(@NonNull TaskAdapter.TaskHolder holder, int position, @NonNull Task task) {
+        holder.textViewTitle.setText(task.getNameTask());
+        holder.textViewDescription.setText(task.getAddress());
+        holder.textViewPriority.setText(task.getDateCreate());
+        holder.textViewTimeCreate.setText(task.getTimeCreate());
 
-        boolean visibleUrgentTask = model.getUrgent();
+        boolean visibleUrgentTask = task.getUrgent();
         if(visibleUrgentTask)
             holder.imageWarningTask.setVisibility(View.VISIBLE);
         else

@@ -22,15 +22,31 @@
         android:name="com.george.vector.ui.help.root.FragmentRootHelp"
         android:label="FragmentRootHelp"
         tools:layout="@layout/fragment_root_help">
+
         <action
             android:id="@+id/actionNavHelpToFragmentAboutProject"
-            app:destination="@id/fragmentAboutProject" />
+            app:destination="@id/fragmentAboutProject"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
         <action
             android:id="@+id/actionNavHelpToFragmentHelpApp"
-            app:destination="@id/fragmentHelpApp" />
+            app:destination="@id/fragmentHelpApp"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
         <action
             android:id="@+id/actionNavHelpToFragmentDataHelp"
-            app:destination="@id/fragmentDataHelp" />
+            app:destination="@id/fragmentDataHelp"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
     </fragment>
 
     <fragment
@@ -41,11 +57,19 @@
 
         <action
             android:id="@+id/actionFragmentAboutProjectToFragmentDevelopApp"
-            app:destination="@id/fragmentDevelopApp" />
+            app:destination="@id/fragmentDevelopApp"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
         <action
             android:id="@+id/actionFragmentAboutProjectToFragmentDescriptionProject"
-            app:destination="@id/fragmentDescriptionProject" />
+            app:destination="@id/fragmentDescriptionProject"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
     </fragment>
 
@@ -54,9 +78,15 @@
         android:name="com.george.vector.ui.help.root.app.FragmentHelpApp"
         android:label="FragmentHelpApp"
         tools:layout="@layout/fragment_help_app">
+
         <action
             android:id="@+id/actionFragmentHelpAppToFragmentHelpTextApp"
-            app:destination="@id/fragmentHelpTextApp" />
+            app:destination="@id/fragmentHelpTextApp"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
     </fragment>
 
     <fragment
@@ -76,6 +106,7 @@
         android:name="com.george.vector.ui.help.root.FragmentDataHelp"
         android:label="FragmentDataHelp"
         tools:layout="@layout/fragment_data_help" />
+
     <fragment
         android:id="@+id/fragmentHelpTextApp"
         android:name="com.george.vector.ui.help.root.app.FragmentHelpTextApp"

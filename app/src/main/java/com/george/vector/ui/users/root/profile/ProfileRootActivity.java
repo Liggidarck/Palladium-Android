@@ -54,10 +54,10 @@ public class ProfileRootActivity extends AppCompatActivity {
         binding.externalDataUser.setText(String.format("%s %s", email, role));
 
         binding.toolbarProfileRoot.setNavigationOnClickListener(v -> onBackPressed());
-        binding.layoutNewPersonProfile.setOnClickListener(v ->
-                startActivity(new Intent(ProfileRootActivity.this, RegisterUserActivity.class)));
+
         binding.layoutEditPersonProfile.setOnClickListener(v ->
-                startActivity(new Intent(ProfileRootActivity.this, ListUsersActivity.class)));
+                startActivity(new Intent(ProfileRootActivity.this, ListUsersActivity.class))
+        );
 
         binding.settingsProfileBtn.setOnClickListener(v ->
             startActivity(new Intent(ProfileRootActivity.this, SettingsActivity.class))

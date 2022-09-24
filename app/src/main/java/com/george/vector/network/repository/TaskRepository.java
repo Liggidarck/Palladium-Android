@@ -6,8 +6,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.george.vector.common.notifications.SendNotification;
 import com.george.vector.network.model.Task;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -27,7 +25,7 @@ public class TaskRepository {
     public void createTask(Task task) {
         firebaseFirestore.collection(collection).add(task).addOnSuccessListener(documentReference -> {
             String id = documentReference.getId();
-            sendNotification(task.getUrgent(), task.getName_task(), id, collection);
+            sendNotification(task.getUrgent(), task.getNameTask(), id, collection);
         });
     }
 
@@ -46,22 +44,22 @@ public class TaskRepository {
 
     public void updateTask(String id, Task task) {
         Map<String, Object> taskMap = new HashMap<>();
-        taskMap.put("name_task", task.getName_task());
+        taskMap.put("nameTask", task.getNameTask());
         taskMap.put("address", task.getAddress());
-        taskMap.put("date_create", task.getDate_create());
+        taskMap.put("dateCreate", task.getDateCreate());
         taskMap.put("floor", task.getFloor());
         taskMap.put("cabinet", task.getCabinet());
         taskMap.put("litera", task.getLitera());
         taskMap.put("comment", task.getComment());
-        taskMap.put("date_done", task.getDate_done());
+        taskMap.put("dateDone", task.getDateDone());
         taskMap.put("executor", task.getExecutor());
         taskMap.put("status", task.getStatus());
         taskMap.put("urgent", task.getUrgent());
-        taskMap.put("time_create", task.getTime_create());
-        taskMap.put("email_creator", task.getEmail_creator());
+        taskMap.put("timeCreate", task.getTimeCreate());
+        taskMap.put("emailCreator", task.getEmailCreator());
         taskMap.put("image", task.getImage());
         taskMap.put("fullNameExecutor", task.getFullNameExecutor());
-        taskMap.put("name_creator", task.getNameCreator());
+        taskMap.put("nameCreator", task.getNameCreator());
         firebaseFirestore.collection(collection).document(id).update(taskMap);
     }
 
@@ -81,15 +79,15 @@ public class TaskRepository {
                     String floor = value.getString("floor");
                     String cabinet = value.getString("cabinet");
                     String letter = value.getString("litera");
-                    String nameTask = value.getString("name_task");
+                    String nameTask = value.getString("nameTask");
                     String comment = value.getString("comment");
                     String status = value.getString("status");
-                    String dateCreate = value.getString("date_create");
-                    String timeCreate = value.getString("time_create");
+                    String dateCreate = value.getString("dateCreate");
+                    String timeCreate = value.getString("timeCreate");
                     String imageId = value.getString("image");
-                    String emailCreator = value.getString("email_creator");
+                    String emailCreator = value.getString("emailCreator");
                     String emailExecutor = value.getString("executor");
-                    String dateDone = value.getString("date_done");
+                    String dateDone = value.getString("dateDone");
                     String fullNameExecutor = value.getString("fullNameExecutor");
                     String fullNameCreator = value.getString("nameCreator");
                     boolean urgent = value.getBoolean("urgent");
