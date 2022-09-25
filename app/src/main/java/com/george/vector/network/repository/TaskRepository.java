@@ -49,7 +49,7 @@ public class TaskRepository {
         taskMap.put("dateCreate", task.getDateCreate());
         taskMap.put("floor", task.getFloor());
         taskMap.put("cabinet", task.getCabinet());
-        taskMap.put("litera", task.getLitera());
+        taskMap.put("letter", task.getLetter());
         taskMap.put("comment", task.getComment());
         taskMap.put("dateDone", task.getDateDone());
         taskMap.put("executor", task.getExecutor());
@@ -78,7 +78,7 @@ public class TaskRepository {
                     String address = value.getString("address");
                     String floor = value.getString("floor");
                     String cabinet = value.getString("cabinet");
-                    String letter = value.getString("litera");
+                    String letter = value.getString("letter");
                     String nameTask = value.getString("nameTask");
                     String comment = value.getString("comment");
                     String status = value.getString("status");

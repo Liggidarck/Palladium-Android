@@ -136,7 +136,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
             requireNonNull(binding.taskAddress.getEditText()).setText(task.getAddress());
             requireNonNull(binding.taskFloor.getEditText()).setText(task.getFloor());
             requireNonNull(binding.taskCabinet.getEditText()).setText(task.getCabinet());
-            requireNonNull(binding.taskLetter.getEditText()).setText(task.getLitera());
+            requireNonNull(binding.taskLetter.getEditText()).setText(task.getLetter());
             requireNonNull(binding.taskName.getEditText()).setText(task.getNameTask());
             requireNonNull(binding.taskDateComplete.getEditText()).setText(task.getDateDone());
             requireNonNull(binding.taskEmailExecutor.getEditText()).setText(task.getExecutor());

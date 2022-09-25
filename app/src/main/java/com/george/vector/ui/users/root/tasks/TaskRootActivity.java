@@ -95,7 +95,7 @@ public class TaskRootActivity extends AppCompatActivity {
             address = task.getAddress();
             floor = String.format("Этаж: %s", task.getFloor());
             cabinet = String.format("Кабинет: %s", task.getCabinet());
-            letter = task.getLitera();
+            letter = task.getLetter();
             nameTask = task.getNameTask();
             comment = task.getComment();
             status = task.getStatus();
@@ -135,8 +135,8 @@ public class TaskRootActivity extends AppCompatActivity {
             if (dateDone == null)
                 binding.textViewDateDoneTaskRoot.setText("Дата выполнения не назначена");
             else {
-                String date_done_text = "Дата выполнения: " + dateDone;
-                binding.textViewDateDoneTaskRoot.setText(date_done_text);
+                String dateDoneText = "Дата выполнения: " + dateDone;
+                binding.textViewDateDoneTaskRoot.setText(dateDoneText);
             }
 
             if (fullNameCreator == null)

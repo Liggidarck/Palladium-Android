@@ -57,7 +57,7 @@ public class TaskUserActivity extends AppCompatActivity {
             dateCreate = task.getDateCreate();
             timeCreate = task.getTimeCreate();
             image = task.getImage();
-            letter = task.getLitera();
+            letter = task.getLetter();
 
             String dateCreateText = "Созданно: " + dateCreate + " " + timeCreate;
             if (!letter.equals("-") && !letter.isEmpty())

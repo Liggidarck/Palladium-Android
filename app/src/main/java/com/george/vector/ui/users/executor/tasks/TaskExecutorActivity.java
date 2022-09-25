@@ -67,7 +67,7 @@ public class TaskExecutorActivity extends AppCompatActivity {
 
         taskViewModel.getTask(id).observe(this, task -> {
             image = task.getImage();
-            letter = task.getLitera();
+            letter = task.getLetter();
             dateCreate = task.getDateCreate();
             timeCreate = task.getTimeCreate();
             dateDone = task.getDateDone();

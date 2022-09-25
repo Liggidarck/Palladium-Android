@@ -81,7 +81,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
             requireNonNull(binding.textAddress.getEditText()).setText(task.getAddress());
             requireNonNull(binding.textFloor.getEditText()).setText(task.getFloor());
             requireNonNull(binding.textCabinet.getEditText()).setText(task.getCabinet());
-            requireNonNull(binding.textLetter.getEditText()).setText(task.getLitera());
+            requireNonNull(binding.textLetter.getEditText()).setText(task.getLetter());
             requireNonNull(binding.textNameTask.getEditText()).setText(task.getNameTask());
             requireNonNull(binding.textStatus.getEditText()).setText(task.getStatus());
             requireNonNull(binding.textDateComplete.getEditText()).setText(task.getDateDone());

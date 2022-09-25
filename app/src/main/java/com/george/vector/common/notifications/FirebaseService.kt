@@ -39,10 +39,8 @@ class FirebaseService : FirebaseMessagingService() {
         intent.putExtra("id", message.data["taskId"])
         intent.putExtra("collection", message.data["collection"])
         intent.action = "showmessage"
-        intent.apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notification = NotificationCompat.Builder(this, CHANNEL_NEW_TASKS_CREATE_ID)
             .setContentTitle(message.data["title"])

@@ -22,14 +22,14 @@ public class Task {
     public Task() {}
 
     public Task(String nameTask, String address, String dateCreate, String floor,
-                String cabinet, String litera, String comment, String dateDone, String executor, String status,
+                String cabinet, String letter, String comment, String dateDone, String executor, String status,
                 String timeCreate, String emailCreator, boolean urgent, String image, String fullNameExecutor, String nameCreator) {
         this.nameTask = nameTask;
         this.address = address;
         this.dateCreate = dateCreate;
         this.floor = floor;
         this.cabinet = cabinet;
-        this.letter = litera;
+        this.letter = letter;
         this.comment = comment;
         this.dateDone = dateDone;
         this.executor = executor;
@@ -86,7 +86,7 @@ public class Task {
         return emailCreator;
     }
 
-    public String getLitera() {
+    public String getLetter() {
         return letter;
     }
 
