@@ -3,7 +3,7 @@ package com.george.vector.ui.users.root.tasks;
 import static com.george.vector.common.utils.consts.Keys.BAR_RUCHEEK;
 import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.BAR_ZVEZDOCHKA;
-import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
 import static com.george.vector.common.utils.consts.Keys.FOLDER;
 import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
@@ -95,7 +95,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         setContentView(binding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        collection = arguments.get(COLLECTION).toString();
+        collection = arguments.get(ZONE).toString();
 
         taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
                 this.getApplication(), collection)
@@ -154,18 +154,18 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         if (comment.isEmpty())
             comment = "Нет коментария к заявке";
 
-        Task task = new Task(taskName, address, dateCreate, floor, cabinet, letter, comment,
-                dateComplete, emailExecutor, taskStatus, timeCreate, emailCreator, urgent,
-                image, fullNameExecutor, fullNameCreator);
+//        Task task = new Task(taskName, address, dateCreate, floor, cabinet, letter, comment,
+//                dateComplete, emailExecutor, taskStatus, timeCreate, emailCreator, urgent,
+//                image, fullNameExecutor, fullNameCreator);
 
-        taskViewModel.createTask(task);
+//        taskViewModel.createTask(task);
 
         startListTasks();
     }
 
     private void startListTasks() {
         Intent intent = new Intent(this, FolderRootActivity.class);
-        intent.putExtra(COLLECTION, collection);
+        intent.putExtra(ZONE, collection);
         intent.putExtra(FOLDER, NEW_TASKS);
         intent.putExtra(EXECUTOR_EMAIL, "root");
         startActivity(intent);
@@ -173,7 +173,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
     private void getUserData() {
         String nameUser = userPrefViewModel.getUser().getName();
-        String lastnameUser = userPrefViewModel.getUser().getLast_name();
+        String lastnameUser = userPrefViewModel.getUser().getLastName();
         String patronymicUser = userPrefViewModel.getUser().getPatronymic();
         emailCreator = userPrefViewModel.getUser().getEmail();
         fullNameCreator = lastnameUser + " " + nameUser + " " + patronymicUser;

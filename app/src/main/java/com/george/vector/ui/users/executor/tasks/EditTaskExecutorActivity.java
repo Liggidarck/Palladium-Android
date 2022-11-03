@@ -1,6 +1,6 @@
 package com.george.vector.ui.users.executor.tasks;
 
-import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.ID;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 import static java.util.Objects.requireNonNull;
@@ -26,7 +26,7 @@ import com.george.vector.ui.users.executor.main.MainExecutorActivity;
 
 public class EditTaskExecutorActivity extends AppCompatActivity {
 
-    String id;
+    long id;
     String collection;
     String comment;
     String dateCreate;
@@ -52,8 +52,8 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.getString(ID);
-        collection = arguments.getString(COLLECTION);
+        id = arguments.getLong(ID);
+        collection = arguments.getString(ZONE);
 
         Log.d(TAG, "onCreate: id: " + id);
 
@@ -67,14 +67,9 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
 
         binding.toolbarEditTaskExecutor.setNavigationOnClickListener(v -> onBackPressed());
 
-        taskViewModel.getTask(id).observe(this, task -> {
+        taskViewModel.getTaskById(id).observe(this, task -> {
             dateCreate = task.getDateCreate();
-            timeCreate = task.getTimeCreate();
-            email = task.getEmailCreator();
-            fullNameExecutor = task.getFullNameExecutor();
-            emailCreator = task.getEmailCreator();
-            nameCreator = task.getNameCreator();
-            urgent = task.getUrgent();
+            urgent = task.isUrgent();
             image = task.getImage();
             comment = task.getComment();
 
@@ -82,10 +77,10 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
             requireNonNull(binding.textFloor.getEditText()).setText(task.getFloor());
             requireNonNull(binding.textCabinet.getEditText()).setText(task.getCabinet());
             requireNonNull(binding.textLetter.getEditText()).setText(task.getLetter());
-            requireNonNull(binding.textNameTask.getEditText()).setText(task.getNameTask());
+            requireNonNull(binding.textNameTask.getEditText()).setText(task.getName());
             requireNonNull(binding.textStatus.getEditText()).setText(task.getStatus());
             requireNonNull(binding.textDateComplete.getEditText()).setText(task.getDateDone());
-            requireNonNull(binding.textExecutor.getEditText()).setText(task.getExecutor());
+
 
             if (comment.equals("Нет коментария к заявке"))
                 requireNonNull(binding.textComment.getEditText()).setText("");
@@ -120,12 +115,12 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         String updateExecutor = requireNonNull(binding.textExecutor.getEditText()).getText().toString();
         String updateStatus = requireNonNull(binding.textStatus.getEditText()).getText().toString();
 
-        Task task = new Task(updateName, updateAddress, dateCreate, updateFloor,
-                updateCabinet, updateLetter, updateComment, updateDateTask,
-                updateExecutor, updateStatus, timeCreate, email, urgent, updateImage,
-                fullNameExecutor, nameCreator);
-
-        taskViewModel.updateTask(id, task);
+//        Task task = new Task(updateName, updateAddress, dateCreate, updateFloor,
+//                updateCabinet, updateLetter, updateComment, updateDateTask,
+//                updateExecutor, updateStatus, timeCreate, email, urgent, updateImage,
+//                fullNameExecutor, nameCreator);
+//
+//        taskViewModel.updateTask(id, task);
 
         Intent intent = new Intent(this, MainExecutorActivity.class);
         startActivity(intent);

@@ -8,6 +8,10 @@ public interface UserPreferencesBehaviour {
 
     User getUser();
 
+    void saveToken(String token);
+
+    String getToken();
+
     boolean getNotifications();
 
     void setNotifications(boolean notifications);

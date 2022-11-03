@@ -1,6 +1,6 @@
 package com.george.vector.ui.tasks;
 
-import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.ID;
 
 import android.content.Intent;
@@ -38,7 +38,7 @@ public class FragmentImageTask extends Fragment {
         assert args != null;
         image = args.getString("image_id");
         id = args.getString(ID);
-        collection = args.getString(COLLECTION);
+        collection = args.getString(ZONE);
 
         TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
                 this.requireActivity().getApplication(),
@@ -90,7 +90,7 @@ public class FragmentImageTask extends Fragment {
     void goActivityImage() {
         Intent intent = new Intent(FragmentImageTask.this.getContext(), ImageTaskActivity.class);
         intent.putExtra(ID, id);
-        intent.putExtra(COLLECTION, collection);
+        intent.putExtra(ZONE, collection);
         startActivity(intent);
     }
 

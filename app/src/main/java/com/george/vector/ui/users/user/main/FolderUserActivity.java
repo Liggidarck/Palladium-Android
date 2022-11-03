@@ -19,7 +19,7 @@ import com.george.vector.ui.users.user.tasks.FragmentTasksUser;
 
 public class FolderUserActivity extends AppCompatActivity {
 
-    String email, permission, folder, textToolbar;
+    String email, zone, folder, textToolbar;
     ActivityFolderUserBinding folderUserBinding;
 
     @Override
@@ -35,7 +35,7 @@ public class FolderUserActivity extends AppCompatActivity {
         folder = arguments.getString(FOLDER);
 
         email = userDataViewModel.getUser().getEmail();
-        permission = userDataViewModel.getUser().getPermission();
+        zone = userDataViewModel.getUser().getZone();
 
 
         if (folder.equals(NEW_TASKS))

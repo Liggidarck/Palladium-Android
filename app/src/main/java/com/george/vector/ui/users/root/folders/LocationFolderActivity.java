@@ -4,7 +4,7 @@ import static com.george.vector.common.utils.consts.Keys.ARCHIVE_TASKS;
 import static com.george.vector.common.utils.consts.Keys.BAR_RUCHEEK;
 import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.BAR_ZVEZDOCHKA;
-import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
 import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
 import static com.george.vector.common.utils.consts.Keys.FOLDER;
@@ -24,7 +24,7 @@ import com.george.vector.databinding.ActivityLocationFolderBinding;
 
 public class LocationFolderActivity extends AppCompatActivity {
 
-    ActivityLocationFolderBinding binding;
+    private ActivityLocationFolderBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,25 +34,25 @@ public class LocationFolderActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        String collection = arguments.get(COLLECTION).toString();
+        String zone = arguments.get(ZONE).toString();
         String executed = arguments.get(EXECUTOR_EMAIL).toString();
 
-        if (collection.equals(OST_SCHOOL))
+        if (zone.equals(OST_SCHOOL))
             binding.toolbarLocationFolderRoot.setTitle(getString(R.string.ost_text));
 
-        if (collection.equals(OST_AIST))
+        if (zone.equals(OST_AIST))
             binding.toolbarLocationFolderRoot.setTitle(getString(R.string.ost_stork_text));
 
-        if (collection.equals(OST_YAGODKA))
+        if (zone.equals(OST_YAGODKA))
             binding.toolbarLocationFolderRoot.setTitle(getString(R.string.ost_berry_text));
 
-        if (collection.equals(BAR_SCHOOL))
+        if (zone.equals(BAR_SCHOOL))
             binding.toolbarLocationFolderRoot.setTitle(getString(R.string.bar_text));
 
-        if (collection.equals(BAR_RUCHEEK))
+        if (zone.equals(BAR_RUCHEEK))
             binding.toolbarLocationFolderRoot.setTitle(getString(R.string.bar_stream_text));
 
-        if (collection.equals(BAR_ZVEZDOCHKA))
+        if (zone.equals(BAR_ZVEZDOCHKA))
             binding.toolbarLocationFolderRoot.setTitle(getString(R.string.bar_star_text));
 
         binding.toolbarLocationFolderRoot.setNavigationOnClickListener(v -> onBackPressed());
@@ -60,7 +60,7 @@ public class LocationFolderActivity extends AppCompatActivity {
         binding.newTasksCardRoot.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);
             intent.putExtra(FOLDER, NEW_TASKS);
-            intent.putExtra(COLLECTION, collection);
+            intent.putExtra(ZONE, zone);
             intent.putExtra(EXECUTOR_EMAIL, executed);
             startActivity(intent);
         });
@@ -68,7 +68,7 @@ public class LocationFolderActivity extends AppCompatActivity {
         binding.inProgressTasksCardRoot.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);
             intent.putExtra(FOLDER, IN_PROGRESS_TASKS);
-            intent.putExtra(COLLECTION, collection);
+            intent.putExtra(ZONE, zone);
             intent.putExtra(EXECUTOR_EMAIL, executed);
             startActivity(intent);
         });
@@ -76,7 +76,7 @@ public class LocationFolderActivity extends AppCompatActivity {
         binding.completedTasksCardRoot.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);
             intent.putExtra(FOLDER, COMPLETED_TASKS);
-            intent.putExtra(COLLECTION, collection);
+            intent.putExtra(ZONE, zone);
             intent.putExtra(EXECUTOR_EMAIL, executed);
             startActivity(intent);
         });
@@ -84,7 +84,7 @@ public class LocationFolderActivity extends AppCompatActivity {
         binding.archiveTasksCardRoot.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);
             intent.putExtra(FOLDER, ARCHIVE_TASKS);
-            intent.putExtra(COLLECTION, collection);
+            intent.putExtra(ZONE, zone);
             intent.putExtra(EXECUTOR_EMAIL, executed);
             startActivity(intent);
         });

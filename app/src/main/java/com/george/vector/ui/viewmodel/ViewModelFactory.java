@@ -9,18 +9,26 @@ import androidx.lifecycle.ViewModelProvider;
 public class ViewModelFactory implements ViewModelProvider.Factory {
 
     private final Application application;
-    private final String collection;
+    private final String token;
 
-    public ViewModelFactory(Application application, String collection) {
+    public ViewModelFactory(Application application, String token) {
         this.application = application;
-        this.collection = collection;
+        this.token = token;
     }
 
     @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new TaskViewModel(application, collection);
-    }
 
+        if (modelClass == TaskViewModel.class) {
+            return (T) new TaskViewModel(application, token);
+        }
+
+        if (modelClass == UserViewModel.class) {
+            return (T) new UserViewModel(application, token);
+        }
+
+        return null;
+    }
 }

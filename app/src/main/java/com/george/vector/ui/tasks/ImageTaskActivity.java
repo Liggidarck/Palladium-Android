@@ -1,6 +1,6 @@
 package com.george.vector.ui.tasks;
 
-import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.ID;
 
 import android.os.Bundle;
@@ -17,7 +17,8 @@ import com.george.vector.ui.viewmodel.ViewModelFactory;
 
 public class ImageTaskActivity extends AppCompatActivity {
 
-    String id, collection, image;
+    long id;
+    String collection, image;
 
     ActivityImageTaskBinding binding;
 
@@ -31,8 +32,8 @@ public class ImageTaskActivity extends AppCompatActivity {
         binding.toolbarImage.setNavigationOnClickListener(v -> onBackPressed());
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.getString(ID);
-        collection = arguments.getString(COLLECTION);
+        id = arguments.getLong(ID);
+        collection = arguments.getString(ZONE);
 
         String bufferSizePreference = PreferenceManager
                 .getDefaultSharedPreferences(ImageTaskActivity.this)
@@ -50,7 +51,7 @@ public class ImageTaskActivity extends AppCompatActivity {
                         .rotation(binding.imageViewTask.getRotation() + 90)
                         .setDuration(60));
 
-        taskViewModel.getTask(id).observe(this, task -> {
+        taskViewModel.getTaskById(id).observe(this, task -> {
             binding.progressBarImage.setVisibility(View.VISIBLE);
             image = task.getImage();
             if (image != null) {

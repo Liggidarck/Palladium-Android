@@ -20,8 +20,6 @@ public class EditDataUserActivity extends AppCompatActivity {
     ActivityEditDataUserBinding binding;
     TextValidatorUtils textValidator = new TextValidatorUtils();
 
-    String permissionUser;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_Palladium);
@@ -29,23 +27,10 @@ public class EditDataUserActivity extends AppCompatActivity {
         binding = ActivityEditDataUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         binding.toolbarEditDataUser.setNavigationOnClickListener(v -> onBackPressed());
 
-        String userId = requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        userViewModel.getUser(userId).observe(this, user -> {
-            binding.progressBarEditDataUser.setVisibility(View.VISIBLE);
-            requireNonNull(binding.textNameUser.getEditText()).setText(user.getName());
-            requireNonNull(binding.textLastNameUser.getEditText()).setText(user.getLast_name());
-            requireNonNull(binding.textPatronymicUser.getEditText()).setText(user.getPatronymic());
-            requireNonNull(binding.textEmailUser.getEditText()).setText(user.getEmail());
-            requireNonNull(binding.textRoleUser.getEditText()).setText(user.getRole());
-            requireNonNull(binding.textPasswordUser.getEditText()).setText(user.getPassword());
-            permissionUser = user.getPermission();
-            binding.progressBarEditDataUser.setVisibility(View.INVISIBLE);
-        });
 
         binding.btnSaveUser.setOnClickListener(v -> {
             binding.progressBarEditDataUser.setVisibility(View.VISIBLE);
@@ -60,9 +45,6 @@ public class EditDataUserActivity extends AppCompatActivity {
                 return;
             }
 
-            binding.progressBarEditDataUser.setVisibility(View.VISIBLE);
-            userViewModel.updateUser(userId, new User(nameUser, lastNameUser, patronymicUser,
-                    emailUser, roleUser, permissionUser, password));
             binding.progressBarEditDataUser.setVisibility(View.INVISIBLE);
             onBackPressed();
         });

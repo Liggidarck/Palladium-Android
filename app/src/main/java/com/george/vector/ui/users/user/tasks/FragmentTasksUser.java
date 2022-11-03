@@ -1,7 +1,7 @@
 package com.george.vector.ui.users.user.tasks;
 
 import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
-import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.FOLDER;
 import static com.george.vector.common.utils.consts.Keys.ID;
 import static com.george.vector.common.utils.consts.Logs.TAG_TASK_USER_ACTIVITY;
@@ -44,15 +44,13 @@ public class FragmentTasksUser extends Fragment {
         UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 
         String email = userDataViewModel.getUser().getEmail();
-        String permission = userDataViewModel.getUser().getPermission();
+        String zone = userDataViewModel.getUser().getZone();
         String folder = args.getString(FOLDER);
 
-        if(permission.equals(BAR_SCHOOL)) {
+        if(zone.equals(BAR_SCHOOL)) {
             userBinding.chipNewSchoolTasksUser.setVisibility(View.INVISIBLE);
             userBinding.chipOldSchoolTasksUser.setVisibility(View.INVISIBLE);
         }
-
-        setUpTasks(permission, email, folder);
 
         return view;
     }
@@ -63,45 +61,6 @@ public class FragmentTasksUser extends Fragment {
         userBinding.recyclerviewUserTasks.setAdapter(taskAdapter);
     }
 
-    void setUpTasks(String collection, String email, String status) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference collectionReference = db.collection(collection);
-
-        Query query = collectionReference
-                .whereEqualTo("email_creator", email)
-                .whereEqualTo("status", status);
-
-        FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
-                .setQuery(query, Task.class)
-                .build();
-        taskAdapter = new TaskAdapter(options);
-
-        setUpRecyclerView();
-
-        taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
-            String id = documentSnapshot.getId();
-
-            Log.d(TAG_TASK_USER_ACTIVITY, String.format("position: %d id: %s", position, id));
-
-            Intent intent = new Intent(FragmentTasksUser.this.getContext(), TaskUserActivity.class);
-            intent.putExtra(ID, id);
-            intent.putExtra(COLLECTION, collection);
-            startActivity(intent);
-
-        });
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        taskAdapter.startListening();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        taskAdapter.stopListening();
-    }
 
     @Override
     public void onDestroyView() {

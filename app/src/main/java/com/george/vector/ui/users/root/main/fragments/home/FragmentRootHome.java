@@ -26,9 +26,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class FragmentRootHome extends Fragment {
 
-    String zone, email;
+    private String zone, email;
 
-    FragmentRootHomeBinding homeBinding;
+    private FragmentRootHomeBinding homeBinding;
 
     @Nullable
     @Override
@@ -42,7 +42,7 @@ public class FragmentRootHome extends Fragment {
 
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         String nameUser = userPrefViewModel.getUser().getName();
-        String lastnameUser = userPrefViewModel.getUser().getLast_name();
+        String lastnameUser = userPrefViewModel.getUser().getLastName();
         email = userPrefViewModel.getUser().getEmail();
 
         String _name = Character.toString(nameUser.charAt(0));

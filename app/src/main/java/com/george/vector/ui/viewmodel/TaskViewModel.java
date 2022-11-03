@@ -22,6 +22,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 public class TaskViewModel extends AndroidViewModel {
@@ -30,26 +31,42 @@ public class TaskViewModel extends AndroidViewModel {
     final FirebaseStorage firebaseStorage;
     final StorageReference storageReference;
 
-    public TaskViewModel(@NonNull Application application, String collection) {
+    public TaskViewModel(@NonNull Application application, String token) {
         super(application);
-        repository = new TaskRepository(collection);
+        repository = new TaskRepository(token);
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
     }
 
-    public MutableLiveData<Task> getTask(String taskId) {
-        return repository.getTask(taskId);
+    public MutableLiveData<String> createTask(Task task) {
+        return repository.createTask(task);
     }
 
-    public void createTask(Task task) {
-        repository.createTask(task);
+    public MutableLiveData<String> editTask(Task task, long id) {
+        return repository.editTask(task, id);
     }
 
-    public void updateTask(String id, Task task) {
-        repository.updateTask(id, task);
+    public MutableLiveData<List<Task>> getTasksByExecutor(long id) {
+        return repository.getTasksByExecutor(id);
     }
 
-    public void deleteTask(String id, String imageId) {
+    public MutableLiveData<List<Task>> getTasksByCreator(long id) {
+        return repository.getTasksByCreator(id);
+    }
+
+    public MutableLiveData<List<Task>> getTasksByStatus(String status) {
+        return repository.getTasksByStatus(status);
+    }
+
+    public MutableLiveData<List<Task>> getAllTasks() {
+        return repository.getAllTasks();
+    }
+
+    public MutableLiveData<Task> getTaskById(long id) {
+        return repository.getTaskById(id);
+    }
+
+    public void deleteTask(long id, String imageId) {
         if (imageId != null) {
             String storageUrl = "images/" + imageId;
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(storageUrl);

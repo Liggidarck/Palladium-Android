@@ -27,7 +27,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 public class SettingsExecutorBottomSheet extends BottomSheetDialogFragment {
 
-    SettingsExecutorBottomSheetBinding binding;
+    private SettingsExecutorBottomSheetBinding binding;
 
     @Nullable
     @Override
@@ -35,7 +35,6 @@ public class SettingsExecutorBottomSheet extends BottomSheetDialogFragment {
         binding = SettingsExecutorBottomSheetBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         String email = userDataViewModel.getUser().getEmail();
         Log.d("ExecutorBottomSheet", String.format("email: %s", email));
@@ -54,11 +53,7 @@ public class SettingsExecutorBottomSheet extends BottomSheetDialogFragment {
                     .setTitle(getString(R.string.warning))
                     .setMessage("Вы действительно хотите выйти из аккаунта?")
                     .setPositiveButton("ok", (dialog1, which) -> {
-                        firebaseAuth.signOut();
-                        userDataViewModel.saveUser(new User("", "", "", "", "", "", ""));
-                        FirebaseMessaging.getInstance().unsubscribeFromTopic(TOPIC_NEW_TASKS_CREATE);
-                        startActivity(new Intent(SettingsExecutorBottomSheet.this.requireActivity(), LoginActivity.class));
-                        requireActivity().finish();
+
                     })
                     .setNegativeButton("Отмена", (dialog12, which) -> dialog12.dismiss())
                     .create();

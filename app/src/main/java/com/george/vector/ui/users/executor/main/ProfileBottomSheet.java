@@ -10,17 +10,16 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.databinding.ProfileBottomSheetBinding;
+import com.george.vector.network.model.Role;
 import com.george.vector.ui.viewmodel.UserViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProfileBottomSheet extends BottomSheetDialogFragment {
 
-    FirebaseAuth firebaseAuth;
-
-    ProfileBottomSheetBinding sheetBinding;
+    private ProfileBottomSheetBinding sheetBinding;
 
     @Nullable
     @Override
@@ -28,18 +27,22 @@ public class ProfileBottomSheet extends BottomSheetDialogFragment {
         sheetBinding = ProfileBottomSheetBinding.inflate(inflater, container, false);
         View view = sheetBinding.getRoot();
 
-        firebaseAuth = FirebaseAuth.getInstance();
         UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         sheetBinding.closeBtn.setOnClickListener(v -> dismiss());
 
-        String userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        userViewModel.getUser(userId).observe(this, user -> {
+        long id = 0;
+
+        userViewModel.getUserById(id).observe(this, user -> {
+
+            List<Role> roleList;
+
             String name = user.getName();
-            String lastName = user.getLast_name();
+            String lastName = user.getLastName();
             String patronymic = user.getPatronymic();
             String email = user.getEmail();
-            String role = user.getRole();
+            roleList = user.getRole();
+            String role = roleList.get(0).getName();
 
             String fullName = String.format("%s %s %s", lastName, name, patronymic);
             String charName = Character.toString(name.charAt(0));

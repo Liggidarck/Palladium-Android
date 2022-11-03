@@ -9,7 +9,7 @@ import com.george.vector.network.model.User;
 
 public class UserDataViewModel extends AndroidViewModel {
 
-    UserPreferencesRepository repository;
+    private final UserPreferencesRepository repository;
 
     public UserDataViewModel(@NonNull Application application) {
         super(application);
@@ -22,6 +22,14 @@ public class UserDataViewModel extends AndroidViewModel {
 
     public User getUser() {
         return repository.getUser();
+    }
+
+    public void saveToken(String token) {
+        repository.saveToken(token);
+    }
+
+    public String getToken() {
+        return repository.getToken();
     }
 
     public boolean getNotifications() {

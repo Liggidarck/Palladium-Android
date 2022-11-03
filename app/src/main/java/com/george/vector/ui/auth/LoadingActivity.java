@@ -1,12 +1,8 @@
 package com.george.vector.ui.auth;
 
-import static com.george.vector.common.utils.consts.Keys.COLLECTION;
-import static com.george.vector.common.utils.consts.Keys.ID;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,19 +12,16 @@ import androidx.lifecycle.ViewModelProvider;
 import com.george.vector.R;
 import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityLoadingBinding;
+import com.george.vector.network.model.Role;
 import com.george.vector.ui.users.executor.main.MainExecutorActivity;
 import com.george.vector.ui.users.root.main.MainRootActivity;
-import com.george.vector.ui.users.root.tasks.TaskRootActivity;
 import com.george.vector.ui.users.user.main.MainUserActivity;
-import com.google.firebase.auth.FirebaseAuth;
 
-import java.io.IOException;
+import java.util.List;
 
 public class LoadingActivity extends AppCompatActivity {
 
-    FirebaseAuth firebaseAuth;
-
-    ActivityLoadingBinding loadingBinding;
+    private ActivityLoadingBinding loadingBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,34 +31,20 @@ public class LoadingActivity extends AppCompatActivity {
         loadingBinding = ActivityLoadingBinding.inflate(getLayoutInflater());
         setContentView(loadingBinding.getRoot());
 
-        try {
-            Bundle arguments = getIntent().getExtras();
-            String id = arguments.getString(ID);
-            String collection = arguments.getString(COLLECTION);
-            if (!id.equals(null) || !collection.equals(null)) {
-                Log.d("Loading", id);
-                Intent intent = new Intent(this, TaskRootActivity.class);
-                intent.putExtra("id", id);
-                intent.putExtra("collection", collection);
-                startActivity(intent);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        firebaseAuth = FirebaseAuth.getInstance();
-
         UserDataViewModel preferencesViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+
+        String token = preferencesViewModel.getToken();
+        String username = preferencesViewModel.getUser().getUsername();
+
         String name = preferencesViewModel.getUser().getName();
-        String lastname = preferencesViewModel.getUser().getLast_name();
+        String lastname = preferencesViewModel.getUser().getLastName();
         String patronymic = preferencesViewModel.getUser().getPatronymic();
         String email = preferencesViewModel.getUser().getEmail();
-        String permission = preferencesViewModel.getUser().getPermission();
-        String role = preferencesViewModel.getUser().getRole();
+        String zone = preferencesViewModel.getUser().getZone();
 
-        if (firebaseAuth.getCurrentUser() != null &
-                (name.equals("") || lastname.equals("") || patronymic.equals("") || email.equals("")
-                        || permission.equals("") || role.equals(""))) {
+        List<Role> roleList = preferencesViewModel.getUser().getRole();
+
+        if (token.equals(null)) {
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle("Внимание!")
                     .setMessage("Необходимо войти в аккаунт снова. Если вы не помните совой логин, обратитесь в техническую поддрежку")
@@ -76,26 +55,20 @@ public class LoadingActivity extends AppCompatActivity {
                         startActivity(Intent.createChooser(intent, "Выберите приложение для отправки электронного письма разработчику приложения"));
 
                     })
-                    .setPositiveButton("ок", (dialog12, which) -> {
-                        firebaseAuth.signOut();
-                        startActivity(new Intent(this, LoginActivity.class));
-                    })
+                    .setPositiveButton("ок", (dialog12, which) ->
+                            startActivity(new Intent(this, LoginActivity.class)))
                     .create();
             dialog.show();
         }
 
-        if (firebaseAuth.getCurrentUser() != null & !role.equals("")) {
-            startApp(role);
-        }
-
-        if (firebaseAuth.getCurrentUser() == null & role.equals("")) {
-            startActivity(new Intent(this, LoginActivity.class));
+        if (token != null & !roleList.get(0).equals(null)) {
+            startApp(roleList.get(0).getName());
         }
 
     }
 
     void startApp(String role) {
-        if (role.equals("Root"))
+        if (role.equals("ROLE_DEVELOPER"))
             startActivity(new Intent(this, MainRootActivity.class));
 
         if (role.equals("Пользователь"))

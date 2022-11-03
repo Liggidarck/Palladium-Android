@@ -16,9 +16,13 @@ import com.george.vector.R;
 import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.databinding.EditUserActivityBinding;
+import com.george.vector.network.model.Role;
 import com.george.vector.network.model.User;
 import com.george.vector.ui.viewmodel.UserViewModel;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditUserActivity extends AppCompatActivity {
 
@@ -27,8 +31,8 @@ public class EditUserActivity extends AppCompatActivity {
     private String patronymicUser;
     private String emailUser;
     private String roleUser;
-    private String permissionUser;
-    private String userID;
+    private String zoneUser;
+    private long userID;
     private String password;
 
     private EditUserActivityBinding binding;
@@ -46,25 +50,28 @@ public class EditUserActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        userID = arguments.get("user_id").toString();
+        userID = arguments.getLong("user_id");
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
-        userViewModel.getUser(userID).observe(this, user -> {
+        userViewModel.getUserById(userID).observe(this, user -> {
+            List<Role> roleList = new ArrayList<>();
+
             nameUser = user.getName();
-            lastNameUser = user.getLast_name();
+            lastNameUser = user.getLastName();
             patronymicUser = user.getPatronymic();
             emailUser = user.getEmail();
-            roleUser = user.getRole();
-            permissionUser = user.getPermission();
+            roleList = user.getRole();
+            zoneUser = user.getZone();
             password = user.getPassword();
+            roleUser = roleList.get(0).getName();
 
             requireNonNull(binding.textName.getEditText()).setText(nameUser);
             requireNonNull(binding.textLastName.getEditText()).setText(lastNameUser);
             requireNonNull(binding.textPatronymic.getEditText()).setText(patronymicUser);
             requireNonNull(binding.textEmail.getEditText()).setText(emailUser);
             requireNonNull(binding.textRole.getEditText()).setText(roleUser);
-            requireNonNull(binding.textPermissions.getEditText()).setText(permissionUser);
+            requireNonNull(binding.textPermissions.getEditText()).setText(zoneUser);
 
             if (emailUser.equals("api@2122.pro"))
                 binding.textPassword.getEditText().setText("Пароль? Какой пароль? ¯\\_(ツ)_/¯");
@@ -105,7 +112,7 @@ public class EditUserActivity extends AppCompatActivity {
         patronymicUser = requireNonNull(binding.textPatronymic.getEditText()).getText().toString();
         emailUser = requireNonNull(binding.textEmail.getEditText()).getText().toString();
         roleUser = requireNonNull(binding.textRole.getEditText()).getText().toString();
-        permissionUser = requireNonNull(binding.textPermissions.getEditText()).getText().toString();
+        zoneUser = requireNonNull(binding.textPermissions.getEditText()).getText().toString();
         password = requireNonNull(binding.textPassword.getEditText()).getText().toString();
 
         if(!validateFields()) {
@@ -120,8 +127,7 @@ public class EditUserActivity extends AppCompatActivity {
 
         binding.progressBarEditUser.setVisibility(View.VISIBLE);
 
-        userViewModel.updateUser(userID, new User(nameUser, lastNameUser, patronymicUser,
-                emailUser, roleUser, permissionUser, password));
+
 
         binding.progressBarEditUser.setVisibility(View.INVISIBLE);
     }
@@ -144,7 +150,7 @@ public class EditUserActivity extends AppCompatActivity {
                 textValidator.isEmptyField(patronymicUser, binding.textPatronymic) &
                 textValidator.isEmptyField(emailUser, binding.textEmail) &
                 textValidator.isEmptyField(roleUser, binding.textRole) &
-                textValidator.isEmptyField(permissionUser, binding.textPermissions) &
+                textValidator.isEmptyField(zoneUser, binding.textPermissions) &
                 textValidator.isEmptyField(password, binding.textPassword);
     }
 }

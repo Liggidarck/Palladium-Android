@@ -17,13 +17,9 @@ import com.google.firebase.firestore.Query;
 
 public class ListUsersActivity extends AppCompatActivity {
 
-    private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    private final CollectionReference collectionReference = firebaseFirestore.collection("users");
-
     private UserAdapter adapter;
-    private Query query;
 
-    ActivityListUsersBinding usersBinding;
+    private ActivityListUsersBinding usersBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,78 +32,19 @@ public class ListUsersActivity extends AppCompatActivity {
 
         setUpRecyclerView();
 
-        usersBinding.chipRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-            if(isChecked){
-                query = collectionReference.whereEqualTo("role", "Root");
-
-                FirestoreRecyclerOptions<User> AdminOptions = new FirestoreRecyclerOptions.Builder<User>()
-                        .setQuery(query, User.class)
-                        .build();
-
-                adapter.updateOptions(AdminOptions);
-            }
-
-        });
-
-        usersBinding.chipUser.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(isChecked){
-                query = collectionReference.whereEqualTo("role", "Пользователь");
-
-                FirestoreRecyclerOptions<User> UserOptions = new FirestoreRecyclerOptions.Builder<User>()
-                        .setQuery(query, User.class)
-                        .build();
-
-                adapter.updateOptions(UserOptions);
-            }
-
-        });
-
-        usersBinding.chipWorker.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(isChecked){
-                query = collectionReference.whereEqualTo("role", "Исполнитель");
-
-                FirestoreRecyclerOptions<User> ExecutorOptions = new FirestoreRecyclerOptions.Builder<User>()
-                        .setQuery(query, User.class)
-                        .build();
-
-                adapter.updateOptions(ExecutorOptions);
-            }
-        });
-
     }
 
     private void setUpRecyclerView() {
-        query = collectionReference.whereEqualTo("role", "Root");
-
-        FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
-                .setQuery(query, User.class)
-                .build();
-
-        adapter = new UserAdapter(options);
-
         usersBinding.recyclerViewListUsers.setHasFixedSize(true);
         usersBinding.recyclerViewListUsers.setLayoutManager(new LinearLayoutManager(this));
         usersBinding.recyclerViewListUsers.setAdapter(adapter);
 
-        adapter.setOnItemClickListener((documentSnapshot, position) -> {
-            String id = documentSnapshot.getId();
+        adapter.setOnItemClickListener((user, position) -> {
+            long id = user.getId();
             Intent intent = new Intent(this, EditUserActivity.class);
             intent.putExtra("user_id", id);
             startActivity(intent);
         });
-    }
-
-    @Override
-    protected void onStart() {
-        adapter.startListening();
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
     }
 
 }

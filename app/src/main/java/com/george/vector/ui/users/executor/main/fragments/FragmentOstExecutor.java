@@ -1,6 +1,6 @@
 package com.george.vector.ui.users.executor.main.fragments;
 
-import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 
 import android.content.Intent;
@@ -28,7 +28,7 @@ public class FragmentOstExecutor extends Fragment {
 
         binding.ostSchool.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentOstExecutor.this.getContext(), FolderExecutorActivity.class);
-            intent.putExtra(COLLECTION, OST_SCHOOL);
+            intent.putExtra(ZONE, OST_SCHOOL);
             startActivity(intent);
         });
 

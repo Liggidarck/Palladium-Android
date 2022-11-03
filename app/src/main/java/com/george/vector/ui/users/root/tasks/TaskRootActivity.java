@@ -1,6 +1,6 @@
 package com.george.vector.ui.users.root.tasks;
 
-import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.ID;
 
 import android.app.AlertDialog;
@@ -27,7 +27,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class TaskRootActivity extends AppCompatActivity {
 
-    private String id;
+    private long id;
     private String address;
     private String floor;
     private String cabinet;
@@ -39,8 +39,8 @@ public class TaskRootActivity extends AppCompatActivity {
     private String timeCreate;
     private String collection;
     private String imageId;
-    private String emailCreator;
-    private String emailExecutor;
+    private int creatorId;
+    private int executorId;
     private String dateDone;
     private String fullNameExecutor;
     private String fullNameCreator;
@@ -72,7 +72,7 @@ public class TaskRootActivity extends AppCompatActivity {
         binding.editTaskRootBtn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskRootActivity.class);
             intent.putExtra(ID, id);
-            intent.putExtra(COLLECTION, collection);
+            intent.putExtra(ZONE, collection);
             startActivity(intent);
         });
 
@@ -82,32 +82,32 @@ public class TaskRootActivity extends AppCompatActivity {
     private void initData() {
         Bundle arguments = getIntent().getExtras();
 
-        id = arguments.getString(ID);
-        collection = arguments.getString(COLLECTION);
+        id = arguments.getLong(ID);
+        collection = arguments.getString(ZONE);
 
         confirmDelete = PreferenceManager
                 .getDefaultSharedPreferences(this)
                 .getBoolean("confirm_before_deleting_root", true);
     }
 
-    void getTask(String collection, String id) {
-        taskViewModel.getTask(id).observe(TaskRootActivity.this, task -> {
+    void getTask(String collection, long id) {
+        taskViewModel.getTaskById(id).observe(this, task -> {
             address = task.getAddress();
             floor = String.format("Этаж: %s", task.getFloor());
             cabinet = String.format("Кабинет: %s", task.getCabinet());
             letter = task.getLetter();
-            nameTask = task.getNameTask();
+
+            nameTask = task.getName();
             comment = task.getComment();
             status = task.getStatus();
             dateCreate = task.getDateCreate();
-            timeCreate = task.getTimeCreate();
+
             imageId = task.getImage();
-            emailCreator = task.getEmailCreator();
-            emailExecutor = task.getExecutor();
+            creatorId = task.getCreatorId();
+            executorId = task.getExecutorId();
             dateDone = task.getDateDone();
-            fullNameExecutor = task.getFullNameExecutor();
-            fullNameCreator = task.getNameCreator();
-            urgent = task.getUrgent();
+
+            urgent = task.isUrgent();
 
             String dateCreateText = "Созданно: " + dateCreate + " " + timeCreate;
 
@@ -118,7 +118,7 @@ public class TaskRootActivity extends AppCompatActivity {
             binding.textViewCommentTaskRoot.setText(comment);
             binding.textViewStatusTaskRoot.setText(status);
             binding.textViewDateCreateTaskRoot.setText(dateCreateText);
-            binding.textViewEmailCreatorTaskRoot.setText(emailCreator);
+            binding.textViewEmailCreatorTaskRoot.setText(creatorId);
 
             if (status.equals("Новая заявка"))
                 binding.circleStatusRoot.setImageResource(R.color.red);
@@ -139,28 +139,14 @@ public class TaskRootActivity extends AppCompatActivity {
                 binding.textViewDateDoneTaskRoot.setText(dateDoneText);
             }
 
-            if (fullNameCreator == null)
-                binding.textViewFullNameCreator.setText("Нет данных об этом пользователе");
-            else
-                binding.textViewFullNameCreator.setText(fullNameCreator);
-
-            if (fullNameExecutor == null)
-                binding.textViewFullNameExecutor.setText("Нет назначенного исполнителя");
-            else
-                binding.textViewFullNameExecutor.setText(fullNameExecutor);
-
-            if (emailExecutor == null)
-                binding.textViewEmailExecutorTaskRoot.setText("Нет данных");
-            else
-                binding.textViewEmailExecutorTaskRoot.setText(emailExecutor);
 
             if (imageId != null) {
                 Fragment imageFragment = new FragmentImageTask();
                 Bundle bundle = new Bundle();
                 bundle.putString("image_id", imageId);
-                bundle.putString(ID, id);
-                bundle.putString(COLLECTION, collection);
-                bundle.putString(COLLECTION, this.collection);
+                bundle.putLong(ID, id);
+                bundle.putString(ZONE, collection);
+                bundle.putString(ZONE, this.collection);
                 imageFragment.setArguments(bundle);
 
                 getSupportFragmentManager()
@@ -208,8 +194,8 @@ public class TaskRootActivity extends AppCompatActivity {
 
             String sharing_data = nameTask + "\n" + comment + "\n \n" +
                     address + "\n" + "Этаж: " + floor + "\n" + "Кабинет: " + cabinet + "\n \n" +
-                    "Создатель заявки" + "\n" + fullNameCreator + "\n" + emailCreator + "\n \n" +
-                    "Исполнитель" + "\n" + fullNameExecutor + "\n" + emailExecutor + "\n" + "Дата выполнения: " + dateDone + "\n \n" +
+                    "Создатель заявки" + "\n" + fullNameCreator + "\n" + creatorId + "\n \n" +
+                    "Исполнитель" + "\n" + fullNameExecutor + "\n" + executorId + "\n" + "Дата выполнения: " + dateDone + "\n \n" +
                     "Статус" + "\n" + status + "\n" + "Созданно: " + dateCreate + " " + timeCreate + "\n \n" +
                     "Изображение" + "\n" + imageUrl;
 

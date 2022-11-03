@@ -1,6 +1,6 @@
 package com.george.vector.ui.users.user.tasks;
 
-import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.ID;
 
 import android.os.Bundle;
@@ -20,7 +20,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class TaskUserActivity extends AppCompatActivity {
 
-    private String id;
+    private long id;
     private String collection;
     private String cabinet;
     private String comment;
@@ -41,8 +41,8 @@ public class TaskUserActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.getString(ID);
-        collection = arguments.getString(COLLECTION);
+        id = arguments.getLong(ID);
+        collection = arguments.getString(ZONE);
 
         TaskViewModel taskViewModel = new ViewModelProvider(
                 this,
@@ -52,10 +52,10 @@ public class TaskUserActivity extends AppCompatActivity {
         setSupportActionBar(binding.topAppBarTaskUser);
         binding.topAppBarTaskUser.setNavigationOnClickListener(v -> onBackPressed());
 
-        taskViewModel.getTask(id).observe(this, task -> {
+        taskViewModel.getTaskById(id).observe(this, task -> {
             comment = task.getComment();
             dateCreate = task.getDateCreate();
-            timeCreate = task.getTimeCreate();
+
             image = task.getImage();
             letter = task.getLetter();
 
@@ -66,20 +66,19 @@ public class TaskUserActivity extends AppCompatActivity {
             binding.textViewAddressTaskUser.setText(task.getAddress());
             binding.textViewFloorTaskUser.setText(task.getFloor());
             binding.textViewCabinetTaskUser.setText(task.getCabinet());
-            binding.textViewNameTaskUser.setText(task.getNameTask());
+            binding.textViewNameTaskUser.setText(task.getName());
             binding.textViewCommentTaskUser.setText(comment);
             binding.textViewDateCreateTaskUser.setText(dateCreateText);
             binding.textViewStatusTaskUser.setText(task.getStatus());
-            binding.textViewEmailCreatorTaskUser.setText(task.getEmailCreator());
-            binding.textViewFullNameCreatorUser.setText(task.getNameCreator());
+
 
             if (image != null) {
                 Fragment imageFragment = new FragmentImageTask();
                 Bundle bundle = new Bundle();
                 bundle.putString("image_id", image);
-                bundle.putString(ID, id);
-                bundle.putString(COLLECTION, collection);
-                bundle.putString(COLLECTION, collection);
+                bundle.putLong(ID, id);
+                bundle.putString(ZONE, collection);
+                bundle.putString(ZONE, collection);
                 imageFragment.setArguments(bundle);
 
                 getSupportFragmentManager()

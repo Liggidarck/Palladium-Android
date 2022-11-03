@@ -23,8 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MainUserActivity extends AppCompatActivity implements BottomSheetProfileUser.stateBtnListener {
 
-    ActivityMainUserBinding binding;
-    FirebaseAuth firebaseAuth;
+    private ActivityMainUserBinding binding;
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -48,26 +47,20 @@ public class MainUserActivity extends AppCompatActivity implements BottomSheetPr
         binding = ActivityMainUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        firebaseAuth = FirebaseAuth.getInstance();
-
         NavController navController = Navigation.findNavController(this, R.id.navHostFragmentActivityUserMain);
         NavigationUI.setupWithNavController(binding.bottomUserNavigation, navController);
     }
 
     @Override
     public void getButton(String button) {
-        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 
         if (button.equals("logoutBtnUser")) {
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle(getString(R.string.warning))
                     .setMessage("Вы действительно хотите выйти из аккаунта?")
                     .setPositiveButton("ok", (dialog1, which) -> {
-                        firebaseAuth.signOut();
-                        userPrefViewModel.saveUser(new User("", "", "",
-                                "", "", "", ""));
-                        startActivity(new Intent(this, LoginActivity.class));
-                        finish();
+
+
                     })
                     .setNegativeButton("Отмена", (dialog12, which) -> dialog12.dismiss())
                     .create();

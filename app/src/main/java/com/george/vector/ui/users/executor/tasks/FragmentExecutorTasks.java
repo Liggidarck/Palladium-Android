@@ -1,6 +1,6 @@
 package com.george.vector.ui.users.executor.tasks;
 
-import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.FOLDER;
 import static com.george.vector.common.utils.consts.Keys.ID;
 
@@ -40,7 +40,7 @@ public class FragmentExecutorTasks extends Fragment {
 
         Bundle args = getArguments();
         assert args != null;
-        collection = args.getString(COLLECTION);
+        collection = args.getString(ZONE);
         status = args.getString(FOLDER);
 
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
@@ -52,44 +52,14 @@ public class FragmentExecutorTasks extends Fragment {
     }
 
     private void setUpRecyclerView() {
-        setUpQuery();
+
 
         binding.recyclerViewTasksExecutor.setHasFixedSize(true);
         binding.recyclerViewTasksExecutor.setLayoutManager(new LinearLayoutManager(FragmentExecutorTasks.this.getContext()));
         binding.recyclerViewTasksExecutor.setAdapter(adapter);
     }
 
-    private void setUpQuery() {
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final CollectionReference reference = db.collection(collection);
-        Query query = reference
-                .whereEqualTo("executor", email)
-                .whereEqualTo("status", status);
 
-        FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
-                .setQuery(query, Task.class)
-                .build();
-        adapter = new TaskAdapter(options);
-
-        adapter.setOnItemClickListener((documentSnapshot, position) -> {
-            Intent intent = new Intent(FragmentExecutorTasks.this.requireActivity(), TaskExecutorActivity.class);
-            intent.putExtra(ID, documentSnapshot.getId());
-            intent.putExtra(COLLECTION, collection);
-            startActivity(intent);
-        });
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
 
     @Override
     public void onDestroyView() {

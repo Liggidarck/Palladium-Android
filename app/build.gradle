@@ -26,8 +26,8 @@ android {
         applicationId "com.george.vector"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 1602
-        versionName "1.6.2"
+        versionCode 2000
+        versionName "2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -36,6 +36,8 @@ android {
 
         buildConfigField("String", "SERVER_KEY", apikeyProperties['SERVER_KEY'])
         buildConfigField("String", "API_KEY", apikeyProperties['API_KEY'])
+
+        buildConfigField("String", "BASE_URL", apikeyProperties['BASE_URL'])
     }
 
     buildTypes {
@@ -64,10 +66,10 @@ dependencies {
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
     implementation 'androidx.annotation:annotation:1.5.0'
     implementation 'androidx.preference:preference-ktx:1.2.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.2'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
     implementation "androidx.core:core-splashscreen:1.0.0"
-    implementation 'com.google.android.material:material:1.8.0-alpha01'
+    implementation 'com.google.android.material:material:1.8.0-alpha02'
 
     //Firebase Main
     implementation platform('com.google.firebase:firebase-bom:30.2.0')

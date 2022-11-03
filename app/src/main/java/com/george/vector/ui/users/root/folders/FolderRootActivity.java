@@ -1,14 +1,13 @@
 package com.george.vector.ui.users.root.folders;
 
 import static com.george.vector.common.utils.consts.Keys.ARCHIVE_TASKS;
-import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
 import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
 import static com.george.vector.common.utils.consts.Keys.FOLDER;
 import static com.george.vector.common.utils.consts.Keys.IN_PROGRESS_TASKS;
 import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -22,9 +21,9 @@ import com.george.vector.ui.users.root.tasks.FragmentTasksRoot;
 
 public class FolderRootActivity extends AppCompatActivity {
 
-    ActivityFolderRootBinding binding;
+    private ActivityFolderRootBinding binding;
 
-    String textToolbar;
+    private String textToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +33,7 @@ public class FolderRootActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        String collection = arguments.getString(COLLECTION);
+        String collection = arguments.getString(ZONE);
         String folder = arguments.getString(FOLDER);
         String executed = arguments.getString(EXECUTOR_EMAIL);
 
@@ -54,7 +53,7 @@ public class FolderRootActivity extends AppCompatActivity {
 
         binding.createTaskRoot.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddTaskRootActivity.class);
-            intent.putExtra(COLLECTION, collection);
+            intent.putExtra(ZONE, collection);
             startActivity(intent);
         });
 
@@ -62,7 +61,7 @@ public class FolderRootActivity extends AppCompatActivity {
 
         Fragment currentFragment = new FragmentTasksRoot();
         Bundle bundle = new Bundle();
-        bundle.putString(COLLECTION, collection);
+        bundle.putString(ZONE, collection);
         bundle.putString(FOLDER, folder);
         bundle.putString(EXECUTOR_EMAIL, executed);
         currentFragment.setArguments(bundle);

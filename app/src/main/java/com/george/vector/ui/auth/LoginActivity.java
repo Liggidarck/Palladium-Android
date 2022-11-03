@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.R;
@@ -15,16 +14,20 @@ import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityLoginBinding;
+import com.george.vector.network.model.Role;
 import com.george.vector.network.model.User;
+import com.george.vector.network.request.LoginRequest;
 import com.george.vector.ui.users.executor.main.MainExecutorActivity;
 import com.george.vector.ui.users.root.main.MainRootActivity;
 import com.george.vector.ui.users.user.main.MainUserActivity;
-import com.george.vector.ui.viewmodel.LoginViewModel;
+import com.george.vector.ui.viewmodel.AuthViewModel;
 import com.george.vector.ui.viewmodel.UserViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
@@ -47,8 +50,11 @@ public class LoginActivity extends AppCompatActivity {
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         binding.btnLogin.setOnClickListener(v -> {
-            String email = Objects.requireNonNull(binding.textEmail.getEditText()).getText().toString();
+
+            String username = Objects.requireNonNull(binding.textUsername.getEditText()).getText().toString();
             String password = Objects.requireNonNull(binding.textPassword.getEditText()).getText().toString();
+
+            LoginRequest loginRequest = new LoginRequest(username, password);
 
             if (!networkUtils.isOnline(this)) {
                 onStart();
@@ -59,52 +65,47 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            if (validateEmail(email)) {
-                binding.textEmail.setError("Некорректный формат e-mail");
-                return;
-            }
-
-            signIn(email, password);
-
+            login(loginRequest);
         });
     }
 
-    void signIn(String login, String password) {
+    void login(LoginRequest loginRequest) {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Загрузка...");
         progressDialog.setMessage("Идет поиск пользователя...");
         progressDialog.show();
 
-        LoginViewModel loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        AuthViewModel authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
-        loginViewModel.signIn(login, password).observe(this, id -> {
-            if (id.equals("error")) {
-                Snackbar.make(binding.coordinatorLoginActivity, "Ошибка. Пользователь не найден",
-                                Snackbar.LENGTH_LONG)
-                        .show();
-                progressDialog.dismiss();
-                return;
-            }
+        authViewModel.login(loginRequest).observe(this, response -> {
 
-            userViewModel.getUser(id).observe(LoginActivity.this, user -> {
-                String name = user.getName();
-                String lastName = user.getLast_name();
-                String patronymic = user.getPatronymic();
-                String role = user.getRole();
-                String email = user.getEmail();
-                String permission = user.getPermission();
+            String token = response.getToken();
+            String username = response.getUsername();
 
-                userDataViewModel.saveUser(new User(name, lastName, patronymic,
-                        email, role, permission, password));
+            String name = response.getName();
+            String lastName = response.getLastName();
+            String patronymic = response.getPatronymic();
+            String email = response.getEmail();
+            String zone = response.getZone();
 
-                progressDialog.dismiss();
-                startApp(role);
-            });
+            List<String> role = response.getRoles();
+
+            List<Role> roleList = new ArrayList<>();
+            roleList.add(new Role(0, role.get(0)));
+
+            userDataViewModel.saveToken(token);
+
+            userDataViewModel.saveUser(new User(zone, name, lastName, patronymic,
+                    email, patronymic, username, roleList));
+
+            progressDialog.dismiss();
+            startApp(role.get(0));
         });
+
     }
 
     void startApp(@NotNull String role) {
-        if (role.equals("Root"))
+        if (role.equals("ROLE_DEVELOPER"))
             startActivity(new Intent(this, MainRootActivity.class));
 
         if (role.equals("Пользователь"))
@@ -126,9 +127,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     boolean validateFields() {
-        String email = binding.textEmail.getEditText().getText().toString();
+        String email = binding.textUsername.getEditText().getText().toString();
         String password = binding.textPassword.getEditText().getText().toString();
-        return textValidator.isEmptyField(email, binding.textEmail) &
+        return textValidator.isEmptyField(email, binding.textUsername) &
                 textValidator.isEmptyField(password, binding.textPassword);
     }
 

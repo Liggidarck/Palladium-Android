@@ -6,18 +6,20 @@ public class Keys {
     public static final String USER_PREFERENCES_NAME = "name_user";
     public static final String USER_PREFERENCES_LAST_NAME = "last_name_user";
     public static final String USER_PREFERENCES_PATRONYMIC = "patronymic_user";
+    public static final String USER_PREFERENCES_USERNAME = "username_user";
     public static final String USER_PREFERENCES_ROLE = "role_user";
     public static final String USER_PREFERENCES_EMAIL = "email_user";
-    public static final String USER_PREFERENCES_PERMISSION = "permission_user";
+    public static final String USER_PREFERENCES_ZONE = "zone_user";
     public static final String USER_PREFERENCES_PASSWORD = "password_user";
     public static final String USER_NOTIFICATIONS_OPTIONS = "root_notifications";
+    public static final String TOKEN = "token";
 
     public static final String ID = "id";
     public static final String FOLDER = "folder";
     public static final String ROLE = "role";
     public static final String EXECUTOR_EMAIL = "executed";
 
-    public static final String COLLECTION = "collection";
+    public static final String ZONE = "zone";
     public static final String USERS = "users";
     public static final String OST = "ost";
     public static final String OST_SCHOOL = "ost_school";

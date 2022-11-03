@@ -26,7 +26,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainRootActivity extends AppCompatActivity {
 
-    ActivityRootMainBinding binding;
+    private ActivityRootMainBinding binding;
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -55,10 +55,12 @@ public class MainRootActivity extends AppCompatActivity {
 
         User user = preferencesViewModel.getUser();
         String nameUser = user.getName();
-        String lastNameUser = user.getLast_name();
+        String lastNameUser = user.getLastName();
         boolean notifications = preferencesViewModel.getNotifications();
 
-
+        if(BuildConfig.DEBUG) {
+            return;
+        }
         if (!notifications) {
             AlertDialog alertDialog = new AlertDialog.Builder(this)
                     .setTitle("Подключить уведомления")

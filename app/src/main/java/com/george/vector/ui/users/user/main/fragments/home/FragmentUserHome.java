@@ -1,6 +1,6 @@
 package com.george.vector.ui.users.user.main.fragments.home;
 
-import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.ID;
 import static com.george.vector.common.utils.consts.Logs.TAG_HOME_USER_FRAGMENT;
 
@@ -31,7 +31,7 @@ import com.google.firebase.firestore.Query;
 public class FragmentUserHome extends Fragment {
 
     FragmentUserHomeBinding homeBinding;
-    String permission, email;
+    String zone, email;
 
     TaskAdapter adapter;
 
@@ -43,37 +43,26 @@ public class FragmentUserHome extends Fragment {
 
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         email = userPrefViewModel.getUser().getEmail();
-        permission = userPrefViewModel.getUser().getPermission();
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference collectionReference = db.collection(permission);
+        zone = userPrefViewModel.getUser().getZone();
 
         homeBinding.homeToolbarUser.setNavigationOnClickListener(v -> {
             BottomSheetProfileUser bottomSheet = new BottomSheetProfileUser();
             bottomSheet.show(getParentFragmentManager(), "ProfileUserBottomSheet");
         });
 
-        Query query = collectionReference
-                .whereEqualTo("email_creator", email)
-                .whereEqualTo("status", "Новая заявка");
-
-        FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
-                .setQuery(query, Task.class)
-                .build();
-        adapter = new TaskAdapter(options);
 
         homeBinding.recyclerviewViewUser.setHasFixedSize(true);
         homeBinding.recyclerviewViewUser.setLayoutManager(new LinearLayoutManager(FragmentUserHome.this.getContext()));
         homeBinding.recyclerviewViewUser.setAdapter(adapter);
 
-        adapter.setOnItemClickListener((documentSnapshot, position) -> {
-            String id = documentSnapshot.getId();
+        adapter.setOnItemClickListener((task, position) -> {
+            long id = task.getId();
 
             Log.d(TAG_HOME_USER_FRAGMENT, String.format("Position: %d ID: %s", position, id));
 
             Intent intent = new Intent(FragmentUserHome.this.getContext(), TaskUserActivity.class);
             intent.putExtra(ID, id);
-            intent.putExtra(COLLECTION, permission);
+            intent.putExtra(ZONE, zone);
             startActivity(intent);
         });
 
@@ -82,18 +71,6 @@ public class FragmentUserHome extends Fragment {
         );
 
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        adapter.stopListening();
     }
 
     @Override

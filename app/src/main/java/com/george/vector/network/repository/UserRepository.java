@@ -1,60 +1,146 @@
 package com.george.vector.network.repository;
 
-import static com.george.vector.common.utils.consts.Keys.ROLE;
-
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.george.vector.network.api.FluffyFoxyClient;
+import com.george.vector.network.api.UserInterface;
+import com.george.vector.network.model.Role;
 import com.george.vector.network.model.User;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UserRepository {
 
-    FirebaseFirestore firebaseFirestore;
-    String collection;
+    private final UserInterface userInterface;
 
-    public UserRepository(String collection) {
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        this.collection = collection;
+    public UserRepository(String token) {
+        userInterface = FluffyFoxyClient.getFoxyTokenClient(token).create(UserInterface.class);
     }
 
-    public void saveUser(User user) {
-        firebaseFirestore.collection(collection).add(user);
-    }
+    public MutableLiveData<List<User>> getAllUsers() {
+        MutableLiveData<List<User>> users = new MutableLiveData<>();
 
-    public void updateUser(String id, User user) {
-        Map<String, Object> userMap = new HashMap<>();
-        userMap.put("name", user.getName());
-        userMap.put("last_name", user.getLast_name());
-        userMap.put("patronymic", user.getPatronymic());
-        userMap.put("email", user.getEmail());
-        userMap.put("role", user.getRole());
-        userMap.put("password", user.getPassword());
-        firebaseFirestore.collection(collection).document(id).update(userMap);
-    }
+        userInterface.getAllUsers().enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<User>> call, @NonNull Response<List<User>> response) {
+                if (response.code() == 200) {
+                    users.setValue(response.body());
+                }
+            }
 
-    public MutableLiveData<User> getUser(String id) {
-        MutableLiveData<User> user = new MutableLiveData<>();
-        firebaseFirestore.collection(collection).document(id).get().addOnCompleteListener(documentReference -> {
-           if(documentReference.isSuccessful()) {
-               DocumentSnapshot value = documentReference.getResult();
-               if(value.exists()) {
-                   String name = value.getString("name");
-                   String lastName = value.getString("last_name");
-                   String patronymic = value.getString("patronymic");
-                   String role = value.getString(ROLE);
-                   String email = value.getString("email");
-                   String permission = value.getString("permission");
-                   String password = value.getString("password");
-                   user.setValue(new User(name, lastName, patronymic, email, role, permission, password));
-
-               }
-           }
+            @Override
+            public void onFailure(@NonNull Call<List<User>> call, @NonNull Throwable t) {
+                users.setValue(null);
+            }
         });
+
+        return users;
+    }
+
+    public MutableLiveData<List<Role>> getAllRoles() {
+        MutableLiveData<List<Role>> roles = new MutableLiveData<>();
+
+        userInterface.getAllRoles().enqueue(new Callback<List<Role>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Role>> call, @NonNull Response<List<Role>> response) {
+                if (response.code() == 200) {
+                    roles.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Role>> call, @NonNull Throwable t) {
+                roles.setValue(null);
+            }
+        });
+
+        return roles;
+    }
+
+    public MutableLiveData<List<User>> getUsersByRoleName(String role) {
+        MutableLiveData<List<User>> users = new MutableLiveData<>();
+
+        userInterface.getUsersByRoleName(role).enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<User>> call, @NonNull Response<List<User>> response) {
+                if (response.code() == 200) {
+                    users.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<User>> call, @NonNull Throwable t) {
+                users.setValue(null);
+            }
+        });
+
+        return users;
+    }
+
+    public MutableLiveData<User> getUserById(long id) {
+        MutableLiveData<User> user = new MutableLiveData<>();
+
+        userInterface.getUserById(id).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+                if (response.code() == 200) {
+                    user.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
+                user.setValue(null);
+            }
+        });
+
         return user;
     }
+
+    public MutableLiveData<String> editUser(User user, long id) {
+        MutableLiveData<String> edit = new MutableLiveData<>();
+
+        userInterface.editUser(user, id).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if(response.code() == 200) {
+                    edit.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                edit.setValue(null);
+            }
+        });
+
+        return edit;
+    }
+
+    public MutableLiveData<String> deleteUser(long id) {
+        MutableLiveData<String> delete = new MutableLiveData<>();
+
+        userInterface.deleteUser(id).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if(response.code() == 200) {
+                    delete.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                delete.setValue(null);
+            }
+        });
+
+        return delete;
+    }
+
 
 }

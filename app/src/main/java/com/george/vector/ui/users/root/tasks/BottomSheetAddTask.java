@@ -3,7 +3,7 @@ package com.george.vector.ui.users.root.tasks;
 import static com.george.vector.common.utils.consts.Keys.BAR_RUCHEEK;
 import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.BAR_ZVEZDOCHKA;
-import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.OST_AIST;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.OST_YAGODKA;
@@ -30,37 +30,37 @@ public class BottomSheetAddTask extends BottomSheetDialogFragment {
 
         binding.ostSchoolNewTask.setOnClickListener(v -> {
             Intent intent = new Intent(BottomSheetAddTask.this.getContext(), AddTaskRootActivity.class);
-            intent.putExtra(COLLECTION, OST_SCHOOL);
+            intent.putExtra(ZONE, OST_SCHOOL);
             startActivity(intent);
         });
 
         binding.ostAistNewTask.setOnClickListener(v -> {
             Intent intent = new Intent(BottomSheetAddTask.this.getContext(), AddTaskRootActivity.class);
-            intent.putExtra(COLLECTION, OST_AIST);
+            intent.putExtra(ZONE, OST_AIST);
             startActivity(intent);
         });
 
         binding.ostYagodkaNewTask.setOnClickListener(v -> {
             Intent intent = new Intent(BottomSheetAddTask.this.getContext(), AddTaskRootActivity.class);
-            intent.putExtra(COLLECTION, OST_YAGODKA);
+            intent.putExtra(ZONE, OST_YAGODKA);
             startActivity(intent);
         });
 
         binding.barSchoolNewTask.setOnClickListener(v -> {
             Intent intent = new Intent(BottomSheetAddTask.this.getContext(), AddTaskRootActivity.class);
-            intent.putExtra(COLLECTION, BAR_SCHOOL);
+            intent.putExtra(ZONE, BAR_SCHOOL);
             startActivity(intent);
         });
 
         binding.barRucheekNewTask.setOnClickListener(v -> {
             Intent intent = new Intent(BottomSheetAddTask.this.getContext(), AddTaskRootActivity.class);
-            intent.putExtra(COLLECTION, BAR_RUCHEEK);
+            intent.putExtra(ZONE, BAR_RUCHEEK);
             startActivity(intent);
         });
 
         binding.barStartNewTask.setOnClickListener(v -> {
             Intent intent = new Intent(BottomSheetAddTask.this.getContext(), AddTaskRootActivity.class);
-            intent.putExtra(COLLECTION, BAR_ZVEZDOCHKA);
+            intent.putExtra(ZONE, BAR_ZVEZDOCHKA);
             startActivity(intent);
         });
 

@@ -2,35 +2,193 @@ package com.george.vector.network.repository;
 
 import static com.george.vector.common.utils.consts.Keys.TOPIC_NEW_TASKS_CREATE;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.george.vector.BuildConfig;
 import com.george.vector.common.notifications.SendNotification;
+import com.george.vector.network.api.FluffyFoxyClient;
+import com.george.vector.network.api.TaskInterface;
 import com.george.vector.network.model.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TaskRepository {
 
-    FirebaseFirestore firebaseFirestore;
-    String collection;
+    private final TaskInterface taskInterface;
 
-    public TaskRepository(String collection) {
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        this.collection = collection;
+    public TaskRepository(String token) {
+        taskInterface = FluffyFoxyClient.getFoxyTokenClient(token).create(TaskInterface.class);
     }
 
-    public void createTask(Task task) {
-        firebaseFirestore.collection(collection).add(task).addOnSuccessListener(documentReference -> {
-            String id = documentReference.getId();
-            sendNotification(task.getUrgent(), task.getNameTask(), id, collection);
+    public MutableLiveData<String> createTask(Task task) {
+        MutableLiveData<String> taskMutableLiveData = new MutableLiveData<>();
+
+        taskInterface.createTask(task).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.code() == 200) {
+                    taskMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                taskMutableLiveData.setValue(null);
+            }
         });
+
+        return taskMutableLiveData;
+    }
+
+    public MutableLiveData<String> editTask(Task task, long id) {
+        MutableLiveData<String> edit = new MutableLiveData<>();
+
+        taskInterface.editTask(task, id).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.code() == 200) {
+                    edit.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                edit.setValue(null);
+            }
+        });
+
+        return edit;
+    }
+
+    public MutableLiveData<String> deleteTask(long id) {
+        MutableLiveData<String> delete = new MutableLiveData<>();
+
+        taskInterface.deleteTask(id).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                delete.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                delete.setValue(null);
+            }
+        });
+
+        return delete;
     }
 
 
-    void sendNotification(boolean urgent, String taskName, String taskId, String collection) {
+    public MutableLiveData<List<Task>> getTasksByExecutor(long id) {
+        MutableLiveData<List<Task>> tasks = new MutableLiveData<>();
+
+        taskInterface.getTasksByExecutor(id).enqueue(new Callback<List<Task>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Task>> call, @NonNull Response<List<Task>> response) {
+                if (response.code() == 200) {
+                    tasks.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Task>> call, @NonNull Throwable t) {
+                tasks.setValue(null);
+            }
+        });
+
+        return tasks;
+    }
+
+    public MutableLiveData<List<Task>> getTasksByCreator(long id) {
+        MutableLiveData<List<Task>> tasks = new MutableLiveData<>();
+
+        taskInterface.getTasksByCreator(id).enqueue(new Callback<List<Task>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Task>> call, @NonNull Response<List<Task>> response) {
+                if (response.code() == 200) {
+                    tasks.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Task>> call, @NonNull Throwable t) {
+                tasks.setValue(null);
+            }
+        });
+
+        return tasks;
+    }
+
+    public MutableLiveData<List<Task>> getTasksByStatus(String status) {
+        MutableLiveData<List<Task>> tasks = new MutableLiveData<>();
+
+        taskInterface.getTasksByStatus(status).enqueue(new Callback<List<Task>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Task>> call, @NonNull Response<List<Task>> response) {
+                if (response.code() == 200) {
+                    tasks.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Task>> call, @NonNull Throwable t) {
+                tasks.setValue(null);
+            }
+        });
+
+        return tasks;
+    }
+
+    public MutableLiveData<List<Task>> getAllTasks() {
+        MutableLiveData<List<Task>> tasks = new MutableLiveData<>();
+
+        taskInterface.getAllTasks().enqueue(new Callback<List<Task>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Task>> call, @NonNull Response<List<Task>> response) {
+                if (response.code() == 200) {
+                    tasks.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Task>> call, @NonNull Throwable t) {
+                tasks.setValue(null);
+            }
+        });
+
+        return tasks;
+    }
+
+    public MutableLiveData<Task> getTaskById(long id) {
+        MutableLiveData<Task> task = new MutableLiveData<>();
+
+        taskInterface.getTaskById(id).enqueue(new Callback<Task>() {
+            @Override
+            public void onResponse(@NonNull Call<Task> call, @NonNull Response<Task> response) {
+                if (response.code() == 200) {
+                    task.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Task> call, @NonNull Throwable t) {
+                task.setValue(null);
+            }
+        });
+
+        return task;
+    }
+
+    private void sendNotification(boolean urgent, String taskName, String taskId, String collection) {
         String title;
 
         if (urgent)
@@ -40,67 +198,6 @@ public class TaskRepository {
 
         SendNotification sendNotification = new SendNotification();
         sendNotification.sendNotification(title, taskName, taskId, collection, TOPIC_NEW_TASKS_CREATE);
-    }
-
-    public void updateTask(String id, Task task) {
-        Map<String, Object> taskMap = new HashMap<>();
-        taskMap.put("nameTask", task.getNameTask());
-        taskMap.put("address", task.getAddress());
-        taskMap.put("dateCreate", task.getDateCreate());
-        taskMap.put("floor", task.getFloor());
-        taskMap.put("cabinet", task.getCabinet());
-        taskMap.put("letter", task.getLetter());
-        taskMap.put("comment", task.getComment());
-        taskMap.put("dateDone", task.getDateDone());
-        taskMap.put("executor", task.getExecutor());
-        taskMap.put("status", task.getStatus());
-        taskMap.put("urgent", task.getUrgent());
-        taskMap.put("timeCreate", task.getTimeCreate());
-        taskMap.put("emailCreator", task.getEmailCreator());
-        taskMap.put("image", task.getImage());
-        taskMap.put("fullNameExecutor", task.getFullNameExecutor());
-        taskMap.put("nameCreator", task.getNameCreator());
-        firebaseFirestore.collection(collection).document(id).update(taskMap);
-    }
-
-    public void deleteTask(String id) {
-        firebaseFirestore.collection(collection).document(id).delete();
-    }
-
-
-    public MutableLiveData<Task> getTask(String id) {
-        MutableLiveData<Task> taskMutable = new MutableLiveData<>();
-
-        firebaseFirestore.collection(collection).document(id).get().addOnCompleteListener(documentSnapshotTask -> {
-            if (documentSnapshotTask.isSuccessful()) {
-                DocumentSnapshot value = documentSnapshotTask.getResult();
-                if (value.exists()) {
-                    String address = value.getString("address");
-                    String floor = value.getString("floor");
-                    String cabinet = value.getString("cabinet");
-                    String letter = value.getString("letter");
-                    String nameTask = value.getString("nameTask");
-                    String comment = value.getString("comment");
-                    String status = value.getString("status");
-                    String dateCreate = value.getString("dateCreate");
-                    String timeCreate = value.getString("timeCreate");
-                    String imageId = value.getString("image");
-                    String emailCreator = value.getString("emailCreator");
-                    String emailExecutor = value.getString("executor");
-                    String dateDone = value.getString("dateDone");
-                    String fullNameExecutor = value.getString("fullNameExecutor");
-                    String fullNameCreator = value.getString("nameCreator");
-                    boolean urgent = value.getBoolean("urgent");
-                    Task task = new Task(nameTask, address, dateCreate, floor,
-                            cabinet, letter, comment, dateDone, emailExecutor, status,
-                            timeCreate, emailCreator, urgent, imageId, fullNameExecutor, fullNameCreator);
-
-                    taskMutable.setValue(task);
-                }
-            }
-        });
-
-        return taskMutable;
     }
 
 }

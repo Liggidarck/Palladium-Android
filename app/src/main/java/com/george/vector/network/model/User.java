@@ -1,34 +1,46 @@
 package com.george.vector.network.model;
 
+import java.util.List;
+import java.util.Set;
+
 public class User {
 
-    private String name;
-    private String last_name;
-    private String patronymic;
-    private String email;
-    private String role;
-    private String permission;
-    private String password;
+    private long id;
+    private final String zone;
+    private final String name;
+    private final String lastName;
+    private final String patronymic;
+    private final String email;
+    private final String password;
+    private final String username;
+    private final List<Role> role;
 
-    public User() {
-    }
-
-    public User(String name, String last_name, String patronymic, String email, String role, String permission, String password) {
+    public User(String zone, String name, String lastName, String patronymic,
+                String email, String password, String username, List<Role> role) {
+        this.zone = zone;
         this.name = name;
-        this.last_name = last_name;
+        this.lastName = lastName;
         this.patronymic = patronymic;
         this.email = email;
-        this.role = role;
-        this.permission = permission;
         this.password = password;
+        this.username = username;
+        this.role = role;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getZone() {
+        return zone;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
     public String getPatronymic() {
@@ -39,15 +51,15 @@ public class User {
         return email;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public String getPermission() {
-        return permission;
-    }
-
     public String getPassword() {
         return password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public List<Role> getRole() {
+        return role;
     }
 }

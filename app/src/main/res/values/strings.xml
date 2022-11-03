@@ -27,7 +27,7 @@
     <string name="done">Готово</string>
 
     <string name="authorization">Авторизация</string>
-    <string name="email_text">E-mail</string>
+    <string name="email_text">Username</string>
     <string name="password">Пароль</string>
     <string name="login">Войти</string>
 

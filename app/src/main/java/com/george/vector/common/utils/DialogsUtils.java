@@ -24,10 +24,6 @@ import java.util.Objects;
 
 public class DialogsUtils {
 
-    Query query;
-    private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    private final CollectionReference usersRef = firebaseFirestore.collection(USERS);
-
     public void showAddExecutorDialog(Context context,
                                       TextInputLayout textLayoutExecutorEmail,
                                       TextInputLayout textLayoutFullNameExecutor) {
@@ -39,63 +35,34 @@ public class DialogsUtils {
         Chip chipRootDialog = dialog.findViewById(R.id.chip_root_dialog);
         Chip chipExecutorsDialog = dialog.findViewById(R.id.chip_executors_dialog);
 
-        query = usersRef.whereEqualTo("role", "Root");
-        FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
-                .setQuery(query, User.class)
-                .build();
-        UserAdapter adapter = new UserAdapter(options);
-
         recyclerViewListExecutors.setHasFixedSize(true);
         recyclerViewListExecutors.setLayoutManager(new LinearLayoutManager(context));
-        recyclerViewListExecutors.setAdapter(adapter);
-
-        chipRootDialog.setOnCheckedChangeListener((compoundButton, isChecked) -> {
-            if (isChecked) {
-                query = usersRef.whereEqualTo("role", "Root");
-
-                FirestoreRecyclerOptions<User> UserOptions = new FirestoreRecyclerOptions.Builder<User>()
-                        .setQuery(query, User.class)
-                        .build();
-
-                adapter.updateOptions(UserOptions);
-            }
-        });
-
-        chipExecutorsDialog.setOnCheckedChangeListener((compoundButton, isChecked) -> {
-            if (isChecked) {
-                query = usersRef.whereEqualTo("role", "Исполнитель");
-
-                FirestoreRecyclerOptions<User> UserOptions = new FirestoreRecyclerOptions.Builder<User>()
-                        .setQuery(query, User.class)
-                        .build();
-
-                adapter.updateOptions(UserOptions);
-            }
-        });
-
-        adapter.setOnItemClickListener((documentSnapshot, position) -> {
-            String id = documentSnapshot.getId();
-
-            DocumentReference documentReference = firebaseFirestore.collection("users").document(id);
-            documentReference.addSnapshotListener((value, error) -> {
-                assert value != null;
-                String nameExecutor = value.getString("name");
-                String lastNameExecutor = value.getString("last_name");
-                String patronymicExecutor = value.getString("patronymic");
-                String emailExecutor = value.getString("email");
-                String fullNameExecutor = String.format("%s %s %s", lastNameExecutor, nameExecutor, patronymicExecutor);
-
-                Objects.requireNonNull(textLayoutExecutorEmail.getEditText()).setText(emailExecutor);
-                Objects.requireNonNull(textLayoutFullNameExecutor.getEditText()).setText(fullNameExecutor);
-
-                adapter.stopListening();
-                dialog.dismiss();
-            });
 
 
-        });
-
-        adapter.startListening();
+//
+//        adapter.setOnItemClickListener((documentSnapshot, position) -> {
+//            String id = documentSnapshot.getId();
+//
+//            DocumentReference documentReference = firebaseFirestore.collection("users").document(id);
+//            documentReference.addSnapshotListener((value, error) -> {
+//                assert value != null;
+//                String nameExecutor = value.getString("name");
+//                String lastNameExecutor = value.getString("last_name");
+//                String patronymicExecutor = value.getString("patronymic");
+//                String emailExecutor = value.getString("email");
+//                String fullNameExecutor = String.format("%s %s %s", lastNameExecutor, nameExecutor, patronymicExecutor);
+//
+//                Objects.requireNonNull(textLayoutExecutorEmail.getEditText()).setText(emailExecutor);
+//                Objects.requireNonNull(textLayoutFullNameExecutor.getEditText()).setText(fullNameExecutor);
+//
+//                adapter.stopListening();
+//                dialog.dismiss();
+//            });
+//
+//
+//        });
+//
+//        adapter.startListening();
         dialog.show();
     }
 

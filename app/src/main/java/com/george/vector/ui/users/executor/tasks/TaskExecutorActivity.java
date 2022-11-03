@@ -1,6 +1,6 @@
 package com.george.vector.ui.users.executor.tasks;
 
-import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.ID;
 import static com.george.vector.common.utils.consts.Logs.TAG_TASK_EXECUTOR_FRAGMENT;
 
@@ -26,7 +26,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class TaskExecutorActivity extends AppCompatActivity {
 
-    String id;
+    long id;
     String collection;
     String cabinet;
     String letter;
@@ -48,8 +48,8 @@ public class TaskExecutorActivity extends AppCompatActivity {
         setContentView(taskExecutorBinding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.getString(ID);
-        collection = arguments.getString(COLLECTION);
+        id = arguments.getLong(ID);
+        collection = arguments.getString(ZONE);
 
         TaskViewModel taskViewModel = new ViewModelProvider(
                 this,
@@ -61,18 +61,18 @@ public class TaskExecutorActivity extends AppCompatActivity {
         taskExecutorBinding.editTaskExecutorBtn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskExecutorActivity.class);
             intent.putExtra(ID, id);
-            intent.putExtra(COLLECTION, collection);
+            intent.putExtra(ZONE, collection);
             startActivity(intent);
         });
 
-        taskViewModel.getTask(id).observe(this, task -> {
+        taskViewModel.getTaskById(id).observe(this, task -> {
             image = task.getImage();
             letter = task.getLetter();
             dateCreate = task.getDateCreate();
-            timeCreate = task.getTimeCreate();
+
             dateDone = task.getDateDone();
             cabinet = task.getCabinet();
-            urgent = task.getUrgent();
+            urgent = task.isUrgent();
             status = task.getStatus();
             String dateCreateText = String.format("Созданно: %s %s", dateCreate, timeCreate);
 
@@ -103,8 +103,8 @@ public class TaskExecutorActivity extends AppCompatActivity {
                 Fragment fragmentImageTask = new FragmentImageTask();
                 Bundle bundle = new Bundle();
                 bundle.putString("image_id", image);
-                bundle.putString(ID, id);
-                bundle.putString(COLLECTION, collection);
+                bundle.putLong(ID, id);
+                bundle.putString(ZONE, collection);
                 fragmentImageTask.setArguments(bundle);
 
                 getSupportFragmentManager()
@@ -116,14 +116,14 @@ public class TaskExecutorActivity extends AppCompatActivity {
             taskExecutorBinding.textViewAddressTaskExecutor.setText(task.getAddress());
             taskExecutorBinding.textViewFloorTaskExecutor.setText(String.format("%s %s", getText(R.string.floor), task.getFloor()));
             taskExecutorBinding.textViewCabinetTaskExecutor.setText(String.format("%s %s", getText(R.string.cabinet), cabinet));
-            taskExecutorBinding.textViewNameTaskExecutor.setText(task.getNameTask());
+            taskExecutorBinding.textViewNameTaskExecutor.setText(task.getName());
             taskExecutorBinding.textViewCommentTaskExecutor.setText(task.getComment());
             taskExecutorBinding.textViewStatusTaskExecutor.setText(status);
             taskExecutorBinding.textViewDateCreateTaskExecutor.setText(dateCreateText);
-            taskExecutorBinding.textViewFullNameCreatorExecutor.setText(task.getNameCreator());
-            taskExecutorBinding.textViewEmailCreatorTaskExecutor.setText(task.getEmailCreator());
-            taskExecutorBinding.textViewFullNameExecutorEX.setText(task.getFullNameExecutor());
-            taskExecutorBinding.textViewEmailExecutorTaskExecutor.setText(task.getExecutor());
+//            taskExecutorBinding.textViewFullNameCreatorExecutor.setText(task.getNameCreator());
+//            taskExecutorBinding.textViewEmailCreatorTaskExecutor.setText(task.getEmailCreator());
+//            taskExecutorBinding.textViewFullNameExecutorEX.setText(task.getFullNameExecutor());
+//            taskExecutorBinding.textViewEmailExecutorTaskExecutor.setText(task.getExecutor());
             if (dateDone == null)
                 taskExecutorBinding.textViewDateDoneTaskExecutor.setText("Дата выполнения не назначена");
             else {

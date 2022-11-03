@@ -1,5 +1,6 @@
 package com.george.vector.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,29 +10,28 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
 import com.george.vector.network.model.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
 
-public class TaskAdapter extends FirestoreRecyclerAdapter<Task, TaskAdapter.TaskHolder> {
+import java.util.ArrayList;
+import java.util.List;
 
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
+
+    private List<Task> tasks = new ArrayList<>();
     private OnItemClickListener listener;
 
-    public TaskAdapter(@NonNull FirestoreRecyclerOptions<Task> options) {
-        super(options);
-    }
-
     @Override
-    protected void onBindViewHolder(@NonNull TaskAdapter.TaskHolder holder, int position, @NonNull Task task) {
-        holder.textViewTitle.setText(task.getNameTask());
+    public void onBindViewHolder(@NonNull TaskHolder holder, int position) {
+        Task task = tasks.get(position);
+
+        holder.textViewTitle.setText(task.getName());
         holder.textViewDescription.setText(task.getAddress());
         holder.textViewPriority.setText(task.getDateCreate());
-        holder.textViewTimeCreate.setText(task.getTimeCreate());
+        holder.textViewTimeCreate.setText(task.getDateCreate());
 
-        boolean visibleUrgentTask = task.getUrgent();
-        if(visibleUrgentTask)
+        boolean visibleUrgentTask = task.isUrgent();
+        if (visibleUrgentTask)
             holder.imageWarningTask.setVisibility(View.VISIBLE);
         else
             holder.imageWarningTask.setVisibility(View.INVISIBLE);
@@ -43,6 +43,17 @@ public class TaskAdapter extends FirestoreRecyclerAdapter<Task, TaskAdapter.Task
     public TaskHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.task_item, parent, false);
         return new TaskHolder(view);
+    }
+
+    @Override
+    public int getItemCount() {
+        return tasks.size();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void addTasks(List<Task> tasks) {
+        this.tasks = tasks;
+        notifyDataSetChanged();
     }
 
     class TaskHolder extends RecyclerView.ViewHolder {
@@ -63,15 +74,15 @@ public class TaskAdapter extends FirestoreRecyclerAdapter<Task, TaskAdapter.Task
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
-                if(position != RecyclerView.NO_POSITION && listener != null)
-                    listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                if (position != RecyclerView.NO_POSITION && listener != null)
+                    listener.onItemClick(tasks.get(position), position);
             });
 
         }
     }
 
     public interface OnItemClickListener {
-        void onItemClick(DocumentSnapshot documentSnapshot, int position);
+        void onItemClick(Task task, int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {

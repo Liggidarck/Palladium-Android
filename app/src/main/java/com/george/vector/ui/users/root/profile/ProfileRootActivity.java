@@ -1,12 +1,9 @@
 package com.george.vector.ui.users.root.profile;
 
 import static com.george.vector.common.utils.consts.Keys.TOPIC_DEVELOP;
-import static com.george.vector.common.utils.consts.Keys.TOPIC_NEW_TASKS_CREATE;
-import static com.george.vector.common.utils.consts.Logs.TAG_NOTIFICATIONS;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,16 +14,18 @@ import com.george.vector.R;
 import com.george.vector.common.notifications.SendNotification;
 import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityProfileRootBinding;
+import com.george.vector.network.model.Role;
 import com.george.vector.network.model.User;
-import com.george.vector.ui.auth.LoginActivity;
 import com.george.vector.ui.settings.SettingsActivity;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProfileRootActivity extends AppCompatActivity {
 
-    String name, lastname, patronymic, email, role, permission;
-    ActivityProfileRootBinding binding;
+    private String name, lastname, patronymic, email, role, zone;
+    private ActivityProfileRootBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,16 +34,18 @@ public class ProfileRootActivity extends AppCompatActivity {
         binding = ActivityProfileRootBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         User user = userPrefViewModel.getUser();
+
+        List<Role> roleList = new ArrayList<>();
+
         name = user.getName();
-        lastname = user.getLast_name();
+        lastname = user.getLastName();
         patronymic = user.getPatronymic();
         email = user.getEmail();
-        role = user.getRole();
-        permission = user.getPermission();
+        roleList = user.getRole();
+        role = roleList.get(0).getName();
+        zone = user.getZone();
 
         String charName = Character.toString(name.charAt(0));
         String charLastname = Character.toString(lastname.charAt(0));
@@ -60,7 +61,7 @@ public class ProfileRootActivity extends AppCompatActivity {
         );
 
         binding.settingsProfileBtn.setOnClickListener(v ->
-            startActivity(new Intent(ProfileRootActivity.this, SettingsActivity.class))
+                startActivity(new Intent(ProfileRootActivity.this, SettingsActivity.class))
         );
 
         binding.logoutBtn.setOnClickListener(v -> {
@@ -68,11 +69,7 @@ public class ProfileRootActivity extends AppCompatActivity {
                     .setTitle(getString(R.string.warning))
                     .setMessage("Вы действительно хотите выйти из аккаунта?")
                     .setPositiveButton("ok", (dialog1, which) -> {
-                        firebaseAuth.signOut();
-                        userPrefViewModel.saveUser(new User("", "", "", "", "", "", ""));
-                        FirebaseMessaging.getInstance().unsubscribeFromTopic(TOPIC_NEW_TASKS_CREATE);
-                        startActivity(new Intent(this, LoginActivity.class));
-                        finish();
+
                     })
                     .setNegativeButton("Отмена", (dialog12, which) -> dialog12.dismiss())
                     .create();

@@ -1,6 +1,6 @@
 package com.george.vector.ui.users.executor.main;
 
-import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
 import static com.george.vector.common.utils.consts.Keys.FOLDER;
 import static com.george.vector.common.utils.consts.Keys.IN_PROGRESS_TASKS;
@@ -27,7 +27,7 @@ public class FolderExecutorActivity extends AppCompatActivity {
         setContentView(executorBinding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        collection = arguments.getString(COLLECTION);
+        collection = arguments.getString(ZONE);
 
         String textToolbar = null;
         switch (collection) {
@@ -61,21 +61,21 @@ public class FolderExecutorActivity extends AppCompatActivity {
 
         executorBinding.cardNewTasks.setOnClickListener(v -> {
             Intent intent = new Intent(this, ExecutorTasksActivity.class);
-            intent.putExtra(COLLECTION, collection);
+            intent.putExtra(ZONE, collection);
             intent.putExtra(FOLDER, NEW_TASKS);
             startActivity(intent);
         });
 
         executorBinding.cardCompletedTasks.setOnClickListener(v -> {
             Intent intent = new Intent(this, ExecutorTasksActivity.class);
-            intent.putExtra(COLLECTION, collection);
+            intent.putExtra(ZONE, collection);
             intent.putExtra(FOLDER, COMPLETED_TASKS);
             startActivity(intent);
         });
 
         executorBinding.cardInProgressTasks.setOnClickListener(v -> {
             Intent intent = new Intent(this, ExecutorTasksActivity.class);
-            intent.putExtra(COLLECTION, collection);
+            intent.putExtra(ZONE, collection);
             intent.putExtra(FOLDER, IN_PROGRESS_TASKS);
             startActivity(intent);
         });
