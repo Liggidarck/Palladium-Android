@@ -3,7 +3,7 @@ package com.george.vector.ui.users.root.tasks;
 import static com.george.vector.common.utils.consts.Keys.BAR_RUCHEEK;
 import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.BAR_ZVEZDOCHKA;
-import static com.george.vector.common.utils.consts.Keys.IS_EXECUTED;
+import static com.george.vector.common.utils.consts.Keys.IS_EXECUTE;
 import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
 import static com.george.vector.common.utils.consts.Keys.OST_AIST;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
@@ -41,12 +41,11 @@ import com.george.vector.R;
 import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.common.utils.TimeUtils;
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityAddTaskRootBinding;
 import com.george.vector.network.model.Task;
 import com.george.vector.ui.adapter.UserAdapter;
-import com.george.vector.ui.tasks.BottomSheetAddImage;
-import com.george.vector.ui.users.root.folders.FolderRootActivity;
+import com.george.vector.ui.common.tasks.BottomSheetAddImage;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.UserViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
@@ -187,10 +186,10 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
     }
 
     private void startListTasks() {
-        Intent intent = new Intent(this, FolderRootActivity.class);
+        Intent intent = new Intent(this, AllTasksRootActivity.class);
         intent.putExtra(ZONE, zone);
         intent.putExtra(STATUS, NEW_TASKS);
-        intent.putExtra(IS_EXECUTED, "root");
+        intent.putExtra(IS_EXECUTE, "root");
         startActivity(intent);
     }
 
@@ -366,7 +365,6 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
             addImage.dismiss();
         }
     }
-
 
     private void showAddExecutorDialog(UserAdapter userAdapter) {
 

@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/nav_help"
-        android:name="com.george.vector.ui.help.root.FragmentRootHelp"
+        android:name="com.george.vector.ui.common.help.root.FragmentRootHelp"
         android:label="FragmentRootHelp"
         tools:layout="@layout/fragment_root_help">
 
@@ -51,7 +51,7 @@
 
     <fragment
         android:id="@+id/fragmentAboutProject"
-        android:name="com.george.vector.ui.help.root.FragmentAboutProject"
+        android:name="com.george.vector.ui.common.help.root.FragmentAboutProject"
         android:label="FragmentAboutProject"
         tools:layout="@layout/fragment_about_project">
 
@@ -75,7 +75,7 @@
 
     <fragment
         android:id="@+id/fragmentHelpApp"
-        android:name="com.george.vector.ui.help.root.app.FragmentHelpApp"
+        android:name="com.george.vector.ui.common.help.root.app.FragmentHelpApp"
         android:label="FragmentHelpApp"
         tools:layout="@layout/fragment_help_app">
 
@@ -91,25 +91,25 @@
 
     <fragment
         android:id="@+id/fragmentDevelopApp"
-        android:name="com.george.vector.ui.help.root.develop_app.FragmentDevelopApp"
+        android:name="com.george.vector.ui.common.help.root.develop_app.FragmentDevelopApp"
         android:label="FragmentDevelopApp"
         tools:layout="@layout/fragment_develop_app" />
 
     <fragment
         android:id="@+id/fragmentDescriptionProject"
-        android:name="com.george.vector.ui.help.root.FragmentDescriptionProject"
+        android:name="com.george.vector.ui.common.help.root.FragmentDescriptionProject"
         android:label="FragmentDescriptionProject"
         tools:layout="@layout/fragment_description_project" />
 
     <fragment
         android:id="@+id/fragmentDataHelp"
-        android:name="com.george.vector.ui.help.root.FragmentDataHelp"
+        android:name="com.george.vector.ui.common.help.root.FragmentDataHelp"
         android:label="FragmentDataHelp"
         tools:layout="@layout/fragment_data_help" />
 
     <fragment
         android:id="@+id/fragmentHelpTextApp"
-        android:name="com.george.vector.ui.help.root.app.FragmentHelpTextApp"
+        android:name="com.george.vector.ui.common.help.root.app.FragmentHelpTextApp"
         android:label="FragmentHelpTextApp" />
 
 

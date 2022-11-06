@@ -1,21 +1,23 @@
 package com.george.vector.ui.users.root.tasks;
 
-import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.ID;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.PERMISSION_CAMERA_CODE;
 import static com.george.vector.common.utils.consts.Keys.PERMISSION_GALLERY_CODE;
+import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static java.util.Objects.requireNonNull;
 
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -26,34 +28,44 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.george.vector.R;
 import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.common.utils.TextValidatorUtils;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityAddTaskRootBinding;
-import com.george.vector.ui.tasks.BottomSheetAddImage;
+import com.george.vector.network.model.Task;
+import com.george.vector.ui.adapter.UserAdapter;
+import com.george.vector.ui.common.tasks.BottomSheetAddImage;
 import com.george.vector.ui.users.root.main.MainRootActivity;
 import com.george.vector.ui.viewmodel.TaskViewModel;
+import com.george.vector.ui.viewmodel.UserViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
 
 public class EditTaskRootActivity extends AppCompatActivity implements BottomSheetAddImage.StateListener {
 
     private ActivityAddTaskRootBinding binding;
 
-    private String comment, dateCreate, timeCreate, emailCreator, collection, image, nameCreator;
-
-    private long id;
+    private String comment, dateCreate, zone, image;
+    private long taskId;
+    private long executorId;
+    private long creatorId;
 
     private Calendar datePickCalendar;
     private Uri fileUri;
 
     private TaskViewModel taskViewModel;
+    private UserViewModel userViewModel;
 
     private final TextValidatorUtils textValidatorUtils = new TextValidatorUtils();
     private final NetworkUtils networkUtils = new NetworkUtils();
@@ -77,6 +89,8 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
             });
 
 
+    public static final String TAG = EditTaskRootActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_Palladium);
@@ -84,22 +98,16 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
         binding = ActivityAddTaskRootBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.toolbarAddEditTask.setNavigationOnClickListener(v -> onBackPressed());
-
         Bundle arguments = getIntent().getExtras();
-        id = arguments.getLong(ID);
-        collection = arguments.getString(ZONE);
+        taskId = arguments.getLong(ID);
+        zone = arguments.getString(ZONE);
 
         String bufferSizePreference = PreferenceManager
                 .getDefaultSharedPreferences(EditTaskRootActivity.this)
                 .getString("buffer_size", "2");
-
-        taskViewModel = new ViewModelProvider(this,
-                new ViewModelFactory(this.getApplication(), collection)
-        ).get(TaskViewModel.class);
-
         int bufferSize = Integer.parseInt(bufferSizePreference);
 
+        initViewModels();
         getTask(bufferSize);
 
         binding.doneBtn.setOnClickListener(v -> {
@@ -112,21 +120,64 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
                 return;
             }
 
-            updateTask(collection);
+            updateTask(zone);
         });
 
-//        binding.addExecutorBtn.setOnClickListener(v -> dialogsUtils.showAddExecutorDialog(EditTaskRootActivity.this, null, binding.taskNameExecutor));
+        binding.toolbarAddEditTask.setNavigationOnClickListener(v -> onBackPressed());
+        binding.addExecutorBtn.setOnClickListener(v -> {
+            UserAdapter userAdapter = new UserAdapter();
+            userViewModel.getAllUsers().observe(this, userAdapter::setUsers);
+            showAddExecutorDialog(userAdapter);
+        });
+    }
+
+    private void showAddExecutorDialog(UserAdapter userAdapter) {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_choose_executor);
+
+        RecyclerView recyclerViewListExecutors = dialog.findViewById(R.id.recyclerViewListExecutors);
+        Chip chipRootDialog = dialog.findViewById(R.id.chip_root_dialog);
+        Chip chipExecutorsDialog = dialog.findViewById(R.id.chip_executors_dialog);
+
+        recyclerViewListExecutors.setHasFixedSize(true);
+        recyclerViewListExecutors.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewListExecutors.setAdapter(userAdapter);
+
+        userAdapter.setOnItemClickListener((executor, position) -> {
+            executorId = (int) executor.getId();
+            Objects.requireNonNull(binding.taskNameExecutor.getEditText()).setText(executor.getName());
+            dialog.dismiss();
+        });
+
+        dialog.show();
+
+    }
+
+    private void initViewModels() {
+        UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+
+        taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                this.getApplication(),
+                userDataViewModel.getToken()
+        )).get(TaskViewModel.class);
+
+        userViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                this.getApplication(),
+                userDataViewModel.getToken()
+        )).get(UserViewModel.class);
     }
 
     private void getTask(int bufferSize) {
-        binding.progressBarAddEditTask.setVisibility(View.VISIBLE);
-        taskViewModel.getTaskById(id).observe(EditTaskRootActivity.this, task -> {
+        taskViewModel.getTaskById(taskId).observe(EditTaskRootActivity.this, task -> {
+            binding.progressBarAddEditTask.setVisibility(View.VISIBLE);
 
             comment = task.getComment();
             dateCreate = task.getDateCreate();
             image = task.getImage();
-//            emailCreator = task.getEmailCreator();
-//            nameCreator = task.getNameCreator();
+
+            executorId = task.getExecutorId();
+            creatorId = task.getCreatorId();
 
             requireNonNull(binding.taskAddress.getEditText()).setText(task.getAddress());
             requireNonNull(binding.taskFloor.getEditText()).setText(task.getFloor());
@@ -134,9 +185,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
             requireNonNull(binding.taskLetter.getEditText()).setText(task.getLetter());
             requireNonNull(binding.taskName.getEditText()).setText(task.getName());
             requireNonNull(binding.taskDateComplete.getEditText()).setText(task.getDateDone());
-//            requireNonNull(binding.taskEmailExecutor.getEditText()).setText(task.getExecutor());
             requireNonNull(binding.taskStatus.getEditText()).setText(task.getStatus());
-//            requireNonNull(binding.taskNameExecutor.getEditText()).setText(task.getFullNameExecutor());
             binding.urgentCheckBox.setChecked(task.isUrgent());
 
             if (comment.equals("Нет коментария к заявке"))
@@ -151,13 +200,17 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
                 taskViewModel.setImage(image, binding.progressBarAddEditTask, binding.imageViewTask, bufferSize);
             }
 
-            binding.progressBarAddEditTask.setVisibility(View.INVISIBLE);
-            initializeFields(collection);
+            userViewModel.getUserById(executorId).observe(this, user -> {
+                String name = user.getLastName() + " " + user.getName() + " " + user.getPatronymic();
+                binding.taskNameExecutor.getEditText().setText(name);
+            });
 
+            binding.progressBarAddEditTask.setVisibility(View.INVISIBLE);
+            initializeFields(zone);
         });
     }
 
-    void updateTask(String collection) {
+    void updateTask(String zone) {
         String updateImage;
 
         if (fileUri != null)
@@ -171,19 +224,16 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
         String updateLetter = requireNonNull(binding.taskLetter.getEditText()).getText().toString();
         String updateName = requireNonNull(binding.taskName.getEditText()).getText().toString();
         String updateComment = requireNonNull(binding.taskComment.getEditText()).getText().toString();
-        String updateDateComplete = requireNonNull(binding.taskDateComplete.getEditText()).getText().toString();
-        String updateNameExecutor = requireNonNull(binding.taskNameExecutor.getEditText()).getText().toString();
+        String updateDateDone = requireNonNull(binding.taskDateComplete.getEditText()).getText().toString();
         String updateStatus = requireNonNull(binding.taskStatus.getEditText()).getText().toString();
         boolean updateUrgent = binding.urgentCheckBox.isChecked();
 
-//        Task task = new Task(updateName, updateAddress, dateCreate, updateFloor, updateCabinet,
-//                updateLetter, updateComment, updateDateComplete, updateExecutor, updateStatus, timeCreate,
-//                emailCreator, updateUrgent, updateImage, updateNameExecutor, nameCreator);
-//
-//        TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(this.getApplication(),
-//                collection)).get(TaskViewModel.class);
-//
-//        taskViewModel.updateTask(id, task);
+        Task task = new Task(zone, updateStatus, updateName, updateComment,
+                updateAddress, updateFloor, updateCabinet, updateLetter,
+                updateUrgent, updateDateDone, (int) executorId, (int) creatorId,
+                dateCreate, updateImage);
+
+        taskViewModel.editTask(task, taskId);
 
         startActivity(new Intent(this, MainRootActivity.class));
     }
@@ -193,7 +243,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
 
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_no_connection))
-                .setPositiveButton(getText(R.string.save), (dialog, id) -> updateTask(collection))
+                .setPositiveButton(getText(R.string.save), (dialog, id) -> updateTask(zone))
                 .setNegativeButton(android.R.string.cancel, (dialog, id) ->
                         startActivity(new Intent(this, MainRootActivity.class)));
 

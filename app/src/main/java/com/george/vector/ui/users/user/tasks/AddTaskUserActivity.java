@@ -4,7 +4,6 @@ import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.PERMISSION_CAMERA_CODE;
 import static com.george.vector.common.utils.consts.Keys.PERMISSION_GALLERY_CODE;
-import static com.george.vector.common.utils.consts.Logs.TAG_ADD_TASK_USER_ACTIVITY;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -28,20 +27,19 @@ import com.george.vector.R;
 import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.common.utils.TimeUtils;
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityAddTaskUserBinding;
-import com.george.vector.network.model.Task;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
-import com.george.vector.ui.tasks.BottomSheetAddImage;
+import com.george.vector.ui.common.tasks.BottomSheetAddImage;
 
 import java.io.File;
 import java.util.Objects;
 
 public class AddTaskUserActivity extends AppCompatActivity implements BottomSheetAddImage.StateListener {
 
-    String address, floor, cabinet, letter, nameTask, comment, email, zone, fullNameCreator;
-    final String status = "Новая заявка";
+    private String address, floor, cabinet, letter, nameTask, comment, email, zone, fullNameCreator;
+    private final String status = "Новая заявка";
 
     private Uri fileUri;
 
@@ -76,8 +74,6 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
         zone = userDataViewModel.getUser().getZone();
         email = userDataViewModel.getUser().getEmail();
 
-        Log.i(TAG_ADD_TASK_USER_ACTIVITY, "permission: " + zone);
-        Log.d(TAG_ADD_TASK_USER_ACTIVITY, "email: " + email);
 
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         String nameUser = userPrefViewModel.getUser().getName();

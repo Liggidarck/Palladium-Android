@@ -1,7 +1,7 @@
 package com.george.vector.ui.users.root.tasks;
 
 import static com.george.vector.common.utils.consts.Keys.ZONE;
-import static com.george.vector.common.utils.consts.Keys.IS_EXECUTED;
+import static com.george.vector.common.utils.consts.Keys.IS_EXECUTE;
 import static com.george.vector.common.utils.consts.Keys.STATUS;
 import static com.george.vector.common.utils.consts.Keys.ID;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
@@ -19,7 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.FragmentTasksRootBinding;
 import com.george.vector.ui.adapter.TaskAdapter;
 import com.george.vector.ui.viewmodel.TaskViewModel;
@@ -45,7 +45,7 @@ public class FragmentTasksRoot extends Fragment {
         assert args != null;
         zone = args.getString(ZONE);
         status = args.getString(STATUS);
-        boolean executed = args.getBoolean(IS_EXECUTED);
+        boolean executed = args.getBoolean(IS_EXECUTE);
 
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 
@@ -93,6 +93,7 @@ public class FragmentTasksRoot extends Fragment {
             Log.d(TAG, "setUpRecyclerView: " + id);
             Intent intent = new Intent(FragmentTasksRoot.this.getContext(), TaskRootActivity.class);
             intent.putExtra(ID, id);
+            intent.putExtra(ZONE, zone);
             startActivity(intent);
         });
 

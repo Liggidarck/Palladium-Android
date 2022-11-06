@@ -2,7 +2,6 @@ package com.george.vector.ui.users.user.main.fragments.home;
 
 import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.ID;
-import static com.george.vector.common.utils.consts.Logs.TAG_HOME_USER_FRAGMENT;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,16 +16,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.FragmentUserHomeBinding;
-import com.george.vector.network.model.Task;
 import com.george.vector.ui.adapter.TaskAdapter;
 import com.george.vector.ui.users.user.tasks.AddTaskUserActivity;
 import com.george.vector.ui.users.user.tasks.TaskUserActivity;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 
 public class FragmentUserHome extends Fragment {
 
@@ -57,8 +51,6 @@ public class FragmentUserHome extends Fragment {
 
         adapter.setOnItemClickListener((task, position) -> {
             long id = task.getId();
-
-            Log.d(TAG_HOME_USER_FRAGMENT, String.format("Position: %d ID: %s", position, id));
 
             Intent intent = new Intent(FragmentUserHome.this.getContext(), TaskUserActivity.class);
             intent.putExtra(ID, id);

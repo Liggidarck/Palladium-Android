@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.george.vector.R;
 import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.common.utils.TextValidatorUtils;
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.EditUserActivityBinding;
 import com.george.vector.network.model.Role;
 import com.george.vector.ui.viewmodel.UserViewModel;

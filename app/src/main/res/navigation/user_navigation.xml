@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/nav_help_user"
-        android:name="com.george.vector.ui.help.user.FragmentUserHelp"
+        android:name="com.george.vector.ui.common.help.user.FragmentUserHelp"
         android:label="FragmentUserHelp"
         tools:layout="@layout/fragment_help_user">
         <action
@@ -29,7 +29,7 @@
 
     <fragment
         android:id="@+id/fragmentDataHelp2"
-        android:name="com.george.vector.ui.help.root.FragmentDataHelp"
+        android:name="com.george.vector.ui.common.help.root.FragmentDataHelp"
         android:label="FragmentDataHelp"
         tools:layout="@layout/fragment_data_help"/>
 

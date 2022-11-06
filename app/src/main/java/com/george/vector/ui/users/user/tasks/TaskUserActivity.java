@@ -15,7 +15,7 @@ import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.databinding.ActivityTaskUserBinding;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
-import com.george.vector.ui.tasks.FragmentImageTask;
+import com.george.vector.ui.common.tasks.FragmentImageTask;
 import com.google.android.material.snackbar.Snackbar;
 
 public class TaskUserActivity extends AppCompatActivity {

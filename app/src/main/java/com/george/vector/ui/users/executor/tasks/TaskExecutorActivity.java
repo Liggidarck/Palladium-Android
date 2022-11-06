@@ -2,7 +2,6 @@ package com.george.vector.ui.users.executor.tasks;
 
 import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.ID;
-import static com.george.vector.common.utils.consts.Logs.TAG_TASK_EXECUTOR_FRAGMENT;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,8 +19,8 @@ import com.george.vector.R;
 import com.george.vector.databinding.ActivityTaskExecutorBinding;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
-import com.george.vector.ui.tasks.FragmentImageTask;
-import com.george.vector.ui.tasks.FragmentUrgentRequest;
+import com.george.vector.ui.common.tasks.FragmentImageTask;
+import com.george.vector.ui.common.tasks.FragmentUrgentRequest;
 import com.google.android.material.snackbar.Snackbar;
 
 public class TaskExecutorActivity extends AppCompatActivity {
@@ -89,7 +88,6 @@ public class TaskExecutorActivity extends AppCompatActivity {
                 cabinet = String.format("%s%s", cabinet, letter);
 
             if (urgent) {
-                Log.d(TAG_TASK_EXECUTOR_FRAGMENT, "Срочная заявка");
 
                 Fragment urgent_fragment = new FragmentUrgentRequest();
                 getSupportFragmentManager()
@@ -150,7 +148,6 @@ public class TaskExecutorActivity extends AppCompatActivity {
         if (!isOnline())
             Snackbar.make(findViewById(R.id.coordinator_task_executor), getString(R.string.error_no_connection), Snackbar.LENGTH_LONG)
                     .setAction("Повторить", v -> {
-                        Log.i(TAG_TASK_EXECUTOR_FRAGMENT, "Update status: " + isOnline());
                         onStart();
                     }).show();
     }

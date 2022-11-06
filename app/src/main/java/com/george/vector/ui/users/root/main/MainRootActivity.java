@@ -1,7 +1,6 @@
 package com.george.vector.ui.users.root.main;
 
 import static com.george.vector.common.utils.consts.Keys.TOPIC_NEW_TASKS_CREATE;
-import static com.george.vector.common.utils.consts.Logs.TAG_NOTIFICATIONS;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -18,8 +17,8 @@ import androidx.preference.PreferenceManager;
 
 import com.george.vector.BuildConfig;
 import com.george.vector.R;
-import com.george.vector.common.notifications.SendNotification;
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.network.notifications.SendNotification;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityRootMainBinding;
 import com.george.vector.network.model.User;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -27,6 +26,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 public class MainRootActivity extends AppCompatActivity {
 
     private ActivityRootMainBinding binding;
+
+    public static final String TAG = MainRootActivity.class.getSimpleName();
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -68,7 +69,7 @@ public class MainRootActivity extends AppCompatActivity {
                     .setPositiveButton("Подключить", (dialog, which) -> {
                         FirebaseMessaging.getInstance().subscribeToTopic(TOPIC_NEW_TASKS_CREATE);
                         preferencesViewModel.setNotifications(true);
-                        Log.d(TAG_NOTIFICATIONS, "Notifications state: " + notifications);
+                        Log.d(TAG, "Notifications state: " + notifications);
 
                         SendNotification sendNotification = new SendNotification();
                         sendNotification.sendNotification("Новый пользователь зарегестрирован на получение уведомлений",

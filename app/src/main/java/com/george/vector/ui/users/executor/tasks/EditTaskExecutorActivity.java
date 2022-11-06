@@ -17,9 +17,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.R;
 import com.george.vector.common.utils.NetworkUtils;
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityEditTaskExecutorBinding;
-import com.george.vector.network.model.Task;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
 import com.george.vector.ui.users.executor.main.MainExecutorActivity;

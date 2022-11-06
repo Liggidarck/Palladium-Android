@@ -1,7 +1,6 @@
 package com.george.vector.ui.users.root.main.fragments.home;
 
 import static com.george.vector.common.utils.consts.Keys.OST;
-import static com.george.vector.common.utils.consts.Logs.TAG_HOME_ROOT_FRAGMENT;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.FragmentRootHomeBinding;
 import com.george.vector.ui.users.root.profile.ProfileRootActivity;
 import com.george.vector.ui.users.root.tasks.BottomSheetAddTask;
@@ -26,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class FragmentRootHome extends Fragment {
 
-    private String zone, email;
+    private String zone;
 
     private FragmentRootHomeBinding homeBinding;
 
@@ -45,10 +44,7 @@ public class FragmentRootHome extends Fragment {
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         String nameUser = userPrefViewModel.getUser().getName();
         String lastnameUser = userPrefViewModel.getUser().getLastName();
-
-        Log.d(TAG, "onCreateView: " + userPrefViewModel.getUser().getEmail());
-
-        email = userPrefViewModel.getUser().getEmail();
+        String email = userPrefViewModel.getUser().getEmail();
 
         String _name = Character.toString(nameUser.charAt(0));
         String _last_name = Character.toString(lastnameUser.charAt(0));
@@ -72,7 +68,6 @@ public class FragmentRootHome extends Fragment {
         homeBinding.chipRootOst.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             if (isChecked) {
-                Log.i(TAG_HOME_ROOT_FRAGMENT, "Остафьево checked");
                 zone = "ost";
                 updateZones(zone);
             }
@@ -80,7 +75,6 @@ public class FragmentRootHome extends Fragment {
         });
         homeBinding.chipRootBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                Log.i(TAG_HOME_ROOT_FRAGMENT, "Барыши checked");
                 zone = "bar";
                 updateZones(zone);
             }
@@ -101,7 +95,7 @@ public class FragmentRootHome extends Fragment {
         zone = PreferenceManager
                 .getDefaultSharedPreferences(FragmentRootHome.this.getContext())
                 .getString("default_root_location", OST);
-        Log.d(TAG_HOME_ROOT_FRAGMENT, "Zone: " + zone);
+        Log.d(TAG, "Zone: " + zone);
     }
 
     @Override
@@ -114,13 +108,13 @@ public class FragmentRootHome extends Fragment {
         Fragment currentFragment = null;
         switch (zoneUpdate) {
             case "ost":
-                Log.i(TAG_HOME_ROOT_FRAGMENT, "Запуск фрагмента Осафьево");
-                currentFragment = new FragmentRootOst();
+                Log.i(TAG, "Запуск фрагмента Осафьево");
+                currentFragment = new FragmentRootZoneOst();
 
                 break;
             case "bar":
-                Log.i(TAG_HOME_ROOT_FRAGMENT, "Запуск фрагмента Барыши");
-                currentFragment = new FragmentRootBar();
+                Log.i(TAG, "Запуск фрагмента Барыши");
+                currentFragment = new FragmentRootZoneBar();
 
                 break;
         }

@@ -7,7 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.george.vector.common.notifications.SendNotification;
+import com.george.vector.network.notifications.SendNotification;
 import com.george.vector.network.api.FluffyFoxyClient;
 import com.george.vector.network.api.TaskInterface;
 import com.george.vector.network.model.Task;

@@ -1,8 +1,8 @@
 package com.george.vector.ui.users.root.tasks;
 
 import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
-import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.ID;
+import static com.george.vector.common.utils.consts.Keys.ZONE;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -20,19 +20,19 @@ import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
 import com.george.vector.common.utils.NetworkUtils;
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityTaskRootBinding;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.UserViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
-import com.george.vector.ui.tasks.FragmentImageTask;
-import com.george.vector.ui.tasks.FragmentUrgentRequest;
+import com.george.vector.ui.common.tasks.FragmentUrgentRequest;
 import com.google.android.material.snackbar.Snackbar;
 
 public class TaskRootActivity extends AppCompatActivity {
 
     private long taskId;
     private long userId;
+    private String zone;
     private String address;
     private String floor;
     private String cabinet;
@@ -72,6 +72,7 @@ public class TaskRootActivity extends AppCompatActivity {
         binding.editTaskRootBtn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskRootActivity.class);
             intent.putExtra(ID, taskId);
+            intent.putExtra(ZONE, zone);
             startActivity(intent);
         });
 
@@ -94,8 +95,8 @@ public class TaskRootActivity extends AppCompatActivity {
         Bundle arguments = getIntent().getExtras();
 
         taskId = arguments.getLong(ID);
+        zone = arguments.getString(ZONE);
 
-        Log.d(TAG, "initData: task id: " + taskId);
 
         confirmDelete = PreferenceManager
                 .getDefaultSharedPreferences(this)

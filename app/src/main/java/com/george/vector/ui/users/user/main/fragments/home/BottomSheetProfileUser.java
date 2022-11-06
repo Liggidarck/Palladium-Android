@@ -11,9 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ProfileUserBottomSheetBinding;
-import com.george.vector.ui.settings.SettingsActivity;
+import com.george.vector.ui.common.settings.SettingsActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class BottomSheetProfileUser extends BottomSheetDialogFragment {

@@ -1,7 +1,6 @@
 package com.george.vector.ui.users.executor.main;
 
 import static com.george.vector.common.utils.consts.Keys.OST;
-import static com.george.vector.common.utils.consts.Logs.TAG_MAIN_EXECUTOR_ACTIVITY;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.george.vector.R;
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityMainExecutorBinding;
 import com.george.vector.ui.users.executor.main.fragments.FragmentBarExecutor;
 import com.george.vector.ui.users.executor.main.fragments.FragmentOstExecutor;
@@ -32,8 +31,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class MainExecutorActivity extends AppCompatActivity {
 
-    String zone, email;
-    ActivityMainExecutorBinding executorBinding;
+    private String zone, email;
+    private ActivityMainExecutorBinding executorBinding;
+
+    public static final String TAG = MainExecutorActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +83,7 @@ public class MainExecutorActivity extends AppCompatActivity {
         executorBinding.chipExecutorOst.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             if(isChecked){
-                Log.i(TAG_MAIN_EXECUTOR_ACTIVITY, "Остафьево checked");
+                Log.i(TAG, "Остафьево checked");
                 zone = "ost";
                 updateZones(zone);
             }
@@ -91,7 +92,7 @@ public class MainExecutorActivity extends AppCompatActivity {
 
         executorBinding.chipExecutorBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked){
-                Log.i(TAG_MAIN_EXECUTOR_ACTIVITY, "Барыши checked");
+                Log.i(TAG, "Барыши checked");
                 zone = "bar";
                 updateZones(zone);
             }
@@ -105,11 +106,11 @@ public class MainExecutorActivity extends AppCompatActivity {
         Fragment currentFragment = null;
         switch (zone_update) {
             case "ost":
-                Log.i(TAG_MAIN_EXECUTOR_ACTIVITY, "Запуск фрагмента Осафьево");
+                Log.i(TAG, "Запуск фрагмента Осафьево");
                 currentFragment = new FragmentOstExecutor();
                 break;
             case "bar":
-                Log.i(TAG_MAIN_EXECUTOR_ACTIVITY, "Запуск фрагмента Барыши");
+                Log.i(TAG, "Запуск фрагмента Барыши");
                 currentFragment = new FragmentBarExecutor();
                 break;
         }
@@ -133,7 +134,7 @@ public class MainExecutorActivity extends AppCompatActivity {
         if(!isOnline())
             Snackbar.make(findViewById(R.id.coordinator_main_executor), getString(R.string.error_no_connection), Snackbar.LENGTH_LONG)
                     .setAction("Повторить", v ->  {
-                        Log.i(TAG_MAIN_EXECUTOR_ACTIVITY, "Update status: " + isOnline());
+                        Log.i(TAG, "Update status: " + isOnline());
                         onStart();
                     }).show();
     }

@@ -11,12 +11,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.BuildConfig;
 import com.george.vector.R;
-import com.george.vector.common.notifications.SendNotification;
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.network.notifications.SendNotification;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityProfileRootBinding;
 import com.george.vector.network.model.Role;
 import com.george.vector.network.model.User;
-import com.george.vector.ui.settings.SettingsActivity;
+import com.george.vector.ui.common.settings.SettingsActivity;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;

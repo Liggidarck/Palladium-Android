@@ -1,25 +1,19 @@
 package com.george.vector.ui.users.user.main;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
-import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityMainUserBinding;
-import com.george.vector.network.model.User;
-import com.george.vector.ui.auth.LoginActivity;
 import com.george.vector.ui.users.user.main.fragments.home.BottomSheetProfileUser;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class MainUserActivity extends AppCompatActivity implements BottomSheetProfileUser.stateBtnListener {
 

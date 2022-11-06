@@ -1,7 +1,7 @@
 package com.george.vector.ui.users.root.main.fragments.my_tasks;
 
 import static com.george.vector.common.utils.consts.Keys.ZONE;
-import static com.george.vector.common.utils.consts.Keys.IS_EXECUTED;
+import static com.george.vector.common.utils.consts.Keys.IS_EXECUTE;
 import static com.george.vector.common.utils.consts.Keys.OST_AIST;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.OST_YAGODKA;
@@ -17,7 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.databinding.FragmentOstBinding;
-import com.george.vector.ui.users.root.folders.LocationFolderActivity;
+import com.george.vector.ui.users.root.status.StatusActivity;
 
 public class FragmentRootMyTasksOst extends Fragment {
 
@@ -30,23 +30,23 @@ public class FragmentRootMyTasksOst extends Fragment {
         View view = binding.getRoot();
 
         binding.ostSchool.setOnClickListener(v -> {
-            Intent intent = new Intent(FragmentRootMyTasksOst.this.getContext(), LocationFolderActivity.class);
+            Intent intent = new Intent(FragmentRootMyTasksOst.this.getContext(), StatusActivity.class);
             intent.putExtra(ZONE, OST_SCHOOL);
-            intent.putExtra(IS_EXECUTED, true);
+            intent.putExtra(IS_EXECUTE, true);
             startActivity(intent);
         });
 
         binding.ostAist.setOnClickListener(v -> {
-            Intent intent = new Intent(FragmentRootMyTasksOst.this.getContext(), LocationFolderActivity.class);
+            Intent intent = new Intent(FragmentRootMyTasksOst.this.getContext(), StatusActivity.class);
             intent.putExtra(ZONE, OST_AIST);
-            intent.putExtra(IS_EXECUTED, "work");
+            intent.putExtra(IS_EXECUTE, "work");
             startActivity(intent);
         });
 
         binding.ostYagodka.setOnClickListener(v -> {
-            Intent intent = new Intent(FragmentRootMyTasksOst.this.getContext(), LocationFolderActivity.class);
+            Intent intent = new Intent(FragmentRootMyTasksOst.this.getContext(), StatusActivity.class);
             intent.putExtra(ZONE, OST_YAGODKA);
-            intent.putExtra(IS_EXECUTED, "work");
+            intent.putExtra(IS_EXECUTE, "work");
             startActivity(intent);
         });
 

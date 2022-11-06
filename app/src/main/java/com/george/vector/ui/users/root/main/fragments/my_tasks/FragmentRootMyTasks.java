@@ -1,7 +1,6 @@
 package com.george.vector.ui.users.root.main.fragments.my_tasks;
 
 import static com.george.vector.common.utils.consts.Keys.OST;
-import static com.george.vector.common.utils.consts.Logs.TAG_TASK_ROOT_FRAGMENT;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -16,24 +15,23 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.FragmentRootTasksBinding;
 
 import org.jetbrains.annotations.NotNull;
 
 public class FragmentRootMyTasks extends Fragment {
 
-    String zone, email;
-    FragmentRootTasksBinding rootTasksBinding;
+    private String zone;
+    private FragmentRootTasksBinding rootTasksBinding;
+
+    public static final String TAG = FragmentRootMyTasks.class.getSimpleName();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootTasksBinding = FragmentRootTasksBinding.inflate(inflater, container, false);
         View view = rootTasksBinding.getRoot();
-
-        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
-        email = userPrefViewModel.getUser().getEmail();
 
         zone = PreferenceManager.getDefaultSharedPreferences(FragmentRootMyTasks.this.getContext()).getString("default_root_location", OST);
 
@@ -46,7 +44,7 @@ public class FragmentRootMyTasks extends Fragment {
         rootTasksBinding.chipOstTasks.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             if(isChecked){
-                Log.i(TAG_TASK_ROOT_FRAGMENT, "Остафьево checked");
+                Log.i(TAG, "Остафьево checked");
                 zone = "ost";
                 updateZones(zone);
             }
@@ -55,7 +53,7 @@ public class FragmentRootMyTasks extends Fragment {
 
         rootTasksBinding.chipBarTasks.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked){
-                Log.i(TAG_TASK_ROOT_FRAGMENT, "Барыши checked");
+                Log.i(TAG, "Барыши checked");
                 zone = "bar";
                 updateZones(zone);
             }
@@ -69,11 +67,11 @@ public class FragmentRootMyTasks extends Fragment {
         Fragment currentFragment = null;
         switch (zone_update) {
             case "ost":
-                Log.i(TAG_TASK_ROOT_FRAGMENT, "Запуск фрагмента Осафьево");
+                Log.i(TAG, "Запуск фрагмента Осафьево");
                 currentFragment = new FragmentRootMyTasksOst();
                 break;
             case "bar":
-                Log.i(TAG_TASK_ROOT_FRAGMENT, "Запуск фрагмента Барыши");
+                Log.i(TAG, "Запуск фрагмента Барыши");
                 currentFragment = new FragmentRootMyTasksBar();
                 break;
         }

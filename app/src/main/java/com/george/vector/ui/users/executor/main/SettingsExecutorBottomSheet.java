@@ -1,7 +1,5 @@
 package com.george.vector.ui.users.executor.main;
 
-import static com.george.vector.common.utils.consts.Keys.TOPIC_NEW_TASKS_CREATE;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,15 +13,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.R;
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.SettingsExecutorBottomSheetBinding;
-import com.george.vector.network.model.User;
-import com.george.vector.ui.auth.LoginActivity;
-import com.george.vector.ui.edit_users.EditDataUserActivity;
-import com.george.vector.ui.settings.SettingsActivity;
+import com.george.vector.ui.users.executor.EditDataUserActivity;
+import com.george.vector.ui.common.settings.SettingsActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 public class SettingsExecutorBottomSheet extends BottomSheetDialogFragment {
 
