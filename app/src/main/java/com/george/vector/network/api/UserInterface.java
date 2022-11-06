@@ -1,7 +1,7 @@
 package com.george.vector.network.api;
 
-import com.george.vector.network.model.Role;
-import com.george.vector.network.model.User;
+import com.george.vector.network.model.user.Role;
+import com.george.vector.network.model.user.User;
 
 import java.util.List;
 

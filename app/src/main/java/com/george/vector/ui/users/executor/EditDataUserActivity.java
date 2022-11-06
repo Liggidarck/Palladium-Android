@@ -11,9 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.george.vector.R;
 import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.databinding.ActivityEditDataUserBinding;
-import com.george.vector.network.model.User;
 import com.george.vector.ui.viewmodel.UserViewModel;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class EditDataUserActivity extends AppCompatActivity {
 

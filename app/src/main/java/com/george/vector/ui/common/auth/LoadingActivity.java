@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.george.vector.R;
 import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityLoadingBinding;
-import com.george.vector.network.model.Role;
+import com.george.vector.network.model.user.Role;
 import com.george.vector.ui.users.executor.main.MainExecutorActivity;
 import com.george.vector.ui.users.root.main.MainRootActivity;
 import com.george.vector.ui.users.user.main.MainUserActivity;

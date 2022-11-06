@@ -17,8 +17,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.george.vector.network.model.Role;
-import com.george.vector.network.model.User;
+import com.george.vector.network.model.user.Role;
+import com.george.vector.network.model.user.User;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -121,6 +121,40 @@
 
                     </RelativeLayout>
 
+                    <RelativeLayout
+                        android:id="@+id/layout_register"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        tools:ignore="UnusedAttribute"
+                        tools:targetApi="m">
+
+                        <ImageView
+                            android:id="@+id/register_user_image"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="15dp"
+                            android:src="@drawable/ic_baseline_person_add_24"
+                            app:tint="?attr/colorControlNormal"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="10dp"
+                            android:layout_toEndOf="@id/register_user_image"
+                            android:text="@string/add_new_user"
+                            android:textColor="?attr/textColor"
+                            android:textSize="17sp" />
+
+                    </RelativeLayout>
+
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

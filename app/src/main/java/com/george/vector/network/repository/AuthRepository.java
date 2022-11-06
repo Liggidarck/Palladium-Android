@@ -7,7 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.george.vector.network.api.FluffyFoxyAuthClient;
 import com.george.vector.network.api.AuthInterface;
-import com.george.vector.network.model.User;
+import com.george.vector.network.model.Message;
+import com.george.vector.network.model.user.RegisterUserModel;
 import com.george.vector.network.request.LoginRequest;
 import com.george.vector.network.responce.LoginResponse;
 
@@ -47,19 +48,19 @@ public class AuthRepository {
         return loginResponseMutableLiveData;
     }
 
-    public MutableLiveData<String> register(User user) {
-        MutableLiveData<String> status = new MutableLiveData<>();
+    public MutableLiveData<Message> register(RegisterUserModel user) {
+        MutableLiveData<Message> status = new MutableLiveData<>();
 
-        authInterface.register(user).enqueue(new Callback<String>() {
+        authInterface.register(user).enqueue(new Callback<Message>() {
             @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+            public void onResponse(@NonNull Call<Message> call, @NonNull Response<Message> response) {
                 if(response.code() == 200) {
                     status.setValue(response.body());
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<Message> call, @NonNull Throwable t) {
                 status.postValue(null);
             }
         });

@@ -1,6 +1,6 @@
 package com.george.vector.data.user;
 
-import com.george.vector.network.model.User;
+import com.george.vector.network.model.user.User;
 
 public interface UserPreferencesBehaviour {
 

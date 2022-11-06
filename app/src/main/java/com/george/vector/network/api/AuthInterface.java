@@ -1,6 +1,7 @@
 package com.george.vector.network.api;
 
-import com.george.vector.network.model.User;
+import com.george.vector.network.model.Message;
+import com.george.vector.network.model.user.RegisterUserModel;
 import com.george.vector.network.request.LoginRequest;
 import com.george.vector.network.responce.LoginResponse;
 
@@ -14,6 +15,6 @@ public interface AuthInterface {
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
 
     @POST("/fluffy_foxy/auth/register")
-    Call<String> register(@Body User user);
+    Call<Message> register(@Body RegisterUserModel user);
 
 }

@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.tasks;
+package com.george.vector.ui.users.root.tasks.contoll;
 
 import static com.george.vector.common.utils.consts.Keys.ID;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
@@ -72,19 +72,19 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
     private final BottomSheetAddImage addImage = new BottomSheetAddImage();
 
     private final ActivityResultLauncher<String> selectPictureLauncher = registerForActivityResult(
-            new ActivityResultContracts.GetContent(),
-            uri -> {
+            new ActivityResultContracts.GetContent(), uri -> {
                 fileUri = uri;
                 binding.imageViewTask.setImageURI(fileUri);
-                Snackbar.make(binding.addEditTaskCoordinator, "Ваше изображение отображено в коне формы заявки", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.addEditTaskCoordinator, R.string.add_image_to_end_text,
+                        Snackbar.LENGTH_SHORT).show();
             });
 
     private final ActivityResultLauncher<Uri> cameraLauncher = registerForActivityResult(
-            new ActivityResultContracts.TakePicture(),
-            result -> {
+            new ActivityResultContracts.TakePicture(), result -> {
                 if (result) {
                     binding.imageViewTask.setImageURI(fileUri);
-                    Snackbar.make(binding.addEditTaskCoordinator, "Ваше изображение отображено в коне формы заявки", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(binding.addEditTaskCoordinator, R.string.add_image_to_end_text,
+                            Snackbar.LENGTH_SHORT).show();
                 }
             });
 
@@ -159,13 +159,13 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
 
         taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
                 this.getApplication(),
-                userDataViewModel.getToken()
-        )).get(TaskViewModel.class);
+                userDataViewModel.getToken())
+        ).get(TaskViewModel.class);
 
         userViewModel = new ViewModelProvider(this, new ViewModelFactory(
                 this.getApplication(),
-                userDataViewModel.getToken()
-        )).get(UserViewModel.class);
+                userDataViewModel.getToken())
+        ).get(UserViewModel.class);
     }
 
     private void getTask(int bufferSize) {
@@ -190,11 +190,11 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
 
             if (comment.equals("Нет коментария к заявке"))
                 requireNonNull(binding.taskComment.getEditText()).setText("");
-            else
-                requireNonNull(binding.taskComment.getEditText()).setText(comment);
+            else requireNonNull(binding.taskComment.getEditText()).setText(comment);
 
             if (image == null) {
-                binding.addImageBtn.setOnClickListener(v -> addImage.show(getSupportFragmentManager(), "BottomSheetAddImage"));
+                binding.addImageBtn.setOnClickListener(v ->
+                        addImage.show(getSupportFragmentManager(), "BottomSheetAddImage"));
             } else {
                 binding.addImageBtn.setEnabled(false);
                 taskViewModel.setImage(image, binding.progressBarAddEditTask, binding.imageViewTask, bufferSize);
@@ -215,8 +215,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
 
         if (fileUri != null)
             updateImage = taskViewModel.uploadImage(fileUri, EditTaskRootActivity.this);
-        else
-            updateImage = image;
+        else updateImage = image;
 
         String updateAddress = requireNonNull(binding.taskAddress.getEditText()).getText().toString();
         String updateFloor = requireNonNull(binding.taskFloor.getEditText()).getText().toString();
@@ -228,10 +227,9 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
         String updateStatus = requireNonNull(binding.taskStatus.getEditText()).getText().toString();
         boolean updateUrgent = binding.urgentCheckBox.isChecked();
 
-        Task task = new Task(zone, updateStatus, updateName, updateComment,
-                updateAddress, updateFloor, updateCabinet, updateLetter,
-                updateUrgent, updateDateDone, (int) executorId, (int) creatorId,
-                dateCreate, updateImage);
+        Task task = new Task(zone, updateStatus, updateName, updateComment, updateAddress,
+                updateFloor, updateCabinet, updateLetter, updateUrgent, updateDateDone,
+                (int) executorId, (int) creatorId, dateCreate, updateImage);
 
         taskViewModel.editTask(task, taskId);
 
@@ -297,10 +295,12 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
             case PERMISSION_CAMERA_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     File file = new File(getFilesDir(), "picFromCamera");
-                    fileUri = FileProvider.getUriForFile(
-                            this,
-                            getApplicationContext().getPackageName() + ".provider",
-                            file);
+
+                    fileUri = FileProvider
+                            .getUriForFile(this,
+                                    getApplicationContext().getPackageName() + ".provider",
+                                    file);
+
                     cameraLauncher.launch(fileUri);
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -324,38 +324,22 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
     void initializeFields(String location) {
         if (location.equals(OST_SCHOOL)) {
             String[] items = getResources().getStringArray(R.array.addressesOstSchool);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                    EditTaskRootActivity.this,
-                    R.layout.dropdown_menu_categories,
-                    items
-            );
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(EditTaskRootActivity.this, R.layout.dropdown_menu_categories, items);
             binding.addressAutoComplete.setAdapter(adapter);
         }
 
         String[] itemsStatus = getResources().getStringArray(R.array.status);
-        ArrayAdapter<String> adapter_status = new ArrayAdapter<>(
-                EditTaskRootActivity.this,
-                R.layout.dropdown_menu_categories,
-                itemsStatus
-        );
+        ArrayAdapter<String> adapter_status = new ArrayAdapter<>(EditTaskRootActivity.this, R.layout.dropdown_menu_categories, itemsStatus);
 
         binding.statusAutoComplete.setAdapter(adapter_status);
 
         String[] itemsLetter = getResources().getStringArray(R.array.letter);
-        ArrayAdapter<String> adapter_letter = new ArrayAdapter<>(
-                EditTaskRootActivity.this,
-                R.layout.dropdown_menu_categories,
-                itemsLetter
-        );
+        ArrayAdapter<String> adapter_letter = new ArrayAdapter<>(EditTaskRootActivity.this, R.layout.dropdown_menu_categories, itemsLetter);
 
         binding.letterAutoComplete.setAdapter(adapter_letter);
 
         String[] floors_basic_school = getResources().getStringArray(R.array.floors);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
-                EditTaskRootActivity.this,
-                R.layout.dropdown_menu_categories,
-                floors_basic_school
-        );
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(EditTaskRootActivity.this, R.layout.dropdown_menu_categories, floors_basic_school);
         binding.floorAutoComplete.setAdapter(arrayAdapter);
 
         datePickCalendar = Calendar.getInstance();
@@ -366,11 +350,14 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
             updateLabel();
         };
 
-        binding.taskDateComplete.getEditText().setOnClickListener(v ->
-                new DatePickerDialog(EditTaskRootActivity.this, date, datePickCalendar
-                        .get(Calendar.YEAR), datePickCalendar.get(Calendar.MONTH), datePickCalendar
-                        .get(Calendar.DAY_OF_MONTH))
-                        .show());
+        binding.taskDateComplete
+                .getEditText()
+                .setOnClickListener(v ->
+                        new DatePickerDialog(EditTaskRootActivity.this,
+                                date,
+                                datePickCalendar.get(Calendar.YEAR),
+                                datePickCalendar.get(Calendar.MONTH),
+                                datePickCalendar.get(Calendar.DAY_OF_MONTH)).show());
 
     }
 
@@ -384,8 +371,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
     @Override
     public void getPhotoFromDevice(String button) {
         if (button.equals("new photo")) {
-            ActivityCompat.requestPermissions(
-                    EditTaskRootActivity.this,
+            ActivityCompat.requestPermissions(EditTaskRootActivity.this,
                     new String[]{
                             Manifest.permission.CAMERA,
                             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -395,8 +381,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
         }
 
         if (button.equals("existing photo")) {
-            ActivityCompat.requestPermissions(
-                    EditTaskRootActivity.this,
+            ActivityCompat.requestPermissions(EditTaskRootActivity.this,
                     new String[]{
                             Manifest.permission.READ_EXTERNAL_STORAGE,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE,

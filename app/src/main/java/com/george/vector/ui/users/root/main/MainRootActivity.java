@@ -20,7 +20,7 @@ import com.george.vector.R;
 import com.george.vector.network.notifications.SendNotification;
 import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityRootMainBinding;
-import com.george.vector.network.model.User;
+import com.george.vector.network.model.user.User;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainRootActivity extends AppCompatActivity {

@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.databinding.ProfileBottomSheetBinding;
-import com.george.vector.network.model.Role;
+import com.george.vector.network.model.user.Role;
 import com.george.vector.ui.viewmodel.UserViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 

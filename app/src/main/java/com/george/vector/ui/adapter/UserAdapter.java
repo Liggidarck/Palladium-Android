@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.george.vector.R;
-import com.george.vector.network.model.User;
+import com.george.vector.network.model.user.User;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -18,7 +18,9 @@ import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.EditUserActivityBinding;
-import com.george.vector.network.model.Role;
+import com.george.vector.network.model.user.RegisterUserModel;
+import com.george.vector.network.model.user.Role;
+import com.george.vector.network.model.user.User;
 import com.george.vector.ui.viewmodel.UserViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
 import com.google.android.material.snackbar.Snackbar;
@@ -35,6 +37,7 @@ public class EditUserActivity extends AppCompatActivity {
     private String zoneUser;
     private long userID;
     private String password;
+    private String username;
 
     private EditUserActivityBinding binding;
 
@@ -55,14 +58,7 @@ public class EditUserActivity extends AppCompatActivity {
         Bundle arguments = getIntent().getExtras();
         userID = arguments.getLong("user_id");
 
-        Log.d(TAG, "onCreate: " + userID);
-
-        UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
-
-        userViewModel = new ViewModelProvider(this, new ViewModelFactory(
-                this.getApplication(),
-                userDataViewModel.getToken()
-        )).get(UserViewModel.class);
+        initViewModels();
 
         userViewModel.getUserById(userID).observe(this, user -> {
             List<Role> roles = user.getRoles();
@@ -74,7 +70,7 @@ public class EditUserActivity extends AppCompatActivity {
             roleUser = roles.get(0).getName();
             zoneUser = user.getZone();
             password = user.getPassword();
-
+            username = user.getUsername();
 
             requireNonNull(binding.textName.getEditText()).setText(nameUser);
             requireNonNull(binding.textLastName.getEditText()).setText(lastNameUser);
@@ -82,19 +78,23 @@ public class EditUserActivity extends AppCompatActivity {
             requireNonNull(binding.textEmail.getEditText()).setText(emailUser);
             requireNonNull(binding.textRole.getEditText()).setText(roleUser);
             requireNonNull(binding.textPermissions.getEditText()).setText(zoneUser);
-            binding.textPassword.getEditText().setText(password);
-
-//            if (emailUser.equals("api@2122.pro"))
-//                binding.textPassword.getEditText().setText("Пароль? Какой пароль? ¯\\_(ツ)_/¯");
-//            else
-//                binding.textPassword.getEditText().setText(password);
+            requireNonNull(binding.textUsername.getEditText()).setText(username);
 
             initFields();
         });
 
         binding.toolbarEditUser.setNavigationOnClickListener(v -> onBackPressed());
         binding.btnUpdateUser.setOnClickListener(v -> updateUser());
-        binding.textPassword.setEndIconOnClickListener(v -> copyUserData());
+
+    }
+
+    private void initViewModels() {
+        UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+
+        userViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                this.getApplication(),
+                userDataViewModel.getToken()
+        )).get(UserViewModel.class);
     }
 
     private void initFields() {
@@ -124,7 +124,7 @@ public class EditUserActivity extends AppCompatActivity {
         emailUser = requireNonNull(binding.textEmail.getEditText()).getText().toString();
         roleUser = requireNonNull(binding.textRole.getEditText()).getText().toString();
         zoneUser = requireNonNull(binding.textPermissions.getEditText()).getText().toString();
-        password = requireNonNull(binding.textPassword.getEditText()).getText().toString();
+        username = requireNonNull(binding.textUsername.getEditText()).getText().toString();
 
         if(!validateFields()) {
             return;
@@ -139,7 +139,6 @@ public class EditUserActivity extends AppCompatActivity {
         binding.progressBarEditUser.setVisibility(View.VISIBLE);
 
 
-
         binding.progressBarEditUser.setVisibility(View.INVISIBLE);
     }
 
@@ -147,7 +146,6 @@ public class EditUserActivity extends AppCompatActivity {
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 
         String email = binding.textEmail.getEditText().getText().toString();
-        String password = binding.textPassword.getEditText().getText().toString();
 
         ClipData clip = ClipData.newPlainText(null, email + " " + password);
         clipboard.setPrimaryClip(clip);
@@ -162,6 +160,6 @@ public class EditUserActivity extends AppCompatActivity {
                 textValidator.isEmptyField(emailUser, binding.textEmail) &
                 textValidator.isEmptyField(roleUser, binding.textRole) &
                 textValidator.isEmptyField(zoneUser, binding.textPermissions) &
-                textValidator.isEmptyField(password, binding.textPassword);
+                textValidator.isEmptyField(password, binding.textUsername);
     }
 }

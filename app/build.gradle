@@ -71,24 +71,16 @@ dependencies {
     implementation "androidx.core:core-splashscreen:1.0.0"
     implementation 'com.google.android.material:material:1.8.0-alpha02'
 
-    //Firebase Main
-    implementation platform('com.google.firebase:firebase-bom:30.2.0')
-    implementation 'com.google.firebase:firebase-core'
-    implementation('com.google.firebase:firebase-auth') {
-        exclude module: "play-services-safetynet"
-    }
-
     //Firebase ui
-    implementation 'com.firebaseui:firebase-ui-database:7.1.1'
     implementation 'com.firebaseui:firebase-ui-storage:7.1.1'
     implementation 'com.firebaseui:firebase-ui-firestore:7.1.1'
 
     // FCM
-    implementation 'com.google.firebase:firebase-messaging:23.0.8'
+    implementation 'com.google.firebase:firebase-messaging:23.1.0'
 
     // Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

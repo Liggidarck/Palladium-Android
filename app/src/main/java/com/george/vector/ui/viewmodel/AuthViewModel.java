@@ -6,7 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.george.vector.network.model.User;
+import com.george.vector.network.model.Message;
+import com.george.vector.network.model.user.RegisterUserModel;
 import com.george.vector.network.repository.AuthRepository;
 import com.george.vector.network.request.LoginRequest;
 import com.george.vector.network.responce.LoginResponse;
@@ -24,7 +25,7 @@ public class AuthViewModel extends AndroidViewModel {
         return repository.login(loginRequest);
     }
 
-    public MutableLiveData<String> register(User user) {
+    public MutableLiveData<Message> register(RegisterUserModel user) {
         return repository.register(user);
     }
 

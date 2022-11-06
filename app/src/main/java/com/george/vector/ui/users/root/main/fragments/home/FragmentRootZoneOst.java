@@ -17,7 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.databinding.FragmentOstBinding;
-import com.george.vector.ui.users.root.status.StatusActivity;
+import com.george.vector.ui.users.root.tasks.navigation.StatusActivity;
 
 public class FragmentRootZoneOst extends Fragment {
 

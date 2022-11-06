@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.tasks;
+package com.george.vector.ui.users.root.tasks.navigation;
 
 import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.IS_EXECUTE;
@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.FragmentTasksRootBinding;
 import com.george.vector.ui.adapter.TaskAdapter;
+import com.george.vector.ui.users.root.tasks.TaskRootActivity;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
 

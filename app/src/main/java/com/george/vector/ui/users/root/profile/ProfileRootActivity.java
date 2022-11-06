@@ -14,12 +14,11 @@ import com.george.vector.R;
 import com.george.vector.network.notifications.SendNotification;
 import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityProfileRootBinding;
-import com.george.vector.network.model.Role;
-import com.george.vector.network.model.User;
+import com.george.vector.network.model.user.Role;
+import com.george.vector.network.model.user.User;
 import com.george.vector.ui.common.settings.SettingsActivity;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileRootActivity extends AppCompatActivity {
@@ -37,7 +36,7 @@ public class ProfileRootActivity extends AppCompatActivity {
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         User user = userPrefViewModel.getUser();
 
-        List<Role> roleList = new ArrayList<>();
+        List<Role> roleList;
 
         name = user.getName();
         lastname = user.getLastName();
@@ -74,8 +73,10 @@ public class ProfileRootActivity extends AppCompatActivity {
                     .setNegativeButton("Отмена", (dialog12, which) -> dialog12.dismiss())
                     .create();
             dialog.show();
+        });
 
-
+        binding.layoutRegister.setOnClickListener(v -> {
+            startActivity(new Intent(this, RegisterUserActivity.class));
         });
 
         String versionName = "Версия: " + BuildConfig.VERSION_NAME;

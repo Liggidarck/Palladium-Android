@@ -12,17 +12,17 @@ import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
 import com.george.vector.data.user.UserDataViewModel;
-import com.george.vector.databinding.SettingsRootActivityBinding;
+import com.george.vector.databinding.ActivitySettingsBinding;
 
 public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    SettingsRootActivityBinding binding;
+    private ActivitySettingsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_Palladium);
         super.onCreate(savedInstanceState);
-        binding = SettingsRootActivityBinding.inflate(getLayoutInflater());
+        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         Context context = getApplicationContext();
@@ -36,7 +36,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
 
         if (savedInstanceState == null) {
 
-            if (role.equals("Root"))
+            if (role.equals("ROLE_DEVELOPER"))
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.settings_frame, new SettingsRootFragment())

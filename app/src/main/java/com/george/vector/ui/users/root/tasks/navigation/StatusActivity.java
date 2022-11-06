@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.status;
+package com.george.vector.ui.users.root.tasks.navigation;
 
 import static com.george.vector.common.utils.consts.Keys.ARCHIVE_TASKS;
 import static com.george.vector.common.utils.consts.Keys.BAR_RUCHEEK;
@@ -21,7 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
 import com.george.vector.databinding.ActivityStatusBinding;
-import com.george.vector.ui.users.root.tasks.AllTasksRootActivity;
+import com.george.vector.ui.users.root.tasks.navigation.AllTasksRootActivity;
 
 public class StatusActivity extends AppCompatActivity {
 

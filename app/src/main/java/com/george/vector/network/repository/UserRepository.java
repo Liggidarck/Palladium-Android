@@ -7,8 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.george.vector.network.api.FluffyFoxyClient;
 import com.george.vector.network.api.UserInterface;
-import com.george.vector.network.model.Role;
-import com.george.vector.network.model.User;
+import com.george.vector.network.model.user.Role;
+import com.george.vector.network.model.user.User;
 
 import java.util.List;
 

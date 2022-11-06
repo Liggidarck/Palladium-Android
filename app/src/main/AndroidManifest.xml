@@ -6,8 +6,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
-
+    <uses-permission
+        android:name="com.google.android.gms.permission.AD_ID"
+        tools:node="remove" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
@@ -21,7 +22,6 @@
 
     <application
         android:allowBackup="true"
-        android:usesCleartextTraffic="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
@@ -29,7 +29,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Loading"
+        android:usesCleartextTraffic="true"
         tools:targetApi="s">
+        <activity
+            android:name=".ui.users.root.profile.RegisterUserActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
 
         <service
             android:name="com.george.vector.network.notifications.FirebaseService"
@@ -60,11 +68,11 @@
         <activity android:name=".ui.users.executor.tasks.TaskExecutorActivity" />
         <activity android:name=".ui.users.executor.main.ExecutorTasksActivity" />
         <activity android:name=".ui.users.executor.main.FolderExecutorActivity" />
-        <activity android:name=".ui.users.root.tasks.EditTaskRootActivity" />
+        <activity android:name=".ui.users.root.tasks.contoll.EditTaskRootActivity" />
         <activity android:name=".ui.users.root.tasks.TaskRootActivity" />
-        <activity android:name=".ui.users.root.tasks.AddTaskRootActivity" />
-        <activity android:name=".ui.users.root.tasks.AllTasksRootActivity" />
-        <activity android:name=".ui.users.root.status.StatusActivity" />
+        <activity android:name=".ui.users.root.tasks.contoll.AddTaskRootActivity" />
+        <activity android:name=".ui.users.root.tasks.navigation.AllTasksRootActivity" />
+        <activity android:name=".ui.users.root.tasks.navigation.StatusActivity" />
         <activity android:name=".ui.users.executor.EditDataUserActivity" />
         <activity android:name=".ui.users.root.profile.EditUserActivity" />
         <activity android:name=".ui.users.root.profile.ListUsersActivity" />

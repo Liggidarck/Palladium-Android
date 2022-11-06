@@ -1,4 +1,4 @@
-package com.george.vector.network.model;
+package com.george.vector.network.model.user;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

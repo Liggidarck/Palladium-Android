@@ -6,9 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.george.vector.R;
-import com.george.vector.network.model.Role;
-import com.george.vector.network.model.User;
+import com.george.vector.network.model.user.Role;
+import com.george.vector.network.model.user.User;
 import com.george.vector.network.repository.UserRepository;
 
 import java.util.List;

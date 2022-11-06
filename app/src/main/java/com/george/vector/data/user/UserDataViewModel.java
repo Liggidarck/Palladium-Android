@@ -5,7 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.george.vector.network.model.User;
+import com.george.vector.network.model.user.User;
 
 public class UserDataViewModel extends AndroidViewModel {
 

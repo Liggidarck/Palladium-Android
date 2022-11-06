@@ -27,7 +27,8 @@
     <string name="done">Готово</string>
 
     <string name="authorization">Авторизация</string>
-    <string name="email_text">Username</string>
+    <string name="email_text">E-mail</string>
+    <string name="username_text">Username</string>
     <string name="password">Пароль</string>
     <string name="login">Войти</string>
 
@@ -105,5 +106,6 @@
     <string name="show_text">Показать</string>
     <string name="root_permission">All</string>
     <string name="url_full_document"><![CDATA[https://docs.google.com/document/d/1YGy2YM9jFOcPkwCeRWDB2iy_AiDoriyR/edit?usp=sharing&ouid=107837366117826648347&rtpof=true&sd=true]]></string>
+    <string name="add_image_to_end_text">Ваше изображение отображено в коне формы заявки</string>
 
 </resources>
