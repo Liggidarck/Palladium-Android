@@ -30,6 +30,8 @@ public class FragmentRootHome extends Fragment {
 
     private FragmentRootHomeBinding homeBinding;
 
+    public static final String TAG = FragmentRootHome.class.getSimpleName();
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,6 +45,9 @@ public class FragmentRootHome extends Fragment {
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         String nameUser = userPrefViewModel.getUser().getName();
         String lastnameUser = userPrefViewModel.getUser().getLastName();
+
+        Log.d(TAG, "onCreateView: " + userPrefViewModel.getUser().getEmail());
+
         email = userPrefViewModel.getUser().getEmail();
 
         String _name = Character.toString(nameUser.charAt(0));

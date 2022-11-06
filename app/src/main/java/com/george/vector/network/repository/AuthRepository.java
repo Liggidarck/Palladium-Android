@@ -1,5 +1,7 @@
 package com.george.vector.network.repository;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
@@ -17,6 +19,8 @@ public class AuthRepository {
 
     AuthInterface authInterface;
 
+    public static final String TAG = AuthRepository.class.getSimpleName();
+
     public AuthRepository() {
         authInterface = FluffyFoxyAuthClient.getAuthClient().create(AuthInterface.class);
     }
@@ -27,6 +31,8 @@ public class AuthRepository {
         authInterface.login(loginRequest).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
+                Log.d(TAG, "onResponse: " + response.code());
+
                 if(response.code() == 200) {
                     loginResponseMutableLiveData.setValue(response.body());
                 }

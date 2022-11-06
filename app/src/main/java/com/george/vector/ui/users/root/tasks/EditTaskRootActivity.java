@@ -28,11 +28,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
-import com.george.vector.common.utils.DialogsUtils;
 import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.databinding.ActivityAddTaskRootBinding;
-import com.george.vector.network.model.Task;
 import com.george.vector.ui.tasks.BottomSheetAddImage;
 import com.george.vector.ui.users.root.main.MainRootActivity;
 import com.george.vector.ui.viewmodel.TaskViewModel;
@@ -59,7 +57,6 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
 
     private final TextValidatorUtils textValidatorUtils = new TextValidatorUtils();
     private final NetworkUtils networkUtils = new NetworkUtils();
-    private final DialogsUtils dialogsUtils = new DialogsUtils();
     private final BottomSheetAddImage addImage = new BottomSheetAddImage();
 
     private final ActivityResultLauncher<String> selectPictureLauncher = registerForActivityResult(
@@ -118,8 +115,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
             updateTask(collection);
         });
 
-        binding.addExecutorBtn.setOnClickListener(v -> dialogsUtils.showAddExecutorDialog(EditTaskRootActivity.this,
-                binding.taskEmailExecutor, binding.taskNameExecutor));
+//        binding.addExecutorBtn.setOnClickListener(v -> dialogsUtils.showAddExecutorDialog(EditTaskRootActivity.this, null, binding.taskNameExecutor));
     }
 
     private void getTask(int bufferSize) {
@@ -176,7 +172,6 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
         String updateName = requireNonNull(binding.taskName.getEditText()).getText().toString();
         String updateComment = requireNonNull(binding.taskComment.getEditText()).getText().toString();
         String updateDateComplete = requireNonNull(binding.taskDateComplete.getEditText()).getText().toString();
-        String updateExecutor = requireNonNull(binding.taskEmailExecutor.getEditText()).getText().toString();
         String updateNameExecutor = requireNonNull(binding.taskNameExecutor.getEditText()).getText().toString();
         String updateStatus = requireNonNull(binding.taskStatus.getEditText()).getText().toString();
         boolean updateUrgent = binding.urgentCheckBox.isChecked();
@@ -212,7 +207,6 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
         String cabinet = binding.taskCabinet.getEditText().getText().toString();
         String taskName = binding.taskName.getEditText().getText().toString();
         String dateComplete = binding.taskDateComplete.getEditText().getText().toString();
-        String emailExecutor = binding.taskEmailExecutor.getEditText().getText().toString();
         String taskStatus = binding.taskStatus.getEditText().getText().toString();
         String fullNameExecutor = binding.taskNameExecutor.getEditText().getText().toString();
 
@@ -221,7 +215,6 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
                 textValidatorUtils.isEmptyField(cabinet, binding.taskCabinet) &
                 textValidatorUtils.isEmptyField(taskName, binding.taskName) &
                 textValidatorUtils.isEmptyField(dateComplete, binding.taskDateComplete) &
-                textValidatorUtils.isEmptyField(emailExecutor, binding.taskEmailExecutor) &
                 textValidatorUtils.isEmptyField(taskStatus, binding.taskStatus) &
                 textValidatorUtils.isEmptyField(fullNameExecutor, binding.taskNameExecutor) &
                 textValidatorUtils.validateNumberField(cabinet, binding.taskCabinet, 3);

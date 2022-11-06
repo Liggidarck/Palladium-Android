@@ -1,11 +1,13 @@
 package com.george.vector.ui.users.root.tasks;
 
+import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
 import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.ID;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +20,7 @@ import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
 import com.george.vector.common.utils.NetworkUtils;
+import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityTaskRootBinding;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
@@ -37,7 +40,7 @@ public class TaskRootActivity extends AppCompatActivity {
     private String status;
     private String dateCreate;
     private String timeCreate;
-    private String collection;
+    private String zone;
     private String imageId;
     private int creatorId;
     private int executorId;
@@ -52,6 +55,8 @@ public class TaskRootActivity extends AppCompatActivity {
     TaskViewModel taskViewModel;
     NetworkUtils networkUtils = new NetworkUtils();
 
+    public static final String TAG = TaskRootActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_Palladium);
@@ -61,9 +66,15 @@ public class TaskRootActivity extends AppCompatActivity {
 
         initData();
 
-        taskViewModel = new ViewModelProvider(
-                this,
-                new ViewModelFactory(TaskRootActivity.this.getApplication(), collection)
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+
+        String token = userPrefViewModel.getToken();
+
+        Log.d(TAG, "onCreate: " + id);
+        Log.d(TAG, "onCreate: " + token);
+
+        taskViewModel = new ViewModelProvider(this,
+                new ViewModelFactory(TaskRootActivity.this.getApplication(), token)
         ).get(TaskViewModel.class);
 
         setSupportActionBar(binding.topAppBarTasksRoot);
@@ -72,26 +83,27 @@ public class TaskRootActivity extends AppCompatActivity {
         binding.editTaskRootBtn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskRootActivity.class);
             intent.putExtra(ID, id);
-            intent.putExtra(ZONE, collection);
             startActivity(intent);
         });
 
-        getTask(collection, id);
+        getTask(zone, id);
     }
 
     private void initData() {
         Bundle arguments = getIntent().getExtras();
 
         id = arguments.getLong(ID);
-        collection = arguments.getString(ZONE);
 
         confirmDelete = PreferenceManager
                 .getDefaultSharedPreferences(this)
                 .getBoolean("confirm_before_deleting_root", true);
     }
 
-    void getTask(String collection, long id) {
+    void getTask(String zone, long id) {
         taskViewModel.getTaskById(id).observe(this, task -> {
+
+            Log.d(TAG, "getTask: " + task.getAddress());
+
             address = task.getAddress();
             floor = String.format("Этаж: %s", task.getFloor());
             cabinet = String.format("Кабинет: %s", task.getCabinet());
@@ -118,9 +130,8 @@ public class TaskRootActivity extends AppCompatActivity {
             binding.textViewCommentTaskRoot.setText(comment);
             binding.textViewStatusTaskRoot.setText(status);
             binding.textViewDateCreateTaskRoot.setText(dateCreateText);
-            binding.textViewEmailCreatorTaskRoot.setText(creatorId);
 
-            if (status.equals("Новая заявка"))
+            if (status.equals(NEW_TASKS))
                 binding.circleStatusRoot.setImageResource(R.color.red);
 
             if (status.equals("В работе"))
@@ -145,8 +156,8 @@ public class TaskRootActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("image_id", imageId);
                 bundle.putLong(ID, id);
-                bundle.putString(ZONE, collection);
-                bundle.putString(ZONE, this.collection);
+                bundle.putString(ZONE, zone);
+                bundle.putString(ZONE, this.zone);
                 imageFragment.setArguments(bundle);
 
                 getSupportFragmentManager()

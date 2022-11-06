@@ -8,6 +8,10 @@ public interface UserPreferencesBehaviour {
 
     User getUser();
 
+    void saveId(long id);
+
+    long getId();
+
     void saveToken(String token);
 
     String getToken();

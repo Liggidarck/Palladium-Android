@@ -2,7 +2,7 @@ package com.george.vector.ui.users.user.main.fragments;
 
 import static com.george.vector.common.utils.consts.Keys.ARCHIVE_TASKS;
 import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
-import static com.george.vector.common.utils.consts.Keys.FOLDER;
+import static com.george.vector.common.utils.consts.Keys.STATUS;
 import static com.george.vector.common.utils.consts.Keys.IN_PROGRESS_TASKS;
 
 import android.content.Intent;
@@ -30,19 +30,19 @@ public class FragmentUserHistory extends Fragment {
 
         historyUserBinding.taskInProgressUser.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentUserHistory.this.getContext(), FolderUserActivity.class);
-            intent.putExtra(FOLDER, IN_PROGRESS_TASKS);
+            intent.putExtra(STATUS, IN_PROGRESS_TASKS);
             startActivity(intent);
         });
 
         historyUserBinding.taskCompletedUser.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentUserHistory.this.getContext(), FolderUserActivity.class);
-            intent.putExtra(FOLDER, COMPLETED_TASKS);
+            intent.putExtra(STATUS, COMPLETED_TASKS);
             startActivity(intent);
         });
 
         historyUserBinding.taskArchiveUser.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentUserHistory.this.getContext(), FolderUserActivity.class);
-            intent.putExtra(FOLDER, ARCHIVE_TASKS);
+            intent.putExtra(STATUS, ARCHIVE_TASKS);
             startActivity(intent);
         });
 

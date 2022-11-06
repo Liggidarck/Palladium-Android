@@ -33,8 +33,12 @@ public interface TaskInterface {
     @GET("/palladium/tasks/get/byStatus")
     Call<List<Task>> getTasksByStatus(@Query("status") String status);
 
-    @GET("/palladium/tasks/get")
+    @GET("/palladium/tasks/get/byZone")
     Call<List<Task>> getTasksByZone(@Query("zone") String zone);
+
+    @GET("/palladium/tasks/get/byZoneAndStatus")
+    Call<List<Task>> getByZoneLikeAndStatusLike(@Query("zone") String zone,
+                                                @Query("status") String status);
 
     @GET("/palladium/tasks/get/all")
     Call<List<Task>> getAllTasks();

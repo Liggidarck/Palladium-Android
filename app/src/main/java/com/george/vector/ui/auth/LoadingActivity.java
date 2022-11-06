@@ -3,6 +3,7 @@ package com.george.vector.ui.auth;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,7 +45,9 @@ public class LoadingActivity extends AppCompatActivity {
 
         List<Role> roleList = preferencesViewModel.getUser().getRole();
 
-        if (token.equals(null)) {
+        Log.d("Loading", "onCreate: token: " + token);
+
+        if (token == null) {
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle("Внимание!")
                     .setMessage("Необходимо войти в аккаунт снова. Если вы не помните совой логин, обратитесь в техническую поддрежку")

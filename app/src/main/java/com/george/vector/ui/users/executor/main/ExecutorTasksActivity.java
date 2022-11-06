@@ -1,7 +1,7 @@
 package com.george.vector.ui.users.executor.main;
 
 import static com.george.vector.common.utils.consts.Keys.ZONE;
-import static com.george.vector.common.utils.consts.Keys.FOLDER;
+import static com.george.vector.common.utils.consts.Keys.STATUS;
 
 import android.os.Bundle;
 
@@ -26,7 +26,7 @@ public class ExecutorTasksActivity extends AppCompatActivity {
 
         Bundle arguments = getIntent().getExtras();
         collection = arguments.getString(ZONE);
-        folder = arguments.getString(FOLDER);
+        folder = arguments.getString(STATUS);
 
         String textToolbar = null;
         switch (collection) {
@@ -62,7 +62,7 @@ public class ExecutorTasksActivity extends AppCompatActivity {
 
         Bundle bundle = new Bundle();
         bundle.putString(ZONE, collection);
-        bundle.putString(FOLDER, folder);
+        bundle.putString(STATUS, folder);
         fragmentTasks.setArguments(bundle);
 
         getSupportFragmentManager()

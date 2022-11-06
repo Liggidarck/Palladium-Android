@@ -4,7 +4,7 @@ import static com.george.vector.common.utils.consts.Keys.ARCHIVE_TASKS;
 import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
 import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
-import static com.george.vector.common.utils.consts.Keys.FOLDER;
+import static com.george.vector.common.utils.consts.Keys.STATUS;
 import static com.george.vector.common.utils.consts.Keys.IN_PROGRESS_TASKS;
 import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
 
@@ -33,27 +33,27 @@ public class FolderRootActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        String collection = arguments.getString(ZONE);
-        String folder = arguments.getString(FOLDER);
+        String zone = arguments.getString(ZONE);
+        String status = arguments.getString(STATUS);
         String executed = arguments.getString(EXECUTOR_EMAIL);
 
-        if (folder.equals(NEW_TASKS))
+        if (status.equals(NEW_TASKS))
             textToolbar = getString(R.string.new_tasks_text);
 
-        if (folder.equals(IN_PROGRESS_TASKS))
+        if (status.equals(IN_PROGRESS_TASKS))
             textToolbar = getString(R.string.progress_tasks);
 
-        if (folder.equals(ARCHIVE_TASKS))
+        if (status.equals(ARCHIVE_TASKS))
             textToolbar = getString(R.string.archive_tasks_text);
 
-        if (folder.equals(COMPLETED_TASKS))
+        if (status.equals(COMPLETED_TASKS))
             textToolbar = getString(R.string.completed_tasks_text);
 
         binding.toolbarFolderRootActivity.setNavigationOnClickListener(v -> onBackPressed());
 
         binding.createTaskRoot.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddTaskRootActivity.class);
-            intent.putExtra(ZONE, collection);
+            intent.putExtra(ZONE, zone);
             startActivity(intent);
         });
 
@@ -61,8 +61,8 @@ public class FolderRootActivity extends AppCompatActivity {
 
         Fragment currentFragment = new FragmentTasksRoot();
         Bundle bundle = new Bundle();
-        bundle.putString(ZONE, collection);
-        bundle.putString(FOLDER, folder);
+        bundle.putString(ZONE, zone);
+        bundle.putString(STATUS, status);
         bundle.putString(EXECUTOR_EMAIL, executed);
         currentFragment.setArguments(bundle);
 

@@ -16,6 +16,14 @@ public class UserDataViewModel extends AndroidViewModel {
         repository = new UserPreferencesRepository(application);
     }
 
+    public void saveId(long id) {
+        repository.saveId(id);
+    }
+
+    public long getId() {
+        return repository.getId();
+    }
+
     public void saveUser(User user) {
         repository.saveUser(user);
     }

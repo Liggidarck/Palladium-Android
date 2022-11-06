@@ -1,5 +1,6 @@
 package com.george.vector.data.preferences;
 
+import static com.george.vector.common.utils.consts.Keys.ID;
 import static com.george.vector.common.utils.consts.Keys.TOKEN;
 import static com.george.vector.common.utils.consts.Keys.USER_NOTIFICATIONS_OPTIONS;
 import static com.george.vector.common.utils.consts.Keys.USER_PREFERENCES;
@@ -64,6 +65,17 @@ public class UserPreferencesRepository implements UserPreferencesBehaviour{
         roles.add(new Role(0, role));
 
         return new User(zone, name, lastName, patronymic, email, password, username, roles);
+    }
+
+    @Override
+    public void saveId(long id) {
+        editor.putLong(ID, id);
+        editor.apply();
+    }
+
+    @Override
+    public long getId() {
+        return sharedPreferences.getLong(ID, 0);
     }
 
     @Override

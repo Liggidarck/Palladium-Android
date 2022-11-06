@@ -1,10 +1,8 @@
 package com.george.vector.ui.users.executor.tasks;
 
 import static com.george.vector.common.utils.consts.Keys.ZONE;
-import static com.george.vector.common.utils.consts.Keys.FOLDER;
-import static com.george.vector.common.utils.consts.Keys.ID;
+import static com.george.vector.common.utils.consts.Keys.STATUS;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +14,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.FragmentExecutorTasksBinding;
-import com.george.vector.network.model.Task;
 import com.george.vector.ui.adapter.TaskAdapter;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 
 public class FragmentExecutorTasks extends Fragment {
 
@@ -41,7 +34,7 @@ public class FragmentExecutorTasks extends Fragment {
         Bundle args = getArguments();
         assert args != null;
         collection = args.getString(ZONE);
-        status = args.getString(FOLDER);
+        status = args.getString(STATUS);
 
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         email = userPrefViewModel.getUser().getEmail();

@@ -1,10 +1,9 @@
 package com.george.vector.ui.auth;
 
-import static com.george.vector.common.utils.TextValidatorUtils.validateEmail;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,7 +20,6 @@ import com.george.vector.ui.users.executor.main.MainExecutorActivity;
 import com.george.vector.ui.users.root.main.MainRootActivity;
 import com.george.vector.ui.users.user.main.MainUserActivity;
 import com.george.vector.ui.viewmodel.AuthViewModel;
-import com.george.vector.ui.viewmodel.UserViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
@@ -32,12 +30,13 @@ import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
-    ActivityLoginBinding binding;
-    UserDataViewModel userDataViewModel;
-    UserViewModel userViewModel;
+    private ActivityLoginBinding binding;
+    private UserDataViewModel userDataViewModel;
 
-    TextValidatorUtils textValidator = new TextValidatorUtils();
-    NetworkUtils networkUtils = new NetworkUtils();
+    private TextValidatorUtils textValidator = new TextValidatorUtils();
+    private NetworkUtils networkUtils = new NetworkUtils();
+
+    public static final String TAG = LoadingActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +46,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         binding.btnLogin.setOnClickListener(v -> {
 
@@ -75,11 +73,18 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Идет поиск пользователя...");
         progressDialog.show();
 
+
+
         AuthViewModel authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
         authViewModel.login(loginRequest).observe(this, response -> {
 
+            Log.d(TAG, "login: " + response.getToken());
+            Log.d(TAG, "login: " + response.getId());
+
             String token = response.getToken();
+            long id = response.getId();
+
             String username = response.getUsername();
 
             String name = response.getName();
@@ -93,10 +98,12 @@ public class LoginActivity extends AppCompatActivity {
             List<Role> roleList = new ArrayList<>();
             roleList.add(new Role(0, role.get(0)));
 
-            userDataViewModel.saveToken(token);
+            Log.d(TAG, "login: " + roleList.get(0).getName());
 
+            userDataViewModel.saveToken(token);
+            userDataViewModel.saveId(id);
             userDataViewModel.saveUser(new User(zone, name, lastName, patronymic,
-                    email, patronymic, username, roleList));
+                    email, loginRequest.getPassword(), username, roleList));
 
             progressDialog.dismiss();
             startApp(role.get(0));
@@ -116,7 +123,6 @@ public class LoginActivity extends AppCompatActivity {
 
         finish();
     }
-
 
     @Override
     protected void onStart() {

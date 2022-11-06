@@ -7,7 +7,7 @@ import static com.george.vector.common.utils.consts.Keys.BAR_ZVEZDOCHKA;
 import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
 import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
-import static com.george.vector.common.utils.consts.Keys.FOLDER;
+import static com.george.vector.common.utils.consts.Keys.STATUS;
 import static com.george.vector.common.utils.consts.Keys.IN_PROGRESS_TASKS;
 import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
 import static com.george.vector.common.utils.consts.Keys.OST_AIST;
@@ -59,7 +59,7 @@ public class LocationFolderActivity extends AppCompatActivity {
 
         binding.newTasksCardRoot.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);
-            intent.putExtra(FOLDER, NEW_TASKS);
+            intent.putExtra(STATUS, NEW_TASKS);
             intent.putExtra(ZONE, zone);
             intent.putExtra(EXECUTOR_EMAIL, executed);
             startActivity(intent);
@@ -67,7 +67,7 @@ public class LocationFolderActivity extends AppCompatActivity {
 
         binding.inProgressTasksCardRoot.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);
-            intent.putExtra(FOLDER, IN_PROGRESS_TASKS);
+            intent.putExtra(STATUS, IN_PROGRESS_TASKS);
             intent.putExtra(ZONE, zone);
             intent.putExtra(EXECUTOR_EMAIL, executed);
             startActivity(intent);
@@ -75,7 +75,7 @@ public class LocationFolderActivity extends AppCompatActivity {
 
         binding.completedTasksCardRoot.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);
-            intent.putExtra(FOLDER, COMPLETED_TASKS);
+            intent.putExtra(STATUS, COMPLETED_TASKS);
             intent.putExtra(ZONE, zone);
             intent.putExtra(EXECUTOR_EMAIL, executed);
             startActivity(intent);
@@ -83,7 +83,7 @@ public class LocationFolderActivity extends AppCompatActivity {
 
         binding.archiveTasksCardRoot.setOnClickListener(v -> {
             Intent intent = new Intent(this, FolderRootActivity.class);
-            intent.putExtra(FOLDER, ARCHIVE_TASKS);
+            intent.putExtra(STATUS, ARCHIVE_TASKS);
             intent.putExtra(ZONE, zone);
             intent.putExtra(EXECUTOR_EMAIL, executed);
             startActivity(intent);

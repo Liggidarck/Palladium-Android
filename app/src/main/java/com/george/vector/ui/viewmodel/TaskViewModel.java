@@ -66,6 +66,14 @@ public class TaskViewModel extends AndroidViewModel {
         return repository.getTaskById(id);
     }
 
+    public MutableLiveData<List<Task>> getTasksByZone(String zone) {
+        return repository.getTasksByZone(zone);
+    }
+
+    public MutableLiveData<List<Task>> getByZoneLikeAndStatusLike(String zone, String status) {
+        return repository.getByZoneLikeAndStatusLike(zone, status);
+    }
+
     public void deleteTask(long id, String imageId) {
         if (imageId != null) {
             String storageUrl = "images/" + imageId;
