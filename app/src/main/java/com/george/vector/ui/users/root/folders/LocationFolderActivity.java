@@ -6,7 +6,7 @@ import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.BAR_ZVEZDOCHKA;
 import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
-import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
+import static com.george.vector.common.utils.consts.Keys.IS_EXECUTED;
 import static com.george.vector.common.utils.consts.Keys.STATUS;
 import static com.george.vector.common.utils.consts.Keys.IN_PROGRESS_TASKS;
 import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
@@ -34,8 +34,8 @@ public class LocationFolderActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        String zone = arguments.get(ZONE).toString();
-        String executed = arguments.get(EXECUTOR_EMAIL).toString();
+        String zone = arguments.getString(ZONE);
+        boolean executed = arguments.getBoolean(IS_EXECUTED);
 
         if (zone.equals(OST_SCHOOL))
             binding.toolbarLocationFolderRoot.setTitle(getString(R.string.ost_text));
@@ -61,7 +61,7 @@ public class LocationFolderActivity extends AppCompatActivity {
             Intent intent = new Intent(this, FolderRootActivity.class);
             intent.putExtra(STATUS, NEW_TASKS);
             intent.putExtra(ZONE, zone);
-            intent.putExtra(EXECUTOR_EMAIL, executed);
+            intent.putExtra(IS_EXECUTED, executed);
             startActivity(intent);
         });
 
@@ -69,7 +69,7 @@ public class LocationFolderActivity extends AppCompatActivity {
             Intent intent = new Intent(this, FolderRootActivity.class);
             intent.putExtra(STATUS, IN_PROGRESS_TASKS);
             intent.putExtra(ZONE, zone);
-            intent.putExtra(EXECUTOR_EMAIL, executed);
+            intent.putExtra(IS_EXECUTED, executed);
             startActivity(intent);
         });
 
@@ -77,7 +77,7 @@ public class LocationFolderActivity extends AppCompatActivity {
             Intent intent = new Intent(this, FolderRootActivity.class);
             intent.putExtra(STATUS, COMPLETED_TASKS);
             intent.putExtra(ZONE, zone);
-            intent.putExtra(EXECUTOR_EMAIL, executed);
+            intent.putExtra(IS_EXECUTED, executed);
             startActivity(intent);
         });
 
@@ -85,7 +85,7 @@ public class LocationFolderActivity extends AppCompatActivity {
             Intent intent = new Intent(this, FolderRootActivity.class);
             intent.putExtra(STATUS, ARCHIVE_TASKS);
             intent.putExtra(ZONE, zone);
-            intent.putExtra(EXECUTOR_EMAIL, executed);
+            intent.putExtra(IS_EXECUTED, executed);
             startActivity(intent);
         });
 

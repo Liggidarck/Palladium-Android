@@ -43,7 +43,7 @@ public class ProfileRootActivity extends AppCompatActivity {
         lastname = user.getLastName();
         patronymic = user.getPatronymic();
         email = user.getEmail();
-        roleList = user.getRole();
+        roleList = user.getRoles();
         role = roleList.get(0).getName();
         zone = user.getZone();
 

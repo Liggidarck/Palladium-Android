@@ -17,7 +17,7 @@ public class Keys {
     public static final String ID = "id";
     public static final String STATUS = "folder";
     public static final String ROLE = "role";
-    public static final String EXECUTOR_EMAIL = "executed";
+    public static final String IS_EXECUTED = "executed";
 
     public static final String ZONE = "zone";
     public static final String USERS = "users";

@@ -1,5 +1,7 @@
 package com.george.vector.network.repository;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
@@ -17,6 +19,8 @@ import retrofit2.Response;
 public class UserRepository {
 
     private final UserInterface userInterface;
+
+    public static final String TAG = UserRepository.class.getSimpleName();
 
     public UserRepository(String token) {
         userInterface = FluffyFoxyClient.getFoxyTokenClient(token).create(UserInterface.class);
@@ -88,6 +92,7 @@ public class UserRepository {
         userInterface.getUserById(id).enqueue(new Callback<User>() {
             @Override
             public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+                Log.d(TAG, "onResponse: " + response.code());
                 if (response.code() == 200) {
                     user.setValue(response.body());
                 }

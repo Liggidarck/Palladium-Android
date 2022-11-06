@@ -3,7 +3,7 @@ package com.george.vector.ui.users.root.folders;
 import static com.george.vector.common.utils.consts.Keys.ARCHIVE_TASKS;
 import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
-import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
+import static com.george.vector.common.utils.consts.Keys.IS_EXECUTED;
 import static com.george.vector.common.utils.consts.Keys.STATUS;
 import static com.george.vector.common.utils.consts.Keys.IN_PROGRESS_TASKS;
 import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
@@ -35,7 +35,7 @@ public class FolderRootActivity extends AppCompatActivity {
         Bundle arguments = getIntent().getExtras();
         String zone = arguments.getString(ZONE);
         String status = arguments.getString(STATUS);
-        String executed = arguments.getString(EXECUTOR_EMAIL);
+        boolean executed = arguments.getBoolean(IS_EXECUTED);
 
         if (status.equals(NEW_TASKS))
             textToolbar = getString(R.string.new_tasks_text);
@@ -63,7 +63,7 @@ public class FolderRootActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putString(ZONE, zone);
         bundle.putString(STATUS, status);
-        bundle.putString(EXECUTOR_EMAIL, executed);
+        bundle.putBoolean(IS_EXECUTED, executed);
         currentFragment.setArguments(bundle);
 
         getSupportFragmentManager()

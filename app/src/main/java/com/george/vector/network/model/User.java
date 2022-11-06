@@ -1,22 +1,44 @@
 package com.george.vector.network.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
-public class User {
+public class User implements Serializable {
 
+    @SerializedName("id")
+    @Expose
     private long id;
+
+    @Expose
     private final String zone;
+
+    @Expose
     private final String name;
+
+    @Expose
     private final String lastName;
+
+    @Expose
     private final String patronymic;
+
+    @Expose
     private final String email;
+
+    @Expose
     private final String password;
+
+    @Expose
     private final String username;
-    private final List<Role> role;
+
+    @SerializedName("roles")
+    @Expose
+    private final List<Role> roles;
 
     public User(String zone, String name, String lastName, String patronymic,
-                String email, String password, String username, List<Role> role) {
+                String email, String password, String username, List<Role> roles) {
         this.zone = zone;
         this.name = name;
         this.lastName = lastName;
@@ -24,7 +46,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.username = username;
-        this.role = role;
+        this.roles = roles;
     }
 
     public void setId(long id) {
@@ -63,7 +85,7 @@ public class User {
         return username;
     }
 
-    public List<Role> getRole() {
-        return role;
+    public List<Role> getRoles() {
+        return roles;
     }
 }

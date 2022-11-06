@@ -74,13 +74,7 @@ public class TaskViewModel extends AndroidViewModel {
         return repository.getByZoneLikeAndStatusLike(zone, status);
     }
 
-    public void deleteTask(long id, String imageId) {
-        if (imageId != null) {
-            String storageUrl = "images/" + imageId;
-            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(storageUrl);
-            storageReference.delete();
-        }
-
+    public void deleteTask(long id) {
         repository.deleteTask(id);
     }
 

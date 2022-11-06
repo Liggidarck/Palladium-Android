@@ -23,7 +23,7 @@ public interface UserInterface {
     @GET("palladium/users/get/all/users")
     Call<List<User>> getUsersByRoleName(@Query("name") String name);
 
-    @GET("palladium/users/get/all/users/get/user")
+    @GET("palladium/users/get/user")
     Call<User> getUserById(@Query("id") long id);
 
     @PUT("palladium/users/edit")

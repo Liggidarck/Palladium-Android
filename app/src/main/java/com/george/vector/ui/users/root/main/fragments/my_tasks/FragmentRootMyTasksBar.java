@@ -4,7 +4,7 @@ import static com.george.vector.common.utils.consts.Keys.BAR_RUCHEEK;
 import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.BAR_ZVEZDOCHKA;
 import static com.george.vector.common.utils.consts.Keys.ZONE;
-import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
+import static com.george.vector.common.utils.consts.Keys.IS_EXECUTED;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,21 +31,21 @@ public class FragmentRootMyTasksBar extends Fragment {
         binding.barSchool.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentRootMyTasksBar.this.getContext(), LocationFolderActivity.class);
             intent.putExtra(ZONE, BAR_SCHOOL);
-            intent.putExtra(EXECUTOR_EMAIL, "work");
+            intent.putExtra(IS_EXECUTED, "work");
             startActivity(intent);
         });
 
         binding.barRucheek.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentRootMyTasksBar.this.getContext(), LocationFolderActivity.class);
             intent.putExtra(ZONE, BAR_RUCHEEK);
-            intent.putExtra(EXECUTOR_EMAIL, "work");
+            intent.putExtra(IS_EXECUTED, "work");
             startActivity(intent);
         });
 
         binding.barZvezdochka.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentRootMyTasksBar.this.getContext(), LocationFolderActivity.class);
             intent.putExtra(ZONE, BAR_ZVEZDOCHKA);
-            intent.putExtra(EXECUTOR_EMAIL, "work");
+            intent.putExtra(IS_EXECUTED, "work");
             startActivity(intent);
         });
 

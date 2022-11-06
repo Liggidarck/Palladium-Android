@@ -23,6 +23,7 @@ import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.ActivityTaskRootBinding;
 import com.george.vector.ui.viewmodel.TaskViewModel;
+import com.george.vector.ui.viewmodel.UserViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
 import com.george.vector.ui.tasks.FragmentImageTask;
 import com.george.vector.ui.tasks.FragmentUrgentRequest;
@@ -30,7 +31,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class TaskRootActivity extends AppCompatActivity {
 
-    private long id;
+    private long taskId;
+    private long userId;
     private String address;
     private String floor;
     private String cabinet;
@@ -39,21 +41,19 @@ public class TaskRootActivity extends AppCompatActivity {
     private String comment;
     private String status;
     private String dateCreate;
-    private String timeCreate;
-    private String zone;
     private String imageId;
     private int creatorId;
     private int executorId;
     private String dateDone;
-    private String fullNameExecutor;
-    private String fullNameCreator;
     private boolean confirmDelete;
     private boolean urgent;
 
     private ActivityTaskRootBinding binding;
 
-    TaskViewModel taskViewModel;
-    NetworkUtils networkUtils = new NetworkUtils();
+    private TaskViewModel taskViewModel;
+    private UserViewModel userViewModel;
+
+    private final NetworkUtils networkUtils = new NetworkUtils();
 
     public static final String TAG = TaskRootActivity.class.getSimpleName();
 
@@ -66,62 +66,61 @@ public class TaskRootActivity extends AppCompatActivity {
 
         initData();
 
-        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
-
-        String token = userPrefViewModel.getToken();
-
-        Log.d(TAG, "onCreate: " + id);
-        Log.d(TAG, "onCreate: " + token);
-
-        taskViewModel = new ViewModelProvider(this,
-                new ViewModelFactory(TaskRootActivity.this.getApplication(), token)
-        ).get(TaskViewModel.class);
-
         setSupportActionBar(binding.topAppBarTasksRoot);
         binding.topAppBarTasksRoot.setNavigationOnClickListener(v -> onBackPressed());
 
         binding.editTaskRootBtn.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditTaskRootActivity.class);
-            intent.putExtra(ID, id);
+            intent.putExtra(ID, taskId);
             startActivity(intent);
         });
 
-        getTask(zone, id);
+        getTask(taskId);
     }
 
     private void initData() {
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+
+        taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                this.getApplication(),
+                userPrefViewModel.getToken()
+        )).get(TaskViewModel.class);
+
+        userViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                this.getApplication(),
+                userPrefViewModel.getToken()
+        )).get(UserViewModel.class);
+
         Bundle arguments = getIntent().getExtras();
 
-        id = arguments.getLong(ID);
+        taskId = arguments.getLong(ID);
+
+        Log.d(TAG, "initData: task id: " + taskId);
 
         confirmDelete = PreferenceManager
                 .getDefaultSharedPreferences(this)
                 .getBoolean("confirm_before_deleting_root", true);
+
+        userId = userPrefViewModel.getId();
+
     }
 
-    void getTask(String zone, long id) {
+    void getTask(long id) {
         taskViewModel.getTaskById(id).observe(this, task -> {
-
-            Log.d(TAG, "getTask: " + task.getAddress());
-
             address = task.getAddress();
             floor = String.format("Этаж: %s", task.getFloor());
             cabinet = String.format("Кабинет: %s", task.getCabinet());
             letter = task.getLetter();
-
             nameTask = task.getName();
             comment = task.getComment();
             status = task.getStatus();
             dateCreate = task.getDateCreate();
-
             imageId = task.getImage();
             creatorId = task.getCreatorId();
             executorId = task.getExecutorId();
             dateDone = task.getDateDone();
-
             urgent = task.isUrgent();
-
-            String dateCreateText = "Созданно: " + dateCreate + " " + timeCreate;
+            String dateCreateText = "Созданно: " + dateCreate;
 
             binding.textViewAddressTaskRoot.setText(address);
             binding.textViewFloorTaskRoot.setText(floor);
@@ -151,20 +150,20 @@ public class TaskRootActivity extends AppCompatActivity {
             }
 
 
-            if (imageId != null) {
-                Fragment imageFragment = new FragmentImageTask();
-                Bundle bundle = new Bundle();
-                bundle.putString("image_id", imageId);
-                bundle.putLong(ID, id);
-                bundle.putString(ZONE, zone);
-                bundle.putString(ZONE, this.zone);
-                imageFragment.setArguments(bundle);
-
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.frame_image_task, imageFragment)
-                        .commit();
-            }
+//            if (imageId != null) {
+//                Fragment imageFragment = new FragmentImageTask();
+//                Bundle bundle = new Bundle();
+//                bundle.putString("image_id", imageId);
+//                bundle.putLong(ID, id);
+//                bundle.putString(ZONE, zone);
+//                bundle.putString(ZONE, this.zone);
+//                imageFragment.setArguments(bundle);
+//
+//                getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.id.frame_image_task, imageFragment)
+//                        .commit();
+//            }
 
             if (urgent) {
                 Fragment urgentFragment = new FragmentUrgentRequest();
@@ -173,6 +172,22 @@ public class TaskRootActivity extends AppCompatActivity {
                         .replace(R.id.frame_urgent_task, urgentFragment)
                         .commit();
             }
+
+            userViewModel.getUserById(creatorId).observe(this, user -> {
+                String name = user.getLastName() + " " + user.getLastName() + " " + user.getPatronymic();
+                String email = user.getEmail();
+
+                binding.textViewFullNameCreator.setText(name);
+                binding.textViewEmailCreatorTaskRoot.setText(email);
+            });
+
+            userViewModel.getUserById(executorId).observe(this, executor -> {
+                String name = executor.getLastName() + " " + executor.getName() + " " + executor.getPatronymic();
+                String email = executor.getEmail();
+
+                binding.textViewFullNameExecutor.setText(name);
+                binding.textViewEmailExecutorTaskRoot.setText(email);
+            });
 
             binding.progressBarTaskRoot.setVisibility(View.INVISIBLE);
         });
@@ -203,20 +218,20 @@ public class TaskRootActivity extends AppCompatActivity {
             else
                 imageUrl = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", imageId);
 
-            String sharing_data = nameTask + "\n" + comment + "\n \n" +
-                    address + "\n" + "Этаж: " + floor + "\n" + "Кабинет: " + cabinet + "\n \n" +
-                    "Создатель заявки" + "\n" + fullNameCreator + "\n" + creatorId + "\n \n" +
-                    "Исполнитель" + "\n" + fullNameExecutor + "\n" + executorId + "\n" + "Дата выполнения: " + dateDone + "\n \n" +
-                    "Статус" + "\n" + status + "\n" + "Созданно: " + dateCreate + " " + timeCreate + "\n \n" +
-                    "Изображение" + "\n" + imageUrl;
+//            String sharingData = nameTask + "\n" + comment + "\n \n" +
+//                    address + "\n" + "Этаж: " + floor + "\n" + "Кабинет: " + cabinet + "\n \n" +
+//                    "Создатель заявки" + "\n" + fullNameCreator + "\n" + creatorId + "\n \n" +
+//                    "Исполнитель" + "\n" + fullNameExecutor + "\n" + executorId + "\n" + "Дата выполнения: " + dateDone + "\n \n" +
+//                    "Статус" + "\n" + status + "\n" + "Созданно: " + dateCreate + " " + timeCreate + "\n \n" +
+//                    "Изображение" + "\n" + imageUrl;
 
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, sharing_data);
-            sendIntent.setType("text/plain");
-
-            Intent shareIntent = Intent.createChooser(sendIntent, null);
-            startActivity(shareIntent);
+//            Intent sendIntent = new Intent();
+//            sendIntent.setAction(Intent.ACTION_SEND);
+//            sendIntent.putExtra(Intent.EXTRA_TEXT, sharingData);
+//            sendIntent.setType("text/plain");
+//
+//            Intent shareIntent = Intent.createChooser(sendIntent, null);
+//            startActivity(shareIntent);
 
         }
 
@@ -236,7 +251,7 @@ public class TaskRootActivity extends AppCompatActivity {
     }
 
     void deleteTask() {
-        taskViewModel.deleteTask(id, imageId);
+        taskViewModel.deleteTask(taskId);
         onBackPressed();
     }
 

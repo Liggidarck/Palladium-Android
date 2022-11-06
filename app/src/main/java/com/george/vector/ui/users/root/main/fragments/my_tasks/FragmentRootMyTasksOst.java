@@ -1,7 +1,7 @@
 package com.george.vector.ui.users.root.main.fragments.my_tasks;
 
 import static com.george.vector.common.utils.consts.Keys.ZONE;
-import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
+import static com.george.vector.common.utils.consts.Keys.IS_EXECUTED;
 import static com.george.vector.common.utils.consts.Keys.OST_AIST;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.OST_YAGODKA;
@@ -32,21 +32,21 @@ public class FragmentRootMyTasksOst extends Fragment {
         binding.ostSchool.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentRootMyTasksOst.this.getContext(), LocationFolderActivity.class);
             intent.putExtra(ZONE, OST_SCHOOL);
-            intent.putExtra(EXECUTOR_EMAIL, "work");
+            intent.putExtra(IS_EXECUTED, true);
             startActivity(intent);
         });
 
         binding.ostAist.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentRootMyTasksOst.this.getContext(), LocationFolderActivity.class);
             intent.putExtra(ZONE, OST_AIST);
-            intent.putExtra(EXECUTOR_EMAIL, "work");
+            intent.putExtra(IS_EXECUTED, "work");
             startActivity(intent);
         });
 
         binding.ostYagodka.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentRootMyTasksOst.this.getContext(), LocationFolderActivity.class);
             intent.putExtra(ZONE, OST_YAGODKA);
-            intent.putExtra(EXECUTOR_EMAIL, "work");
+            intent.putExtra(IS_EXECUTED, "work");
             startActivity(intent);
         });
 

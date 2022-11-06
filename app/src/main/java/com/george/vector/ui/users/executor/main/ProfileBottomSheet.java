@@ -14,7 +14,6 @@ import com.george.vector.network.model.Role;
 import com.george.vector.ui.viewmodel.UserViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileBottomSheet extends BottomSheetDialogFragment {
@@ -41,7 +40,7 @@ public class ProfileBottomSheet extends BottomSheetDialogFragment {
             String lastName = user.getLastName();
             String patronymic = user.getPatronymic();
             String email = user.getEmail();
-            roleList = user.getRole();
+            roleList = user.getRoles();
             String role = roleList.get(0).getName();
 
             String fullName = String.format("%s %s %s", lastName, name, patronymic);

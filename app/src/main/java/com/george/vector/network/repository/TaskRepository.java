@@ -7,17 +7,12 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.george.vector.BuildConfig;
 import com.george.vector.common.notifications.SendNotification;
 import com.george.vector.network.api.FluffyFoxyClient;
 import com.george.vector.network.api.TaskInterface;
 import com.george.vector.network.model.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -74,13 +69,15 @@ public class TaskRepository {
         return edit;
     }
 
-    public MutableLiveData<String> deleteTask(long id) {
+    public void deleteTask(long id) {
         MutableLiveData<String> delete = new MutableLiveData<>();
 
         taskInterface.deleteTask(id).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                delete.setValue(response.body());
+                if(response.code() == 200) {
+                    delete.setValue(response.body());
+                }
             }
 
             @Override
@@ -89,7 +86,6 @@ public class TaskRepository {
             }
         });
 
-        return delete;
     }
 
 

@@ -6,6 +6,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
@@ -15,13 +16,13 @@ import androidx.lifecycle.ViewModelProvider;
 import com.george.vector.R;
 import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.common.utils.TextValidatorUtils;
+import com.george.vector.data.preferences.UserDataViewModel;
 import com.george.vector.databinding.EditUserActivityBinding;
 import com.george.vector.network.model.Role;
-import com.george.vector.network.model.User;
 import com.george.vector.ui.viewmodel.UserViewModel;
+import com.george.vector.ui.viewmodel.ViewModelFactory;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EditUserActivity extends AppCompatActivity {
@@ -42,6 +43,8 @@ public class EditUserActivity extends AppCompatActivity {
     NetworkUtils networkUtils = new NetworkUtils();
     TextValidatorUtils textValidator = new TextValidatorUtils();
 
+    public static final String TAG = EditUserActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_Palladium);
@@ -52,19 +55,26 @@ public class EditUserActivity extends AppCompatActivity {
         Bundle arguments = getIntent().getExtras();
         userID = arguments.getLong("user_id");
 
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        Log.d(TAG, "onCreate: " + userID);
+
+        UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+
+        userViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                this.getApplication(),
+                userDataViewModel.getToken()
+        )).get(UserViewModel.class);
 
         userViewModel.getUserById(userID).observe(this, user -> {
-            List<Role> roleList = new ArrayList<>();
+            List<Role> roles = user.getRoles();
 
             nameUser = user.getName();
             lastNameUser = user.getLastName();
             patronymicUser = user.getPatronymic();
             emailUser = user.getEmail();
-            roleList = user.getRole();
+            roleUser = roles.get(0).getName();
             zoneUser = user.getZone();
             password = user.getPassword();
-            roleUser = roleList.get(0).getName();
+
 
             requireNonNull(binding.textName.getEditText()).setText(nameUser);
             requireNonNull(binding.textLastName.getEditText()).setText(lastNameUser);
@@ -72,11 +82,12 @@ public class EditUserActivity extends AppCompatActivity {
             requireNonNull(binding.textEmail.getEditText()).setText(emailUser);
             requireNonNull(binding.textRole.getEditText()).setText(roleUser);
             requireNonNull(binding.textPermissions.getEditText()).setText(zoneUser);
+            binding.textPassword.getEditText().setText(password);
 
-            if (emailUser.equals("api@2122.pro"))
-                binding.textPassword.getEditText().setText("Пароль? Какой пароль? ¯\\_(ツ)_/¯");
-            else
-                binding.textPassword.getEditText().setText(password);
+//            if (emailUser.equals("api@2122.pro"))
+//                binding.textPassword.getEditText().setText("Пароль? Какой пароль? ¯\\_(ツ)_/¯");
+//            else
+//                binding.textPassword.getEditText().setText(password);
 
             initFields();
         });

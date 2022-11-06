@@ -35,7 +35,7 @@ public class UserPreferencesRepository implements UserPreferencesBehaviour{
 
     @Override
     public void saveUser(User user) {
-        List<Role> roles = user.getRole();
+        List<Role> roles = user.getRoles();
 
         editor.putString(USER_PREFERENCES_NAME, user.getName());
         editor.putString(USER_PREFERENCES_LAST_NAME, user.getLastName());

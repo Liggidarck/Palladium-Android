@@ -30,7 +30,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
         prefs.registerOnSharedPreferenceChangeListener(this);
 
         UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
-        String role = userDataViewModel.getUser().getRole().get(0).getName();
+        String role = userDataViewModel.getUser().getRoles().get(0).getName();
 
         binding.toolbarSettings.setNavigationOnClickListener(v -> onBackPressed());
 

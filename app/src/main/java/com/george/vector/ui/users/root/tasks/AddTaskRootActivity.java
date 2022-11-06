@@ -3,7 +3,7 @@ package com.george.vector.ui.users.root.tasks;
 import static com.george.vector.common.utils.consts.Keys.BAR_RUCHEEK;
 import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.BAR_ZVEZDOCHKA;
-import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
+import static com.george.vector.common.utils.consts.Keys.IS_EXECUTED;
 import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
 import static com.george.vector.common.utils.consts.Keys.OST_AIST;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
@@ -190,7 +190,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         Intent intent = new Intent(this, FolderRootActivity.class);
         intent.putExtra(ZONE, zone);
         intent.putExtra(STATUS, NEW_TASKS);
-        intent.putExtra(EXECUTOR_EMAIL, "root");
+        intent.putExtra(IS_EXECUTED, "root");
         startActivity(intent);
     }
 

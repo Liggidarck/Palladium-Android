@@ -1,13 +1,14 @@
 package com.george.vector.ui.users.root.tasks;
 
 import static com.george.vector.common.utils.consts.Keys.ZONE;
-import static com.george.vector.common.utils.consts.Keys.EXECUTOR_EMAIL;
+import static com.george.vector.common.utils.consts.Keys.IS_EXECUTED;
 import static com.george.vector.common.utils.consts.Keys.STATUS;
 import static com.george.vector.common.utils.consts.Keys.ID;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,7 @@ import com.george.vector.ui.viewmodel.ViewModelFactory;
 
 public class FragmentTasksRoot extends Fragment {
 
-    private String zone, status, executorEmail, email;
+    private String zone, status, executed, email;
 
     private TaskAdapter taskAdapter = new TaskAdapter();
     private TaskViewModel taskViewModel;
@@ -44,7 +45,7 @@ public class FragmentTasksRoot extends Fragment {
         assert args != null;
         zone = args.getString(ZONE);
         status = args.getString(STATUS);
-        executorEmail = args.getString(EXECUTOR_EMAIL);
+        boolean executed = args.getBoolean(IS_EXECUTED);
 
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 
@@ -60,18 +61,28 @@ public class FragmentTasksRoot extends Fragment {
             binding.chipOldSchoolTasksRoot.setVisibility(View.INVISIBLE);
         }
 
-        setUpRecyclerView(zone, status, executorEmail);
+        setUpRecyclerView(zone, status, executed);
 
         return view;
     }
 
-    void setUpRecyclerView(String zone, String status, String executed) {
+    void setUpRecyclerView(String zone, String status, boolean executed) {
 
-        taskViewModel
-                .getByZoneLikeAndStatusLike(zone, status)
-                .observe(FragmentTasksRoot.this.requireActivity(),
-                        tasks -> taskAdapter.addTasks(tasks)
-                );
+        if (!executed) {
+            taskViewModel
+                    .getByZoneLikeAndStatusLike(zone, status)
+                    .observe(FragmentTasksRoot.this.requireActivity(),
+                            tasks -> taskAdapter.addTasks(tasks)
+                    );
+
+        } else {
+            UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+            taskViewModel
+                    .getTasksByExecutor(userDataViewModel.getId())
+                    .observe(FragmentTasksRoot.this.requireActivity(),
+                            tasks -> taskAdapter.addTasks(tasks)
+                    );
+        }
 
         binding.recyclerviewSchoolOstNewTasks.setHasFixedSize(true);
         binding.recyclerviewSchoolOstNewTasks.setLayoutManager(new LinearLayoutManager(FragmentTasksRoot.this.requireActivity()));
@@ -79,10 +90,12 @@ public class FragmentTasksRoot extends Fragment {
 
         taskAdapter.setOnItemClickListener((task, position) -> {
             long id = task.getId();
+            Log.d(TAG, "setUpRecyclerView: " + id);
             Intent intent = new Intent(FragmentTasksRoot.this.getContext(), TaskRootActivity.class);
             intent.putExtra(ID, id);
             startActivity(intent);
         });
+
     }
 
 

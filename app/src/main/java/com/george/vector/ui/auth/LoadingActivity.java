@@ -43,7 +43,7 @@ public class LoadingActivity extends AppCompatActivity {
         String email = preferencesViewModel.getUser().getEmail();
         String zone = preferencesViewModel.getUser().getZone();
 
-        List<Role> roleList = preferencesViewModel.getUser().getRole();
+        List<Role> roleList = preferencesViewModel.getUser().getRoles();
 
         Log.d("Loading", "onCreate: token: " + token);
 

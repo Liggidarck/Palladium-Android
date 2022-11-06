@@ -1,26 +1,56 @@
 package com.george.vector.network.model;
 
-public class Task {
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
+public class Task implements Serializable {
+
+    @SerializedName("id")
+    @Expose
     private long id;
 
+    @Expose
     private String zone;
+
+    @Expose
     private String status;
 
+    @Expose
     private String name;
+
+    @Expose
     private String comment;
 
+    @Expose
     private String address;
+
+    @Expose
     private String floor;
+
+    @Expose
     private String cabinet;
+
+    @Expose
     private String letter;
+
+    @Expose
     private boolean urgent;
+
+    @Expose
     private String dateDone;
 
+    @Expose
     private int executorId;
+
+    @Expose
     private int creatorId;
 
+    @Expose
     private String dateCreate;
+
+    @Expose
     private String image;
 
     public Task(String zone, String status, String name, String comment, String address, String floor, String cabinet, String letter, boolean urgent, String dateDone, int executorId, int creatorId, String dateCreate, String image) {
