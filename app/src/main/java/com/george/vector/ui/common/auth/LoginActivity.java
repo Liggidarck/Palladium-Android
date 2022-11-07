@@ -1,9 +1,12 @@
 package com.george.vector.ui.common.auth;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
     private UserDataViewModel userDataViewModel;
+    private AuthViewModel authViewModel;
 
     private TextValidatorUtils textValidator = new TextValidatorUtils();
     private NetworkUtils networkUtils = new NetworkUtils();
@@ -46,9 +50,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+        authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
         binding.btnLogin.setOnClickListener(v -> {
-
             String username = Objects.requireNonNull(binding.textUsername.getEditText()).getText().toString();
             String password = Objects.requireNonNull(binding.textPassword.getEditText()).getText().toString();
 
@@ -73,14 +77,20 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Идет поиск пользователя...");
         progressDialog.show();
 
-
-
-        AuthViewModel authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-
         authViewModel.login(loginRequest).observe(this, response -> {
+            if(response == null) {
+                progressDialog.dismiss();
+                
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Ошибка!")
+                        .setMessage("Пользователь не найден или не верный пароль. Проверьте введеные данные.")
+                        .setPositiveButton("ok", (dialog, which) -> dialog.dismiss());
 
-            Log.d(TAG, "login: " + response.getToken());
-            Log.d(TAG, "login: " + response.getId());
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                return;
+            }
 
             String token = response.getToken();
             long id = response.getId();
@@ -97,8 +107,6 @@ public class LoginActivity extends AppCompatActivity {
 
             List<Role> roleList = new ArrayList<>();
             roleList.add(new Role(0, role.get(0)));
-
-            Log.d(TAG, "login: " + roleList.get(0).getName());
 
             userDataViewModel.saveToken(token);
             userDataViewModel.saveId(id);

@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.george.vector.network.api.FluffyFoxyClient;
 import com.george.vector.network.api.UserInterface;
-import com.george.vector.network.model.user.EditUserModel;
+import com.george.vector.network.model.user.RegisterUserModel;
 import com.george.vector.network.model.user.Role;
 import com.george.vector.network.model.user.User;
 
@@ -33,6 +33,7 @@ public class UserRepository {
         userInterface.getAllUsers().enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(@NonNull Call<List<User>> call, @NonNull Response<List<User>> response) {
+                Log.d(TAG, "getAllUsers: " + response.code());
                 if (response.code() == 200) {
                     users.setValue(response.body());
                 }
@@ -41,6 +42,7 @@ public class UserRepository {
             @Override
             public void onFailure(@NonNull Call<List<User>> call, @NonNull Throwable t) {
                 users.setValue(null);
+                Log.e(TAG, "getAllUsers: ", t);
             }
         });
 
@@ -53,6 +55,7 @@ public class UserRepository {
         userInterface.getAllRoles().enqueue(new Callback<List<Role>>() {
             @Override
             public void onResponse(@NonNull Call<List<Role>> call, @NonNull Response<List<Role>> response) {
+                Log.d(TAG, "getAllRoles: " + response.code());
                 if (response.code() == 200) {
                     roles.setValue(response.body());
                 }
@@ -61,6 +64,7 @@ public class UserRepository {
             @Override
             public void onFailure(@NonNull Call<List<Role>> call, @NonNull Throwable t) {
                 roles.setValue(null);
+                Log.e(TAG, "getAllRoles: ", t);
             }
         });
 
@@ -73,6 +77,7 @@ public class UserRepository {
         userInterface.getUsersByRoleName(role).enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(@NonNull Call<List<User>> call, @NonNull Response<List<User>> response) {
+                Log.d(TAG, "getUsersByRoleName: " + response.code());
                 if (response.code() == 200) {
                     users.setValue(response.body());
                 }
@@ -81,6 +86,7 @@ public class UserRepository {
             @Override
             public void onFailure(@NonNull Call<List<User>> call, @NonNull Throwable t) {
                 users.setValue(null);
+                Log.e(TAG, "getUsersByRoleName: ", t);
             }
         });
 
@@ -93,7 +99,7 @@ public class UserRepository {
         userInterface.getUserById(id).enqueue(new Callback<User>() {
             @Override
             public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
-                Log.d(TAG, "onResponse: " + response.code());
+                Log.d(TAG, "getUserById: " + response.code());
                 if (response.code() == 200) {
                     user.setValue(response.body());
                 }
@@ -102,18 +108,20 @@ public class UserRepository {
             @Override
             public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
                 user.setValue(null);
+                Log.e(TAG, "getUserById: ", t);
             }
         });
 
         return user;
     }
 
-    public MutableLiveData<String> editUser(EditUserModel user, long id) {
+    public MutableLiveData<String> editUser(RegisterUserModel user, long id) {
         MutableLiveData<String> edit = new MutableLiveData<>();
 
         userInterface.editUser(user, id).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                Log.d(TAG, "editUser: " + response.code());
                 if(response.code() == 200) {
                     edit.setValue(response.body());
                 }
@@ -121,6 +129,7 @@ public class UserRepository {
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e(TAG, "editUser: ", t);
                 edit.setValue(null);
             }
         });
@@ -134,6 +143,7 @@ public class UserRepository {
         userInterface.deleteUser(id).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                Log.d(TAG, "deleteUser: " + response.code());
                 if(response.code() == 200) {
                     delete.setValue(response.body());
                 }
@@ -142,6 +152,7 @@ public class UserRepository {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 delete.setValue(null);
+                Log.e(TAG, "deleteUser: ", t);
             }
         });
 

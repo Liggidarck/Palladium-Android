@@ -2,12 +2,10 @@ package com.george.vector.ui.users.root.profile;
 
 import static java.util.Objects.requireNonNull;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,7 +15,7 @@ import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.EditUserActivityBinding;
-import com.george.vector.network.model.user.EditUserModel;
+import com.george.vector.network.model.user.RegisterUserModel;
 import com.george.vector.network.model.user.Role;
 import com.george.vector.network.model.user.User;
 import com.george.vector.ui.viewmodel.UserViewModel;
@@ -35,6 +33,7 @@ public class EditUserActivity extends AppCompatActivity {
     private String patronymicUser;
     private String emailUser;
     private String roleUser;
+    private int roleId;
     private String zoneUser;
     private String password;
     private String username;
@@ -68,6 +67,7 @@ public class EditUserActivity extends AppCompatActivity {
             patronymicUser = user.getPatronymic();
             emailUser = user.getEmail();
             roleUser = roles.get(0).getName();
+            roleId = roles.get(0).getId();
             zoneUser = user.getZone();
             password = user.getPassword();
             username = user.getUsername();
@@ -125,12 +125,13 @@ public class EditUserActivity extends AppCompatActivity {
         roleUser = requireNonNull(binding.textRole.getEditText()).getText().toString();
         zoneUser = requireNonNull(binding.textPermissions.getEditText()).getText().toString();
         username = requireNonNull(binding.textUsername.getEditText()).getText().toString();
+        password = requireNonNull(binding.textPassword.getEditText()).getText().toString();
 
-        if(!validateFields()) {
+        if (!validateFields()) {
             return;
         }
 
-        if(!networkUtils.isOnline(EditUserActivity.this)) {
+        if (!networkUtils.isOnline(EditUserActivity.this)) {
             Snackbar.make(findViewById(R.id.coordinator_login_activity),
                     getString(R.string.error_no_connection), Snackbar.LENGTH_LONG).show();
             return;
@@ -141,12 +142,16 @@ public class EditUserActivity extends AppCompatActivity {
         List<String> roles = new ArrayList<>();
         roles.add(roleUser);
 
-        //todo: add edit user
 
-        EditUserModel user = new EditUserModel(zoneUser, nameUser, lastNameUser, patronymicUser, emailUser,
-                username, roles);
+        RegisterUserModel user = new RegisterUserModel(zoneUser, nameUser, lastNameUser, patronymicUser,
+                emailUser, password, username,roles);
 
-        userViewModel.updateUser(user, userID);
+        userViewModel.updateUser(user, userID).observe(this, status -> {
+            // todo: fix this crash
+            if (status.equals("User successfully edited")) {
+                Toast.makeText(this, "User successfully edited", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         binding.progressBarEditUser.setVisibility(View.INVISIBLE);
     }
@@ -159,6 +164,7 @@ public class EditUserActivity extends AppCompatActivity {
                 textValidator.isEmptyField(emailUser, binding.textEmail) &
                 textValidator.isEmptyField(roleUser, binding.textRole) &
                 textValidator.isEmptyField(zoneUser, binding.textPermissions) &
-                textValidator.isEmptyField(username, binding.textUsername);
+                textValidator.isEmptyField(username, binding.textUsername) &
+                textValidator.isEmptyField(password, binding.textPassword);
     }
 }

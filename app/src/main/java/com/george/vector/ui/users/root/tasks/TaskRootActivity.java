@@ -32,7 +32,6 @@ import com.google.android.material.snackbar.Snackbar;
 public class TaskRootActivity extends AppCompatActivity {
 
     private long taskId;
-    private long userId;
     private String zone;
     private String address;
     private String floor;
@@ -104,9 +103,6 @@ public class TaskRootActivity extends AppCompatActivity {
         confirmDelete = PreferenceManager
                 .getDefaultSharedPreferences(this)
                 .getBoolean("confirm_before_deleting_root", true);
-
-        userId = userPrefViewModel.getId();
-
     }
 
     void getTask(long id) {
@@ -191,9 +187,11 @@ public class TaskRootActivity extends AppCompatActivity {
 
                 binding.textViewFullNameExecutor.setText(userName);
                 binding.textViewEmailExecutorTaskRoot.setText(email);
+
+                binding.progressBarTaskRoot.setVisibility(View.INVISIBLE);
             });
 
-            binding.progressBarTaskRoot.setVisibility(View.INVISIBLE);
+
         });
 
     }

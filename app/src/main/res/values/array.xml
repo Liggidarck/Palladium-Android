@@ -20,10 +20,10 @@
     </string-array>
 
     <string-array name="roles">
-        <item>developer</item>
-        <item>admin</item>
-        <item>executor</item>
-        <item>user</item>
+        <item>ROLE_DEVELOPER</item>
+        <item>ROLE_ADMIN</item>
+        <item>ROLE_EXECUTOR</item>
+        <item>ROLE_USER</item>
     </string-array>
 
     <string-array name="letter">

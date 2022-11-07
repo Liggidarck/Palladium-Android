@@ -3,6 +3,7 @@ package com.george.vector.ui.users.root.profile;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -54,13 +55,28 @@ public class RegisterUserActivity extends AppCompatActivity {
 
             authViewModel.register(userModel).observe(this, message -> {
                 String messageStr = message.getMessage();
-                if(messageStr.equals("User registered successfully!")) {
-                    binding.progressBarRegister.setVisibility(View.INVISIBLE);
+                binding.progressBarRegister.setVisibility(View.INVISIBLE);
+
+                if (messageStr.equals("User registered successfully!")) {
+                    Toast.makeText(this,
+                                    "User registered successfully!",
+                                    Toast.LENGTH_SHORT).show();
                     onBackPressed();
+                }
+
+                if (messageStr.equals("Error: Email is already in use!")) {
+                    Toast.makeText(this,
+                                    "Error: Email is already in use!",
+                                    Toast.LENGTH_SHORT).show();
+                }
+
+                if (messageStr.equals("Error: Username is already taken!")) {
+                    Toast.makeText(this,
+                                    "Error: Username is already taken!",
+                                    Toast.LENGTH_SHORT).show();
                 }
             });
         });
-
     }
 
     private void initFields() {

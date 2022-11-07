@@ -175,7 +175,6 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
             comment = task.getComment();
             dateCreate = task.getDateCreate();
             image = task.getImage();
-
             executorId = task.getExecutorId();
             creatorId = task.getCreatorId();
 

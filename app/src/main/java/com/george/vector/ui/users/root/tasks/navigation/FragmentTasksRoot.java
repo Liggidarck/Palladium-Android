@@ -28,9 +28,7 @@ import com.george.vector.ui.viewmodel.ViewModelFactory;
 
 public class FragmentTasksRoot extends Fragment {
 
-    private String zone, status, executed, email;
-
-    private TaskAdapter taskAdapter = new TaskAdapter();
+    private final TaskAdapter taskAdapter = new TaskAdapter();
     private TaskViewModel taskViewModel;
     private FragmentTasksRootBinding binding;
 
@@ -44,8 +42,8 @@ public class FragmentTasksRoot extends Fragment {
 
         Bundle args = getArguments();
         assert args != null;
-        zone = args.getString(ZONE);
-        status = args.getString(STATUS);
+        String zone = args.getString(ZONE);
+        String status = args.getString(STATUS);
         boolean executed = args.getBoolean(IS_EXECUTE);
 
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
@@ -73,7 +71,10 @@ public class FragmentTasksRoot extends Fragment {
             taskViewModel
                     .getByZoneLikeAndStatusLike(zone, status)
                     .observe(FragmentTasksRoot.this.requireActivity(),
-                            tasks -> taskAdapter.addTasks(tasks)
+                            tasks -> {
+                                taskAdapter.addTasks(tasks);
+                                binding.progressAllTasks.setVisibility(View.INVISIBLE);
+                            }
                     );
 
         } else {
@@ -81,7 +82,10 @@ public class FragmentTasksRoot extends Fragment {
             taskViewModel
                     .getTasksByExecutor(userDataViewModel.getId())
                     .observe(FragmentTasksRoot.this.requireActivity(),
-                            tasks -> taskAdapter.addTasks(tasks)
+                            tasks -> {
+                                taskAdapter.addTasks(tasks);
+                                binding.progressAllTasks.setVisibility(View.INVISIBLE);
+                            }
                     );
         }
 

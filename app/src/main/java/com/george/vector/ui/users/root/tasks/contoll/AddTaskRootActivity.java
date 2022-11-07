@@ -18,6 +18,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -26,6 +27,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -161,12 +163,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
     }
 
     private void saveTask() {
-        String image;
-
-        if (fileUri != null)
-            image = taskViewModel.uploadImage(fileUri, AddTaskRootActivity.this);
-        else
-            image = null;
+        String image = null;
 
         String dateCreate = timeUtils.getDate() + " " + timeUtils.getTime();
 
@@ -176,10 +173,20 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         Task task = new Task(zone, NEW_TASKS, taskName, comment, address, floor,
                 cabinet, letter, urgent, dateComplete, executorId, userId, dateCreate, image);
 
-        taskViewModel.createTask(task).observe(this, str -> {
-            Log.d(TAG, "saveTask: " + str);
-            Log.d(TAG, "saveTask: " + executorId);
-            startListTasks();
+        taskViewModel.createTask(task).observe(this, response -> {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Загрузка...");
+            progressDialog.setMessage("Ваша заявка сохраняется...");
+            progressDialog.show();
+
+            if (response.equals("Task successfully created")) {
+                startListTasks();
+                progressDialog.dismiss();
+            } else {
+                Toast.makeText(this, "Произошла ошибка", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+
         });
     }
 

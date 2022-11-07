@@ -12,6 +12,8 @@ import com.george.vector.network.model.user.RegisterUserModel;
 import com.george.vector.network.request.LoginRequest;
 import com.george.vector.network.responce.LoginResponse;
 
+import java.nio.file.Path;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,16 +34,19 @@ public class AuthRepository {
         authInterface.login(loginRequest).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
-                Log.d(TAG, "onResponse: " + response.code());
+                Log.d(TAG, "login code: " + response.code());
 
-                if(response.code() == 200) {
+                if (response.code() == 200) {
                     loginResponseMutableLiveData.setValue(response.body());
+                } else {
+                    loginResponseMutableLiveData.setValue(null);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<LoginResponse> call, @NonNull Throwable t) {
                 loginResponseMutableLiveData.postValue(null);
+                Log.e(TAG, "onFailure: auth: ", t);
             }
         });
 
@@ -54,7 +59,8 @@ public class AuthRepository {
         authInterface.register(user).enqueue(new Callback<Message>() {
             @Override
             public void onResponse(@NonNull Call<Message> call, @NonNull Response<Message> response) {
-                if(response.code() == 200) {
+                Log.d(TAG, "onResponse: code: " + response.code());
+                if (response.code() == 200) {
                     status.setValue(response.body());
                 }
             }
@@ -62,6 +68,7 @@ public class AuthRepository {
             @Override
             public void onFailure(@NonNull Call<Message> call, @NonNull Throwable t) {
                 status.postValue(null);
+                Log.e(TAG, "onFailure: register: ", t);
             }
         });
 

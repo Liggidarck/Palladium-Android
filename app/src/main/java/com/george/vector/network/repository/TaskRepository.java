@@ -34,7 +34,7 @@ public class TaskRepository {
         taskInterface.createTask(task).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                Log.d(TAG, "Task create: " + response.code());
+                Log.d(TAG, "Task create code: " + response.code());
                 if (response.code() == 200) {
                     taskMutableLiveData.setValue(response.body());
                 }
@@ -43,6 +43,7 @@ public class TaskRepository {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 taskMutableLiveData.setValue(null);
+                Log.e(TAG, "onFailure: create task: ", t);
             }
         });
 
@@ -55,6 +56,7 @@ public class TaskRepository {
         taskInterface.editTask(task, id).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                Log.d(TAG, "onResponse: edit task: " + response.code());
                 if (response.code() == 200) {
                     edit.setValue(response.body());
                 }
@@ -63,6 +65,7 @@ public class TaskRepository {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 edit.setValue(null);
+                Log.e(TAG, "onFailure: edit task: ", t);
             }
         });
 
@@ -75,6 +78,7 @@ public class TaskRepository {
         taskInterface.deleteTask(id).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                Log.d(TAG, "onResponse: delete task code: " + response.code());
                 if(response.code() == 200) {
                     delete.setValue(response.body());
                 }
@@ -83,6 +87,7 @@ public class TaskRepository {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 delete.setValue(null);
+                Log.e(TAG, "onFailure: delete task", t);
             }
         });
 
@@ -95,6 +100,7 @@ public class TaskRepository {
         taskInterface.getTasksByExecutor(id).enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(@NonNull Call<List<Task>> call, @NonNull Response<List<Task>> response) {
+                Log.d(TAG, "getTasksByExecutor code: " + response.code());
                 if (response.code() == 200) {
                     tasks.setValue(response.body());
                 }
@@ -103,6 +109,7 @@ public class TaskRepository {
             @Override
             public void onFailure(@NonNull Call<List<Task>> call, @NonNull Throwable t) {
                 tasks.setValue(null);
+                Log.e(TAG, "getTasksByExecutor: ", t);
             }
         });
 
@@ -115,6 +122,7 @@ public class TaskRepository {
         taskInterface.getTasksByCreator(id).enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(@NonNull Call<List<Task>> call, @NonNull Response<List<Task>> response) {
+                Log.d(TAG, "getTasksByCreator: " + response.code());
                 if (response.code() == 200) {
                     tasks.setValue(response.body());
                 }
@@ -123,6 +131,7 @@ public class TaskRepository {
             @Override
             public void onFailure(@NonNull Call<List<Task>> call, @NonNull Throwable t) {
                 tasks.setValue(null);
+                Log.e(TAG, "getTasksByCreator: ", t);
             }
         });
 
@@ -135,6 +144,7 @@ public class TaskRepository {
         taskInterface.getTasksByZone(zone).enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(@NonNull Call<List<Task>> call, @NonNull Response<List<Task>> response) {
+                Log.d(TAG, "getTasksByZone: " + response.code());
                 if (response.code() == 200) {
                     tasks.setValue(response.body());
                 }
@@ -143,6 +153,7 @@ public class TaskRepository {
             @Override
             public void onFailure(@NonNull Call<List<Task>> call, @NonNull Throwable t) {
                 tasks.setValue(null);
+                Log.e(TAG, "getTasksByZone: ", t);
             }
         });
 
@@ -155,6 +166,7 @@ public class TaskRepository {
         taskInterface.getByZoneLikeAndStatusLike(zone, status).enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(@NonNull Call<List<Task>> call, @NonNull Response<List<Task>> response) {
+                Log.d(TAG, "getByZoneLikeAndStatusLike: " + response.code());
                 if(response.code() == 200) {
                     tasks.setValue(response.body());
                 }
@@ -163,6 +175,7 @@ public class TaskRepository {
             @Override
             public void onFailure(@NonNull Call<List<Task>> call, @NonNull Throwable t) {
                 tasks.setValue(null);
+                Log.e(TAG, "getByZoneLikeAndStatusLike: ", t);
             }
         });
 
@@ -175,6 +188,7 @@ public class TaskRepository {
         taskInterface.getTasksByStatus(status).enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(@NonNull Call<List<Task>> call, @NonNull Response<List<Task>> response) {
+                Log.d(TAG, "getTasksByStatus: " + response.code());
                 if (response.code() == 200) {
                     tasks.setValue(response.body());
                 }
@@ -183,6 +197,7 @@ public class TaskRepository {
             @Override
             public void onFailure(@NonNull Call<List<Task>> call, @NonNull Throwable t) {
                 tasks.setValue(null);
+                Log.e(TAG, "getTasksByStatus: ", t);
             }
         });
 
@@ -195,6 +210,7 @@ public class TaskRepository {
         taskInterface.getAllTasks().enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(@NonNull Call<List<Task>> call, @NonNull Response<List<Task>> response) {
+                Log.d(TAG, "getAllTasks: " + response.code());
                 if (response.code() == 200) {
                     tasks.setValue(response.body());
                 }
@@ -203,6 +219,7 @@ public class TaskRepository {
             @Override
             public void onFailure(@NonNull Call<List<Task>> call, @NonNull Throwable t) {
                 tasks.setValue(null);
+                Log.e(TAG, "getAllTasks: ", t);
             }
         });
 
@@ -215,7 +232,7 @@ public class TaskRepository {
         taskInterface.getTaskById(id).enqueue(new Callback<Task>() {
             @Override
             public void onResponse(@NonNull Call<Task> call, @NonNull Response<Task> response) {
-                Log.d(TAG, "onResponse: " + response.code());
+                Log.d(TAG, "getTaskById: " + response.code());
                 if (response.code() == 200) {
                     task.setValue(response.body());
                 }
@@ -223,7 +240,7 @@ public class TaskRepository {
 
             @Override
             public void onFailure(@NonNull Call<Task> call, @NonNull Throwable t) {
-                Log.e(TAG, "onFailure: ", t);
+                Log.e(TAG, "getTaskById: ", t);
                 task.setValue(null);
             }
         });

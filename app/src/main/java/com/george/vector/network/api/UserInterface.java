@@ -1,6 +1,6 @@
 package com.george.vector.network.api;
 
-import com.george.vector.network.model.user.EditUserModel;
+import com.george.vector.network.model.user.RegisterUserModel;
 import com.george.vector.network.model.user.Role;
 import com.george.vector.network.model.user.User;
 
@@ -28,7 +28,7 @@ public interface UserInterface {
     Call<User> getUserById(@Query("id") long id);
 
     @PUT("palladium/users/edit")
-    Call<String> editUser(@Body EditUserModel user, @Query("id") long id);
+    Call<String> editUser(@Body RegisterUserModel user, @Query("id") long id);
 
     @DELETE("palladium/users/delete")
     Call<String> deleteUser(@Query("id") long id);

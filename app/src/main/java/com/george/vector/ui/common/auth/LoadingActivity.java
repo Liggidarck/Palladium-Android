@@ -35,19 +35,14 @@ public class LoadingActivity extends AppCompatActivity {
         UserDataViewModel preferencesViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 
         String token = preferencesViewModel.getToken();
-        String username = preferencesViewModel.getUser().getUsername();
-
-        String name = preferencesViewModel.getUser().getName();
-        String lastname = preferencesViewModel.getUser().getLastName();
-        String patronymic = preferencesViewModel.getUser().getPatronymic();
         String email = preferencesViewModel.getUser().getEmail();
-        String zone = preferencesViewModel.getUser().getZone();
-
         List<Role> roleList = preferencesViewModel.getUser().getRoles();
 
-        Log.d("Loading", "onCreate: token: " + token);
+        if(token == null) {
+            startActivity(new Intent(this, LoginActivity.class));
+        }
 
-        if (token == null) {
+        if (token == null & email != null) {
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle("Внимание!")
                     .setMessage("Необходимо войти в аккаунт снова. Если вы не помните совой логин, обратитесь в техническую поддрежку")
@@ -64,7 +59,7 @@ public class LoadingActivity extends AppCompatActivity {
             dialog.show();
         }
 
-        if (token != null & !roleList.get(0).equals(null)) {
+        if (token != null) {
             startApp(roleList.get(0).getName());
         }
 
@@ -79,8 +74,6 @@ public class LoadingActivity extends AppCompatActivity {
 
         if (role.equals("Исполнитель"))
             startActivity(new Intent(this, MainExecutorActivity.class));
-
-
         finish();
     }
 
