@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.george.vector.network.model.user.EditUserModel;
 import com.george.vector.network.model.user.Role;
 import com.george.vector.network.model.user.User;
 import com.george.vector.network.repository.UserRepository;
@@ -37,7 +38,7 @@ public class UserViewModel extends AndroidViewModel {
         return repository.getUserById(id);
     }
 
-    public MutableLiveData<String> updateUser(User user, long id) {
+    public MutableLiveData<String> updateUser(EditUserModel user, long id) {
         return repository.editUser(user, id);
     }
 

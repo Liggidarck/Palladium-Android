@@ -48,4 +48,8 @@ public class UserDataViewModel extends AndroidViewModel {
         repository.setNotifications(notifications);
     }
 
+    public void deleteUserData() {
+        repository.deleteUserData();
+    }
+
 }

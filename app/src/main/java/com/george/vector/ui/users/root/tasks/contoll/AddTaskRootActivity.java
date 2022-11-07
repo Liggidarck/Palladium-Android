@@ -62,7 +62,9 @@ import java.util.Objects;
 public class AddTaskRootActivity extends AppCompatActivity implements BottomSheetAddImage.StateListener {
 
     private ActivityAddTaskRootBinding binding;
+
     private TaskViewModel taskViewModel;
+    private UserViewModel userViewModel;
 
     private String address, floor, cabinet, letter, taskName, dateComplete, taskStatus,
             comment, zone;
@@ -117,7 +119,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
                 userPrefViewModel.getToken())
         ).get(TaskViewModel.class);
 
-        UserViewModel userViewModel = new ViewModelProvider(this, new ViewModelFactory(
+        userViewModel = new ViewModelProvider(this, new ViewModelFactory(
                 this.getApplication(),
                 userPrefViewModel.getToken()
         )).get(UserViewModel.class);
@@ -128,15 +130,10 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
         binding.toolbarAddEditTask.setNavigationOnClickListener(v -> onBackPressed());
 
-        binding.addExecutorBtn.setOnClickListener(v -> {
-            UserAdapter userAdapter = new UserAdapter();
-            //todo: change role to executor
-            userViewModel.getUsersByRoleName("ROLE_DEVELOPER").observe(this, userAdapter::setUsers);
-            showAddExecutorDialog(userAdapter);
+        binding.addExecutorBtn.setOnClickListener(v -> showAddExecutorDialog());
 
-        });
-
-        binding.addImageBtn.setOnClickListener(v -> addImage.show(getSupportFragmentManager(), "BottomSheetAddImage"));
+        binding.addImageBtn.setOnClickListener(v ->
+                addImage.show(getSupportFragmentManager(), "BottomSheetAddImage"));
 
         binding.doneBtn.setOnClickListener(v -> {
             address = requireNonNull(binding.taskAddress.getEditText()).getText().toString();
@@ -293,7 +290,9 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         switch (requestCode) {
@@ -367,15 +366,21 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         }
     }
 
-    private void showAddExecutorDialog(UserAdapter userAdapter) {
-
+    private void showAddExecutorDialog() {
         Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_choose_executor);
 
+
+        //todo: create filter for users.
         RecyclerView recyclerViewListExecutors = dialog.findViewById(R.id.recyclerViewListExecutors);
         Chip chipRootDialog = dialog.findViewById(R.id.chip_root_dialog);
         Chip chipExecutorsDialog = dialog.findViewById(R.id.chip_executors_dialog);
+        Chip chipDeveloperDialog = dialog.findViewById(R.id.chip_developer_dialog);
+
+        UserAdapter userAdapter = new UserAdapter();
+
+        userViewModel.getAllUsers().observe(this, userAdapter::setUsers);
 
         recyclerViewListExecutors.setHasFixedSize(true);
         recyclerViewListExecutors.setLayoutManager(new LinearLayoutManager(this));
@@ -383,12 +388,12 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
         userAdapter.setOnItemClickListener((executor, position) -> {
             executorId = (int) executor.getId();
-            Objects.requireNonNull(binding.taskNameExecutor.getEditText()).setText(executor.getName());
+            String name = executor.getLastName() + " " + executor.getName() + " " + executor.getPatronymic();
+            Objects.requireNonNull(binding.taskNameExecutor.getEditText()).setText(name);
             dialog.dismiss();
         });
 
         dialog.show();
-
     }
 
 }

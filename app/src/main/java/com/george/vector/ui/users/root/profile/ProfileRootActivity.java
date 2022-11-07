@@ -16,6 +16,7 @@ import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityProfileRootBinding;
 import com.george.vector.network.model.user.Role;
 import com.george.vector.network.model.user.User;
+import com.george.vector.ui.common.auth.LoginActivity;
 import com.george.vector.ui.common.settings.SettingsActivity;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -23,7 +24,6 @@ import java.util.List;
 
 public class ProfileRootActivity extends AppCompatActivity {
 
-    private String name, lastname, patronymic, email, role, zone;
     private ActivityProfileRootBinding binding;
 
     @Override
@@ -36,15 +36,11 @@ public class ProfileRootActivity extends AppCompatActivity {
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         User user = userPrefViewModel.getUser();
 
-        List<Role> roleList;
-
-        name = user.getName();
-        lastname = user.getLastName();
-        patronymic = user.getPatronymic();
-        email = user.getEmail();
-        roleList = user.getRoles();
-        role = roleList.get(0).getName();
-        zone = user.getZone();
+        String name = user.getName();
+        String lastname = user.getLastName();
+        String email = user.getEmail();
+        List<Role> roleList = user.getRoles();
+        String role = roleList.get(0).getName();
 
         String charName = Character.toString(name.charAt(0));
         String charLastname = Character.toString(lastname.charAt(0));
@@ -68,7 +64,8 @@ public class ProfileRootActivity extends AppCompatActivity {
                     .setTitle(getString(R.string.warning))
                     .setMessage("Вы действительно хотите выйти из аккаунта?")
                     .setPositiveButton("ok", (dialog1, which) -> {
-
+                        userPrefViewModel.deleteUserData();
+                        startActivity(new Intent(this, LoginActivity.class));
                     })
                     .setNegativeButton("Отмена", (dialog12, which) -> dialog12.dismiss())
                     .create();

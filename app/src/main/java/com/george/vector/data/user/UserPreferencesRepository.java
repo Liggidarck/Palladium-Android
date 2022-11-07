@@ -100,4 +100,22 @@ public class UserPreferencesRepository implements UserPreferencesBehaviour{
         editor.apply();
     }
 
+    @Override
+    public void deleteUserData() {
+        editor.putString(USER_PREFERENCES_NAME, null);
+        editor.putString(USER_PREFERENCES_LAST_NAME, null);
+        editor.putString(USER_PREFERENCES_PATRONYMIC, null);
+        editor.putString(USER_PREFERENCES_ROLE, null);
+        editor.putString(USER_PREFERENCES_EMAIL, null);
+        editor.putString(USER_PREFERENCES_ZONE, null);
+        editor.putString(USER_PREFERENCES_PASSWORD, null);
+        editor.putString(USER_PREFERENCES_USERNAME, null);
+
+        editor.putString(TOKEN, null);
+        editor.putLong(ID, 0);
+        editor.putBoolean(USER_NOTIFICATIONS_OPTIONS, false);
+
+        editor.apply();
+    }
+
 }

@@ -6,7 +6,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
@@ -18,24 +17,25 @@ import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.EditUserActivityBinding;
-import com.george.vector.network.model.user.RegisterUserModel;
+import com.george.vector.network.model.user.EditUserModel;
 import com.george.vector.network.model.user.Role;
 import com.george.vector.network.model.user.User;
 import com.george.vector.ui.viewmodel.UserViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EditUserActivity extends AppCompatActivity {
 
+    private long userID;
     private String nameUser;
     private String lastNameUser;
     private String patronymicUser;
     private String emailUser;
     private String roleUser;
     private String zoneUser;
-    private long userID;
     private String password;
     private String username;
 
@@ -43,8 +43,8 @@ public class EditUserActivity extends AppCompatActivity {
 
     private UserViewModel userViewModel;
 
-    NetworkUtils networkUtils = new NetworkUtils();
-    TextValidatorUtils textValidator = new TextValidatorUtils();
+    private final NetworkUtils networkUtils = new NetworkUtils();
+    private final TextValidatorUtils textValidator = new TextValidatorUtils();
 
     public static final String TAG = EditUserActivity.class.getSimpleName();
 
@@ -138,20 +138,19 @@ public class EditUserActivity extends AppCompatActivity {
 
         binding.progressBarEditUser.setVisibility(View.VISIBLE);
 
+        List<String> roles = new ArrayList<>();
+        roles.add(roleUser);
+
+        //todo: add edit user
+
+        EditUserModel user = new EditUserModel(zoneUser, nameUser, lastNameUser, patronymicUser, emailUser,
+                username, roles);
+
+        userViewModel.updateUser(user, userID);
 
         binding.progressBarEditUser.setVisibility(View.INVISIBLE);
     }
 
-    private void copyUserData() {
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-
-        String email = binding.textEmail.getEditText().getText().toString();
-
-        ClipData clip = ClipData.newPlainText(null, email + " " + password);
-        clipboard.setPrimaryClip(clip);
-
-        Snackbar.make(binding.baseLayout, "Логин и пароль пользователя скопированы", Snackbar.LENGTH_SHORT).show();
-    }
 
     boolean validateFields() {
         return textValidator.isEmptyField(nameUser, binding.textName) &
@@ -160,6 +159,6 @@ public class EditUserActivity extends AppCompatActivity {
                 textValidator.isEmptyField(emailUser, binding.textEmail) &
                 textValidator.isEmptyField(roleUser, binding.textRole) &
                 textValidator.isEmptyField(zoneUser, binding.textPermissions) &
-                textValidator.isEmptyField(password, binding.textUsername);
+                textValidator.isEmptyField(username, binding.textUsername);
     }
 }

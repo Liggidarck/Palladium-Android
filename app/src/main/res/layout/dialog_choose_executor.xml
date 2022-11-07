@@ -55,6 +55,14 @@
                 android:text="@string/executors"
                 style="@style/Widget.MaterialComponents.Chip.Filter" />
 
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_developer_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Разработчик"
+                style="@style/Widget.MaterialComponents.Chip.Filter" />
+
+
         </com.google.android.material.chip.ChipGroup>
 
     </HorizontalScrollView>

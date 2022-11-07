@@ -1,6 +1,5 @@
 package com.george.vector.ui.common.tasks;
 
-import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.ID;
 
 import android.content.Intent;
@@ -16,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.FragmentImageTaskBinding;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
@@ -24,9 +24,9 @@ public class FragmentImageTask extends Fragment {
 
     private static final String TAG = "fragmentImageTask";
 
-    FragmentImageTaskBinding binding;
+    private FragmentImageTaskBinding binding;
 
-    String image, id, collection;
+    private String image, id;
 
     @Nullable
     @Override
@@ -38,11 +38,12 @@ public class FragmentImageTask extends Fragment {
         assert args != null;
         image = args.getString("image_id");
         id = args.getString(ID);
-        collection = args.getString(ZONE);
+
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 
         TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
                 this.requireActivity().getApplication(),
-                collection)
+                userPrefViewModel.getToken())
         ).get(TaskViewModel.class);
 
         boolean economyTraffic = PreferenceManager
@@ -90,7 +91,6 @@ public class FragmentImageTask extends Fragment {
     void goActivityImage() {
         Intent intent = new Intent(FragmentImageTask.this.getContext(), ImageTaskActivity.class);
         intent.putExtra(ID, id);
-        intent.putExtra(ZONE, collection);
         startActivity(intent);
     }
 

@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityImageTaskBinding;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
@@ -18,7 +19,7 @@ import com.george.vector.ui.viewmodel.ViewModelFactory;
 public class ImageTaskActivity extends AppCompatActivity {
 
     long id;
-    String collection, image;
+    String image;
 
     ActivityImageTaskBinding binding;
 
@@ -33,7 +34,9 @@ public class ImageTaskActivity extends AppCompatActivity {
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.getLong(ID);
-        collection = arguments.getString(ZONE);
+
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+
 
         String bufferSizePreference = PreferenceManager
                 .getDefaultSharedPreferences(ImageTaskActivity.this)
@@ -42,7 +45,7 @@ public class ImageTaskActivity extends AppCompatActivity {
 
         TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
                 this.getApplication(),
-                collection)
+                userPrefViewModel.getToken())
         ).get(TaskViewModel.class);
 
         binding.imageViewTask.setOnClickListener(v ->

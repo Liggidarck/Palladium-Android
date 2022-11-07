@@ -20,6 +20,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserHolder> {
     private onItemUserClickListener listener;
     private List<User> users = new ArrayList<>();
 
+    public static final String TAG = UserAdapter.class.getSimpleName();
+
     @Override
     public void onBindViewHolder(@NonNull UserHolder holder, int position) {
         User user = users.get(position);
@@ -63,7 +65,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserHolder> {
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
-                if(position != RecyclerView.NO_POSITION && listener != null)
+                if (position != RecyclerView.NO_POSITION && listener != null)
                     listener.onItemClick(users.get(position), position);
             });
 
@@ -74,7 +76,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserHolder> {
         void onItemClick(User user, int position);
     }
 
-    public void setOnItemClickListener(onItemUserClickListener listener){
+    public void setOnItemClickListener(onItemUserClickListener listener) {
         this.listener = listener;
     }
 

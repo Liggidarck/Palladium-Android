@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.george.vector.network.api.FluffyFoxyClient;
 import com.george.vector.network.api.UserInterface;
+import com.george.vector.network.model.user.EditUserModel;
 import com.george.vector.network.model.user.Role;
 import com.george.vector.network.model.user.User;
 
@@ -107,7 +108,7 @@ public class UserRepository {
         return user;
     }
 
-    public MutableLiveData<String> editUser(User user, long id) {
+    public MutableLiveData<String> editUser(EditUserModel user, long id) {
         MutableLiveData<String> edit = new MutableLiveData<>();
 
         userInterface.editUser(user, id).enqueue(new Callback<String>() {

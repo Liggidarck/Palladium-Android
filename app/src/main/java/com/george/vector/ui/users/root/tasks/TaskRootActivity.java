@@ -21,6 +21,7 @@ import com.george.vector.R;
 import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityTaskRootBinding;
+import com.george.vector.ui.common.tasks.FragmentImageTask;
 import com.george.vector.ui.users.root.tasks.contoll.EditTaskRootActivity;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.UserViewModel;
@@ -45,6 +46,8 @@ public class TaskRootActivity extends AppCompatActivity {
     private int creatorId;
     private int executorId;
     private String dateDone;
+    private String executorName;
+    private String userName;
     private boolean confirmDelete;
     private boolean urgent;
 
@@ -151,20 +154,20 @@ public class TaskRootActivity extends AppCompatActivity {
             }
 
 
-//            if (imageId != null) {
-//                Fragment imageFragment = new FragmentImageTask();
-//                Bundle bundle = new Bundle();
-//                bundle.putString("image_id", imageId);
-//                bundle.putLong(ID, id);
-//                bundle.putString(ZONE, zone);
-//                bundle.putString(ZONE, this.zone);
-//                imageFragment.setArguments(bundle);
-//
-//                getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .replace(R.id.frame_image_task, imageFragment)
-//                        .commit();
-//            }
+            if (imageId != null) {
+                Fragment imageFragment = new FragmentImageTask();
+                Bundle bundle = new Bundle();
+                bundle.putString("image_id", imageId);
+                bundle.putLong(ID, id);
+                bundle.putString(ZONE, zone);
+                bundle.putString(ZONE, this.zone);
+                imageFragment.setArguments(bundle);
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frame_image_task, imageFragment)
+                        .commit();
+            }
 
             if (urgent) {
                 Fragment urgentFragment = new FragmentUrgentRequest();
@@ -175,18 +178,18 @@ public class TaskRootActivity extends AppCompatActivity {
             }
 
             userViewModel.getUserById(creatorId).observe(this, user -> {
-                String name = user.getLastName() + " " + user.getLastName() + " " + user.getPatronymic();
+                executorName = user.getLastName() + " " + user.getLastName() + " " + user.getPatronymic();
                 String email = user.getEmail();
 
-                binding.textViewFullNameCreator.setText(name);
+                binding.textViewFullNameCreator.setText(executorName);
                 binding.textViewEmailCreatorTaskRoot.setText(email);
             });
 
             userViewModel.getUserById(executorId).observe(this, executor -> {
-                String name = executor.getLastName() + " " + executor.getName() + " " + executor.getPatronymic();
+                userName = executor.getLastName() + " " + executor.getName() + " " + executor.getPatronymic();
                 String email = executor.getEmail();
 
-                binding.textViewFullNameExecutor.setText(name);
+                binding.textViewFullNameExecutor.setText(userName);
                 binding.textViewEmailExecutorTaskRoot.setText(email);
             });
 
@@ -219,21 +222,20 @@ public class TaskRootActivity extends AppCompatActivity {
             else
                 imageUrl = String.format("https://firebasestorage.googleapis.com/v0/b/school-2122.appspot.com/o/images%%2F%s?alt=media", imageId);
 
-//            String sharingData = nameTask + "\n" + comment + "\n \n" +
-//                    address + "\n" + "Этаж: " + floor + "\n" + "Кабинет: " + cabinet + "\n \n" +
-//                    "Создатель заявки" + "\n" + fullNameCreator + "\n" + creatorId + "\n \n" +
-//                    "Исполнитель" + "\n" + fullNameExecutor + "\n" + executorId + "\n" + "Дата выполнения: " + dateDone + "\n \n" +
-//                    "Статус" + "\n" + status + "\n" + "Созданно: " + dateCreate + " " + timeCreate + "\n \n" +
-//                    "Изображение" + "\n" + imageUrl;
+            String sharingData = nameTask + "\n" + comment + "\n \n" +
+                    address + "\n" + "Этаж: " + floor + "\n" + "Кабинет: " + cabinet + "\n \n" +
+                    "Создатель заявки" + "\n" + userName + "\n" + creatorId + "\n \n" +
+                    "Исполнитель" + "\n" + executorName + "\n" + executorId + "\n" + "Дата выполнения: " + dateDone + "\n \n" +
+                    "Статус" + "\n" + status + "\n" + "Созданно: " + dateCreate + "\n \n" +
+                    "Изображение" + "\n" + imageUrl;
 
-//            Intent sendIntent = new Intent();
-//            sendIntent.setAction(Intent.ACTION_SEND);
-//            sendIntent.putExtra(Intent.EXTRA_TEXT, sharingData);
-//            sendIntent.setType("text/plain");
-//
-//            Intent shareIntent = Intent.createChooser(sendIntent, null);
-//            startActivity(shareIntent);
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, sharingData);
+            sendIntent.setType("text/plain");
 
+            Intent shareIntent = Intent.createChooser(sendIntent, null);
+            startActivity(shareIntent);
         }
 
         return true;

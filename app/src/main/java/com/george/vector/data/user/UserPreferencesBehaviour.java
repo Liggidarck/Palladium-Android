@@ -20,4 +20,6 @@ public interface UserPreferencesBehaviour {
 
     void setNotifications(boolean notifications);
 
+    void deleteUserData();
+
 }
