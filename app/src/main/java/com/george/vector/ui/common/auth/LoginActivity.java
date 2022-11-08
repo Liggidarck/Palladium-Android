@@ -120,13 +120,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void startApp(@NotNull String role) {
-        if (role.equals("ROLE_DEVELOPER"))
+        if (role.equals("ROLE_DEVELOPER") || role.equals("ROLE_ADMIN"))
             startActivity(new Intent(this, MainRootActivity.class));
 
-        if (role.equals("Пользователь"))
+        if (role.equals("ROLE_USER"))
             startActivity(new Intent(this, MainUserActivity.class));
 
-        if (role.equals("Исполнитель"))
+        if (role.equals("ROLE_EXECUTOR"))
             startActivity(new Intent(this, MainExecutorActivity.class));
 
         finish();

@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.george.vector.network.model.Message;
 import com.george.vector.network.model.Task;
 import com.george.vector.network.repository.TaskRepository;
 import com.google.firebase.storage.FirebaseStorage;
@@ -38,11 +39,11 @@ public class TaskViewModel extends AndroidViewModel {
         storageReference = firebaseStorage.getReference();
     }
 
-    public MutableLiveData<String> createTask(Task task) {
+    public MutableLiveData<Message> createTask(Task task) {
         return repository.createTask(task);
     }
 
-    public MutableLiveData<String> editTask(Task task, long id) {
+    public MutableLiveData<Message> editTask(Task task, long id) {
         return repository.editTask(task, id);
     }
 
@@ -74,8 +75,8 @@ public class TaskViewModel extends AndroidViewModel {
         return repository.getByZoneLikeAndStatusLike(zone, status);
     }
 
-    public void deleteTask(long id) {
-        repository.deleteTask(id);
+    public MutableLiveData<Message> deleteTask(long id) {
+        return repository.deleteTask(id);
     }
 
 

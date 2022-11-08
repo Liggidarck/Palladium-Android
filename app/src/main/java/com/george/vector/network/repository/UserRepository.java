@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.george.vector.network.api.FluffyFoxyClient;
 import com.george.vector.network.api.UserInterface;
+import com.george.vector.network.model.Message;
 import com.george.vector.network.model.user.RegisterUserModel;
 import com.george.vector.network.model.user.Role;
 import com.george.vector.network.model.user.User;
@@ -115,12 +116,12 @@ public class UserRepository {
         return user;
     }
 
-    public MutableLiveData<String> editUser(RegisterUserModel user, long id) {
-        MutableLiveData<String> edit = new MutableLiveData<>();
+    public MutableLiveData<Message> editUser(RegisterUserModel user, long id) {
+        MutableLiveData<Message> edit = new MutableLiveData<>();
 
-        userInterface.editUser(user, id).enqueue(new Callback<String>() {
+        userInterface.editUser(user, id).enqueue(new Callback<Message>() {
             @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+            public void onResponse(@NonNull Call<Message> call, @NonNull Response<Message> response) {
                 Log.d(TAG, "editUser: " + response.code());
                 if(response.code() == 200) {
                     edit.setValue(response.body());
@@ -128,7 +129,7 @@ public class UserRepository {
             }
 
             @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<Message> call, @NonNull Throwable t) {
                 Log.e(TAG, "editUser: ", t);
                 edit.setValue(null);
             }
@@ -137,12 +138,12 @@ public class UserRepository {
         return edit;
     }
 
-    public MutableLiveData<String> deleteUser(long id) {
-        MutableLiveData<String> delete = new MutableLiveData<>();
+    public MutableLiveData<Message> deleteUser(long id) {
+        MutableLiveData<Message> delete = new MutableLiveData<>();
 
-        userInterface.deleteUser(id).enqueue(new Callback<String>() {
+        userInterface.deleteUser(id).enqueue(new Callback<Message>() {
             @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+            public void onResponse(@NonNull Call<Message> call, @NonNull Response<Message> response) {
                 Log.d(TAG, "deleteUser: " + response.code());
                 if(response.code() == 200) {
                     delete.setValue(response.body());
@@ -150,7 +151,7 @@ public class UserRepository {
             }
 
             @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<Message> call, @NonNull Throwable t) {
                 delete.setValue(null);
                 Log.e(TAG, "deleteUser: ", t);
             }

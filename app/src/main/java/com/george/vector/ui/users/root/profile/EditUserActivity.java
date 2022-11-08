@@ -2,13 +2,14 @@ package com.george.vector.ui.users.root.profile;
 
 import static java.util.Objects.requireNonNull;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
 import com.george.vector.common.utils.NetworkUtils;
@@ -17,7 +18,6 @@ import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.EditUserActivityBinding;
 import com.george.vector.network.model.user.RegisterUserModel;
 import com.george.vector.network.model.user.Role;
-import com.george.vector.network.model.user.User;
 import com.george.vector.ui.viewmodel.UserViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
 import com.google.android.material.snackbar.Snackbar;
@@ -33,10 +33,10 @@ public class EditUserActivity extends AppCompatActivity {
     private String patronymicUser;
     private String emailUser;
     private String roleUser;
-    private int roleId;
     private String zoneUser;
     private String password;
     private String username;
+    boolean confirmDelete;
 
     private EditUserActivityBinding binding;
 
@@ -56,6 +56,9 @@ public class EditUserActivity extends AppCompatActivity {
 
         Bundle arguments = getIntent().getExtras();
         userID = arguments.getLong("user_id");
+        confirmDelete = PreferenceManager
+                .getDefaultSharedPreferences(this)
+                .getBoolean("confirm_before_deleting_root", true);
 
         initViewModels();
 
@@ -67,7 +70,6 @@ public class EditUserActivity extends AppCompatActivity {
             patronymicUser = user.getPatronymic();
             emailUser = user.getEmail();
             roleUser = roles.get(0).getName();
-            roleId = roles.get(0).getId();
             zoneUser = user.getZone();
             password = user.getPassword();
             username = user.getUsername();
@@ -85,8 +87,30 @@ public class EditUserActivity extends AppCompatActivity {
 
         binding.toolbarEditUser.setNavigationOnClickListener(v -> onBackPressed());
         binding.btnUpdateUser.setOnClickListener(v -> updateUser());
+        binding.btnDeleteUser.setOnClickListener(v -> {
+            if (confirmDelete)
+                showDialogDelete();
+            else
+                deleteUser();
+        });
 
     }
+
+    private void showDialogDelete() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle(getText(R.string.warning))
+                .setMessage(getText(R.string.warning_delete_user))
+                .setPositiveButton(getText(R.string.delete), (dialog, id) -> {
+                    deleteUser();
+                    dialog.dismiss();
+                })
+                .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.dismiss());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 
     private void initViewModels() {
         UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
@@ -107,7 +131,7 @@ public class EditUserActivity extends AppCompatActivity {
 
         binding.autoCompleteTextViewEditRoleUser.setAdapter(arrayAdapter);
 
-        String[] permissions = getResources().getStringArray(R.array.permissions);
+        String[] permissions = getResources().getStringArray(R.array.zones);
         ArrayAdapter<String> arrayAdapterPermission = new ArrayAdapter<>(
                 EditUserActivity.this,
                 R.layout.dropdown_menu_categories,
@@ -141,19 +165,28 @@ public class EditUserActivity extends AppCompatActivity {
 
         List<String> roles = new ArrayList<>();
         roles.add(roleUser);
-
-
         RegisterUserModel user = new RegisterUserModel(zoneUser, nameUser, lastNameUser, patronymicUser,
                 emailUser, password, username,roles);
 
-        userViewModel.updateUser(user, userID).observe(this, status -> {
-            // todo: fix this crash
-            if (status.equals("User successfully edited")) {
-                Toast.makeText(this, "User successfully edited", Toast.LENGTH_SHORT).show();
+        userViewModel.updateUser(user, userID).observe(this, message -> {
+            if(message.getMessage().equals("User successfully edited")) {
+                binding.progressBarEditUser.setVisibility(View.INVISIBLE);
+                onBackPressed();
             }
         });
 
-        binding.progressBarEditUser.setVisibility(View.INVISIBLE);
+
+    }
+
+    private void deleteUser() {
+        binding.progressBarEditUser.setVisibility(View.VISIBLE);
+
+        userViewModel.deleteUser(userID).observe(this, message -> {
+            if(message.getMessage().equals("User successfully deleted")) {
+                binding.progressBarEditUser.setVisibility(View.INVISIBLE);
+                onBackPressed();
+            }
+        });
     }
 
 

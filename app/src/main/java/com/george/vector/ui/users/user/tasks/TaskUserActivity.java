@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.R;
 import com.george.vector.common.utils.NetworkUtils;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityTaskUserBinding;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
@@ -21,11 +22,9 @@ import com.google.android.material.snackbar.Snackbar;
 public class TaskUserActivity extends AppCompatActivity {
 
     private long id;
-    private String collection;
     private String cabinet;
     private String comment;
     private String dateCreate;
-    private String timeCreate;
     private String image;
     private String letter;
 
@@ -42,12 +41,13 @@ public class TaskUserActivity extends AppCompatActivity {
 
         Bundle arguments = getIntent().getExtras();
         id = arguments.getLong(ID);
-        collection = arguments.getString(ZONE);
 
-        TaskViewModel taskViewModel = new ViewModelProvider(
-                this,
-                new ViewModelFactory(TaskUserActivity.this.getApplication(), collection)
-        ).get(TaskViewModel.class);
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+
+        TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                TaskUserActivity.this.getApplication(),
+                userPrefViewModel.getToken()
+        )).get(TaskViewModel.class);
 
         setSupportActionBar(binding.topAppBarTaskUser);
         binding.topAppBarTaskUser.setNavigationOnClickListener(v -> onBackPressed());
@@ -55,11 +55,10 @@ public class TaskUserActivity extends AppCompatActivity {
         taskViewModel.getTaskById(id).observe(this, task -> {
             comment = task.getComment();
             dateCreate = task.getDateCreate();
-
             image = task.getImage();
             letter = task.getLetter();
 
-            String dateCreateText = "Созданно: " + dateCreate + " " + timeCreate;
+            String dateCreateText = "Созданно: " + dateCreate;
             if (!letter.equals("-") && !letter.isEmpty())
                 cabinet = String.format("%s%s", cabinet, letter);
 
@@ -71,14 +70,11 @@ public class TaskUserActivity extends AppCompatActivity {
             binding.textViewDateCreateTaskUser.setText(dateCreateText);
             binding.textViewStatusTaskUser.setText(task.getStatus());
 
-
             if (image != null) {
                 Fragment imageFragment = new FragmentImageTask();
                 Bundle bundle = new Bundle();
                 bundle.putString("image_id", image);
                 bundle.putLong(ID, id);
-                bundle.putString(ZONE, collection);
-                bundle.putString(ZONE, collection);
                 imageFragment.setArguments(bundle);
 
                 getSupportFragmentManager()
@@ -87,10 +83,8 @@ public class TaskUserActivity extends AppCompatActivity {
                         .commit();
             }
 
+            binding.progressBarTaskUser.setVisibility(View.INVISIBLE);
         });
-
-        binding.progressBarTaskUser.setVisibility(View.INVISIBLE);
-
     }
 
     @Override
@@ -98,8 +92,8 @@ public class TaskUserActivity extends AppCompatActivity {
         super.onStart();
         if (!networkUtils.isOnline(TaskUserActivity.this))
             Snackbar.make(findViewById(R.id.coordinator_task_user),
-                            getString(R.string.error_no_connection),
-                            Snackbar.LENGTH_LONG
-                    ).show();
+                    getString(R.string.error_no_connection),
+                    Snackbar.LENGTH_LONG
+            ).show();
     }
 }

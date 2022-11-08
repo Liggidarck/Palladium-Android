@@ -5,11 +5,13 @@ import static com.george.vector.common.utils.consts.Keys.ID;
 import static com.george.vector.common.utils.consts.Keys.ZONE;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -244,7 +246,10 @@ public class TaskRootActivity extends AppCompatActivity {
 
         builder.setTitle(getText(R.string.warning))
                 .setMessage(getText(R.string.warning_delete_task))
-                .setPositiveButton(getText(R.string.delete), (dialog, id) -> deleteTask())
+                .setPositiveButton(getText(R.string.delete), (dialog, id) -> {
+                    deleteTask();
+                    dialog.dismiss();
+                })
                 .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.dismiss());
 
         AlertDialog dialog = builder.create();
@@ -252,8 +257,22 @@ public class TaskRootActivity extends AppCompatActivity {
     }
 
     void deleteTask() {
-        taskViewModel.deleteTask(taskId);
-        onBackPressed();
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Загрузка...");
+        progressDialog.setMessage("Ваша заявка удаляется...");
+        progressDialog.show();
+
+        taskViewModel.deleteTask(taskId).observe(this, message -> {
+
+            if (message.getMessage().equals("Task successfully deleted")) {
+                onBackPressed();
+                progressDialog.dismiss();
+            } else {
+                Toast.makeText(this, "Произошла ошибка", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+
+        });
     }
 
     @Override

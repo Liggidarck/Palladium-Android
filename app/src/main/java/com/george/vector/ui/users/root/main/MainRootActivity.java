@@ -59,6 +59,8 @@ public class MainRootActivity extends AppCompatActivity {
         String lastNameUser = user.getLastName();
         boolean notifications = preferencesViewModel.getNotifications();
 
+        Log.d(TAG, "onCreate: token: " + preferencesViewModel.getToken());
+
         if(BuildConfig.DEBUG) {
             return;
         }

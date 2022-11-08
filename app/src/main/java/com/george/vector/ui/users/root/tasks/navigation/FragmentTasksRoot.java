@@ -28,9 +28,13 @@ import com.george.vector.ui.viewmodel.ViewModelFactory;
 
 public class FragmentTasksRoot extends Fragment {
 
+    private FragmentTasksRootBinding binding;
+
     private final TaskAdapter taskAdapter = new TaskAdapter();
     private TaskViewModel taskViewModel;
-    private FragmentTasksRootBinding binding;
+
+    private String zone, status;
+    private boolean executed;
 
     public static final String TAG = FragmentTasksRoot.class.getSimpleName();
 
@@ -42,9 +46,9 @@ public class FragmentTasksRoot extends Fragment {
 
         Bundle args = getArguments();
         assert args != null;
-        String zone = args.getString(ZONE);
-        String status = args.getString(STATUS);
-        boolean executed = args.getBoolean(IS_EXECUTE);
+        zone = args.getString(ZONE);
+        status = args.getString(STATUS);
+        executed = args.getBoolean(IS_EXECUTE);
 
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 
@@ -66,31 +70,11 @@ public class FragmentTasksRoot extends Fragment {
     }
 
     void setUpRecyclerView(String zone, String status, boolean executed) {
-
-        if (!executed) {
-            taskViewModel
-                    .getByZoneLikeAndStatusLike(zone, status)
-                    .observe(FragmentTasksRoot.this.requireActivity(),
-                            tasks -> {
-                                taskAdapter.addTasks(tasks);
-                                binding.progressAllTasks.setVisibility(View.INVISIBLE);
-                            }
-                    );
-
-        } else {
-            UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
-            taskViewModel
-                    .getTasksByExecutor(userDataViewModel.getId())
-                    .observe(FragmentTasksRoot.this.requireActivity(),
-                            tasks -> {
-                                taskAdapter.addTasks(tasks);
-                                binding.progressAllTasks.setVisibility(View.INVISIBLE);
-                            }
-                    );
-        }
+        updateListTasks(zone, status, executed);
 
         binding.recyclerviewSchoolOstNewTasks.setHasFixedSize(true);
-        binding.recyclerviewSchoolOstNewTasks.setLayoutManager(new LinearLayoutManager(FragmentTasksRoot.this.requireActivity()));
+        binding.recyclerviewSchoolOstNewTasks.setLayoutManager(new
+                LinearLayoutManager(FragmentTasksRoot.this.requireActivity()));
         binding.recyclerviewSchoolOstNewTasks.setAdapter(taskAdapter);
 
         taskAdapter.setOnItemClickListener((task, position) -> {
@@ -104,6 +88,28 @@ public class FragmentTasksRoot extends Fragment {
 
     }
 
+    private void updateListTasks(String zone, String status, boolean executed) {
+        if (!executed) {
+            taskViewModel.getByZoneLikeAndStatusLike(zone, status)
+                    .observe(FragmentTasksRoot.this.requireActivity(), tasks -> {
+                        taskAdapter.addTasks(tasks);
+                        binding.progressAllTasks.setVisibility(View.INVISIBLE);
+                    });
+        } else {
+            UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+            taskViewModel.getTasksByExecutor(userDataViewModel.getId())
+                    .observe(FragmentTasksRoot.this.requireActivity(), tasks -> {
+                        taskAdapter.addTasks(tasks);
+                        binding.progressAllTasks.setVisibility(View.INVISIBLE);
+                    });
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateListTasks(zone, status, executed);
+    }
 
     @Override
     public void onDestroyView() {

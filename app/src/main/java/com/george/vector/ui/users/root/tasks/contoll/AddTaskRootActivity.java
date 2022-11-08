@@ -163,6 +163,11 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
     }
 
     private void saveTask() {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Загрузка...");
+        progressDialog.setMessage("Ваша заявка сохраняется...");
+        progressDialog.show();
+
         String image = null;
 
         String dateCreate = timeUtils.getDate() + " " + timeUtils.getTime();
@@ -173,13 +178,10 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         Task task = new Task(zone, NEW_TASKS, taskName, comment, address, floor,
                 cabinet, letter, urgent, dateComplete, executorId, userId, dateCreate, image);
 
-        taskViewModel.createTask(task).observe(this, response -> {
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Загрузка...");
-            progressDialog.setMessage("Ваша заявка сохраняется...");
-            progressDialog.show();
+        taskViewModel.createTask(task).observe(this, message -> {
+            Log.d(TAG, "saveTask: " + message.getMessage());
 
-            if (response.equals("Task successfully created")) {
+            if (message.getMessage().equals("Task successfully created!")) {
                 startListTasks();
                 progressDialog.dismiss();
             } else {

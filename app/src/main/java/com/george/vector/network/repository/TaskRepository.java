@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.george.vector.network.model.Message;
 import com.george.vector.network.notifications.SendNotification;
 import com.george.vector.network.api.FluffyFoxyClient;
 import com.george.vector.network.api.TaskInterface;
@@ -28,12 +29,12 @@ public class TaskRepository {
         taskInterface = FluffyFoxyClient.getFoxyTokenClient(token).create(TaskInterface.class);
     }
 
-    public MutableLiveData<String> createTask(Task task) {
-        MutableLiveData<String> taskMutableLiveData = new MutableLiveData<>();
+    public MutableLiveData<Message> createTask(Task task) {
+        MutableLiveData<Message> taskMutableLiveData = new MutableLiveData<>();
 
-        taskInterface.createTask(task).enqueue(new Callback<String>() {
+        taskInterface.createTask(task).enqueue(new Callback<Message>() {
             @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+            public void onResponse(@NonNull Call<Message> call, @NonNull Response<Message> response) {
                 Log.d(TAG, "Task create code: " + response.code());
                 if (response.code() == 200) {
                     taskMutableLiveData.setValue(response.body());
@@ -41,7 +42,7 @@ public class TaskRepository {
             }
 
             @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<Message> call, @NonNull Throwable t) {
                 taskMutableLiveData.setValue(null);
                 Log.e(TAG, "onFailure: create task: ", t);
             }
@@ -50,12 +51,12 @@ public class TaskRepository {
         return taskMutableLiveData;
     }
 
-    public MutableLiveData<String> editTask(Task task, long id) {
-        MutableLiveData<String> edit = new MutableLiveData<>();
+    public MutableLiveData<Message> editTask(Task task, long id) {
+        MutableLiveData<Message> edit = new MutableLiveData<>();
 
-        taskInterface.editTask(task, id).enqueue(new Callback<String>() {
+        taskInterface.editTask(task, id).enqueue(new Callback<Message>() {
             @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+            public void onResponse(@NonNull Call<Message> call, @NonNull Response<Message> response) {
                 Log.d(TAG, "onResponse: edit task: " + response.code());
                 if (response.code() == 200) {
                     edit.setValue(response.body());
@@ -63,7 +64,7 @@ public class TaskRepository {
             }
 
             @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<Message> call, @NonNull Throwable t) {
                 edit.setValue(null);
                 Log.e(TAG, "onFailure: edit task: ", t);
             }
@@ -72,25 +73,26 @@ public class TaskRepository {
         return edit;
     }
 
-    public void deleteTask(long id) {
-        MutableLiveData<String> delete = new MutableLiveData<>();
+    public MutableLiveData<Message> deleteTask(long id) {
+        MutableLiveData<Message> delete = new MutableLiveData<>();
 
-        taskInterface.deleteTask(id).enqueue(new Callback<String>() {
+        taskInterface.deleteTask(id).enqueue(new Callback<Message>() {
             @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+            public void onResponse(@NonNull Call<Message> call, @NonNull Response<Message> response) {
                 Log.d(TAG, "onResponse: delete task code: " + response.code());
-                if(response.code() == 200) {
+                if (response.code() == 200) {
                     delete.setValue(response.body());
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<Message> call, @NonNull Throwable t) {
                 delete.setValue(null);
                 Log.e(TAG, "onFailure: delete task", t);
             }
         });
 
+        return delete;
     }
 
 
@@ -122,10 +124,8 @@ public class TaskRepository {
         taskInterface.getTasksByCreator(id).enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(@NonNull Call<List<Task>> call, @NonNull Response<List<Task>> response) {
-                Log.d(TAG, "getTasksByCreator: " + response.code());
-                if (response.code() == 200) {
-                    tasks.setValue(response.body());
-                }
+                Log.d(TAG, "getTasksByCreator: " + response.body());
+                tasks.setValue(response.body());
             }
 
             @Override
@@ -167,7 +167,7 @@ public class TaskRepository {
             @Override
             public void onResponse(@NonNull Call<List<Task>> call, @NonNull Response<List<Task>> response) {
                 Log.d(TAG, "getByZoneLikeAndStatusLike: " + response.code());
-                if(response.code() == 200) {
+                if (response.code() == 200) {
                     tasks.setValue(response.body());
                 }
             }

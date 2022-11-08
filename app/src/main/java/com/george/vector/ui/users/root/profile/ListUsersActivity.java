@@ -18,6 +18,8 @@ public class ListUsersActivity extends AppCompatActivity {
 
     private UserAdapter adapter = new UserAdapter();
 
+    private UserViewModel userViewModel;
+
     private ActivityListUsersBinding usersBinding;
 
     @Override
@@ -31,17 +33,19 @@ public class ListUsersActivity extends AppCompatActivity {
 
         UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 
-        UserViewModel userViewModel = new ViewModelProvider(this, new ViewModelFactory(
+        userViewModel = new ViewModelProvider(this, new ViewModelFactory(
                 this.getApplication(),
                 userDataViewModel.getToken()
         )).get(UserViewModel.class);
 
-        userViewModel.getAllUsers().observe(this, users -> adapter.setUsers(users));
-
-
+        setUpList();
 
         setUpRecyclerView();
 
+    }
+
+    private void setUpList() {
+        userViewModel.getAllUsers().observe(this, users -> adapter.setUsers(users));
     }
 
     private void setUpRecyclerView() {
@@ -57,4 +61,9 @@ public class ListUsersActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setUpList();
+    }
 }

@@ -1,5 +1,6 @@
 package com.george.vector.network.api;
 
+import com.george.vector.network.model.Message;
 import com.george.vector.network.model.Task;
 
 import java.util.List;
@@ -10,19 +11,18 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface TaskInterface {
 
     @POST("/palladium/tasks/create")
-    Call<String> createTask(@Body Task task);
+    Call<Message> createTask(@Body Task task);
 
     @PUT("/palladium/tasks/edit")
-    Call<String> editTask(@Body Task task, @Query("id") long id);
+    Call<Message> editTask(@Body Task task, @Query("id") long id);
 
     @DELETE("/palladium/tasks/delete")
-    Call<String> deleteTask(@Query("id") long id);
+    Call<Message> deleteTask(@Query("id") long id);
 
     @GET("/palladium/tasks/get/byExecutor")
     Call<List<Task>> getTasksByExecutor(@Query("id") long id);

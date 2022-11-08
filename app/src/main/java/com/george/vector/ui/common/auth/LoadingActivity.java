@@ -3,7 +3,6 @@ package com.george.vector.ui.common.auth;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,20 +37,20 @@ public class LoadingActivity extends AppCompatActivity {
         String email = preferencesViewModel.getUser().getEmail();
         List<Role> roleList = preferencesViewModel.getUser().getRoles();
 
-        if(token == null) {
+        if (token == null) {
             startActivity(new Intent(this, LoginActivity.class));
         }
 
         if (token == null & email != null) {
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle("Внимание!")
-                    .setMessage("Необходимо войти в аккаунт снова. Если вы не помните совой логин, обратитесь в техническую поддрежку")
+                    .setMessage("Необходимо войти в аккаунт снова. Ваши данные были изменены разработчиком. Обратитесь к разработчику любым удобным способом для получения новых данных.")
                     .setNegativeButton("Помощь", (dialog1, which) -> {
-
                         Intent intent = new Intent("android.intent.action.SENDTO", Uri.fromParts("mailto", getString(R.string.email_developer), null));
                         intent.putExtra("android.intent.extra.SUBJECT", "Помощь с восстановлением доступа к приложению");
                         startActivity(Intent.createChooser(intent, "Выберите приложение для отправки электронного письма разработчику приложения"));
 
+                        preferencesViewModel.deleteUserData();
                     })
                     .setPositiveButton("ок", (dialog12, which) ->
                             startActivity(new Intent(this, LoginActivity.class)))
@@ -66,13 +65,13 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     void startApp(String role) {
-        if (role.equals("ROLE_DEVELOPER"))
+        if (role.equals("ROLE_DEVELOPER") || role.equals("ROLE_ADMIN"))
             startActivity(new Intent(this, MainRootActivity.class));
 
-        if (role.equals("Пользователь"))
+        if (role.equals("ROLE_USER"))
             startActivity(new Intent(this, MainUserActivity.class));
 
-        if (role.equals("Исполнитель"))
+        if (role.equals("ROLE_EXECUTOR"))
             startActivity(new Intent(this, MainExecutorActivity.class));
         finish();
     }
