@@ -1,5 +1,8 @@
 package com.george.vector.ui.users.root.tasks;
 
+import static com.george.vector.common.utils.consts.Keys.ARCHIVE_TASKS;
+import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
+import static com.george.vector.common.utils.consts.Keys.IN_PROGRESS_TASKS;
 import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
 import static com.george.vector.common.utils.consts.Keys.ID;
 import static com.george.vector.common.utils.consts.Keys.ZONE;
@@ -129,17 +132,28 @@ public class TaskRootActivity extends AppCompatActivity {
             binding.textViewCabinetTaskRoot.setText(cabinet);
             binding.textViewNameTaskRoot.setText(nameTask);
             binding.textViewCommentTaskRoot.setText(comment);
-            binding.textViewStatusTaskRoot.setText(status);
             binding.textViewDateCreateTaskRoot.setText(dateCreateText);
 
-            if (status.equals(NEW_TASKS))
+            if (status.equals(NEW_TASKS)) {
                 binding.circleStatusRoot.setImageResource(R.color.red);
+                binding.textViewStatusTaskRoot.setText("Новая заявка");
+            }
 
-            if (status.equals("В работе"))
+            if (status.equals(IN_PROGRESS_TASKS)) {
                 binding.circleStatusRoot.setImageResource(R.color.orange);
+                binding.textViewStatusTaskRoot.setText("Заявка в работе");
+            }
 
-            if (status.equals("Архив") || status.equals("Завершенная заявка"))
+            if (status.equals(ARCHIVE_TASKS)) {
+                binding.textViewStatusTaskRoot.setText("Архив");
                 binding.circleStatusRoot.setImageResource(R.color.green);
+            }
+
+            if (status.equals(COMPLETED_TASKS)) {
+                binding.textViewStatusTaskRoot.setText("Завершенная заявка");
+                binding.circleStatusRoot.setImageResource(R.color.green);
+            }
+
 
             if (!letter.equals("-") && !letter.isEmpty())
                 cabinet = String.format("%s%s", cabinet, letter);
@@ -224,8 +238,8 @@ public class TaskRootActivity extends AppCompatActivity {
 
             String sharingData = nameTask + "\n" + comment + "\n \n" +
                     address + "\n" + "Этаж: " + floor + "\n" + "Кабинет: " + cabinet + "\n \n" +
-                    "Создатель заявки" + "\n" + userName + "\n" + creatorId + "\n \n" +
-                    "Исполнитель" + "\n" + executorName + "\n" + executorId + "\n" + "Дата выполнения: " + dateDone + "\n \n" +
+                    "Создатель заявки" + "\n" + userName + "\n \n" +
+                    "Исполнитель" + "\n" + "\n" + executorName + "\n" + "Дата выполнения: " + dateDone + "\n \n" +
                     "Статус" + "\n" + status + "\n" + "Созданно: " + dateCreate + "\n \n" +
                     "Изображение" + "\n" + imageUrl;
 

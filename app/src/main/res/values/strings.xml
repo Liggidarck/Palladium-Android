@@ -65,7 +65,7 @@
     <string name="editing">Редактирование</string>
     <string name="save">Сохранить</string>
 
-    <string name="superusers">Суперпользователи</string>
+    <string name="admins">Администраторы</string>
     <string name="executors">Исполнители</string>
 
     <string name="warning">Внимание!</string>

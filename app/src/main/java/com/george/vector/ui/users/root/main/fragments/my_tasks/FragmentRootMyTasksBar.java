@@ -31,21 +31,21 @@ public class FragmentRootMyTasksBar extends Fragment {
         binding.barSchool.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentRootMyTasksBar.this.getContext(), StatusActivity.class);
             intent.putExtra(ZONE, BAR_SCHOOL);
-            intent.putExtra(IS_EXECUTE, "work");
+            intent.putExtra(IS_EXECUTE, true);
             startActivity(intent);
         });
 
         binding.barRucheek.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentRootMyTasksBar.this.getContext(), StatusActivity.class);
             intent.putExtra(ZONE, BAR_RUCHEEK);
-            intent.putExtra(IS_EXECUTE, "work");
+            intent.putExtra(IS_EXECUTE, true);
             startActivity(intent);
         });
 
         binding.barZvezdochka.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentRootMyTasksBar.this.getContext(), StatusActivity.class);
             intent.putExtra(ZONE, BAR_ZVEZDOCHKA);
-            intent.putExtra(IS_EXECUTE, "work");
+            intent.putExtra(IS_EXECUTE, true);
             startActivity(intent);
         });
 

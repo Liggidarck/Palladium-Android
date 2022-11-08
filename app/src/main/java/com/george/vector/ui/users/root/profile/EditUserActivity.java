@@ -36,7 +36,7 @@ public class EditUserActivity extends AppCompatActivity {
     private String zoneUser;
     private String password;
     private String username;
-    boolean confirmDelete;
+    private boolean confirmDelete;
 
     private EditUserActivityBinding binding;
 

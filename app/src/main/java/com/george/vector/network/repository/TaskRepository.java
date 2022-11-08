@@ -95,6 +95,49 @@ public class TaskRepository {
         return delete;
     }
 
+    public MutableLiveData<Message> countByZoneLikeAndStatusLike(String zone, String status) {
+        MutableLiveData<Message> count = new MutableLiveData<>();
+
+        taskInterface.countByZoneLikeAndStatusLike(zone, status).enqueue(new Callback<Message>() {
+            @Override
+            public void onResponse(@NonNull Call<Message> call, @NonNull Response<Message> response) {
+                Log.d(TAG, "countByZoneLikeAndStatusLike: " + response.code());
+                if(response.code() == 200) {
+                    count.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Message> call, @NonNull Throwable t) {
+                Log.e(TAG, "onFailure: countByZoneLikeAndStatusLike", t);
+                count.postValue(null);
+            }
+        });
+
+        return count;
+    }
+
+    public MutableLiveData<List<Task>> getByZoneLikeAndStatusLikeAndExecutorId(String zone, String status, int executorId) {
+        MutableLiveData<List<Task>> tasks = new MutableLiveData<>();
+
+        taskInterface.getByZoneLikeAndStatusLikeAndExecutorId(zone, status, executorId).enqueue(new Callback<List<Task>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Task>> call, @NonNull Response<List<Task>> response) {
+                Log.d(TAG, "getByZoneLikeAndStatusLikeAndExecutorId: " + response.code());
+                if(response.code() == 200) {
+                    tasks.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Task>> call, @NonNull Throwable t) {
+                Log.e(TAG, "getByZoneLikeAndStatusLikeAndExecutorId: ", t);
+                tasks.postValue(null);
+            }
+        });
+
+        return tasks;
+    }
 
     public MutableLiveData<List<Task>> getTasksByExecutor(long id) {
         MutableLiveData<List<Task>> tasks = new MutableLiveData<>();

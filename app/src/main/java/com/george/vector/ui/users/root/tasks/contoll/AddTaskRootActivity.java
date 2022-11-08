@@ -27,6 +27,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -69,7 +70,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
     private UserViewModel userViewModel;
 
     private String address, floor, cabinet, letter, taskName, dateComplete, taskStatus,
-            comment, zone;
+            comment, zone, executorName;
 
     private int executorId;
     private int userId;
@@ -196,7 +197,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         Intent intent = new Intent(this, AllTasksRootActivity.class);
         intent.putExtra(ZONE, zone);
         intent.putExtra(STATUS, NEW_TASKS);
-        intent.putExtra(IS_EXECUTE, "root");
+        intent.putExtra(IS_EXECUTE, false);
         startActivity(intent);
     }
 
@@ -286,15 +287,13 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
     }
 
     boolean validateFields() {
-
-        // todo: enable validation for executor
-
         return textValidatorUtils.isEmptyField(address, binding.taskAddress) &
                 textValidatorUtils.isEmptyField(floor, binding.taskFloor) &
                 textValidatorUtils.isEmptyField(cabinet, binding.taskCabinet) &
                 textValidatorUtils.isEmptyField(taskName, binding.taskName) &
                 textValidatorUtils.isEmptyField(dateComplete, binding.taskDateComplete) &
                 textValidatorUtils.isEmptyField(taskStatus, binding.taskStatus) &
+                textValidatorUtils.isEmptyField(executorName, binding.taskNameExecutor) &
                 textValidatorUtils.validateNumberField(cabinet, binding.taskCabinet, 3);
     }
 
@@ -380,29 +379,58 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_choose_executor);
 
-
-        //todo: create filter for users.
         RecyclerView recyclerViewListExecutors = dialog.findViewById(R.id.recyclerViewListExecutors);
-        Chip chipRootDialog = dialog.findViewById(R.id.chip_root_dialog);
+        Chip chipAdminDialog = dialog.findViewById(R.id.chip_root_dialog);
         Chip chipExecutorsDialog = dialog.findViewById(R.id.chip_executors_dialog);
         Chip chipDeveloperDialog = dialog.findViewById(R.id.chip_developer_dialog);
 
         UserAdapter userAdapter = new UserAdapter();
 
-        userViewModel.getAllUsers().observe(this, userAdapter::setUsers);
+        setUsers(userAdapter,"ROLE_ADMIN");
 
         recyclerViewListExecutors.setHasFixedSize(true);
         recyclerViewListExecutors.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewListExecutors.setAdapter(userAdapter);
 
+        chipAdminDialog.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                userAdapter.clearUsers();
+                setUsers(userAdapter, "ROLE_ADMIN");
+            }
+        });
+
+        chipExecutorsDialog.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                userAdapter.clearUsers();
+                setUsers(userAdapter, "ROLE_EXECUTOR");
+            }
+        });
+
+        chipDeveloperDialog.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                userAdapter.clearUsers();
+                setUsers(userAdapter, "ROLE_DEVELOPER");
+            }
+        });
+
         userAdapter.setOnItemClickListener((executor, position) -> {
             executorId = (int) executor.getId();
-            String name = executor.getLastName() + " " + executor.getName() + " " + executor.getPatronymic();
-            Objects.requireNonNull(binding.taskNameExecutor.getEditText()).setText(name);
+            executorName = executor.getLastName() + " " + executor.getName() + " " + executor.getPatronymic();
+            Objects.requireNonNull(binding.taskNameExecutor.getEditText()).setText(executorName);
             dialog.dismiss();
         });
 
         dialog.show();
+    }
+
+    private void setUsers(UserAdapter userAdapter, String role) {
+        userViewModel.getUsersByRoleName(role).observe(this, users -> {
+            if(users == null) {
+                return;
+            }
+
+            userAdapter.setUsers(users);
+        });
     }
 
 }

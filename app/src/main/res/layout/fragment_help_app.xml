@@ -117,7 +117,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_marginTop="9dp"
-                                android:text="@string/superusers"
+                                android:text="@string/admins"
                                 android:textColor="@color/white"
                                 android:textSize="22sp" />
 

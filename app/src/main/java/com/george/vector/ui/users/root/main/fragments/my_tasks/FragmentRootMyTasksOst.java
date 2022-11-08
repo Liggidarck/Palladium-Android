@@ -39,14 +39,14 @@ public class FragmentRootMyTasksOst extends Fragment {
         binding.ostAist.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentRootMyTasksOst.this.getContext(), StatusActivity.class);
             intent.putExtra(ZONE, OST_AIST);
-            intent.putExtra(IS_EXECUTE, "work");
+            intent.putExtra(IS_EXECUTE, true);
             startActivity(intent);
         });
 
         binding.ostYagodka.setOnClickListener(v -> {
             Intent intent = new Intent(FragmentRootMyTasksOst.this.getContext(), StatusActivity.class);
             intent.putExtra(ZONE, OST_YAGODKA);
-            intent.putExtra(IS_EXECUTE, "work");
+            intent.putExtra(IS_EXECUTE, true);
             startActivity(intent);
         });
 

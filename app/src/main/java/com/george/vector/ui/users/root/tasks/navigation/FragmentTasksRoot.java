@@ -1,10 +1,10 @@
 package com.george.vector.ui.users.root.tasks.navigation;
 
-import static com.george.vector.common.utils.consts.Keys.ZONE;
-import static com.george.vector.common.utils.consts.Keys.IS_EXECUTE;
-import static com.george.vector.common.utils.consts.Keys.STATUS;
 import static com.george.vector.common.utils.consts.Keys.ID;
+import static com.george.vector.common.utils.consts.Keys.IS_EXECUTE;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
+import static com.george.vector.common.utils.consts.Keys.STATUS;
+import static com.george.vector.common.utils.consts.Keys.ZONE;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,10 +21,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.FragmentTasksRootBinding;
+import com.george.vector.network.model.Task;
 import com.george.vector.ui.adapter.TaskAdapter;
 import com.george.vector.ui.users.root.tasks.TaskRootActivity;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FragmentTasksRoot extends Fragment {
 
@@ -37,6 +41,8 @@ public class FragmentTasksRoot extends Fragment {
     private boolean executed;
 
     public static final String TAG = FragmentTasksRoot.class.getSimpleName();
+
+    private List<Task> tasks;
 
     @Nullable
     @Override
@@ -52,17 +58,60 @@ public class FragmentTasksRoot extends Fragment {
 
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 
-        String token = userPrefViewModel.getToken();
-
         taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
                 this.getActivity().getApplication(),
-                token
+                userPrefViewModel.getToken()
         )).get(TaskViewModel.class);
 
         if (!zone.equals(OST_SCHOOL)) {
             binding.chipNewSchoolTasksRoot.setVisibility(View.INVISIBLE);
             binding.chipOldSchoolTasksRoot.setVisibility(View.INVISIBLE);
         }
+
+        binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> taskAdapter.addTasks(tasks));
+
+        binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                ArrayList<Task> filterTasks = new ArrayList<>();
+
+                for (Task task : tasks) {
+                    if (task.isUrgent()) {
+                        filterTasks.add(task);
+                    }
+                }
+
+                taskAdapter.filterList(filterTasks);
+            }
+        });
+
+        binding.chipNewSchoolTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            // Старшая школа
+            if (isChecked) {
+                ArrayList<Task> filterTasks = new ArrayList<>();
+
+                for (Task task : tasks) {
+                    if (task.getAddress().equals("Авиаторов 9. Старшая школа")) {
+                        filterTasks.add(task);
+                    }
+                }
+
+                taskAdapter.filterList(filterTasks);
+            }
+        });
+
+        binding.chipOldSchoolTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                ArrayList<Task> filterTasks = new ArrayList<>();
+
+                for (Task task : tasks) {
+                    if (task.getAddress().equals("Авиаторов 9. Начальная школа")) {
+                        filterTasks.add(task);
+                    }
+                }
+
+                taskAdapter.filterList(filterTasks);
+            }
+        });
 
         setUpRecyclerView(zone, status, executed);
 
@@ -89,17 +138,30 @@ public class FragmentTasksRoot extends Fragment {
     }
 
     private void updateListTasks(String zone, String status, boolean executed) {
+        //todo: ENABLE IN SERVER: get task by executor and zone and executorId
         if (!executed) {
             taskViewModel.getByZoneLikeAndStatusLike(zone, status)
                     .observe(FragmentTasksRoot.this.requireActivity(), tasks -> {
+                        if (tasks == null) {
+                            binding.progressAllTasks.setVisibility(View.INVISIBLE);
+                            return;
+                        }
+
                         taskAdapter.addTasks(tasks);
+                        this.tasks = tasks;
                         binding.progressAllTasks.setVisibility(View.INVISIBLE);
                     });
         } else {
             UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
-            taskViewModel.getTasksByExecutor(userDataViewModel.getId())
+            taskViewModel.getByZoneLikeAndStatusLikeAndExecutorId(zone, status, (int) userDataViewModel.getId())
                     .observe(FragmentTasksRoot.this.requireActivity(), tasks -> {
+                        if (tasks == null) {
+                            binding.progressAllTasks.setVisibility(View.INVISIBLE);
+                            return;
+                        }
+
                         taskAdapter.addTasks(tasks);
+                        this.tasks = tasks;
                         binding.progressAllTasks.setVisibility(View.INVISIBLE);
                     });
         }

@@ -29,14 +29,10 @@ import java.util.UUID;
 public class TaskViewModel extends AndroidViewModel {
 
     final TaskRepository repository;
-    final FirebaseStorage firebaseStorage;
-    final StorageReference storageReference;
 
     public TaskViewModel(@NonNull Application application, String token) {
         super(application);
         repository = new TaskRepository(token);
-        firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
     }
 
     public MutableLiveData<Message> createTask(Task task) {
@@ -45,6 +41,14 @@ public class TaskViewModel extends AndroidViewModel {
 
     public MutableLiveData<Message> editTask(Task task, long id) {
         return repository.editTask(task, id);
+    }
+
+    public MutableLiveData<Message> countByZoneLikeAndStatusLike(String zone, String status) {
+        return repository.countByZoneLikeAndStatusLike(zone, status);
+    }
+
+    public MutableLiveData<List<Task>> getByZoneLikeAndStatusLikeAndExecutorId(String zone, String status, int executorId) {
+        return repository.getByZoneLikeAndStatusLikeAndExecutorId(zone, status, executorId);
     }
 
     public MutableLiveData<List<Task>> getTasksByExecutor(long id) {
@@ -77,48 +81,6 @@ public class TaskViewModel extends AndroidViewModel {
 
     public MutableLiveData<Message> deleteTask(long id) {
         return repository.deleteTask(id);
-    }
-
-
-    public String uploadImage(Uri fileUri, Context context) {
-        String nameImage;
-        Bitmap bmp = null;
-        try {
-            bmp = MediaStore.Images.Media.getBitmap(context.getContentResolver(), fileUri);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 25, byteArrayOutputStream);
-        byte[] data = byteArrayOutputStream.toByteArray();
-
-        final ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setTitle("Загрузка...");
-        progressDialog.show();
-
-        nameImage = UUID.randomUUID().toString();
-
-        StorageReference ref = storageReference.child("images/" + nameImage);
-        ref.putBytes(data)
-                .addOnProgressListener(taskSnapshot -> {
-                    double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                    progressDialog.setMessage("Прогресс: " + (int) progress + "%");
-                });
-
-        return nameImage;
-    }
-
-
-    public void setImage(String image, ProgressBar progressBar, ImageView imageView, int bufferSize) {
-        StorageReference photoReference = storageReference.child("images/" + image);
-
-        long BUFFER = bufferSize * (1024 * 1024);
-        photoReference.getBytes(BUFFER).addOnSuccessListener(bytes -> {
-            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            progressBar.setVisibility(View.INVISIBLE);
-            imageView.setImageBitmap(bmp);
-        });
-
     }
 
 }

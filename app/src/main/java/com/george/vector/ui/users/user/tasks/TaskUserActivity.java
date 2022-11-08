@@ -14,6 +14,7 @@ import com.george.vector.R;
 import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityTaskUserBinding;
+import com.george.vector.network.model.user.User;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
 import com.george.vector.ui.common.tasks.FragmentImageTask;
@@ -44,6 +45,8 @@ public class TaskUserActivity extends AppCompatActivity {
 
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 
+        User currentUser = userPrefViewModel.getUser();
+
         TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
                 TaskUserActivity.this.getApplication(),
                 userPrefViewModel.getToken()
@@ -57,8 +60,10 @@ public class TaskUserActivity extends AppCompatActivity {
             dateCreate = task.getDateCreate();
             image = task.getImage();
             letter = task.getLetter();
-
             String dateCreateText = "Созданно: " + dateCreate;
+            String nameCreator = currentUser.getLastName() + " " + currentUser.getName() + " " + currentUser.getPatronymic();
+            String emailCreator = currentUser.getEmail();
+
             if (!letter.equals("-") && !letter.isEmpty())
                 cabinet = String.format("%s%s", cabinet, letter);
 
@@ -69,6 +74,8 @@ public class TaskUserActivity extends AppCompatActivity {
             binding.textViewCommentTaskUser.setText(comment);
             binding.textViewDateCreateTaskUser.setText(dateCreateText);
             binding.textViewStatusTaskUser.setText(task.getStatus());
+            binding.textViewFullNameCreatorUser.setText(nameCreator);
+            binding.textViewEmailCreatorTaskUser.setText(emailCreator);
 
             if (image != null) {
                 Fragment imageFragment = new FragmentImageTask();

@@ -112,12 +112,12 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
         TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(this.getApplication(),
                 location)).get(TaskViewModel.class);
 
-        String image;
-
-        if (fileUri != null)
-            image = taskViewModel.uploadImage(fileUri, AddTaskUserActivity.this);
-        else
-            image = null;
+//        String image;
+//
+//        if (fileUri != null)
+//            image = taskViewModel.uploadImage(fileUri, AddTaskUserActivity.this);
+//        else
+//            image = null;
 
         String dateCreate = timeUtils.getDate();
         String timeCreate = timeUtils.getTime();

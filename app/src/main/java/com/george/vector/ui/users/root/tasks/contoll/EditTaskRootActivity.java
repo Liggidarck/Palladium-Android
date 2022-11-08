@@ -1,9 +1,15 @@
 package com.george.vector.ui.users.root.tasks.contoll;
 
+import static com.george.vector.common.utils.consts.Keys.ARCHIVE_TASKS;
+import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
 import static com.george.vector.common.utils.consts.Keys.ID;
+import static com.george.vector.common.utils.consts.Keys.IN_PROGRESS_TASKS;
+import static com.george.vector.common.utils.consts.Keys.IS_EXECUTE;
+import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.PERMISSION_CAMERA_CODE;
 import static com.george.vector.common.utils.consts.Keys.PERMISSION_GALLERY_CODE;
+import static com.george.vector.common.utils.consts.Keys.STATUS;
 import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static java.util.Objects.requireNonNull;
 
@@ -11,6 +17,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -27,7 +34,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,6 +46,7 @@ import com.george.vector.network.model.Task;
 import com.george.vector.ui.adapter.UserAdapter;
 import com.george.vector.ui.common.tasks.BottomSheetAddImage;
 import com.george.vector.ui.users.root.main.MainRootActivity;
+import com.george.vector.ui.users.root.tasks.navigation.AllTasksRootActivity;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.UserViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
@@ -56,7 +63,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
 
     private ActivityAddTaskRootBinding binding;
 
-    private String comment, dateCreate, zone, image;
+    private String comment, dateCreate, zone;
     private long taskId;
     private long executorId;
     private long creatorId;
@@ -102,13 +109,8 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
         taskId = arguments.getLong(ID);
         zone = arguments.getString(ZONE);
 
-        String bufferSizePreference = PreferenceManager
-                .getDefaultSharedPreferences(EditTaskRootActivity.this)
-                .getString("buffer_size", "2");
-        int bufferSize = Integer.parseInt(bufferSizePreference);
-
         initViewModels();
-        getTask(bufferSize);
+        getTask();
 
         binding.doneBtn.setOnClickListener(v -> {
             if (!validateFields()) {
@@ -124,34 +126,66 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
         });
 
         binding.toolbarAddEditTask.setNavigationOnClickListener(v -> onBackPressed());
-        binding.addExecutorBtn.setOnClickListener(v -> {
-            UserAdapter userAdapter = new UserAdapter();
-            userViewModel.getAllUsers().observe(this, userAdapter::setUsers);
-            showAddExecutorDialog(userAdapter);
-        });
+        binding.addExecutorBtn.setOnClickListener(v -> showAddExecutorDialog());
     }
 
-    private void showAddExecutorDialog(UserAdapter userAdapter) {
+    private void showAddExecutorDialog() {
         Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_choose_executor);
 
         RecyclerView recyclerViewListExecutors = dialog.findViewById(R.id.recyclerViewListExecutors);
-        Chip chipRootDialog = dialog.findViewById(R.id.chip_root_dialog);
+        Chip chipAdminDialog = dialog.findViewById(R.id.chip_root_dialog);
         Chip chipExecutorsDialog = dialog.findViewById(R.id.chip_executors_dialog);
+        Chip chipDeveloperDialog = dialog.findViewById(R.id.chip_developer_dialog);
+
+        UserAdapter userAdapter = new UserAdapter();
+
+        setUsers(userAdapter,"ROLE_ADMIN");
 
         recyclerViewListExecutors.setHasFixedSize(true);
         recyclerViewListExecutors.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewListExecutors.setAdapter(userAdapter);
 
+        chipAdminDialog.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                userAdapter.clearUsers();
+                setUsers(userAdapter, "ROLE_ADMIN");
+            }
+        });
+
+        chipExecutorsDialog.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                userAdapter.clearUsers();
+                setUsers(userAdapter, "ROLE_EXECUTOR");
+            }
+        });
+
+        chipDeveloperDialog.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                userAdapter.clearUsers();
+                setUsers(userAdapter, "ROLE_DEVELOPER");
+            }
+        });
+
         userAdapter.setOnItemClickListener((executor, position) -> {
             executorId = (int) executor.getId();
-            Objects.requireNonNull(binding.taskNameExecutor.getEditText()).setText(executor.getName());
+            String executorName = executor.getLastName() + " " + executor.getName() + " " + executor.getPatronymic();
+            Objects.requireNonNull(binding.taskNameExecutor.getEditText()).setText(executorName);
             dialog.dismiss();
         });
 
         dialog.show();
+    }
 
+    private void setUsers(UserAdapter userAdapter, String role) {
+        userViewModel.getUsersByRoleName(role).observe(this, users -> {
+            if(users == null) {
+                return;
+            }
+
+            userAdapter.setUsers(users);
+        });
     }
 
     private void initViewModels() {
@@ -168,15 +202,27 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
         ).get(UserViewModel.class);
     }
 
-    private void getTask(int bufferSize) {
+    private void getTask() {
         taskViewModel.getTaskById(taskId).observe(EditTaskRootActivity.this, task -> {
             binding.progressBarAddEditTask.setVisibility(View.VISIBLE);
 
             comment = task.getComment();
             dateCreate = task.getDateCreate();
-            image = task.getImage();
             executorId = task.getExecutorId();
             creatorId = task.getCreatorId();
+            String status = task.getStatus();
+
+            if (status.equals(NEW_TASKS))
+                status = "Новая заявка";
+
+            if (status.equals(IN_PROGRESS_TASKS))
+                status = "Заявка в работе";
+
+            if (status.equals(COMPLETED_TASKS))
+                status = "Завершенная заявка";
+
+            if (status.equals(ARCHIVE_TASKS))
+                status = "Архив";
 
             requireNonNull(binding.taskAddress.getEditText()).setText(task.getAddress());
             requireNonNull(binding.taskFloor.getEditText()).setText(task.getFloor());
@@ -184,20 +230,12 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
             requireNonNull(binding.taskLetter.getEditText()).setText(task.getLetter());
             requireNonNull(binding.taskName.getEditText()).setText(task.getName());
             requireNonNull(binding.taskDateComplete.getEditText()).setText(task.getDateDone());
-            requireNonNull(binding.taskStatus.getEditText()).setText(task.getStatus());
+            requireNonNull(binding.taskStatus.getEditText()).setText(status);
             binding.urgentCheckBox.setChecked(task.isUrgent());
 
             if (comment.equals("Нет коментария к заявке"))
                 requireNonNull(binding.taskComment.getEditText()).setText("");
             else requireNonNull(binding.taskComment.getEditText()).setText(comment);
-
-            if (image == null) {
-                binding.addImageBtn.setOnClickListener(v ->
-                        addImage.show(getSupportFragmentManager(), "BottomSheetAddImage"));
-            } else {
-                binding.addImageBtn.setEnabled(false);
-                taskViewModel.setImage(image, binding.progressBarAddEditTask, binding.imageViewTask, bufferSize);
-            }
 
             userViewModel.getUserById(executorId).observe(this, user -> {
                 String name = user.getLastName() + " " + user.getName() + " " + user.getPatronymic();
@@ -210,12 +248,6 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
     }
 
     void updateTask(String zone) {
-        String updateImage;
-
-        if (fileUri != null)
-            updateImage = taskViewModel.uploadImage(fileUri, EditTaskRootActivity.this);
-        else updateImage = image;
-
         String updateAddress = requireNonNull(binding.taskAddress.getEditText()).getText().toString();
         String updateFloor = requireNonNull(binding.taskFloor.getEditText()).getText().toString();
         String updateCabinet = requireNonNull(binding.taskCabinet.getEditText()).getText().toString();
@@ -226,16 +258,41 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
         String updateStatus = requireNonNull(binding.taskStatus.getEditText()).getText().toString();
         boolean updateUrgent = binding.urgentCheckBox.isChecked();
 
+        if (updateStatus.equals("Новая заявка"))
+            updateStatus = NEW_TASKS;
+
+        if (updateStatus.equals("Заявка в работе"))
+            updateStatus = IN_PROGRESS_TASKS;
+
+        if (updateStatus.equals("Завершенная заявка"))
+            updateStatus = COMPLETED_TASKS;
+
+        if (updateStatus.equals("Архив"))
+            updateStatus = ARCHIVE_TASKS;
+
         Task task = new Task(zone, updateStatus, updateName, updateComment, updateAddress,
                 updateFloor, updateCabinet, updateLetter, updateUrgent, updateDateDone,
-                (int) executorId, (int) creatorId, dateCreate, updateImage);
+                (int) executorId, (int) creatorId, dateCreate, null);
 
-        taskViewModel.editTask(task, taskId);
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Загрузка...");
+        progressDialog.setMessage("Ваша заявка обновляется...");
+        progressDialog.show();
 
-        startActivity(new Intent(this, MainRootActivity.class));
+        taskViewModel.editTask(task, taskId).observe(this, message -> {
+            if (message.getMessage().equals("Task successfully edited")) {
+                progressDialog.dismiss();
+            }
+        });
+
+        Intent intent = new Intent(this, AllTasksRootActivity.class);
+        intent.putExtra(ZONE, zone);
+        intent.putExtra(STATUS, updateStatus);
+        intent.putExtra(IS_EXECUTE, false);
+        startActivity(intent);
     }
 
-    void showDialog() {
+    private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle(getText(R.string.warning))
@@ -248,7 +305,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
         dialog.show();
     }
 
-    boolean validateFields() {
+    private boolean validateFields() {
         String address = binding.taskAddress.getEditText().getText().toString();
         String floor = binding.taskFloor.getEditText().getText().toString();
         String cabinet = binding.taskCabinet.getEditText().getText().toString();
@@ -320,17 +377,18 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
 
     }
 
-    void initializeFields(String location) {
+    private void initializeFields(String location) {
         if (location.equals(OST_SCHOOL)) {
             String[] items = getResources().getStringArray(R.array.addressesOstSchool);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(EditTaskRootActivity.this, R.layout.dropdown_menu_categories, items);
             binding.addressAutoComplete.setAdapter(adapter);
         }
 
-        String[] itemsStatus = getResources().getStringArray(R.array.status);
-        ArrayAdapter<String> adapter_status = new ArrayAdapter<>(EditTaskRootActivity.this, R.layout.dropdown_menu_categories, itemsStatus);
+        String[] itemsStatus = getResources().getStringArray(R.array.status_name);
+        ArrayAdapter<String> adapterStatus =
+                new ArrayAdapter<>(EditTaskRootActivity.this, R.layout.dropdown_menu_categories, itemsStatus);
 
-        binding.statusAutoComplete.setAdapter(adapter_status);
+        binding.statusAutoComplete.setAdapter(adapterStatus);
 
         String[] itemsLetter = getResources().getStringArray(R.array.letter);
         ArrayAdapter<String> adapter_letter = new ArrayAdapter<>(EditTaskRootActivity.this, R.layout.dropdown_menu_categories, itemsLetter);
@@ -360,7 +418,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
 
     }
 
-    void updateLabel() {
+    private void updateLabel() {
         String date_text = "dd.MM.yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(date_text, Locale.US);
 

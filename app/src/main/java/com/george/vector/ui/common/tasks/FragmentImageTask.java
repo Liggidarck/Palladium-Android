@@ -76,11 +76,11 @@ public class FragmentImageTask extends Fragment {
                 binding.progressBarImage.setVisibility(View.VISIBLE);
                 binding.imageViewTask.setVisibility(View.VISIBLE);
                 binding.btnRotateImage.setVisibility(View.VISIBLE);
-                taskViewModel.setImage(image, binding.progressBarImage, binding.imageViewTask, bufferSize);
+
             });
         } else {
             binding.btnDownload.setVisibility(View.INVISIBLE);
-            taskViewModel.setImage(image, binding.progressBarImage, binding.imageViewTask, bufferSize);
+
         }
 
         binding.cardViewImage.setOnClickListener(v -> goActivityImage());

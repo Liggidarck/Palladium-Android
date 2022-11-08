@@ -19,6 +19,13 @@
         <item>archive</item>
     </string-array>
 
+    <string-array name="status_name">
+        <item>Новая заявка</item>
+        <item>Заявка в работе</item>
+        <item>Завершенная заявка</item>
+        <item>Архив</item>
+    </string-array>
+
     <string-array name="roles">
         <item>ROLE_DEVELOPER</item>
         <item>ROLE_ADMIN</item>

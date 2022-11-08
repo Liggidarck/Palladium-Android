@@ -14,6 +14,8 @@ import com.george.vector.R;
 import com.george.vector.network.model.Task;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
@@ -25,9 +27,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
     public void onBindViewHolder(@NonNull TaskHolder holder, int position) {
         Task task = tasks.get(position);
 
-        holder.textViewTitle.setText(task.getName());
-        holder.textViewDescription.setText(task.getAddress());
-        holder.textViewPriority.setText(task.getDateCreate());
+        holder.textViewNameTask.setText(task.getName());
+        holder.textViewAddress.setText(task.getAddress());
+        holder.textViewTimeCreate.setText(task.getDateCreate());
         holder.textViewTimeCreate.setText(task.getDateCreate());
 
         boolean visibleUrgentTask = task.isUrgent();
@@ -50,6 +52,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
         return tasks.size();
     }
 
+    public void filterList(ArrayList<Task> tasks) {
+        this.tasks = tasks;
+        notifyDataSetChanged();
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     public void addTasks(List<Task> tasks) {
         this.tasks = tasks;
@@ -57,18 +64,16 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
     }
 
     class TaskHolder extends RecyclerView.ViewHolder {
-        final TextView textViewTitle;
-        final TextView textViewDescription;
-        final TextView textViewPriority;
+        final TextView textViewNameTask;
+        final TextView textViewAddress;
         final TextView textViewTimeCreate;
         final ImageView imageWarningTask;
 
         public TaskHolder(@NonNull View itemView) {
             super(itemView);
 
-            textViewTitle = itemView.findViewById(R.id.text_view_nate_task);
-            textViewDescription = itemView.findViewById(R.id.text_view_address);
-            textViewPriority = itemView.findViewById(R.id.date_create);
+            textViewNameTask = itemView.findViewById(R.id.text_view_nate_task);
+            textViewAddress = itemView.findViewById(R.id.text_view_address);
             textViewTimeCreate = itemView.findViewById(R.id.text_view_time_create);
             imageWarningTask = itemView.findViewById(R.id.image_warning_task);
 

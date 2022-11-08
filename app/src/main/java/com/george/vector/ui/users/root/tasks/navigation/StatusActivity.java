@@ -4,15 +4,15 @@ import static com.george.vector.common.utils.consts.Keys.ARCHIVE_TASKS;
 import static com.george.vector.common.utils.consts.Keys.BAR_RUCHEEK;
 import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.BAR_ZVEZDOCHKA;
-import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
-import static com.george.vector.common.utils.consts.Keys.IS_EXECUTE;
-import static com.george.vector.common.utils.consts.Keys.STATUS;
 import static com.george.vector.common.utils.consts.Keys.IN_PROGRESS_TASKS;
+import static com.george.vector.common.utils.consts.Keys.IS_EXECUTE;
 import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
 import static com.george.vector.common.utils.consts.Keys.OST_AIST;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.OST_YAGODKA;
+import static com.george.vector.common.utils.consts.Keys.STATUS;
+import static com.george.vector.common.utils.consts.Keys.ZONE;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +21,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
 import com.george.vector.databinding.ActivityStatusBinding;
-import com.george.vector.ui.users.root.tasks.navigation.AllTasksRootActivity;
 
 public class StatusActivity extends AppCompatActivity {
 

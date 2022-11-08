@@ -58,7 +58,7 @@ public class ImageTaskActivity extends AppCompatActivity {
             binding.progressBarImage.setVisibility(View.VISIBLE);
             image = task.getImage();
             if (image != null) {
-                taskViewModel.setImage(image, binding.progressBarImage, binding.imageViewTask, bufferSize);
+
             } else {
                 binding.imageViewTask.setImageResource(R.drawable.ic_baseline_camera_alt_24);
             }

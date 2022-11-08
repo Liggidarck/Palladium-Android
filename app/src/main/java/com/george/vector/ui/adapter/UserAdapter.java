@@ -53,6 +53,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserHolder> {
         notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    public void clearUsers() {
+        this.users.clear();
+        notifyDataSetChanged();
+    }
+
     public class UserHolder extends RecyclerView.ViewHolder {
         final TextView textViewName;
         final TextView textViewEmail;
