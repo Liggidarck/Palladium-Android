@@ -20,7 +20,7 @@ import com.george.vector.ui.users.user.main.FolderUserActivity;
 
 public class FragmentUserHistory extends Fragment {
 
-    FragmentHistoryUserBinding historyUserBinding;
+    private FragmentHistoryUserBinding historyUserBinding;
 
     @Nullable
     @Override

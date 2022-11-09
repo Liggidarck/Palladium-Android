@@ -1,6 +1,7 @@
 package com.george.vector.ui.users.user.main.fragments.home;
 
 import static com.george.vector.common.utils.consts.Keys.ID;
+import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,16 +17,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.FragmentUserHomeBinding;
+import com.george.vector.network.model.Task;
 import com.george.vector.ui.adapter.TaskAdapter;
 import com.george.vector.ui.users.user.tasks.AddTaskUserActivity;
 import com.george.vector.ui.users.user.tasks.TaskUserActivity;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
 
+import java.util.ArrayList;
+
 public class FragmentUserHome extends Fragment {
 
     private FragmentUserHomeBinding homeBinding;
 
+    private int userId;
+
+    private TaskViewModel taskViewModel;
     private final TaskAdapter adapter = new TaskAdapter();
 
     public static final String TAG = FragmentUserHome.class.getSimpleName();
@@ -38,21 +45,19 @@ public class FragmentUserHome extends Fragment {
 
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 
-        TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
+        taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
                 this.getActivity().getApplication(),
                 userPrefViewModel.getToken()
         )).get(TaskViewModel.class);
 
-        int userId = (int) userPrefViewModel.getId();
+        userId = (int) userPrefViewModel.getId();
 
         homeBinding.homeToolbarUser.setNavigationOnClickListener(v -> {
             BottomSheetProfileUser bottomSheet = new BottomSheetProfileUser();
             bottomSheet.show(getParentFragmentManager(), "ProfileUserBottomSheet");
         });
 
-        taskViewModel
-                .getTasksByCreator(userId)
-                .observe(FragmentUserHome.this.requireActivity(), adapter::addTasks);
+        getTasks();
 
         homeBinding.recyclerviewViewUser.setHasFixedSize(true);
         homeBinding.recyclerviewViewUser.setLayoutManager(new LinearLayoutManager(FragmentUserHome.this.getContext()));
@@ -73,9 +78,31 @@ public class FragmentUserHome extends Fragment {
         return view;
     }
 
+    private void getTasks() {
+        taskViewModel
+                .getTasksByCreator(userId)
+                .observe(FragmentUserHome.this.requireActivity(), tasks -> {
+                    ArrayList<Task> sortedTasks = new ArrayList<>();
+
+                    for (Task task : tasks) {
+                        if (task.getStatus().equals(NEW_TASKS)) {
+                            sortedTasks.add(task);
+                        }
+                    }
+
+                    adapter.addTasks(sortedTasks);
+                });
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         homeBinding = null;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getTasks();
     }
 }

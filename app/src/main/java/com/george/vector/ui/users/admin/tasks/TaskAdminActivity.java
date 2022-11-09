@@ -157,7 +157,6 @@ public class TaskAdminActivity extends AppCompatActivity {
                 binding.circleStatusRoot.setImageResource(R.color.green);
             }
 
-
             if (!letter.equals("-") && !letter.isEmpty())
                 cabinet = String.format("%s%s", cabinet, letter);
 
@@ -198,7 +197,15 @@ public class TaskAdminActivity extends AppCompatActivity {
 
                 binding.textViewFullNameCreator.setText(executorName);
                 binding.textViewEmailCreatorTaskRoot.setText(email);
+
+                binding.progressBarTaskRoot.setVisibility(View.INVISIBLE);
             });
+
+            if(executorId == 0) {
+                binding.textViewFullNameExecutor.setText("Нет назначенного исполнителя");
+                binding.textViewEmailExecutorTaskRoot.setText("Нет назначенного исполнителя");
+                return;
+            }
 
             userViewModel.getUserById(executorId).observe(this, executor -> {
                 userName = executor.getLastName() + " " + executor.getName() + " " + executor.getPatronymic();

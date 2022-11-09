@@ -1,13 +1,15 @@
 package com.george.vector.ui.users.user.tasks;
 
-import static com.george.vector.common.utils.consts.Keys.ZONE;
+import static com.george.vector.common.utils.consts.Keys.ARCHIVE_TASKS;
+import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
 import static com.george.vector.common.utils.consts.Keys.ID;
+import static com.george.vector.common.utils.consts.Keys.IN_PROGRESS_TASKS;
+import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
 
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.R;
@@ -17,17 +19,9 @@ import com.george.vector.databinding.ActivityTaskUserBinding;
 import com.george.vector.network.model.user.User;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
-import com.george.vector.ui.common.tasks.FragmentImageTask;
 import com.google.android.material.snackbar.Snackbar;
 
 public class TaskUserActivity extends AppCompatActivity {
-
-    private long id;
-    private String cabinet;
-    private String comment;
-    private String dateCreate;
-    private String image;
-    private String letter;
 
     private ActivityTaskUserBinding binding;
 
@@ -41,10 +35,9 @@ public class TaskUserActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.getLong(ID);
+        long id = arguments.getLong(ID);
 
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
-
         User currentUser = userPrefViewModel.getUser();
 
         TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
@@ -56,38 +49,46 @@ public class TaskUserActivity extends AppCompatActivity {
         binding.topAppBarTaskUser.setNavigationOnClickListener(v -> onBackPressed());
 
         taskViewModel.getTaskById(id).observe(this, task -> {
-            comment = task.getComment();
-            dateCreate = task.getDateCreate();
-            image = task.getImage();
-            letter = task.getLetter();
+            String comment = task.getComment();
+            String dateCreate = task.getDateCreate();
+            String letter = task.getLetter();
+            String floor = "Этаж: " + task.getFloor();
+            String cabinet = "Кабинет:  " + task.getCabinet();
             String dateCreateText = "Созданно: " + dateCreate;
             String nameCreator = currentUser.getLastName() + " " + currentUser.getName() + " " + currentUser.getPatronymic();
             String emailCreator = currentUser.getEmail();
+            String status = task.getStatus();
 
             if (!letter.equals("-") && !letter.isEmpty())
-                cabinet = String.format("%s%s", cabinet, letter);
+                cabinet = "Кабинет: " + cabinet + " " + letter;
 
             binding.textViewAddressTaskUser.setText(task.getAddress());
-            binding.textViewFloorTaskUser.setText(task.getFloor());
-            binding.textViewCabinetTaskUser.setText(task.getCabinet());
+            binding.textViewFloorTaskUser.setText(floor);
+            binding.textViewCabinetTaskUser.setText(cabinet);
             binding.textViewNameTaskUser.setText(task.getName());
             binding.textViewCommentTaskUser.setText(comment);
             binding.textViewDateCreateTaskUser.setText(dateCreateText);
-            binding.textViewStatusTaskUser.setText(task.getStatus());
             binding.textViewFullNameCreatorUser.setText(nameCreator);
             binding.textViewEmailCreatorTaskUser.setText(emailCreator);
 
-            if (image != null) {
-                Fragment imageFragment = new FragmentImageTask();
-                Bundle bundle = new Bundle();
-                bundle.putString("image_id", image);
-                bundle.putLong(ID, id);
-                imageFragment.setArguments(bundle);
+            if (status.equals(NEW_TASKS)) {
+                binding.circleStatusUser.setImageResource(R.color.red);
+                binding.textViewStatusTaskUser.setText("Новая заявка");
+            }
 
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.frame_image_task_user, imageFragment)
-                        .commit();
+            if (status.equals(IN_PROGRESS_TASKS)) {
+                binding.circleStatusUser.setImageResource(R.color.orange);
+                binding.textViewStatusTaskUser.setText("Заявка в работе");
+            }
+
+            if (status.equals(ARCHIVE_TASKS)) {
+                binding.circleStatusUser.setImageResource(R.color.green);
+                binding.textViewStatusTaskUser.setText("Архив");
+            }
+
+            if (status.equals(COMPLETED_TASKS)) {
+                binding.circleStatusUser.setImageResource(R.color.green);
+                binding.textViewStatusTaskUser.setText("Завершенная заявка");
             }
 
             binding.progressBarTaskUser.setVisibility(View.INVISIBLE);
@@ -97,10 +98,11 @@ public class TaskUserActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (!networkUtils.isOnline(TaskUserActivity.this))
+        if (!networkUtils.isOnline(TaskUserActivity.this)) {
             Snackbar.make(findViewById(R.id.coordinator_task_user),
                     getString(R.string.error_no_connection),
                     Snackbar.LENGTH_LONG
             ).show();
+        }
     }
 }

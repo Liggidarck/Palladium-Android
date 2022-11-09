@@ -1,19 +1,21 @@
 package com.george.vector.ui.users.user.tasks;
 
 import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
+import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.PERMISSION_CAMERA_CODE;
 import static com.george.vector.common.utils.consts.Keys.PERMISSION_GALLERY_CODE;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -29,17 +31,18 @@ import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.common.utils.TimeUtils;
 import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityAddTaskUserBinding;
+import com.george.vector.network.model.Task;
+import com.george.vector.ui.common.tasks.BottomSheetAddImage;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
-import com.george.vector.ui.common.tasks.BottomSheetAddImage;
 
 import java.io.File;
 import java.util.Objects;
 
 public class AddTaskUserActivity extends AppCompatActivity implements BottomSheetAddImage.StateListener {
 
-    private String address, floor, cabinet, letter, nameTask, comment, email, zone, fullNameCreator;
-    private final String status = "Новая заявка";
+    private String address, floor, cabinet, letter, nameTask, comment, zone;
+    private long userId;
 
     private Uri fileUri;
 
@@ -48,20 +51,24 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
     private final TimeUtils timeUtils = new TimeUtils();
     private ActivityAddTaskUserBinding binding;
 
-    final ActivityResultLauncher<String> selectPictureLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
+    private final ActivityResultLauncher<String> selectPictureLauncher
+            = registerForActivityResult(new ActivityResultContracts.GetContent(),
             uri -> {
                 fileUri = uri;
                 binding.imageViewTaskUser.setImageURI(fileUri);
             });
 
-    final ActivityResultLauncher<Uri> cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicture(),
+    private final ActivityResultLauncher<Uri> cameraLauncher
+            = registerForActivityResult(new ActivityResultContracts.TakePicture(),
             result -> {
                 if (result) {
                     binding.imageViewTaskUser.setImageURI(fileUri);
                 }
             });
 
-    final BottomSheetAddImage addImage = new BottomSheetAddImage();
+    private final BottomSheetAddImage addImage = new BottomSheetAddImage();
+
+    private TaskViewModel taskViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,14 +79,13 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
 
         UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         zone = userDataViewModel.getUser().getZone();
-        email = userDataViewModel.getUser().getEmail();
+        userId = userDataViewModel.getId();
 
+        taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                this.getApplication(),
+                userDataViewModel.getToken()
+        )).get(TaskViewModel.class);
 
-        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
-        String nameUser = userPrefViewModel.getUser().getName();
-        String lastNameUser = userPrefViewModel.getUser().getLastName();
-        String patronymicUser = userPrefViewModel.getUser().getPatronymic();
-        fullNameCreator = nameUser + " " + lastNameUser + " " + patronymicUser;
 
         binding.toolbarAddTask.setNavigationOnClickListener(v -> onBackPressed());
 
@@ -91,7 +97,7 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
             nameTask = Objects.requireNonNull(binding.textInputNameUser.getEditText()).getText().toString();
             comment = Objects.requireNonNull(binding.textInputCommentUser.getEditText()).getText().toString();
 
-            if(!validateFields()) {
+            if (!validateFields()) {
                 return;
             }
 
@@ -100,7 +106,7 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
                 return;
             }
 
-            saveTask(zone);
+            saveTask();
         });
 
         binding.materialCardViewImage.setOnClickListener(v -> showDialogImage());
@@ -108,29 +114,28 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
         initializeField(zone);
     }
 
-    void saveTask(String location) {
-        TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(this.getApplication(),
-                location)).get(TaskViewModel.class);
+    void saveTask() {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Загрузка...");
+        progressDialog.setMessage("Ваша заявка сохраняется...");
+        progressDialog.show();
 
-//        String image;
-//
-//        if (fileUri != null)
-//            image = taskViewModel.uploadImage(fileUri, AddTaskUserActivity.this);
-//        else
-//            image = null;
-
-        String dateCreate = timeUtils.getDate();
-        String timeCreate = timeUtils.getTime();
+        String dateCreate = timeUtils.getDate() + " " + timeUtils.getTime();
 
         if (comment.isEmpty())
             comment = "Нет коментария к заявке";
 
-//        Task task = new Task(nameTask, address, dateCreate, floor, cabinet, letter, comment,
-//                null, null, status, timeCreate, email, false, image,
-//                null, fullNameCreator);
-//
-//        taskViewModel.createTask(task);
-//        onBackPressed();
+        Task task = new Task(zone, NEW_TASKS, nameTask, comment, address,
+                floor, cabinet, letter, false, null, 0, (int) userId,
+                dateCreate, null);
+
+        taskViewModel.createTask(task).observe(this, response -> {
+            if (response.getMessage().equals("Task successfully created!")) {
+                Toast.makeText(this, "Заявка созданна", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                onBackPressed();
+            }
+        });
     }
 
     boolean validateFields() {
@@ -162,7 +167,8 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
 
 
         if (permission.equals(BAR_SCHOOL))
-            Objects.requireNonNull(binding.textInputAddressUser.getEditText()).setText(getText(R.string.bar_school_address));
+            Objects.requireNonNull(binding.textInputAddressUser.getEditText())
+                    .setText(getText(R.string.bar_school_address));
 
     }
 
@@ -171,7 +177,9 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         switch (requestCode) {
@@ -184,7 +192,8 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
 
                     builder.setTitle(getText(R.string.warning))
                             .setMessage(getString(R.string.permission_gallery))
-                            .setPositiveButton("Настройки", (dialog, id) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+                            .setPositiveButton("Настройки", (dialog, id) ->
+                                    startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
                             .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.cancel());
 
                     AlertDialog dialog = builder.create();
@@ -222,11 +231,9 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
 
     void showDialogNoInternet() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
         builder.setTitle(getText(R.string.warning))
-                .setMessage(getText(R.string.warning_no_connection))
-                .setPositiveButton(getText(R.string.save), (dialog, id) -> saveTask(zone))
-                .setNegativeButton(android.R.string.cancel, (dialog, id) -> onBackPressed());
+                .setMessage(getText(R.string.warning_no_connection_main))
+                .setPositiveButton("Ок", (dialog, id) -> onBackPressed());
 
         AlertDialog dialog = builder.create();
         dialog.show();

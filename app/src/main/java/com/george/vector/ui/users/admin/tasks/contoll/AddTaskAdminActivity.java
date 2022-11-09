@@ -204,9 +204,8 @@ public class AddTaskAdminActivity extends AppCompatActivity implements BottomShe
     void showDialogNoInternet() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getText(R.string.warning))
-                .setMessage(getText(R.string.warning_no_connection))
-                .setPositiveButton(getText(R.string.save), (dialog, id) -> saveTask())
-                .setNegativeButton(android.R.string.cancel, (dialog, id) -> onBackPressed());
+                .setMessage(getText(R.string.warning_no_connection_main))
+                .setPositiveButton("Ок", (dialog, id) -> onBackPressed());
 
         AlertDialog dialog = builder.create();
         dialog.show();

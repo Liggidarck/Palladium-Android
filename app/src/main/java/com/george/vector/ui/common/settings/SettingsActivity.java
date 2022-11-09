@@ -36,13 +36,13 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
 
         if (savedInstanceState == null) {
 
-            if (role.equals("ROLE_DEVELOPER"))
+            if (role.equals("ROLE_DEVELOPER") || role.equals("ROLE_ADMIN"))
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.settings_frame, new SettingsRootFragment())
                         .commit();
 
-            if (role.equals("Пользователь"))
+            if (role.equals("ROLE_USER"))
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.settings_frame, new SettingsUserFragment())
