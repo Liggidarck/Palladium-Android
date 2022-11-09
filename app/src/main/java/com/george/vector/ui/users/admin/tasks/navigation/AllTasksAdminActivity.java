@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.tasks.navigation;
+package com.george.vector.ui.users.admin.tasks.navigation;
 
 import static com.george.vector.common.utils.consts.Keys.ARCHIVE_TASKS;
 import static com.george.vector.common.utils.consts.Keys.ZONE;
@@ -16,9 +16,9 @@ import androidx.fragment.app.Fragment;
 
 import com.george.vector.R;
 import com.george.vector.databinding.ActivityAllTasksRootBinding;
-import com.george.vector.ui.users.root.tasks.contoll.AddTaskRootActivity;
+import com.george.vector.ui.users.admin.tasks.contoll.AddTaskAdminActivity;
 
-public class AllTasksRootActivity extends AppCompatActivity {
+public class AllTasksAdminActivity extends AppCompatActivity {
 
     private ActivityAllTasksRootBinding binding;
 
@@ -51,14 +51,14 @@ public class AllTasksRootActivity extends AppCompatActivity {
         binding.toolbarFolderRootActivity.setNavigationOnClickListener(v -> onBackPressed());
 
         binding.createTaskRoot.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AddTaskRootActivity.class);
+            Intent intent = new Intent(this, AddTaskAdminActivity.class);
             intent.putExtra(ZONE, zone);
             startActivity(intent);
         });
 
         binding.toolbarFolderRootActivity.setTitle(textToolbar);
 
-        Fragment currentFragment = new FragmentTasksRoot();
+        Fragment currentFragment = new FragmentAllTasksAdmin();
         Bundle bundle = new Bundle();
         bundle.putString(ZONE, zone);
         bundle.putString(STATUS, status);

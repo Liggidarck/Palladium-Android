@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.profile;
+package com.george.vector.ui.users.admin.profile;
 
 import android.os.Bundle;
 import android.view.View;

@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.main.fragments.home;
+package com.george.vector.ui.users.admin.main.fragments.home;
 
 import static com.george.vector.common.utils.consts.Keys.OST;
 
@@ -18,18 +18,18 @@ import androidx.preference.PreferenceManager;
 import com.george.vector.R;
 import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.FragmentRootHomeBinding;
-import com.george.vector.ui.users.root.profile.ProfileRootActivity;
-import com.george.vector.ui.users.root.tasks.contoll.BottomSheetAddTask;
+import com.george.vector.ui.users.admin.profile.ProfileAdminActivity;
+import com.george.vector.ui.users.admin.tasks.contoll.BottomSheetAddTask;
 
 import org.jetbrains.annotations.NotNull;
 
-public class FragmentRootHome extends Fragment {
+public class FragmentAdminHome extends Fragment {
 
     private String zone;
 
     private FragmentRootHomeBinding homeBinding;
 
-    public static final String TAG = FragmentRootHome.class.getSimpleName();
+    public static final String TAG = FragmentAdminHome.class.getSimpleName();
 
     @Nullable
     @Override
@@ -38,7 +38,7 @@ public class FragmentRootHome extends Fragment {
         View view = homeBinding.getRoot();
 
         zone = PreferenceManager
-                .getDefaultSharedPreferences(FragmentRootHome.this.getContext())
+                .getDefaultSharedPreferences(FragmentAdminHome.this.getContext())
                 .getString("default_root_location", OST);
 
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
@@ -81,8 +81,8 @@ public class FragmentRootHome extends Fragment {
         });
 
         homeBinding.profileLayout.setOnClickListener(v ->
-                startActivity(new Intent(FragmentRootHome.this.getActivity(),
-                        ProfileRootActivity.class)));
+                startActivity(new Intent(FragmentAdminHome.this.getActivity(),
+                        ProfileAdminActivity.class)));
 
         updateZones(zone);
         return view;
@@ -93,7 +93,7 @@ public class FragmentRootHome extends Fragment {
         super.onStart();
 
         zone = PreferenceManager
-                .getDefaultSharedPreferences(FragmentRootHome.this.getContext())
+                .getDefaultSharedPreferences(FragmentAdminHome.this.getContext())
                 .getString("default_root_location", OST);
         Log.d(TAG, "Zone: " + zone);
     }
@@ -109,12 +109,12 @@ public class FragmentRootHome extends Fragment {
         switch (zoneUpdate) {
             case "ost":
                 Log.i(TAG, "Запуск фрагмента Осафьево");
-                currentFragment = new FragmentRootZoneOst();
+                currentFragment = new FragmentAdminZoneOst();
 
                 break;
             case "bar":
                 Log.i(TAG, "Запуск фрагмента Барыши");
-                currentFragment = new FragmentRootZoneBar();
+                currentFragment = new FragmentAdminZoneBar();
 
                 break;
         }

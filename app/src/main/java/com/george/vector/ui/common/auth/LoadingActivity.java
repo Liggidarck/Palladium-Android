@@ -14,7 +14,7 @@ import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityLoadingBinding;
 import com.george.vector.network.model.user.Role;
 import com.george.vector.ui.users.executor.main.MainExecutorActivity;
-import com.george.vector.ui.users.root.main.MainRootActivity;
+import com.george.vector.ui.users.admin.main.MainAdminActivity;
 import com.george.vector.ui.users.user.main.MainUserActivity;
 
 import java.util.List;
@@ -66,7 +66,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     void startApp(String role) {
         if (role.equals("ROLE_DEVELOPER") || role.equals("ROLE_ADMIN"))
-            startActivity(new Intent(this, MainRootActivity.class));
+            startActivity(new Intent(this, MainAdminActivity.class));
 
         if (role.equals("ROLE_USER"))
             startActivity(new Intent(this, MainUserActivity.class));

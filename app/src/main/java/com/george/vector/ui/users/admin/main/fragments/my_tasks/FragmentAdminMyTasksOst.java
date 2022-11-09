@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.main.fragments.my_tasks;
+package com.george.vector.ui.users.admin.main.fragments.my_tasks;
 
 import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.IS_EXECUTE;
@@ -17,9 +17,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.databinding.FragmentOstBinding;
-import com.george.vector.ui.users.root.tasks.navigation.StatusActivity;
+import com.george.vector.ui.users.admin.tasks.navigation.StatusActivity;
 
-public class FragmentRootMyTasksOst extends Fragment {
+public class FragmentAdminMyTasksOst extends Fragment {
 
     FragmentOstBinding binding;
 
@@ -30,21 +30,21 @@ public class FragmentRootMyTasksOst extends Fragment {
         View view = binding.getRoot();
 
         binding.ostSchool.setOnClickListener(v -> {
-            Intent intent = new Intent(FragmentRootMyTasksOst.this.getContext(), StatusActivity.class);
+            Intent intent = new Intent(FragmentAdminMyTasksOst.this.getContext(), StatusActivity.class);
             intent.putExtra(ZONE, OST_SCHOOL);
             intent.putExtra(IS_EXECUTE, true);
             startActivity(intent);
         });
 
         binding.ostAist.setOnClickListener(v -> {
-            Intent intent = new Intent(FragmentRootMyTasksOst.this.getContext(), StatusActivity.class);
+            Intent intent = new Intent(FragmentAdminMyTasksOst.this.getContext(), StatusActivity.class);
             intent.putExtra(ZONE, OST_AIST);
             intent.putExtra(IS_EXECUTE, true);
             startActivity(intent);
         });
 
         binding.ostYagodka.setOnClickListener(v -> {
-            Intent intent = new Intent(FragmentRootMyTasksOst.this.getContext(), StatusActivity.class);
+            Intent intent = new Intent(FragmentAdminMyTasksOst.this.getContext(), StatusActivity.class);
             intent.putExtra(ZONE, OST_YAGODKA);
             intent.putExtra(IS_EXECUTE, true);
             startActivity(intent);

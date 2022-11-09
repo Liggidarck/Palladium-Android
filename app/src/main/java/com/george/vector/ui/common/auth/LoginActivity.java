@@ -2,11 +2,8 @@ package com.george.vector.ui.common.auth;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,7 +17,7 @@ import com.george.vector.network.model.user.Role;
 import com.george.vector.network.model.user.User;
 import com.george.vector.network.request.LoginRequest;
 import com.george.vector.ui.users.executor.main.MainExecutorActivity;
-import com.george.vector.ui.users.root.main.MainRootActivity;
+import com.george.vector.ui.users.admin.main.MainAdminActivity;
 import com.george.vector.ui.users.user.main.MainUserActivity;
 import com.george.vector.ui.viewmodel.AuthViewModel;
 import com.google.android.material.snackbar.Snackbar;
@@ -121,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
 
     void startApp(@NotNull String role) {
         if (role.equals("ROLE_DEVELOPER") || role.equals("ROLE_ADMIN"))
-            startActivity(new Intent(this, MainRootActivity.class));
+            startActivity(new Intent(this, MainAdminActivity.class));
 
         if (role.equals("ROLE_USER"))
             startActivity(new Intent(this, MainUserActivity.class));

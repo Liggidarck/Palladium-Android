@@ -1,8 +1,9 @@
-package com.george.vector.ui.users.root.tasks;
+package com.george.vector.ui.users.admin.tasks;
 
 import static com.george.vector.common.utils.consts.Keys.ARCHIVE_TASKS;
 import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
 import static com.george.vector.common.utils.consts.Keys.IN_PROGRESS_TASKS;
+import static com.george.vector.common.utils.consts.Keys.IS_EXECUTE;
 import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
 import static com.george.vector.common.utils.consts.Keys.ID;
 import static com.george.vector.common.utils.consts.Keys.ZONE;
@@ -27,14 +28,14 @@ import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityTaskRootBinding;
 import com.george.vector.ui.common.tasks.FragmentImageTask;
-import com.george.vector.ui.users.root.tasks.contoll.EditTaskRootActivity;
+import com.george.vector.ui.users.admin.tasks.contoll.EditTaskAdminActivity;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.UserViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
 import com.george.vector.ui.common.tasks.FragmentUrgentRequest;
 import com.google.android.material.snackbar.Snackbar;
 
-public class TaskRootActivity extends AppCompatActivity {
+public class TaskAdminActivity extends AppCompatActivity {
 
     private long taskId;
     private String zone;
@@ -54,6 +55,7 @@ public class TaskRootActivity extends AppCompatActivity {
     private String userName;
     private boolean confirmDelete;
     private boolean urgent;
+    private boolean executed;
 
     private ActivityTaskRootBinding binding;
 
@@ -62,7 +64,7 @@ public class TaskRootActivity extends AppCompatActivity {
 
     private final NetworkUtils networkUtils = new NetworkUtils();
 
-    public static final String TAG = TaskRootActivity.class.getSimpleName();
+    public static final String TAG = TaskAdminActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +79,10 @@ public class TaskRootActivity extends AppCompatActivity {
         binding.topAppBarTasksRoot.setNavigationOnClickListener(v -> onBackPressed());
 
         binding.editTaskRootBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(this, EditTaskRootActivity.class);
+            Intent intent = new Intent(this, EditTaskAdminActivity.class);
             intent.putExtra(ID, taskId);
             intent.putExtra(ZONE, zone);
+            intent.putExtra(IS_EXECUTE, executed);
             startActivity(intent);
         });
 
@@ -103,7 +106,7 @@ public class TaskRootActivity extends AppCompatActivity {
 
         taskId = arguments.getLong(ID);
         zone = arguments.getString(ZONE);
-
+        executed = arguments.getBoolean(IS_EXECUTE);
 
         confirmDelete = PreferenceManager
                 .getDefaultSharedPreferences(this)
@@ -292,7 +295,7 @@ public class TaskRootActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (!networkUtils.isOnline(TaskRootActivity.this))
+        if (!networkUtils.isOnline(TaskAdminActivity.this))
             Snackbar.make(findViewById(R.id.task_root_coordinator), getString(R.string.error_no_connection), Snackbar.LENGTH_LONG).show();
     }
 

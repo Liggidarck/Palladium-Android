@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.profile;
+package com.george.vector.ui.users.admin.profile;
 
 import static com.george.vector.common.utils.consts.Keys.TOPIC_DEVELOP;
 
@@ -11,9 +11,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.BuildConfig;
 import com.george.vector.R;
+import com.george.vector.databinding.ActivityProfileRootBinding;
 import com.george.vector.network.notifications.SendNotification;
 import com.george.vector.data.user.UserDataViewModel;
-import com.george.vector.databinding.ActivityProfileRootBinding;
 import com.george.vector.network.model.user.Role;
 import com.george.vector.network.model.user.User;
 import com.george.vector.ui.common.auth.LoginActivity;
@@ -22,7 +22,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.List;
 
-public class ProfileRootActivity extends AppCompatActivity {
+public class ProfileAdminActivity extends AppCompatActivity {
 
     private ActivityProfileRootBinding binding;
 
@@ -52,11 +52,11 @@ public class ProfileRootActivity extends AppCompatActivity {
         binding.toolbarProfileRoot.setNavigationOnClickListener(v -> onBackPressed());
 
         binding.layoutEditPersonProfile.setOnClickListener(v ->
-                startActivity(new Intent(ProfileRootActivity.this, ListUsersActivity.class))
+                startActivity(new Intent(ProfileAdminActivity.this, ListUsersActivity.class))
         );
 
         binding.settingsProfileBtn.setOnClickListener(v ->
-                startActivity(new Intent(ProfileRootActivity.this, SettingsActivity.class))
+                startActivity(new Intent(ProfileAdminActivity.this, SettingsActivity.class))
         );
 
         binding.logoutBtn.setOnClickListener(v -> {

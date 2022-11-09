@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.tasks.contoll;
+package com.george.vector.ui.users.admin.tasks.contoll;
 
 import static com.george.vector.common.utils.consts.Keys.BAR_RUCHEEK;
 import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
@@ -27,7 +27,6 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Window;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -49,7 +48,7 @@ import com.george.vector.databinding.ActivityAddTaskRootBinding;
 import com.george.vector.network.model.Task;
 import com.george.vector.ui.adapter.UserAdapter;
 import com.george.vector.ui.common.tasks.BottomSheetAddImage;
-import com.george.vector.ui.users.root.tasks.navigation.AllTasksRootActivity;
+import com.george.vector.ui.users.admin.tasks.navigation.AllTasksAdminActivity;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.UserViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
@@ -62,7 +61,7 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
 
-public class AddTaskRootActivity extends AppCompatActivity implements BottomSheetAddImage.StateListener {
+public class AddTaskAdminActivity extends AppCompatActivity implements BottomSheetAddImage.StateListener {
 
     private ActivityAddTaskRootBinding binding;
 
@@ -77,7 +76,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
     boolean urgent;
 
-    public static final String TAG = AddTaskRootActivity.class.getSimpleName();
+    public static final String TAG = AddTaskAdminActivity.class.getSimpleName();
 
     private Uri fileUri;
 
@@ -153,7 +152,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
                 return;
             }
 
-            if (!networkUtils.isOnline(AddTaskRootActivity.this)) {
+            if (!networkUtils.isOnline(AddTaskAdminActivity.this)) {
                 showDialogNoInternet();
                 return;
             }
@@ -194,11 +193,12 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
     }
 
     private void startListTasks() {
-        Intent intent = new Intent(this, AllTasksRootActivity.class);
+        Intent intent = new Intent(this, AllTasksAdminActivity.class);
         intent.putExtra(ZONE, zone);
         intent.putExtra(STATUS, NEW_TASKS);
         intent.putExtra(IS_EXECUTE, false);
         startActivity(intent);
+        finish();
     }
 
     void showDialogNoInternet() {
@@ -218,7 +218,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
             String[] items = getResources().getStringArray(R.array.addressesOstSchool);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                    AddTaskRootActivity.this,
+                    AddTaskAdminActivity.this,
                     R.layout.dropdown_menu_categories,
                     items
             );
@@ -244,7 +244,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
         String[] floors = getResources().getStringArray(R.array.floors);
         ArrayAdapter<String> floorsAdapter = new ArrayAdapter<>(
-                AddTaskRootActivity.this,
+                AddTaskAdminActivity.this,
                 R.layout.dropdown_menu_categories,
                 floors
         );
@@ -254,7 +254,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
         String[] itemsLetter = getResources().getStringArray(R.array.letter);
         ArrayAdapter<String> letterAdapter = new ArrayAdapter<>(
-                AddTaskRootActivity.this,
+                AddTaskAdminActivity.this,
                 R.layout.dropdown_menu_categories,
                 itemsLetter
         );
@@ -270,7 +270,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
         };
 
         binding.taskDateComplete.getEditText().setOnClickListener(v ->
-                new DatePickerDialog(AddTaskRootActivity.this, date,
+                new DatePickerDialog(AddTaskAdminActivity.this, date,
                         datePickCalendar.get(Calendar.YEAR),
                         datePickCalendar.get(Calendar.MONTH),
                         datePickCalendar.get(Calendar.DAY_OF_MONTH))
@@ -354,7 +354,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
     public void getPhotoFromDevice(String button) {
         if (button.equals("new photo")) {
             ActivityCompat.requestPermissions(
-                    AddTaskRootActivity.this,
+                    AddTaskAdminActivity.this,
                     new String[]{
                             Manifest.permission.CAMERA,
                             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -365,7 +365,7 @@ public class AddTaskRootActivity extends AppCompatActivity implements BottomShee
 
         if (button.equals("existing photo")) {
             ActivityCompat.requestPermissions(
-                    AddTaskRootActivity.this,
+                    AddTaskAdminActivity.this,
                     new String[]{
                             Manifest.permission.READ_EXTERNAL_STORAGE,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE,

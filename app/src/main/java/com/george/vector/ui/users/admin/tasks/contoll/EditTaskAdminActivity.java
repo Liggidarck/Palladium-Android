@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.tasks.contoll;
+package com.george.vector.ui.users.admin.tasks.contoll;
 
 import static com.george.vector.common.utils.consts.Keys.ARCHIVE_TASKS;
 import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
@@ -45,8 +45,8 @@ import com.george.vector.databinding.ActivityAddTaskRootBinding;
 import com.george.vector.network.model.Task;
 import com.george.vector.ui.adapter.UserAdapter;
 import com.george.vector.ui.common.tasks.BottomSheetAddImage;
-import com.george.vector.ui.users.root.main.MainRootActivity;
-import com.george.vector.ui.users.root.tasks.navigation.AllTasksRootActivity;
+import com.george.vector.ui.users.admin.main.MainAdminActivity;
+import com.george.vector.ui.users.admin.tasks.navigation.AllTasksAdminActivity;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.UserViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
@@ -59,7 +59,7 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
 
-public class EditTaskRootActivity extends AppCompatActivity implements BottomSheetAddImage.StateListener {
+public class EditTaskAdminActivity extends AppCompatActivity implements BottomSheetAddImage.StateListener {
 
     private ActivityAddTaskRootBinding binding;
 
@@ -67,6 +67,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
     private long taskId;
     private long executorId;
     private long creatorId;
+    private boolean executed;
 
     private Calendar datePickCalendar;
     private Uri fileUri;
@@ -96,7 +97,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
             });
 
 
-    public static final String TAG = EditTaskRootActivity.class.getSimpleName();
+    public static final String TAG = EditTaskAdminActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +109,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
         Bundle arguments = getIntent().getExtras();
         taskId = arguments.getLong(ID);
         zone = arguments.getString(ZONE);
+        executed = arguments.getBoolean(IS_EXECUTE);
 
         initViewModels();
         getTask();
@@ -117,7 +119,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
                 return;
             }
 
-            if (!networkUtils.isOnline(EditTaskRootActivity.this)) {
+            if (!networkUtils.isOnline(EditTaskAdminActivity.this)) {
                 showDialog();
                 return;
             }
@@ -203,7 +205,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
     }
 
     private void getTask() {
-        taskViewModel.getTaskById(taskId).observe(EditTaskRootActivity.this, task -> {
+        taskViewModel.getTaskById(taskId).observe(EditTaskAdminActivity.this, task -> {
             binding.progressBarAddEditTask.setVisibility(View.VISIBLE);
 
             comment = task.getComment();
@@ -285,11 +287,12 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
             }
         });
 
-        Intent intent = new Intent(this, AllTasksRootActivity.class);
+        Intent intent = new Intent(this, AllTasksAdminActivity.class);
         intent.putExtra(ZONE, zone);
         intent.putExtra(STATUS, updateStatus);
-        intent.putExtra(IS_EXECUTE, false);
+        intent.putExtra(IS_EXECUTE, executed);
         startActivity(intent);
+        finish();
     }
 
     private void showDialog() {
@@ -299,7 +302,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
                 .setMessage(getText(R.string.warning_no_connection))
                 .setPositiveButton(getText(R.string.save), (dialog, id) -> updateTask(zone))
                 .setNegativeButton(android.R.string.cancel, (dialog, id) ->
-                        startActivity(new Intent(this, MainRootActivity.class)));
+                        startActivity(new Intent(this, MainAdminActivity.class)));
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -380,23 +383,23 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
     private void initializeFields(String location) {
         if (location.equals(OST_SCHOOL)) {
             String[] items = getResources().getStringArray(R.array.addressesOstSchool);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(EditTaskRootActivity.this, R.layout.dropdown_menu_categories, items);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(EditTaskAdminActivity.this, R.layout.dropdown_menu_categories, items);
             binding.addressAutoComplete.setAdapter(adapter);
         }
 
         String[] itemsStatus = getResources().getStringArray(R.array.status_name);
         ArrayAdapter<String> adapterStatus =
-                new ArrayAdapter<>(EditTaskRootActivity.this, R.layout.dropdown_menu_categories, itemsStatus);
+                new ArrayAdapter<>(EditTaskAdminActivity.this, R.layout.dropdown_menu_categories, itemsStatus);
 
         binding.statusAutoComplete.setAdapter(adapterStatus);
 
         String[] itemsLetter = getResources().getStringArray(R.array.letter);
-        ArrayAdapter<String> adapter_letter = new ArrayAdapter<>(EditTaskRootActivity.this, R.layout.dropdown_menu_categories, itemsLetter);
+        ArrayAdapter<String> adapter_letter = new ArrayAdapter<>(EditTaskAdminActivity.this, R.layout.dropdown_menu_categories, itemsLetter);
 
         binding.letterAutoComplete.setAdapter(adapter_letter);
 
         String[] floors_basic_school = getResources().getStringArray(R.array.floors);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(EditTaskRootActivity.this, R.layout.dropdown_menu_categories, floors_basic_school);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(EditTaskAdminActivity.this, R.layout.dropdown_menu_categories, floors_basic_school);
         binding.floorAutoComplete.setAdapter(arrayAdapter);
 
         datePickCalendar = Calendar.getInstance();
@@ -410,7 +413,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
         binding.taskDateComplete
                 .getEditText()
                 .setOnClickListener(v ->
-                        new DatePickerDialog(EditTaskRootActivity.this,
+                        new DatePickerDialog(EditTaskAdminActivity.this,
                                 date,
                                 datePickCalendar.get(Calendar.YEAR),
                                 datePickCalendar.get(Calendar.MONTH),
@@ -428,7 +431,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
     @Override
     public void getPhotoFromDevice(String button) {
         if (button.equals("new photo")) {
-            ActivityCompat.requestPermissions(EditTaskRootActivity.this,
+            ActivityCompat.requestPermissions(EditTaskAdminActivity.this,
                     new String[]{
                             Manifest.permission.CAMERA,
                             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -438,7 +441,7 @@ public class EditTaskRootActivity extends AppCompatActivity implements BottomShe
         }
 
         if (button.equals("existing photo")) {
-            ActivityCompat.requestPermissions(EditTaskRootActivity.this,
+            ActivityCompat.requestPermissions(EditTaskAdminActivity.this,
                     new String[]{
                             Manifest.permission.READ_EXTERNAL_STORAGE,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE,

@@ -125,7 +125,7 @@ public class TaskRepository {
             public void onResponse(@NonNull Call<List<Task>> call, @NonNull Response<List<Task>> response) {
                 Log.d(TAG, "getByZoneLikeAndStatusLikeAndExecutorId: " + response.code());
                 if(response.code() == 200) {
-                    tasks.setValue(null);
+                    tasks.setValue(response.body());
                 }
             }
 

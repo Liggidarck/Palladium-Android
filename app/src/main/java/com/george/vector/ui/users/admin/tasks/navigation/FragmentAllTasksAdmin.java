@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.tasks.navigation;
+package com.george.vector.ui.users.admin.tasks.navigation;
 
 import static com.george.vector.common.utils.consts.Keys.ID;
 import static com.george.vector.common.utils.consts.Keys.IS_EXECUTE;
@@ -23,14 +23,14 @@ import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.FragmentTasksRootBinding;
 import com.george.vector.network.model.Task;
 import com.george.vector.ui.adapter.TaskAdapter;
-import com.george.vector.ui.users.root.tasks.TaskRootActivity;
+import com.george.vector.ui.users.admin.tasks.TaskAdminActivity;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentTasksRoot extends Fragment {
+public class FragmentAllTasksAdmin extends Fragment {
 
     private FragmentTasksRootBinding binding;
 
@@ -40,7 +40,7 @@ public class FragmentTasksRoot extends Fragment {
     private String zone, status;
     private boolean executed;
 
-    public static final String TAG = FragmentTasksRoot.class.getSimpleName();
+    public static final String TAG = FragmentAllTasksAdmin.class.getSimpleName();
 
     private List<Task> tasks;
 
@@ -68,10 +68,14 @@ public class FragmentTasksRoot extends Fragment {
             binding.chipOldSchoolTasksRoot.setVisibility(View.INVISIBLE);
         }
 
-        binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> taskAdapter.addTasks(tasks));
+        binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                taskAdapter.addTasks(tasks);
+            }
+        });
 
         binding.chipUrgentTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
+            if (isChecked & !tasks.isEmpty()) {
                 ArrayList<Task> filterTasks = new ArrayList<>();
 
                 for (Task task : tasks) {
@@ -86,7 +90,7 @@ public class FragmentTasksRoot extends Fragment {
 
         binding.chipNewSchoolTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
             // Старшая школа
-            if (isChecked) {
+            if (isChecked & !tasks.isEmpty()) {
                 ArrayList<Task> filterTasks = new ArrayList<>();
 
                 for (Task task : tasks) {
@@ -100,7 +104,7 @@ public class FragmentTasksRoot extends Fragment {
         });
 
         binding.chipOldSchoolTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
+            if (isChecked & !tasks.isEmpty()) {
                 ArrayList<Task> filterTasks = new ArrayList<>();
 
                 for (Task task : tasks) {
@@ -123,25 +127,25 @@ public class FragmentTasksRoot extends Fragment {
 
         binding.recyclerviewSchoolOstNewTasks.setHasFixedSize(true);
         binding.recyclerviewSchoolOstNewTasks.setLayoutManager(new
-                LinearLayoutManager(FragmentTasksRoot.this.requireActivity()));
+                LinearLayoutManager(FragmentAllTasksAdmin.this.requireActivity()));
         binding.recyclerviewSchoolOstNewTasks.setAdapter(taskAdapter);
 
         taskAdapter.setOnItemClickListener((task, position) -> {
             long id = task.getId();
             Log.d(TAG, "setUpRecyclerView: " + id);
-            Intent intent = new Intent(FragmentTasksRoot.this.getContext(), TaskRootActivity.class);
+            Intent intent = new Intent(FragmentAllTasksAdmin.this.getContext(), TaskAdminActivity.class);
             intent.putExtra(ID, id);
             intent.putExtra(ZONE, zone);
+            intent.putExtra(IS_EXECUTE, executed);
             startActivity(intent);
         });
 
     }
 
     private void updateListTasks(String zone, String status, boolean executed) {
-        //todo: ENABLE IN SERVER: get task by executor and zone and executorId
         if (!executed) {
             taskViewModel.getByZoneLikeAndStatusLike(zone, status)
-                    .observe(FragmentTasksRoot.this.requireActivity(), tasks -> {
+                    .observe(FragmentAllTasksAdmin.this.requireActivity(), tasks -> {
                         if (tasks == null) {
                             binding.progressAllTasks.setVisibility(View.INVISIBLE);
                             return;
@@ -153,12 +157,14 @@ public class FragmentTasksRoot extends Fragment {
                     });
         } else {
             UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+
             taskViewModel.getByZoneLikeAndStatusLikeAndExecutorId(zone, status, (int) userDataViewModel.getId())
-                    .observe(FragmentTasksRoot.this.requireActivity(), tasks -> {
+                    .observe(FragmentAllTasksAdmin.this.requireActivity(), tasks -> {
                         if (tasks == null) {
                             binding.progressAllTasks.setVisibility(View.INVISIBLE);
                             return;
                         }
+
 
                         taskAdapter.addTasks(tasks);
                         this.tasks = tasks;

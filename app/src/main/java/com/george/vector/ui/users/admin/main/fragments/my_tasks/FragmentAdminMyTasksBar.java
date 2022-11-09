@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.main.fragments.home;
+package com.george.vector.ui.users.admin.main.fragments.my_tasks;
 
 import static com.george.vector.common.utils.consts.Keys.BAR_RUCHEEK;
 import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
@@ -17,40 +17,39 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.databinding.FragmentBarBinding;
-import com.george.vector.ui.users.root.tasks.navigation.StatusActivity;
+import com.george.vector.ui.users.admin.tasks.navigation.StatusActivity;
 
-public class FragmentRootZoneBar extends Fragment {
+public class FragmentAdminMyTasksBar extends Fragment {
 
     FragmentBarBinding binding;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentBarBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
 
         binding.barSchool.setOnClickListener(v -> {
-            Intent intent = new Intent(FragmentRootZoneBar.this.getContext(), StatusActivity.class);
+            Intent intent = new Intent(FragmentAdminMyTasksBar.this.getContext(), StatusActivity.class);
             intent.putExtra(ZONE, BAR_SCHOOL);
-            intent.putExtra(IS_EXECUTE, "root");
+            intent.putExtra(IS_EXECUTE, true);
             startActivity(intent);
         });
 
         binding.barRucheek.setOnClickListener(v -> {
-            Intent intent = new Intent(FragmentRootZoneBar.this.getContext(), StatusActivity.class);
+            Intent intent = new Intent(FragmentAdminMyTasksBar.this.getContext(), StatusActivity.class);
             intent.putExtra(ZONE, BAR_RUCHEEK);
-            intent.putExtra(IS_EXECUTE, "root");
+            intent.putExtra(IS_EXECUTE, true);
             startActivity(intent);
         });
 
         binding.barZvezdochka.setOnClickListener(v -> {
-            Intent intent = new Intent(FragmentRootZoneBar.this.getContext(), StatusActivity.class);
+            Intent intent = new Intent(FragmentAdminMyTasksBar.this.getContext(), StatusActivity.class);
             intent.putExtra(ZONE, BAR_ZVEZDOCHKA);
-            intent.putExtra(IS_EXECUTE, "root");
+            intent.putExtra(IS_EXECUTE, true);
             startActivity(intent);
         });
 
-        return view;
+        return binding.getRoot();
     }
 
     @Override

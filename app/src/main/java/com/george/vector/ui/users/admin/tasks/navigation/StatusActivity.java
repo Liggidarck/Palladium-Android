@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.tasks.navigation;
+package com.george.vector.ui.users.admin.tasks.navigation;
 
 import static com.george.vector.common.utils.consts.Keys.ARCHIVE_TASKS;
 import static com.george.vector.common.utils.consts.Keys.BAR_RUCHEEK;
@@ -58,7 +58,7 @@ public class StatusActivity extends AppCompatActivity {
         binding.toolbarLocationFolderRoot.setNavigationOnClickListener(v -> onBackPressed());
 
         binding.newTasksCardRoot.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AllTasksRootActivity.class);
+            Intent intent = new Intent(this, AllTasksAdminActivity.class);
             intent.putExtra(STATUS, NEW_TASKS);
             intent.putExtra(ZONE, zone);
             intent.putExtra(IS_EXECUTE, executed);
@@ -66,7 +66,7 @@ public class StatusActivity extends AppCompatActivity {
         });
 
         binding.inProgressTasksCardRoot.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AllTasksRootActivity.class);
+            Intent intent = new Intent(this, AllTasksAdminActivity.class);
             intent.putExtra(STATUS, IN_PROGRESS_TASKS);
             intent.putExtra(ZONE, zone);
             intent.putExtra(IS_EXECUTE, executed);
@@ -74,7 +74,7 @@ public class StatusActivity extends AppCompatActivity {
         });
 
         binding.completedTasksCardRoot.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AllTasksRootActivity.class);
+            Intent intent = new Intent(this, AllTasksAdminActivity.class);
             intent.putExtra(STATUS, COMPLETED_TASKS);
             intent.putExtra(ZONE, zone);
             intent.putExtra(IS_EXECUTE, executed);
@@ -82,7 +82,7 @@ public class StatusActivity extends AppCompatActivity {
         });
 
         binding.archiveTasksCardRoot.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AllTasksRootActivity.class);
+            Intent intent = new Intent(this, AllTasksAdminActivity.class);
             intent.putExtra(STATUS, ARCHIVE_TASKS);
             intent.putExtra(ZONE, zone);
             intent.putExtra(IS_EXECUTE, executed);

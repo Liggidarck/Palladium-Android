@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.main.fragments.my_tasks;
+package com.george.vector.ui.users.admin.main.fragments.my_tasks;
 
 import static com.george.vector.common.utils.consts.Keys.OST;
 
@@ -11,21 +11,19 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
-import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.FragmentRootTasksBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-public class FragmentRootMyTasks extends Fragment {
+public class FragmentAdminMyTasks extends Fragment {
 
     private String zone;
     private FragmentRootTasksBinding rootTasksBinding;
 
-    public static final String TAG = FragmentRootMyTasks.class.getSimpleName();
+    public static final String TAG = FragmentAdminMyTasks.class.getSimpleName();
 
     @Nullable
     @Override
@@ -33,7 +31,7 @@ public class FragmentRootMyTasks extends Fragment {
         rootTasksBinding = FragmentRootTasksBinding.inflate(inflater, container, false);
         View view = rootTasksBinding.getRoot();
 
-        zone = PreferenceManager.getDefaultSharedPreferences(FragmentRootMyTasks.this.getContext()).getString("default_root_location", OST);
+        zone = PreferenceManager.getDefaultSharedPreferences(FragmentAdminMyTasks.this.getContext()).getString("default_root_location", OST);
 
         if(zone.equals("ost"))
             rootTasksBinding.chipOstTasks.setChecked(true);
@@ -68,11 +66,11 @@ public class FragmentRootMyTasks extends Fragment {
         switch (zone_update) {
             case "ost":
                 Log.i(TAG, "Запуск фрагмента Осафьево");
-                currentFragment = new FragmentRootMyTasksOst();
+                currentFragment = new FragmentAdminMyTasksOst();
                 break;
             case "bar":
                 Log.i(TAG, "Запуск фрагмента Барыши");
-                currentFragment = new FragmentRootMyTasksBar();
+                currentFragment = new FragmentAdminMyTasksBar();
                 break;
         }
         assert currentFragment != null;

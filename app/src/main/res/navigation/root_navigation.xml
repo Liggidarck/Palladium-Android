@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.george.vector.ui.users.root.main.fragments.home.FragmentRootHome"
+        android:name="com.george.vector.ui.users.admin.main.fragments.home.FragmentAdminHome"
         android:label="FragmentRootHome"
         tools:layout="@layout/fragment_root_home" />
 
     <fragment
         android:id="@+id/nav_tasks"
-        android:name="com.george.vector.ui.users.root.main.fragments.my_tasks.FragmentRootMyTasks"
+        android:name="com.george.vector.ui.users.admin.main.fragments.my_tasks.FragmentAdminMyTasks"
         android:label="FragmentRootMyTasks"
         tools:layout="@layout/fragment_root_tasks" />
 

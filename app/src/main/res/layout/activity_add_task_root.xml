@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.users.root.tasks.contoll.AddTaskRootActivity">
+    tools:context=".ui.users.admin.tasks.contoll.AddTaskAdminActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/addEditTaskCoordinator"

@@ -1,4 +1,4 @@
-package com.george.vector.ui.users.root.main;
+package com.george.vector.ui.users.admin.main;
 
 import static com.george.vector.common.utils.consts.Keys.TOPIC_NEW_TASKS_CREATE;
 
@@ -17,17 +17,17 @@ import androidx.preference.PreferenceManager;
 
 import com.george.vector.BuildConfig;
 import com.george.vector.R;
+import com.george.vector.databinding.ActivityAdminMainBinding;
 import com.george.vector.network.notifications.SendNotification;
 import com.george.vector.data.user.UserDataViewModel;
-import com.george.vector.databinding.ActivityRootMainBinding;
 import com.george.vector.network.model.user.User;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-public class MainRootActivity extends AppCompatActivity {
+public class MainAdminActivity extends AppCompatActivity {
 
-    private ActivityRootMainBinding binding;
+    private ActivityAdminMainBinding binding;
 
-    public static final String TAG = MainRootActivity.class.getSimpleName();
+    public static final String TAG = MainAdminActivity.class.getSimpleName();
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -46,7 +46,7 @@ public class MainRootActivity extends AppCompatActivity {
 
         setTheme(R.style.MainActivity);
         super.onCreate(savedInstanceState);
-        binding = ActivityRootMainBinding.inflate(getLayoutInflater());
+        binding = ActivityAdminMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         UserDataViewModel preferencesViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
