@@ -2,7 +2,7 @@ package com.george.vector.ui.users.user.main;
 
 import static com.george.vector.common.utils.consts.Keys.ARCHIVE_TASKS;
 import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
-import static com.george.vector.common.utils.consts.Keys.FOLDER;
+import static com.george.vector.common.utils.consts.Keys.STATUS;
 import static com.george.vector.common.utils.consts.Keys.IN_PROGRESS_TASKS;
 import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
 
@@ -13,13 +13,13 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.R;
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityFolderUserBinding;
 import com.george.vector.ui.users.user.tasks.FragmentTasksUser;
 
 public class FolderUserActivity extends AppCompatActivity {
 
-    String email, permission, folder, textToolbar;
+    String email, zone, folder, textToolbar;
     ActivityFolderUserBinding folderUserBinding;
 
     @Override
@@ -32,10 +32,10 @@ public class FolderUserActivity extends AppCompatActivity {
         UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 
         Bundle arguments = getIntent().getExtras();
-        folder = arguments.getString(FOLDER);
+        folder = arguments.getString(STATUS);
 
         email = userDataViewModel.getUser().getEmail();
-        permission = userDataViewModel.getUser().getPermission();
+        zone = userDataViewModel.getUser().getZone();
 
 
         if (folder.equals(NEW_TASKS))
@@ -55,7 +55,7 @@ public class FolderUserActivity extends AppCompatActivity {
 
         Fragment fragmentTasksUser = new FragmentTasksUser();
         Bundle dataUserTasks = new Bundle();
-        dataUserTasks.putString(FOLDER, folder);
+        dataUserTasks.putString(STATUS, folder);
         fragmentTasksUser.setArguments(dataUserTasks);
 
         getSupportFragmentManager()

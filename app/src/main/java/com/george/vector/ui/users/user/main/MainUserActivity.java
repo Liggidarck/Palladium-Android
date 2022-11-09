@@ -14,17 +14,15 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityMainUserBinding;
-import com.george.vector.network.model.User;
-import com.george.vector.ui.auth.LoginActivity;
+import com.george.vector.ui.common.auth.LoginActivity;
 import com.george.vector.ui.users.user.main.fragments.home.BottomSheetProfileUser;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class MainUserActivity extends AppCompatActivity implements BottomSheetProfileUser.stateBtnListener {
 
-    ActivityMainUserBinding binding;
-    FirebaseAuth firebaseAuth;
+    private ActivityMainUserBinding binding;
+    private UserDataViewModel userDataViewModel;
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -48,7 +46,7 @@ public class MainUserActivity extends AppCompatActivity implements BottomSheetPr
         binding = ActivityMainUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 
         NavController navController = Navigation.findNavController(this, R.id.navHostFragmentActivityUserMain);
         NavigationUI.setupWithNavController(binding.bottomUserNavigation, navController);
@@ -56,18 +54,14 @@ public class MainUserActivity extends AppCompatActivity implements BottomSheetPr
 
     @Override
     public void getButton(String button) {
-        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 
         if (button.equals("logoutBtnUser")) {
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle(getString(R.string.warning))
                     .setMessage("Вы действительно хотите выйти из аккаунта?")
                     .setPositiveButton("ok", (dialog1, which) -> {
-                        firebaseAuth.signOut();
-                        userPrefViewModel.saveUser(new User("", "", "",
-                                "", "", "", ""));
+                        userDataViewModel.deleteUserData();
                         startActivity(new Intent(this, LoginActivity.class));
-                        finish();
                     })
                     .setNegativeButton("Отмена", (dialog12, which) -> dialog12.dismiss())
                     .create();

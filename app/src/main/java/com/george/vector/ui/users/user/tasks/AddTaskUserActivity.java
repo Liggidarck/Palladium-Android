@@ -1,20 +1,21 @@
 package com.george.vector.ui.users.user.tasks;
 
 import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
+import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.PERMISSION_CAMERA_CODE;
 import static com.george.vector.common.utils.consts.Keys.PERMISSION_GALLERY_CODE;
-import static com.george.vector.common.utils.consts.Logs.TAG_ADD_TASK_USER_ACTIVITY;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -28,20 +29,20 @@ import com.george.vector.R;
 import com.george.vector.common.utils.NetworkUtils;
 import com.george.vector.common.utils.TextValidatorUtils;
 import com.george.vector.common.utils.TimeUtils;
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityAddTaskUserBinding;
 import com.george.vector.network.model.Task;
+import com.george.vector.ui.common.tasks.BottomSheetAddImage;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
-import com.george.vector.ui.tasks.BottomSheetAddImage;
 
 import java.io.File;
 import java.util.Objects;
 
 public class AddTaskUserActivity extends AppCompatActivity implements BottomSheetAddImage.StateListener {
 
-    String address, floor, cabinet, letter, nameTask, comment, email, permission, fullNameCreator;
-    final String status = "Новая заявка";
+    private String address, floor, cabinet, letter, nameTask, comment, zone;
+    private long userId;
 
     private Uri fileUri;
 
@@ -50,20 +51,24 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
     private final TimeUtils timeUtils = new TimeUtils();
     private ActivityAddTaskUserBinding binding;
 
-    final ActivityResultLauncher<String> selectPictureLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
+    private final ActivityResultLauncher<String> selectPictureLauncher
+            = registerForActivityResult(new ActivityResultContracts.GetContent(),
             uri -> {
                 fileUri = uri;
-                binding.imageTaskUser.setImageURI(fileUri);
+                binding.imageViewTaskUser.setImageURI(fileUri);
             });
 
-    final ActivityResultLauncher<Uri> cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicture(),
+    private final ActivityResultLauncher<Uri> cameraLauncher
+            = registerForActivityResult(new ActivityResultContracts.TakePicture(),
             result -> {
                 if (result) {
-                    binding.imageTaskUser.setImageURI(fileUri);
+                    binding.imageViewTaskUser.setImageURI(fileUri);
                 }
             });
 
-    final BottomSheetAddImage addImage = new BottomSheetAddImage();
+    private final BottomSheetAddImage addImage = new BottomSheetAddImage();
+
+    private TaskViewModel taskViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,29 +78,26 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
         setContentView(binding.getRoot());
 
         UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
-        permission = userDataViewModel.getUser().getPermission();
-        email = userDataViewModel.getUser().getEmail();
+        zone = userDataViewModel.getUser().getZone();
+        userId = userDataViewModel.getId();
 
-        Log.i(TAG_ADD_TASK_USER_ACTIVITY, "permission: " + permission);
-        Log.d(TAG_ADD_TASK_USER_ACTIVITY, "email: " + email);
+        taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                this.getApplication(),
+                userDataViewModel.getToken()
+        )).get(TaskViewModel.class);
 
-        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
-        String nameUser = userPrefViewModel.getUser().getName();
-        String lastNameUser = userPrefViewModel.getUser().getLast_name();
-        String patronymicUser = userPrefViewModel.getUser().getPatronymic();
-        fullNameCreator = nameUser + " " + lastNameUser + " " + patronymicUser;
 
-        binding.topAppBarNewTaskUser.setNavigationOnClickListener(v -> onBackPressed());
+        binding.toolbarAddTask.setNavigationOnClickListener(v -> onBackPressed());
 
-        binding.crateTask.setOnClickListener(v -> {
-            address = Objects.requireNonNull(binding.textInputLayoutAddress.getEditText()).getText().toString();
-            floor = Objects.requireNonNull(binding.textInputLayoutFloor.getEditText()).getText().toString();
-            cabinet = Objects.requireNonNull(binding.textInputLayoutCabinet.getEditText()).getText().toString();
-            letter = Objects.requireNonNull(binding.textInputLayoutCabinetLiterUser.getEditText()).getText().toString();
-            nameTask = Objects.requireNonNull(binding.textInputLayoutNameTask.getEditText()).getText().toString();
-            comment = Objects.requireNonNull(binding.textInputLayoutComment.getEditText()).getText().toString();
+        binding.btnCreateTask.setOnClickListener(v -> {
+            address = Objects.requireNonNull(binding.textInputAddressUser.getEditText()).getText().toString();
+            floor = Objects.requireNonNull(binding.textInputFloorUser.getEditText()).getText().toString();
+            cabinet = Objects.requireNonNull(binding.textInputCabinetUser.getEditText()).getText().toString();
+            letter = Objects.requireNonNull(binding.textInputLetterUser.getEditText()).getText().toString();
+            nameTask = Objects.requireNonNull(binding.textInputNameUser.getEditText()).getText().toString();
+            comment = Objects.requireNonNull(binding.textInputCommentUser.getEditText()).getText().toString();
 
-            if(!validateFields()) {
+            if (!validateFields()) {
                 return;
             }
 
@@ -104,44 +106,43 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
                 return;
             }
 
-            saveTask(permission);
+            saveTask();
         });
 
-        binding.cardImage.setOnClickListener(v -> showDialogImage());
+        binding.materialCardViewImage.setOnClickListener(v -> showDialogImage());
 
-        initializeField(permission);
+        initializeField(zone);
     }
 
-    void saveTask(String location) {
-        TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(this.getApplication(),
-                location)).get(TaskViewModel.class);
+    void saveTask() {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Загрузка...");
+        progressDialog.setMessage("Ваша заявка сохраняется...");
+        progressDialog.show();
 
-        String image;
-
-        if (fileUri != null)
-            image = taskViewModel.uploadImage(fileUri, AddTaskUserActivity.this);
-        else
-            image = null;
-
-        String dateCreate = timeUtils.getDate();
-        String timeCreate = timeUtils.getTime();
+        String dateCreate = timeUtils.getDate() + " " + timeUtils.getTime();
 
         if (comment.isEmpty())
             comment = "Нет коментария к заявке";
 
-        Task task = new Task(nameTask, address, dateCreate, floor, cabinet, letter, comment,
-                null, null, status, timeCreate, email, false, image,
-                null, fullNameCreator);
+        Task task = new Task(zone, NEW_TASKS, nameTask, comment, address,
+                floor, cabinet, letter, false, null, 0, (int) userId,
+                dateCreate, null);
 
-        taskViewModel.createTask(task);
-        onBackPressed();
+        taskViewModel.createTask(task).observe(this, response -> {
+            if (response.getMessage().equals("Task successfully created!")) {
+                Toast.makeText(this, "Заявка созданна", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                onBackPressed();
+            }
+        });
     }
 
     boolean validateFields() {
-        return textValidator.isEmptyField(address, binding.textInputLayoutAddress) &
-                textValidator.isEmptyField(floor, binding.textInputLayoutFloor) &
-                textValidator.isEmptyField(cabinet, binding.textInputLayoutCabinet) &
-                textValidator.isEmptyField(nameTask, binding.textInputLayoutNameTask);
+        return textValidator.isEmptyField(address, binding.textInputAddressUser) &
+                textValidator.isEmptyField(floor, binding.textInputFloorUser) &
+                textValidator.isEmptyField(cabinet, binding.textInputCabinetUser) &
+                textValidator.isEmptyField(nameTask, binding.textInputNameUser);
     }
 
     void initializeField(String permission) {
@@ -152,7 +153,7 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
                     R.layout.dropdown_menu_categories,
                     items
             );
-            binding.addressAutoComplete.setAdapter(adapter);
+            binding.autoCompleteAddressUser.setAdapter(adapter);
         }
 
         String[] itemsLetter = getResources().getStringArray(R.array.letter);
@@ -162,11 +163,12 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
                 itemsLetter
         );
 
-        binding.literAutoCompleteUser.setAdapter(adapter_letter);
+        binding.autoCompleteLetterUser.setAdapter(adapter_letter);
 
 
         if (permission.equals(BAR_SCHOOL))
-            Objects.requireNonNull(binding.textInputLayoutAddress.getEditText()).setText(getText(R.string.bar_school_address));
+            Objects.requireNonNull(binding.textInputAddressUser.getEditText())
+                    .setText(getText(R.string.bar_school_address));
 
     }
 
@@ -175,7 +177,9 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         switch (requestCode) {
@@ -188,7 +192,8 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
 
                     builder.setTitle(getText(R.string.warning))
                             .setMessage(getString(R.string.permission_gallery))
-                            .setPositiveButton("Настройки", (dialog, id) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+                            .setPositiveButton("Настройки", (dialog, id) ->
+                                    startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
                             .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.cancel());
 
                     AlertDialog dialog = builder.create();
@@ -226,11 +231,9 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
 
     void showDialogNoInternet() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
         builder.setTitle(getText(R.string.warning))
-                .setMessage(getText(R.string.warning_no_connection))
-                .setPositiveButton(getText(R.string.save), (dialog, id) -> saveTask(permission))
-                .setNegativeButton(android.R.string.cancel, (dialog, id) -> onBackPressed());
+                .setMessage(getText(R.string.warning_no_connection_main))
+                .setPositiveButton("Ок", (dialog, id) -> onBackPressed());
 
         AlertDialog dialog = builder.create();
         dialog.show();

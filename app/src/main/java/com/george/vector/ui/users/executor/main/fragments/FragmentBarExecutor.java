@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.FragmentBarBinding;
 
 import org.jetbrains.annotations.NotNull;

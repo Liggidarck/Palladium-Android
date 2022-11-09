@@ -1,5 +1,6 @@
 package com.george.vector.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,29 +9,30 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.george.vector.R;
-import com.george.vector.network.model.User;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.george.vector.network.model.user.User;
 
-public class UserAdapter extends FirestoreRecyclerAdapter<User, UserAdapter.UserHolder> {
+import java.util.ArrayList;
+import java.util.List;
+
+public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserHolder> {
 
     private onItemUserClickListener listener;
+    private List<User> users = new ArrayList<>();
 
-    public UserAdapter(@NonNull FirestoreRecyclerOptions<User> options) {
-        super(options);
-    }
+    public static final String TAG = UserAdapter.class.getSimpleName();
 
     @Override
-    protected void onBindViewHolder(@NonNull UserAdapter.UserHolder holder, int position, @NonNull User model) {
-        String name = model.getName();
-        String lastName = model.getLast_name();
-        String patronymic = model.getPatronymic();
+    public void onBindViewHolder(@NonNull UserHolder holder, int position) {
+        User user = users.get(position);
+
+        String name = user.getName();
+        String lastName = user.getLastName();
+        String patronymic = user.getPatronymic();
         String fullName = String.format("%s %s %s", lastName, name, patronymic);
 
         holder.textViewName.setText(fullName);
-        holder.textViewEmail.setText(model.getEmail());
+        holder.textViewEmail.setText(user.getEmail());
     }
 
     @NonNull
@@ -38,6 +40,23 @@ public class UserAdapter extends FirestoreRecyclerAdapter<User, UserAdapter.User
     public UserHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View root = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item, parent, false);
         return new UserHolder(root);
+    }
+
+    @Override
+    public int getItemCount() {
+        return users.size();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setUsers(List<User> users) {
+        this.users = users;
+        notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void clearUsers() {
+        this.users.clear();
+        notifyDataSetChanged();
     }
 
     public class UserHolder extends RecyclerView.ViewHolder {
@@ -52,18 +71,18 @@ public class UserAdapter extends FirestoreRecyclerAdapter<User, UserAdapter.User
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
-                if(position != RecyclerView.NO_POSITION && listener != null)
-                    listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                if (position != RecyclerView.NO_POSITION && listener != null)
+                    listener.onItemClick(users.get(position), position);
             });
 
         }
     }
 
     public interface onItemUserClickListener {
-        void onItemClick(DocumentSnapshot documentSnapshot, int position);
+        void onItemClick(User user, int position);
     }
 
-    public void setOnItemClickListener(onItemUserClickListener listener){
+    public void setOnItemClickListener(onItemUserClickListener listener) {
         this.listener = listener;
     }
 

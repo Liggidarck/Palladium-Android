@@ -1,14 +1,18 @@
 package com.george.vector.ui.users.executor.tasks;
 
-import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ARCHIVE_TASKS;
+import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
+import static com.george.vector.common.utils.consts.Keys.IN_PROGRESS_TASKS;
+import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
+import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.ID;
 import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 import static java.util.Objects.requireNonNull;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
@@ -17,7 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.R;
 import com.george.vector.common.utils.NetworkUtils;
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityEditTaskExecutorBinding;
 import com.george.vector.network.model.Task;
 import com.george.vector.ui.viewmodel.TaskViewModel;
@@ -26,22 +30,15 @@ import com.george.vector.ui.users.executor.main.MainExecutorActivity;
 
 public class EditTaskExecutorActivity extends AppCompatActivity {
 
-    String id;
-    String collection;
-    String comment;
-    String dateCreate;
-    String timeCreate;
-    String email;
-    String image;
-    String fullNameExecutor;
-    String emailCreator;
-    String nameCreator;
-    boolean urgent;
+    private long taskId, creatorID, executorId;
+    private String zone, comment, dateCreate;
+    private boolean urgent;
 
-    TaskViewModel taskViewModel;
+    private TaskViewModel taskViewModel;
 
-    ActivityEditTaskExecutorBinding binding;
-    NetworkUtils networkUtils = new NetworkUtils();
+    private ActivityEditTaskExecutorBinding binding;
+    private final NetworkUtils networkUtils = new NetworkUtils();
+
     public static final String TAG = EditTaskExecutorActivity.class.getSimpleName();
 
     @Override
@@ -52,50 +49,59 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.getString(ID);
-        collection = arguments.getString(COLLECTION);
-
-        Log.d(TAG, "onCreate: id: " + id);
-
-        taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
-                this.getApplication(),
-                collection)
-        ).get(TaskViewModel.class);
 
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
-        email = userPrefViewModel.getUser().getEmail();
+        taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                this.getApplication(),
+                userPrefViewModel.getToken())
+        ).get(TaskViewModel.class);
+
+        taskId = arguments.getLong(ID);
+        zone = arguments.getString(ZONE);
+        executorId = userPrefViewModel.getId();
 
         binding.toolbarEditTaskExecutor.setNavigationOnClickListener(v -> onBackPressed());
 
-        taskViewModel.getTask(id).observe(this, task -> {
+        taskViewModel.getTaskById(taskId).observe(this, task -> {
             dateCreate = task.getDateCreate();
-            timeCreate = task.getTimeCreate();
-            email = task.getEmailCreator();
-            fullNameExecutor = task.getFullNameExecutor();
-            emailCreator = task.getEmailCreator();
-            nameCreator = task.getNameCreator();
-            urgent = task.getUrgent();
-            image = task.getImage();
+            urgent = task.isUrgent();
             comment = task.getComment();
+            creatorID = task.getCreatorId();
+            String status = task.getStatus();
+            String nameExecutor = userPrefViewModel.getUser().getLastName() + " "
+                    + userPrefViewModel.getUser().getName() + " "
+                    + userPrefViewModel.getUser().getPatronymic();
+
+
+            if (status.equals(NEW_TASKS))
+                status = "Новая заявка";
+
+            if (status.equals(IN_PROGRESS_TASKS))
+                status = "Заявка в работе";
+
+            if (status.equals(COMPLETED_TASKS))
+                status = "Завершенная заявка";
+
+            if (status.equals(ARCHIVE_TASKS))
+                status = "Архив";
 
             requireNonNull(binding.textAddress.getEditText()).setText(task.getAddress());
             requireNonNull(binding.textFloor.getEditText()).setText(task.getFloor());
             requireNonNull(binding.textCabinet.getEditText()).setText(task.getCabinet());
             requireNonNull(binding.textLetter.getEditText()).setText(task.getLetter());
-            requireNonNull(binding.textNameTask.getEditText()).setText(task.getNameTask());
-            requireNonNull(binding.textStatus.getEditText()).setText(task.getStatus());
+            requireNonNull(binding.textNameTask.getEditText()).setText(task.getName());
+            requireNonNull(binding.textStatus.getEditText()).setText(status);
             requireNonNull(binding.textDateComplete.getEditText()).setText(task.getDateDone());
-            requireNonNull(binding.textExecutor.getEditText()).setText(task.getExecutor());
+            requireNonNull(binding.textExecutor).getEditText().setText(nameExecutor);
 
             if (comment.equals("Нет коментария к заявке"))
                 requireNonNull(binding.textComment.getEditText()).setText("");
             else
                 requireNonNull(binding.textComment.getEditText()).setText(comment);
 
-            initializeFields(collection);
+            binding.progressEditTaskExecutor.setVisibility(View.INVISIBLE);
+            initializeFields(zone);
         });
-
-        binding.progressEditTaskExecutor.setVisibility(View.INVISIBLE);
 
         binding.btnSaveTask.setOnClickListener(v -> {
             if (!networkUtils.isOnline(this)) {
@@ -108,7 +114,10 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
     }
 
     void updateTask() {
-        String updateImage = image;
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Загрузка...");
+        progressDialog.setMessage("Ваша заявка обновляется...");
+        progressDialog.show();
 
         String updateAddress = requireNonNull(binding.textAddress.getEditText()).getText().toString();
         String updateFloor = requireNonNull(binding.textFloor.getEditText()).getText().toString();
@@ -116,19 +125,33 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         String updateLetter = requireNonNull(binding.textLetter.getEditText()).getText().toString();
         String updateName = requireNonNull(binding.textNameTask.getEditText()).getText().toString();
         String updateComment = requireNonNull(binding.textComment.getEditText()).getText().toString();
-        String updateDateTask = requireNonNull(binding.textDateComplete.getEditText()).getText().toString();
-        String updateExecutor = requireNonNull(binding.textExecutor.getEditText()).getText().toString();
+        String updateDateDone = requireNonNull(binding.textDateComplete.getEditText()).getText().toString();
         String updateStatus = requireNonNull(binding.textStatus.getEditText()).getText().toString();
 
-        Task task = new Task(updateName, updateAddress, dateCreate, updateFloor,
-                updateCabinet, updateLetter, updateComment, updateDateTask,
-                updateExecutor, updateStatus, timeCreate, email, urgent, updateImage,
-                fullNameExecutor, nameCreator);
+        if (updateStatus.equals("Новая заявка"))
+            updateStatus = NEW_TASKS;
 
-        taskViewModel.updateTask(id, task);
+        if (updateStatus.equals("Заявка в работе"))
+            updateStatus = IN_PROGRESS_TASKS;
 
-        Intent intent = new Intent(this, MainExecutorActivity.class);
-        startActivity(intent);
+        if (updateStatus.equals("Завершенная заявка"))
+            updateStatus = COMPLETED_TASKS;
+
+        if (updateStatus.equals("Архив"))
+            updateStatus = ARCHIVE_TASKS;
+
+        Task task = new Task(zone, updateStatus, updateName, updateComment,
+                updateAddress, updateFloor, updateCabinet, updateLetter,
+                urgent, updateDateDone, (int) executorId, (int) creatorID, dateCreate, null);
+
+        taskViewModel.editTask(task, taskId).observe(this, message -> {
+            if (message.getMessage().equals("Task successfully edited")) {
+                progressDialog.dismiss();
+
+                Intent intent = new Intent(this, MainExecutorActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     void showDialog() {
@@ -143,8 +166,8 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    void initializeFields(String collection) {
-        if (collection.equals(OST_SCHOOL)) {
+    void initializeFields(String zone) {
+        if (zone.equals(OST_SCHOOL)) {
             String[] itemsAddresses = getResources().getStringArray(R.array.addressesOstSchool);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     EditTaskExecutorActivity.this,
@@ -154,7 +177,7 @@ public class EditTaskExecutorActivity extends AppCompatActivity {
             binding.autoCompleteAddress.setAdapter(adapter);
         }
 
-        String[] itemsStatus = getResources().getStringArray(R.array.status);
+        String[] itemsStatus = getResources().getStringArray(R.array.status_name);
         ArrayAdapter<String> adapter_status = new ArrayAdapter<>(
                 EditTaskExecutorActivity.this,
                 R.layout.dropdown_menu_categories,

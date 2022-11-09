@@ -11,9 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ProfileUserBottomSheetBinding;
-import com.george.vector.ui.settings.SettingsActivity;
+import com.george.vector.ui.common.settings.SettingsActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class BottomSheetProfileUser extends BottomSheetDialogFragment {
@@ -30,7 +30,7 @@ public class BottomSheetProfileUser extends BottomSheetDialogFragment {
 
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         String nameUser = userPrefViewModel.getUser().getName();
-        String lastNameUser = userPrefViewModel.getUser().getLast_name();
+        String lastNameUser = userPrefViewModel.getUser().getLastName();
         String email = userPrefViewModel.getUser().getEmail();
 
         String charName = Character.toString(nameUser.charAt(0));

@@ -1,57 +1,97 @@
 package com.george.vector.network.model;
 
-public class Task {
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-    private String nameTask;
-    private String address;
-    private String dateCreate;
-    private String floor;
-    private String cabinet;
-    private String letter;
-    private String comment;
-    private String dateDone;
-    private String executor;
+import java.io.Serializable;
+
+public class Task implements Serializable {
+
+    @SerializedName("id")
+    @Expose
+    private long id;
+
+    @Expose
+    private String zone;
+
+    @Expose
     private String status;
+
+    @Expose
+    private String name;
+
+    @Expose
+    private String comment;
+
+    @Expose
+    private String address;
+
+    @Expose
+    private String floor;
+
+    @Expose
+    private String cabinet;
+
+    @Expose
+    private String letter;
+
+    @Expose
     private boolean urgent;
-    private String timeCreate;
-    private String emailCreator;
+
+    @Expose
+    private String dateDone;
+
+    @Expose
+    private int executorId;
+
+    @Expose
+    private int creatorId;
+
+    @Expose
+    private String dateCreate;
+
+    @Expose
     private String image;
-    private String fullNameExecutor;
-    private String nameCreator;
 
-    public Task() {}
-
-    public Task(String nameTask, String address, String dateCreate, String floor,
-                String cabinet, String letter, String comment, String dateDone, String executor, String status,
-                String timeCreate, String emailCreator, boolean urgent, String image, String fullNameExecutor, String nameCreator) {
-        this.nameTask = nameTask;
+    public Task(String zone, String status, String name, String comment, String address, String floor, String cabinet, String letter, boolean urgent, String dateDone, int executorId, int creatorId, String dateCreate, String image) {
+        this.zone = zone;
+        this.status = status;
+        this.name = name;
+        this.comment = comment;
         this.address = address;
-        this.dateCreate = dateCreate;
         this.floor = floor;
         this.cabinet = cabinet;
         this.letter = letter;
-        this.comment = comment;
-        this.dateDone = dateDone;
-        this.executor = executor;
-        this.status = status;
         this.urgent = urgent;
-        this.timeCreate = timeCreate;
-        this.emailCreator = emailCreator;
+        this.dateDone = dateDone;
+        this.executorId = executorId;
+        this.creatorId = creatorId;
+        this.dateCreate = dateCreate;
         this.image = image;
-        this.fullNameExecutor = fullNameExecutor;
-        this.nameCreator = nameCreator;
     }
 
-    public String getNameTask() {
-        return nameTask;
+    public long getId() {
+        return id;
+    }
+
+    public String getZone() {
+        return zone;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getComment() {
+        return comment;
     }
 
     public String getAddress() {
         return address;
-    }
-
-    public String getDateCreate() {
-        return dateCreate;
     }
 
     public String getFloor() {
@@ -62,48 +102,31 @@ public class Task {
         return cabinet;
     }
 
-    public String getComment() {
-        return comment;
+    public String getLetter() {
+        return letter;
+    }
+
+    public boolean isUrgent() {
+        return urgent;
     }
 
     public String getDateDone() {
         return dateDone;
     }
 
-    public String getExecutor() {
-        return executor;
+    public int getExecutorId() {
+        return executorId;
     }
 
-    public String getStatus() {
-        return status;
+    public int getCreatorId() {
+        return creatorId;
     }
 
-    public String getTimeCreate() {
-        return timeCreate;
-    }
-
-    public String getEmailCreator() {
-        return emailCreator;
-    }
-
-    public String getLetter() {
-        return letter;
-    }
-
-    public boolean getUrgent() {
-        return urgent;
+    public String getDateCreate() {
+        return dateCreate;
     }
 
     public String getImage() {
         return image;
     }
-
-    public String getFullNameExecutor() {
-        return fullNameExecutor;
-    }
-
-    public String getNameCreator() {
-        return nameCreator;
-    }
-
 }

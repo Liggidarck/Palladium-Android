@@ -1,35 +1,50 @@
 package com.george.vector.ui.viewmodel;
 
-import static com.george.vector.common.utils.consts.Keys.USERS;
-
 import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.george.vector.network.model.User;
+import com.george.vector.network.model.Message;
+import com.george.vector.network.model.user.RegisterUserModel;
+import com.george.vector.network.model.user.Role;
+import com.george.vector.network.model.user.User;
 import com.george.vector.network.repository.UserRepository;
+
+import java.util.List;
 
 public class UserViewModel extends AndroidViewModel {
 
-    UserRepository repository;
+    private UserRepository repository;
 
-    public UserViewModel(@NonNull Application application) {
+    public UserViewModel(@NonNull Application application, String token) {
         super(application);
-        repository = new UserRepository(USERS);
+        repository = new UserRepository(token);
     }
 
-    public MutableLiveData<User> getUser(String userId) {
-        return repository.getUser(userId);
+    public MutableLiveData<List<User>> getAllUsers() {
+        return repository.getAllUsers();
     }
 
-    public void updateUser(String id, User user) {
-        repository.updateUser(id, user);
+    public MutableLiveData<List<Role>> getAllRoles() {
+        return repository.getAllRoles();
     }
 
-    public void saveUser(User user) {
-        repository.saveUser(user);
+    public MutableLiveData<List<User>> getUsersByRoleName(String role) {
+        return repository.getUsersByRoleName(role);
+    }
+
+    public MutableLiveData<User> getUserById(long id) {
+        return repository.getUserById(id);
+    }
+
+    public MutableLiveData<Message> updateUser(RegisterUserModel user, long id) {
+        return repository.editUser(user, id);
+    }
+
+    public MutableLiveData<Message> deleteUser(long id) {
+        return repository.deleteUser(id);
     }
 
 }

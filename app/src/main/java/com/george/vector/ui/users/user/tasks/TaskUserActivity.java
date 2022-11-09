@@ -1,33 +1,27 @@
 package com.george.vector.ui.users.user.tasks;
 
-import static com.george.vector.common.utils.consts.Keys.COLLECTION;
+import static com.george.vector.common.utils.consts.Keys.ARCHIVE_TASKS;
+import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
 import static com.george.vector.common.utils.consts.Keys.ID;
+import static com.george.vector.common.utils.consts.Keys.IN_PROGRESS_TASKS;
+import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
 
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.R;
 import com.george.vector.common.utils.NetworkUtils;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityTaskUserBinding;
+import com.george.vector.network.model.user.User;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
-import com.george.vector.ui.tasks.FragmentImageTask;
 import com.google.android.material.snackbar.Snackbar;
 
 public class TaskUserActivity extends AppCompatActivity {
-
-    private String id;
-    private String collection;
-    private String cabinet;
-    private String comment;
-    private String dateCreate;
-    private String timeCreate;
-    private String image;
-    private String letter;
 
     private ActivityTaskUserBinding binding;
 
@@ -41,66 +35,74 @@ public class TaskUserActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        id = arguments.getString(ID);
-        collection = arguments.getString(COLLECTION);
+        long id = arguments.getLong(ID);
 
-        TaskViewModel taskViewModel = new ViewModelProvider(
-                this,
-                new ViewModelFactory(TaskUserActivity.this.getApplication(), collection)
-        ).get(TaskViewModel.class);
+        UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+        User currentUser = userPrefViewModel.getUser();
+
+        TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                TaskUserActivity.this.getApplication(),
+                userPrefViewModel.getToken()
+        )).get(TaskViewModel.class);
 
         setSupportActionBar(binding.topAppBarTaskUser);
         binding.topAppBarTaskUser.setNavigationOnClickListener(v -> onBackPressed());
 
-        taskViewModel.getTask(id).observe(this, task -> {
-            comment = task.getComment();
-            dateCreate = task.getDateCreate();
-            timeCreate = task.getTimeCreate();
-            image = task.getImage();
-            letter = task.getLetter();
+        taskViewModel.getTaskById(id).observe(this, task -> {
+            String comment = task.getComment();
+            String dateCreate = task.getDateCreate();
+            String letter = task.getLetter();
+            String floor = "Этаж: " + task.getFloor();
+            String cabinet = "Кабинет:  " + task.getCabinet();
+            String dateCreateText = "Созданно: " + dateCreate;
+            String nameCreator = currentUser.getLastName() + " " + currentUser.getName() + " " + currentUser.getPatronymic();
+            String emailCreator = currentUser.getEmail();
+            String status = task.getStatus();
 
-            String dateCreateText = "Созданно: " + dateCreate + " " + timeCreate;
             if (!letter.equals("-") && !letter.isEmpty())
-                cabinet = String.format("%s%s", cabinet, letter);
+                cabinet = "Кабинет: " + cabinet + " " + letter;
 
             binding.textViewAddressTaskUser.setText(task.getAddress());
-            binding.textViewFloorTaskUser.setText(task.getFloor());
-            binding.textViewCabinetTaskUser.setText(task.getCabinet());
-            binding.textViewNameTaskUser.setText(task.getNameTask());
+            binding.textViewFloorTaskUser.setText(floor);
+            binding.textViewCabinetTaskUser.setText(cabinet);
+            binding.textViewNameTaskUser.setText(task.getName());
             binding.textViewCommentTaskUser.setText(comment);
             binding.textViewDateCreateTaskUser.setText(dateCreateText);
-            binding.textViewStatusTaskUser.setText(task.getStatus());
-            binding.textViewEmailCreatorTaskUser.setText(task.getEmailCreator());
-            binding.textViewFullNameCreatorUser.setText(task.getNameCreator());
+            binding.textViewFullNameCreatorUser.setText(nameCreator);
+            binding.textViewEmailCreatorTaskUser.setText(emailCreator);
 
-            if (image != null) {
-                Fragment imageFragment = new FragmentImageTask();
-                Bundle bundle = new Bundle();
-                bundle.putString("image_id", image);
-                bundle.putString(ID, id);
-                bundle.putString(COLLECTION, collection);
-                bundle.putString(COLLECTION, collection);
-                imageFragment.setArguments(bundle);
-
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.frame_image_task_user, imageFragment)
-                        .commit();
+            if (status.equals(NEW_TASKS)) {
+                binding.circleStatusUser.setImageResource(R.color.red);
+                binding.textViewStatusTaskUser.setText("Новая заявка");
             }
 
+            if (status.equals(IN_PROGRESS_TASKS)) {
+                binding.circleStatusUser.setImageResource(R.color.orange);
+                binding.textViewStatusTaskUser.setText("Заявка в работе");
+            }
+
+            if (status.equals(ARCHIVE_TASKS)) {
+                binding.circleStatusUser.setImageResource(R.color.green);
+                binding.textViewStatusTaskUser.setText("Архив");
+            }
+
+            if (status.equals(COMPLETED_TASKS)) {
+                binding.circleStatusUser.setImageResource(R.color.green);
+                binding.textViewStatusTaskUser.setText("Завершенная заявка");
+            }
+
+            binding.progressBarTaskUser.setVisibility(View.INVISIBLE);
         });
-
-        binding.progressBarTaskUser.setVisibility(View.INVISIBLE);
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if (!networkUtils.isOnline(TaskUserActivity.this))
+        if (!networkUtils.isOnline(TaskUserActivity.this)) {
             Snackbar.make(findViewById(R.id.coordinator_task_user),
-                            getString(R.string.error_no_connection),
-                            Snackbar.LENGTH_LONG
-                    ).show();
+                    getString(R.string.error_no_connection),
+                    Snackbar.LENGTH_LONG
+            ).show();
+        }
     }
 }

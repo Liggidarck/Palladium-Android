@@ -1,14 +1,8 @@
 package com.george.vector.ui.users.user.tasks;
 
-import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
-import static com.george.vector.common.utils.consts.Keys.COLLECTION;
-import static com.george.vector.common.utils.consts.Keys.FOLDER;
-import static com.george.vector.common.utils.consts.Keys.ID;
-import static com.george.vector.common.utils.consts.Logs.TAG_TASK_USER_ACTIVITY;
+import static com.george.vector.common.utils.consts.Keys.STATUS;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,94 +13,78 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.FragmentTasksUserBinding;
 import com.george.vector.network.model.Task;
 import com.george.vector.ui.adapter.TaskAdapter;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
+import com.george.vector.ui.viewmodel.TaskViewModel;
+import com.george.vector.ui.viewmodel.ViewModelFactory;
+
+import java.util.ArrayList;
 
 public class FragmentTasksUser extends Fragment {
 
-    TaskAdapter taskAdapter;
-    FragmentTasksUserBinding userBinding;
+    private String status;
+    private long userId;
+
+    private final TaskAdapter taskAdapter = new TaskAdapter();
+
+    private TaskViewModel taskViewModel;
+
+    private FragmentTasksUserBinding binding;
+
+    ArrayList<Task> allTasks = new ArrayList<>();
+
+    public static final String TAG = FragmentTasksUser.class.getSimpleName();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        userBinding = FragmentTasksUserBinding.inflate(inflater, container, false);
-        View view = userBinding.getRoot();
+        binding = FragmentTasksUserBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+
+        UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+
+        taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                this.requireActivity().getApplication(),
+                userDataViewModel.getToken()
+        )).get(TaskViewModel.class);
 
         Bundle args = getArguments();
         assert args != null;
-        UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+        status = args.getString(STATUS);
+        userId = userDataViewModel.getId();
 
-        String email = userDataViewModel.getUser().getEmail();
-        String permission = userDataViewModel.getUser().getPermission();
-        String folder = args.getString(FOLDER);
+        setUpRecyclerView();
 
-        if(permission.equals(BAR_SCHOOL)) {
-            userBinding.chipNewSchoolTasksUser.setVisibility(View.INVISIBLE);
-            userBinding.chipOldSchoolTasksUser.setVisibility(View.INVISIBLE);
-        }
-
-        setUpTasks(permission, email, folder);
+        getAllTasks();
 
         return view;
     }
 
-    void setUpRecyclerView() {
-        userBinding.recyclerviewUserTasks.setHasFixedSize(true);
-        userBinding.recyclerviewUserTasks.setLayoutManager(new LinearLayoutManager(FragmentTasksUser.this.getContext()));
-        userBinding.recyclerviewUserTasks.setAdapter(taskAdapter);
-    }
+    private void getAllTasks() {
+        taskViewModel.getTasksByCreator(userId).observe(FragmentTasksUser.this.requireActivity(), tasks -> {
 
-    void setUpTasks(String collection, String email, String status) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference collectionReference = db.collection(collection);
+            for (Task task : tasks) {
+                if (task.getStatus().equals(status)) {
+                    allTasks.add(task);
+                }
+            }
 
-        Query query = collectionReference
-                .whereEqualTo("email_creator", email)
-                .whereEqualTo("status", status);
-
-        FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
-                .setQuery(query, Task.class)
-                .build();
-        taskAdapter = new TaskAdapter(options);
-
-        setUpRecyclerView();
-
-        taskAdapter.setOnItemClickListener((documentSnapshot, position) -> {
-            String id = documentSnapshot.getId();
-
-            Log.d(TAG_TASK_USER_ACTIVITY, String.format("position: %d id: %s", position, id));
-
-            Intent intent = new Intent(FragmentTasksUser.this.getContext(), TaskUserActivity.class);
-            intent.putExtra(ID, id);
-            intent.putExtra(COLLECTION, collection);
-            startActivity(intent);
-
+            taskAdapter.addTasks(allTasks);
         });
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        taskAdapter.startListening();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        taskAdapter.stopListening();
+    void setUpRecyclerView() {
+        binding.recyclerviewUserTasks.setHasFixedSize(true);
+        binding.recyclerviewUserTasks.setLayoutManager(new LinearLayoutManager(FragmentTasksUser.this.getContext()));
+        binding.recyclerviewUserTasks.setAdapter(taskAdapter);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        userBinding = null;
+        binding = null;
     }
 
 }

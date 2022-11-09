@@ -28,6 +28,7 @@
 
     <string name="authorization">Авторизация</string>
     <string name="email_text">E-mail</string>
+    <string name="username_text">Username</string>
     <string name="password">Пароль</string>
     <string name="login">Войти</string>
 
@@ -64,12 +65,15 @@
     <string name="editing">Редактирование</string>
     <string name="save">Сохранить</string>
 
-    <string name="superusers">Суперпользователи</string>
+    <string name="admins">Администраторы</string>
     <string name="executors">Исполнители</string>
 
     <string name="warning">Внимание!</string>
     <string name="warning_no_connection">Отсутствует интернет подключение. Вы можете сохранить заявку у себя в телефоне и когда интернет снова появиться, заявка автоматически будет отправлена в фоновом режиме. Или вы можете отправить заявку позже, когда появиться интернет.</string>
-    <string name="warning_delete_task">Выдействительно хотите удалить заявку? Восстановить удаленную заявку будет невозможно.</string>
+    <string name="warning_no_connection_main">Отсутствует интернет подключение.</string>
+    <string name="warning_delete_task">Выдействительно хотите удалить заявку? Восстановить удаленную заявку невозможно.</string>
+    <string name="warning_delete_user">Выдействительно хотите удалить этого пользователя? Восстановить удаленного пользователя невозможно.</string>
+
     <string name="error_no_connection">Ошибка! Проверьте подключение к интернету</string>
 
     <string name="letter">Литера</string>
@@ -105,5 +109,6 @@
     <string name="show_text">Показать</string>
     <string name="root_permission">All</string>
     <string name="url_full_document"><![CDATA[https://docs.google.com/document/d/1YGy2YM9jFOcPkwCeRWDB2iy_AiDoriyR/edit?usp=sharing&ouid=107837366117826648347&rtpof=true&sd=true]]></string>
+    <string name="add_image_to_end_text">Ваше изображение отображено в коне формы заявки</string>
 
 </resources>

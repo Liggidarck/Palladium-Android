@@ -1,12 +1,10 @@
 package com.george.vector.ui.users.user.main.fragments.home;
 
-import static com.george.vector.common.utils.consts.Keys.COLLECTION;
 import static com.george.vector.common.utils.consts.Keys.ID;
-import static com.george.vector.common.utils.consts.Logs.TAG_HOME_USER_FRAGMENT;
+import static com.george.vector.common.utils.consts.Keys.NEW_TASKS;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,23 +15,27 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.george.vector.data.preferences.UserDataViewModel;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.FragmentUserHomeBinding;
 import com.george.vector.network.model.Task;
 import com.george.vector.ui.adapter.TaskAdapter;
 import com.george.vector.ui.users.user.tasks.AddTaskUserActivity;
 import com.george.vector.ui.users.user.tasks.TaskUserActivity;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
+import com.george.vector.ui.viewmodel.TaskViewModel;
+import com.george.vector.ui.viewmodel.ViewModelFactory;
+
+import java.util.ArrayList;
 
 public class FragmentUserHome extends Fragment {
 
-    FragmentUserHomeBinding homeBinding;
-    String permission, email;
+    private FragmentUserHomeBinding homeBinding;
 
-    TaskAdapter adapter;
+    private int userId;
+
+    private TaskViewModel taskViewModel;
+    private final TaskAdapter adapter = new TaskAdapter();
+
+    public static final String TAG = FragmentUserHome.class.getSimpleName();
 
     @Nullable
     @Override
@@ -42,38 +44,30 @@ public class FragmentUserHome extends Fragment {
         View view = homeBinding.getRoot();
 
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
-        email = userPrefViewModel.getUser().getEmail();
-        permission = userPrefViewModel.getUser().getPermission();
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference collectionReference = db.collection(permission);
+        taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                this.getActivity().getApplication(),
+                userPrefViewModel.getToken()
+        )).get(TaskViewModel.class);
+
+        userId = (int) userPrefViewModel.getId();
 
         homeBinding.homeToolbarUser.setNavigationOnClickListener(v -> {
             BottomSheetProfileUser bottomSheet = new BottomSheetProfileUser();
             bottomSheet.show(getParentFragmentManager(), "ProfileUserBottomSheet");
         });
 
-        Query query = collectionReference
-                .whereEqualTo("email_creator", email)
-                .whereEqualTo("status", "Новая заявка");
-
-        FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
-                .setQuery(query, Task.class)
-                .build();
-        adapter = new TaskAdapter(options);
+        getTasks();
 
         homeBinding.recyclerviewViewUser.setHasFixedSize(true);
         homeBinding.recyclerviewViewUser.setLayoutManager(new LinearLayoutManager(FragmentUserHome.this.getContext()));
         homeBinding.recyclerviewViewUser.setAdapter(adapter);
 
-        adapter.setOnItemClickListener((documentSnapshot, position) -> {
-            String id = documentSnapshot.getId();
-
-            Log.d(TAG_HOME_USER_FRAGMENT, String.format("Position: %d ID: %s", position, id));
+        adapter.setOnItemClickListener((task, position) -> {
+            long id = task.getId();
 
             Intent intent = new Intent(FragmentUserHome.this.getContext(), TaskUserActivity.class);
             intent.putExtra(ID, id);
-            intent.putExtra(COLLECTION, permission);
             startActivity(intent);
         });
 
@@ -84,21 +78,31 @@ public class FragmentUserHome extends Fragment {
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
+    private void getTasks() {
+        taskViewModel
+                .getTasksByCreator(userId)
+                .observe(FragmentUserHome.this.requireActivity(), tasks -> {
+                    ArrayList<Task> sortedTasks = new ArrayList<>();
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        adapter.stopListening();
+                    for (Task task : tasks) {
+                        if (task.getStatus().equals(NEW_TASKS)) {
+                            sortedTasks.add(task);
+                        }
+                    }
+
+                    adapter.addTasks(sortedTasks);
+                });
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         homeBinding = null;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getTasks();
     }
 }

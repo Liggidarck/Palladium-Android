@@ -13,16 +13,24 @@
     </string-array>
 
     <string-array name="status">
+        <item>new</item>
+        <item>in_progress</item>
+        <item>complete</item>
+        <item>archive</item>
+    </string-array>
+
+    <string-array name="status_name">
         <item>Новая заявка</item>
-        <item>В работе</item>
+        <item>Заявка в работе</item>
         <item>Завершенная заявка</item>
         <item>Архив</item>
     </string-array>
 
     <string-array name="roles">
-        <item>Root</item>
-        <item>Пользователь</item>
-        <item>Исполнитель</item>
+        <item>ROLE_DEVELOPER</item>
+        <item>ROLE_ADMIN</item>
+        <item>ROLE_EXECUTOR</item>
+        <item>ROLE_USER</item>
     </string-array>
 
     <string-array name="letter">
@@ -40,6 +48,12 @@
         <item>ОП Барыши</item>
         <item>ОП Ручеек</item>
         <item>ОП Звездочка</item>
+    </string-array>
+
+    <string-array name="zones" >
+        <item>all</item>
+        <item>ostSchool</item>
+        <item>barSchool</item>
     </string-array>
 
     <string-array name="defaultRootLocation">
