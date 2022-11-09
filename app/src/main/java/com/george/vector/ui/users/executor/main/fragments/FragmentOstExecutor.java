@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.george.vector.databinding.FragmentOstBinding;
-import com.george.vector.ui.users.executor.main.FolderExecutorActivity;
+import com.george.vector.ui.users.executor.tasks.FolderExecutorActivity;
 
 public class FragmentOstExecutor extends Fragment {
 

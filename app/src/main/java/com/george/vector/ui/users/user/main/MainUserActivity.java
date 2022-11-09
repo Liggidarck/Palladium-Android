@@ -1,23 +1,28 @@
 package com.george.vector.ui.users.user.main;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
 import com.george.vector.R;
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ActivityMainUserBinding;
+import com.george.vector.ui.common.auth.LoginActivity;
 import com.george.vector.ui.users.user.main.fragments.home.BottomSheetProfileUser;
 
 public class MainUserActivity extends AppCompatActivity implements BottomSheetProfileUser.stateBtnListener {
 
     private ActivityMainUserBinding binding;
+    private UserDataViewModel userDataViewModel;
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -41,6 +46,8 @@ public class MainUserActivity extends AppCompatActivity implements BottomSheetPr
         binding = ActivityMainUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+
         NavController navController = Navigation.findNavController(this, R.id.navHostFragmentActivityUserMain);
         NavigationUI.setupWithNavController(binding.bottomUserNavigation, navController);
     }
@@ -53,8 +60,8 @@ public class MainUserActivity extends AppCompatActivity implements BottomSheetPr
                     .setTitle(getString(R.string.warning))
                     .setMessage("Вы действительно хотите выйти из аккаунта?")
                     .setPositiveButton("ok", (dialog1, which) -> {
-
-
+                        userDataViewModel.deleteUserData();
+                        startActivity(new Intent(this, LoginActivity.class));
                     })
                     .setNegativeButton("Отмена", (dialog12, which) -> dialog12.dismiss())
                     .create();

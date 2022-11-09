@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.george.vector.R;
 import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.SettingsExecutorBottomSheetBinding;
-import com.george.vector.ui.users.executor.EditDataUserActivity;
+import com.george.vector.ui.common.auth.LoginActivity;
 import com.george.vector.ui.common.settings.SettingsActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -30,13 +30,8 @@ public class SettingsExecutorBottomSheet extends BottomSheetDialogFragment {
         View view = binding.getRoot();
 
         UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
-        String email = userDataViewModel.getUser().getEmail();
-        Log.d("ExecutorBottomSheet", String.format("email: %s", email));
 
         binding.btnClose.setOnClickListener(v -> dismiss());
-        binding.btnEditUser.setOnClickListener(v ->
-                startActivity(new Intent(SettingsExecutorBottomSheet.this.getContext(), EditDataUserActivity.class))
-        );
 
         binding.btnSettings.setOnClickListener(v ->
                 startActivity(new Intent(SettingsExecutorBottomSheet.this.getContext(), SettingsActivity.class))
@@ -47,7 +42,9 @@ public class SettingsExecutorBottomSheet extends BottomSheetDialogFragment {
                     .setTitle(getString(R.string.warning))
                     .setMessage("Вы действительно хотите выйти из аккаунта?")
                     .setPositiveButton("ok", (dialog1, which) -> {
-
+                        userDataViewModel.deleteUserData();
+                        startActivity(new Intent(SettingsExecutorBottomSheet.this.requireActivity(),
+                                LoginActivity.class));
                     })
                     .setNegativeButton("Отмена", (dialog12, which) -> dialog12.dismiss())
                     .create();

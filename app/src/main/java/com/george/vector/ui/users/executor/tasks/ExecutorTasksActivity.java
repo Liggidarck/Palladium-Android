@@ -1,5 +1,7 @@
-package com.george.vector.ui.users.executor.main;
+package com.george.vector.ui.users.executor.tasks;
 
+import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
+import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.STATUS;
 
@@ -14,8 +16,7 @@ import com.george.vector.ui.users.executor.tasks.FragmentExecutorTasks;
 
 public class ExecutorTasksActivity extends AppCompatActivity {
 
-    String collection, folder, email;
-    ActivityExecutorTasksBinding tasksBinding;
+    private ActivityExecutorTasksBinding tasksBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,16 +26,16 @@ public class ExecutorTasksActivity extends AppCompatActivity {
         setContentView(tasksBinding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        collection = arguments.getString(ZONE);
-        folder = arguments.getString(STATUS);
+        String zone = arguments.getString(ZONE);
+        String status = arguments.getString(STATUS);
 
         String textToolbar = null;
-        switch (collection) {
-            case "ost_school":
+        switch (zone) {
+            case OST_SCHOOL:
                 textToolbar = getString(R.string.ost_text);
                 break;
 
-            case "bar_school":
+            case BAR_SCHOOL:
                 textToolbar = getString(R.string.bar_text);
                 break;
 
@@ -59,10 +60,9 @@ public class ExecutorTasksActivity extends AppCompatActivity {
         tasksBinding.toolbarTasks.setTitle(textToolbar);
 
         Fragment fragmentTasks = new FragmentExecutorTasks();
-
         Bundle bundle = new Bundle();
-        bundle.putString(ZONE, collection);
-        bundle.putString(STATUS, folder);
+        bundle.putString(ZONE, zone);
+        bundle.putString(STATUS, status);
         fragmentTasks.setArguments(bundle);
 
         getSupportFragmentManager()

@@ -148,13 +148,13 @@ public class TaskAdminActivity extends AppCompatActivity {
             }
 
             if (status.equals(ARCHIVE_TASKS)) {
-                binding.textViewStatusTaskRoot.setText("Архив");
                 binding.circleStatusRoot.setImageResource(R.color.green);
+                binding.textViewStatusTaskRoot.setText("Архив");
             }
 
             if (status.equals(COMPLETED_TASKS)) {
-                binding.textViewStatusTaskRoot.setText("Завершенная заявка");
                 binding.circleStatusRoot.setImageResource(R.color.green);
+                binding.textViewStatusTaskRoot.setText("Завершенная заявка");
             }
 
             if (!letter.equals("-") && !letter.isEmpty())

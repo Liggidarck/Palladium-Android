@@ -48,7 +48,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
                         .replace(R.id.settings_frame, new SettingsUserFragment())
                         .commit();
 
-            if (role.equals("Исполнитель"))
+            if (role.equals("ROLE_EXECUTOR"))
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.settings_frame, new SettingsExecutorFragment())

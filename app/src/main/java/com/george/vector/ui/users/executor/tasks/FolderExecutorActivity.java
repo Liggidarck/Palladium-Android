@@ -1,5 +1,7 @@
-package com.george.vector.ui.users.executor.main;
+package com.george.vector.ui.users.executor.tasks;
 
+import static com.george.vector.common.utils.consts.Keys.BAR_SCHOOL;
+import static com.george.vector.common.utils.consts.Keys.OST_SCHOOL;
 import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.COMPLETED_TASKS;
 import static com.george.vector.common.utils.consts.Keys.STATUS;
@@ -13,11 +15,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.george.vector.R;
 import com.george.vector.databinding.ActivityFolderExecutorBinding;
+import com.george.vector.ui.users.executor.tasks.ExecutorTasksActivity;
 
 public class FolderExecutorActivity extends AppCompatActivity {
 
-    String collection;
-    ActivityFolderExecutorBinding executorBinding;
+    private String zone;
+    private ActivityFolderExecutorBinding executorBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,15 +30,15 @@ public class FolderExecutorActivity extends AppCompatActivity {
         setContentView(executorBinding.getRoot());
 
         Bundle arguments = getIntent().getExtras();
-        collection = arguments.getString(ZONE);
+        zone = arguments.getString(ZONE);
 
         String textToolbar = null;
-        switch (collection) {
-            case "ost_school":
+        switch (zone) {
+            case OST_SCHOOL:
                 textToolbar = getString(R.string.ost_text);
                 break;
 
-            case "bar_school":
+            case BAR_SCHOOL:
                 textToolbar = getString(R.string.bar_text);
                 break;
 
@@ -61,21 +64,21 @@ public class FolderExecutorActivity extends AppCompatActivity {
 
         executorBinding.cardNewTasks.setOnClickListener(v -> {
             Intent intent = new Intent(this, ExecutorTasksActivity.class);
-            intent.putExtra(ZONE, collection);
+            intent.putExtra(ZONE, zone);
             intent.putExtra(STATUS, NEW_TASKS);
             startActivity(intent);
         });
 
         executorBinding.cardCompletedTasks.setOnClickListener(v -> {
             Intent intent = new Intent(this, ExecutorTasksActivity.class);
-            intent.putExtra(ZONE, collection);
+            intent.putExtra(ZONE, zone);
             intent.putExtra(STATUS, COMPLETED_TASKS);
             startActivity(intent);
         });
 
         executorBinding.cardInProgressTasks.setOnClickListener(v -> {
             Intent intent = new Intent(this, ExecutorTasksActivity.class);
-            intent.putExtra(ZONE, collection);
+            intent.putExtra(ZONE, zone);
             intent.putExtra(STATUS, IN_PROGRESS_TASKS);
             startActivity(intent);
         });

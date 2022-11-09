@@ -1,9 +1,12 @@
 package com.george.vector.ui.users.executor.tasks;
 
+import static com.george.vector.common.utils.consts.Keys.ID;
 import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.STATUS;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +19,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.FragmentExecutorTasksBinding;
+import com.george.vector.network.model.Task;
 import com.george.vector.ui.adapter.TaskAdapter;
+import com.george.vector.ui.users.user.tasks.FragmentTasksUser;
+import com.george.vector.ui.viewmodel.TaskViewModel;
+import com.george.vector.ui.viewmodel.ViewModelFactory;
+
+import java.util.ArrayList;
 
 public class FragmentExecutorTasks extends Fragment {
 
-    String collection, status, email;
+    private final TaskAdapter adapter = new TaskAdapter();
 
-    TaskAdapter adapter;
-    FragmentExecutorTasksBinding binding;
+    private FragmentExecutorTasksBinding binding;
+
+    public static final String TAG = FragmentExecutorTasks.class.getSimpleName();
+
+    private String zone;
 
     @Nullable
     @Override
@@ -33,26 +45,46 @@ public class FragmentExecutorTasks extends Fragment {
 
         Bundle args = getArguments();
         assert args != null;
-        collection = args.getString(ZONE);
-        status = args.getString(STATUS);
+        zone = args.getString(ZONE);
+        String status = args.getString(STATUS);
 
         UserDataViewModel userPrefViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
-        email = userPrefViewModel.getUser().getEmail();
+        TaskViewModel taskViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                this.requireActivity().getApplication(),
+                userPrefViewModel.getToken()
+        )).get(TaskViewModel.class);
+
+        long executorId = userPrefViewModel.getId();
 
         setUpRecyclerView();
+
+        taskViewModel.getTasksByExecutor(executorId).observe(this.requireActivity(), tasks -> {
+            ArrayList<Task> filterList = new ArrayList<>();
+
+            for(Task task : tasks) {
+                if(task.getZone().equals(zone) & task.getStatus().equals(status)) {
+                    filterList.add(task);
+                }
+            }
+
+            adapter.addTasks(filterList);
+        });
 
         return view;
     }
 
     private void setUpRecyclerView() {
-
-
         binding.recyclerViewTasksExecutor.setHasFixedSize(true);
         binding.recyclerViewTasksExecutor.setLayoutManager(new LinearLayoutManager(FragmentExecutorTasks.this.getContext()));
         binding.recyclerViewTasksExecutor.setAdapter(adapter);
+
+        adapter.setOnItemClickListener((task, position) -> {
+            Intent intent = new Intent(this.requireActivity(), TaskExecutorActivity.class);
+            intent.putExtra(ID, task.getId());
+            intent.putExtra(ZONE, zone);
+            startActivity(intent);
+        });
     }
-
-
 
     @Override
     public void onDestroyView() {

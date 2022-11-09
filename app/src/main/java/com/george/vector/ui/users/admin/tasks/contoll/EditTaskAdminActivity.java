@@ -281,15 +281,19 @@ public class EditTaskAdminActivity extends AppCompatActivity implements BottomSh
         progressDialog.setMessage("Ваша заявка обновляется...");
         progressDialog.show();
 
+        String finalUpdateStatus = updateStatus;
         taskViewModel.editTask(task, taskId).observe(this, message -> {
             if (message.getMessage().equals("Task successfully edited")) {
                 progressDialog.dismiss();
+                startAllTasks(finalUpdateStatus);
             }
         });
+    }
 
+    private void startAllTasks(String status) {
         Intent intent = new Intent(this, AllTasksAdminActivity.class);
         intent.putExtra(ZONE, zone);
-        intent.putExtra(STATUS, updateStatus);
+        intent.putExtra(STATUS, status);
         intent.putExtra(IS_EXECUTE, executed);
         startActivity(intent);
         finish();

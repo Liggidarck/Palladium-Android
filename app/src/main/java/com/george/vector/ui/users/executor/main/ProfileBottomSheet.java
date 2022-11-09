@@ -9,9 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ProfileBottomSheetBinding;
 import com.george.vector.network.model.user.Role;
-import com.george.vector.ui.viewmodel.UserViewModel;
+import com.george.vector.network.model.user.User;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.List;
@@ -26,33 +27,25 @@ public class ProfileBottomSheet extends BottomSheetDialogFragment {
         sheetBinding = ProfileBottomSheetBinding.inflate(inflater, container, false);
         View view = sheetBinding.getRoot();
 
-        UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-
         sheetBinding.closeBtn.setOnClickListener(v -> dismiss());
 
-        long id = 0;
+        UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+        User user = userDataViewModel.getUser();
 
-        userViewModel.getUserById(id).observe(this, user -> {
+        String name = user.getName();
+        String lastName = user.getLastName();
+        String patronymic = user.getPatronymic();
+        String email = user.getEmail();
 
-            List<Role> roleList;
+        String fullName = String.format("%s %s %s", lastName, name, patronymic);
+        String charName = Character.toString(name.charAt(0));
+        String charLastName = Character.toString(lastName.charAt(0));
+        String ava = String.format("%s%s", charName, charLastName);
 
-            String name = user.getName();
-            String lastName = user.getLastName();
-            String patronymic = user.getPatronymic();
-            String email = user.getEmail();
-            roleList = user.getRoles();
-            String role = roleList.get(0).getName();
-
-            String fullName = String.format("%s %s %s", lastName, name, patronymic);
-            String charName = Character.toString(name.charAt(0));
-            String charLastName = Character.toString(lastName.charAt(0));
-            String ava = String.format("%s%s", charName, charLastName);
-
-            sheetBinding.textViewFullName.setText(fullName);
-            sheetBinding.textViewNameAva.setText(ava);
-            sheetBinding.textViewEmail.setText(email);
-            sheetBinding.textViewRole.setText(role);
-        });
+        sheetBinding.textViewFullName.setText(fullName);
+        sheetBinding.textViewNameAva.setText(ava);
+        sheetBinding.textViewEmail.setText(email);
+        sheetBinding.textViewRole.setText("Исполнитель");
 
         return view;
     }

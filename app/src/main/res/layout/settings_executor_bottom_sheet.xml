@@ -68,39 +68,6 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/btnEditUser"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        tools:targetApi="m"
-        tools:ignore="UnusedAttribute">
-
-        <ImageView
-            android:id="@+id/edit_data_image_executor"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:src="@drawable/ic_baseline_edit_24"
-            app:tint="?attr/colorControlNormal"
-            tools:ignore="ContentDescription" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:layout_toEndOf="@id/edit_data_image_executor"
-            android:text="Изменить данные"
-            android:textColor="?attr/textColor"
-            android:textSize="17sp" />
-
-    </RelativeLayout>
-
     <Button
         android:id="@+id/btnLogout"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"

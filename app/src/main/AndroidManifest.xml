@@ -66,14 +66,13 @@
         <activity android:name=".ui.users.executor.tasks.EditTaskExecutorActivity" />
         <activity android:name=".ui.common.settings.SettingsActivity" />
         <activity android:name=".ui.users.executor.tasks.TaskExecutorActivity" />
-        <activity android:name=".ui.users.executor.main.ExecutorTasksActivity" />
-        <activity android:name=".ui.users.executor.main.FolderExecutorActivity" />
+        <activity android:name=".ui.users.executor.tasks.ExecutorTasksActivity" />
+        <activity android:name=".ui.users.executor.tasks.FolderExecutorActivity" />
         <activity android:name=".ui.users.admin.tasks.contoll.EditTaskAdminActivity" />
         <activity android:name=".ui.users.admin.tasks.TaskAdminActivity" />
         <activity android:name=".ui.users.admin.tasks.contoll.AddTaskAdminActivity" />
         <activity android:name=".ui.users.admin.tasks.navigation.AllTasksAdminActivity" />
         <activity android:name=".ui.users.admin.tasks.navigation.StatusActivity" />
-        <activity android:name=".ui.users.executor.EditDataUserActivity" />
         <activity android:name=".ui.users.admin.profile.EditUserActivity" />
         <activity android:name=".ui.users.admin.profile.ListUsersActivity" />
         <activity android:name=".ui.users.user.tasks.TaskUserActivity" />
