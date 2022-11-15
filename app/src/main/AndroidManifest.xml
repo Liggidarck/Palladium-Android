@@ -28,9 +28,16 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Loading"
+        android:theme="@style/MainActivity"
         android:usesCleartextTraffic="true"
         tools:targetApi="s">
+        <activity
+            android:name=".data.app.InitializeActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".ui.users.admin.profile.RegisterUserActivity"
             android:exported="false">

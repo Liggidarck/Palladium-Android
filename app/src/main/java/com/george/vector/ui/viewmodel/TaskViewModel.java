@@ -1,15 +1,6 @@
 package com.george.vector.ui.viewmodel;
 
 import android.app.Application;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -18,13 +9,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.george.vector.network.model.Message;
 import com.george.vector.network.model.Task;
 import com.george.vector.network.repository.TaskRepository;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 public class TaskViewModel extends AndroidViewModel {
 
@@ -45,6 +31,10 @@ public class TaskViewModel extends AndroidViewModel {
 
     public MutableLiveData<Message> countByZoneLikeAndStatusLike(String zone, String status) {
         return repository.countByZoneLikeAndStatusLike(zone, status);
+    }
+
+    public MutableLiveData<Message> countByZone(String zone) {
+        return repository.countByZone(zone);
     }
 
     public MutableLiveData<List<Task>> getByZoneLikeAndStatusLikeAndExecutorId(String zone, String status, int executorId) {

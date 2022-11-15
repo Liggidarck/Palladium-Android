@@ -69,8 +69,8 @@ public class FragmentAllTasksAdmin extends Fragment {
         }
 
         binding.chipAllTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(isChecked) {
-                taskAdapter.addTasks(tasks);
+            if (isChecked) {
+                taskAdapter.setTasks(tasks);
             }
         });
 
@@ -89,7 +89,6 @@ public class FragmentAllTasksAdmin extends Fragment {
         });
 
         binding.chipNewSchoolTasksRoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // Старшая школа
             if (isChecked & !tasks.isEmpty()) {
                 ArrayList<Task> filterTasks = new ArrayList<>();
 
@@ -151,9 +150,18 @@ public class FragmentAllTasksAdmin extends Fragment {
                             return;
                         }
 
-                        taskAdapter.addTasks(tasks);
+                        if (tasks.isEmpty()) {
+                            Log.d(TAG, "updateListTasks: empty");
+                            try {
+                                binding.emptyView.setVisibility(View.VISIBLE);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        taskAdapter.setTasks(tasks);
                         this.tasks = tasks;
-                        binding.progressAllTasks.setVisibility(View.INVISIBLE);
+
                     });
         } else {
             UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
@@ -165,12 +173,21 @@ public class FragmentAllTasksAdmin extends Fragment {
                             return;
                         }
 
+                        if (tasks.isEmpty()) {
+                            Log.d(TAG, "updateListTasks: empty");
+                            try {
+                                binding.emptyView.setVisibility(View.VISIBLE);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
 
-                        taskAdapter.addTasks(tasks);
+                        taskAdapter.setTasks(tasks);
                         this.tasks = tasks;
-                        binding.progressAllTasks.setVisibility(View.INVISIBLE);
                     });
         }
+
+        binding.progressAllTasks.setVisibility(View.INVISIBLE);
     }
 
     @Override

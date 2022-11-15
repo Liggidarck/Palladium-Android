@@ -71,7 +71,7 @@ public class FragmentTasksUser extends Fragment {
                 }
             }
 
-            taskAdapter.addTasks(allTasks);
+            taskAdapter.setTasks(allTasks);
         });
     }
 

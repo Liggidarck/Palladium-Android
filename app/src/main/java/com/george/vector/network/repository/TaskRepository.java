@@ -117,6 +117,27 @@ public class TaskRepository {
         return count;
     }
 
+    public MutableLiveData<Message> countByZone(String zone) {
+        MutableLiveData<Message> count = new MutableLiveData<>();
+
+        taskInterface.countByZone(zone).enqueue(new Callback<Message>() {
+            @Override
+            public void onResponse(@NonNull Call<Message> call, @NonNull Response<Message> response) {
+                if (response.code() == 200) {
+                    count.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Message> call, @NonNull Throwable t) {
+                count.setValue(null);
+                Log.e(TAG, "countByZone: ", t);
+            }
+        });
+
+        return count;
+    }
+
     public MutableLiveData<List<Task>> getByZoneLikeAndStatusLikeAndExecutorId(String zone, String status, int executorId) {
         MutableLiveData<List<Task>> tasks = new MutableLiveData<>();
 

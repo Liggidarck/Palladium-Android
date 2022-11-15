@@ -24,9 +24,12 @@ public interface TaskInterface {
     @DELETE("/palladium/tasks/delete")
     Call<Message> deleteTask(@Query("id") long id);
 
-    @GET("/palladium/tasks/countByStatus")
+    @GET("/palladium/tasks/get/countByZoneAndStatus")
     Call<Message> countByZoneLikeAndStatusLike(@Query("zone") String zone,
                                                @Query("status") String status);
+
+    @GET("/palladium/tasks/get/countByZone")
+    Call<Message> countByZone(@Query("zone") String zone);
 
     @GET("/palladium/tasks/get/byExecutor")
     Call<List<Task>> getTasksByExecutor(@Query("id") long id);
