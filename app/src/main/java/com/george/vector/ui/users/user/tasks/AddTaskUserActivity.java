@@ -56,6 +56,10 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
             uri -> {
                 fileUri = uri;
                 binding.imageViewTaskUser.setImageURI(fileUri);
+                Toast.makeText(this,
+                                "Ваше изображение отображено в коне формы заявки",
+                                Toast.LENGTH_SHORT)
+                        .show();
             });
 
     private final ActivityResultLauncher<Uri> cameraLauncher
@@ -63,6 +67,10 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
             result -> {
                 if (result) {
                     binding.imageViewTaskUser.setImageURI(fileUri);
+                    Toast.makeText(this,
+                                    "Ваше изображение отображено в коне формы заявки",
+                                    Toast.LENGTH_SHORT)
+                            .show();
                 }
             });
 
@@ -192,7 +200,9 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
                     builder.setTitle(getText(R.string.warning))
                             .setMessage(getString(R.string.permission_gallery))
                             .setPositiveButton("Настройки", (dialog, id) ->
-                                    startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+                                    startActivity(new Intent(
+                                            android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                            )
                             .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.cancel());
 
                     AlertDialog dialog = builder.create();

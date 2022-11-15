@@ -12,8 +12,6 @@ import com.george.vector.network.model.user.RegisterUserModel;
 import com.george.vector.network.request.LoginRequest;
 import com.george.vector.network.responce.LoginResponse;
 
-import java.nio.file.Path;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

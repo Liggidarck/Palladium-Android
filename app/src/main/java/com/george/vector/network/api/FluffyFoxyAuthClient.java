@@ -2,7 +2,6 @@ package com.george.vector.network.api;
 
 import com.george.vector.BuildConfig;
 
-import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 

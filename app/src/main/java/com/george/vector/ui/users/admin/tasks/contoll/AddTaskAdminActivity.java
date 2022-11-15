@@ -85,7 +85,7 @@ public class AddTaskAdminActivity extends AppCompatActivity implements BottomShe
             uri -> {
                 fileUri = uri;
                 binding.imageViewTask.setImageURI(fileUri);
-                Snackbar.make(binding.addEditTaskCoordinator, "Ваше изображение отображено в коне формы заявки", Snackbar.LENGTH_SHORT).show();
+                Toast.makeText(this, "Ваше изображение отображено в коне формы заявки", Toast.LENGTH_SHORT).show();
             });
 
     private final ActivityResultLauncher<Uri> cameraLauncher = registerForActivityResult(
@@ -93,7 +93,7 @@ public class AddTaskAdminActivity extends AppCompatActivity implements BottomShe
             result -> {
                 if (result) {
                     binding.imageViewTask.setImageURI(fileUri);
-                    Snackbar.make(binding.addEditTaskCoordinator, "Ваше изображение отображено в коне формы заявки", Snackbar.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Ваше изображение отображено в коне формы заявки", Toast.LENGTH_SHORT).show();
                 }
             });
 

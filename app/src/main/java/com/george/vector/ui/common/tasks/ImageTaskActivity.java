@@ -1,6 +1,5 @@
 package com.george.vector.ui.common.tasks;
 
-import static com.george.vector.common.utils.consts.Keys.ZONE;
 import static com.george.vector.common.utils.consts.Keys.ID;
 
 import android.os.Bundle;

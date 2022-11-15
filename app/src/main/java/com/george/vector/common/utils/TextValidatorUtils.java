@@ -2,13 +2,11 @@ package com.george.vector.common.utils;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

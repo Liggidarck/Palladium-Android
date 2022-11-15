@@ -14,7 +14,7 @@ import java.util.List;
 
 public class TaskViewModel extends AndroidViewModel {
 
-    final TaskRepository repository;
+    final private TaskRepository repository;
 
     public TaskViewModel(@NonNull Application application, String token) {
         super(application);

@@ -11,11 +11,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.ProfileBottomSheetBinding;
-import com.george.vector.network.model.user.Role;
 import com.george.vector.network.model.user.User;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
-import java.util.List;
 
 public class ProfileBottomSheet extends BottomSheetDialogFragment {
 

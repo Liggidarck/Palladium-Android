@@ -192,10 +192,10 @@ public class TaskAdminActivity extends AppCompatActivity {
             }
 
             userViewModel.getUserById(creatorId).observe(this, user -> {
-                executorName = user.getLastName() + " " + user.getLastName() + " " + user.getPatronymic();
+                userName = user.getLastName() + " " + user.getLastName() + " " + user.getPatronymic();
                 String email = user.getEmail();
 
-                binding.textViewFullNameCreator.setText(executorName);
+                binding.textViewFullNameCreator.setText(userName);
                 binding.textViewEmailCreatorTaskRoot.setText(email);
 
                 binding.progressBarTaskRoot.setVisibility(View.INVISIBLE);
@@ -208,10 +208,10 @@ public class TaskAdminActivity extends AppCompatActivity {
             }
 
             userViewModel.getUserById(executorId).observe(this, executor -> {
-                userName = executor.getLastName() + " " + executor.getName() + " " + executor.getPatronymic();
+                executorName = executor.getLastName() + " " + executor.getName() + " " + executor.getPatronymic();
                 String email = executor.getEmail();
 
-                binding.textViewFullNameExecutor.setText(userName);
+                binding.textViewFullNameExecutor.setText(executorName);
                 binding.textViewEmailExecutorTaskRoot.setText(email);
 
                 binding.progressBarTaskRoot.setVisibility(View.INVISIBLE);

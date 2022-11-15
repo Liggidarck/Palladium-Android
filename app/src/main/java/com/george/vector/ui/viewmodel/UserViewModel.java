@@ -16,7 +16,7 @@ import java.util.List;
 
 public class UserViewModel extends AndroidViewModel {
 
-    private UserRepository repository;
+    private final UserRepository repository;
 
     public UserViewModel(@NonNull Application application, String token) {
         super(application);

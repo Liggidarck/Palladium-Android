@@ -14,7 +14,7 @@ import com.george.vector.network.responce.LoginResponse;
 
 public class AuthViewModel extends AndroidViewModel {
 
-    AuthRepository repository;
+    private final AuthRepository repository;
 
     public AuthViewModel(@NonNull Application application) {
         super(application);
