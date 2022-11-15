@@ -4,7 +4,7 @@ import java.util.List;
 
 public class LoginResponse {
 
-    private String token;
+    private final String token;
     private String type;
     private Long id;
     private String username;

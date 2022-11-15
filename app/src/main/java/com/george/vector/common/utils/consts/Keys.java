@@ -23,12 +23,12 @@ public class Keys {
     public static final String USERS = "users";
     public static final String OST = "ost";
     public static final String OST_SCHOOL = "ostSchool";
-    public static final String OST_AIST = "ost_aist";
-    public static final String OST_YAGODKA = "ost_yagodka";
+    public static final String OST_AIST = "ostAist";
+    public static final String OST_YAGODKA = "ostYagodka";
 
     public static final String BAR_SCHOOL = "barSchool";
-    public static final String BAR_RUCHEEK = "bar_rucheek";
-    public static final String BAR_ZVEZDOCHKA = "bar_zvezdochka";
+    public static final String BAR_RUCHEEK = "barRucheek";
+    public static final String BAR_ZVEZDOCHKA = "barZvezdochka";
 
     public static final String NEW_TASKS = "new";
     public static final String IN_PROGRESS_TASKS = "in_progress";

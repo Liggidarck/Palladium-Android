@@ -50,6 +50,11 @@
     </fragment>
 
     <fragment
+        android:id="@+id/nav_statistic"
+        android:name="com.george.vector.ui.users.admin.main.fragments.statistic.FragmentStatistic"
+        android:label="FragmentStatistic" />
+
+    <fragment
         android:id="@+id/fragmentAboutProject"
         android:name="com.george.vector.ui.common.help.root.FragmentAboutProject"
         android:label="FragmentAboutProject"

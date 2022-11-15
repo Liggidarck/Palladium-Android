@@ -86,7 +86,6 @@ public class AddTaskUserActivity extends AppCompatActivity implements BottomShee
                 userDataViewModel.getToken()
         )).get(TaskViewModel.class);
 
-
         binding.toolbarAddTask.setNavigationOnClickListener(v -> onBackPressed());
 
         binding.btnCreateTask.setOnClickListener(v -> {

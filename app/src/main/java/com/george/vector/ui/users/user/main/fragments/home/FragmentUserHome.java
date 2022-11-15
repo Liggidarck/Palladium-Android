@@ -90,7 +90,7 @@ public class FragmentUserHome extends Fragment {
                         }
                     }
 
-                    adapter.addTasks(sortedTasks);
+                    adapter.setTasks(sortedTasks);
                 });
     }
 

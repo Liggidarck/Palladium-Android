@@ -14,8 +14,6 @@ import com.george.vector.R;
 import com.george.vector.network.model.Task;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
@@ -52,13 +50,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
         return tasks.size();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void filterList(ArrayList<Task> tasks) {
         this.tasks = tasks;
         notifyDataSetChanged();
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void addTasks(List<Task> tasks) {
+    public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
         notifyDataSetChanged();
     }

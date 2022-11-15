@@ -6,7 +6,6 @@ import static com.george.vector.common.utils.consts.Keys.STATUS;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import com.george.vector.data.user.UserDataViewModel;
 import com.george.vector.databinding.FragmentExecutorTasksBinding;
 import com.george.vector.network.model.Task;
 import com.george.vector.ui.adapter.TaskAdapter;
-import com.george.vector.ui.users.user.tasks.FragmentTasksUser;
 import com.george.vector.ui.viewmodel.TaskViewModel;
 import com.george.vector.ui.viewmodel.ViewModelFactory;
 
@@ -67,7 +65,7 @@ public class FragmentExecutorTasks extends Fragment {
                 }
             }
 
-            adapter.addTasks(filterList);
+            adapter.setTasks(filterList);
         });
 
         return view;
