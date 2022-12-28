@@ -21,7 +21,7 @@ class SendNotification {
     private fun sendNotificationAPI(notification: PushNotification) =
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                RetrofitInstance.api.postNotification(notification)
+                NotificationInstance.api.postNotification(notification)
             } catch (e: Exception) {
                 Log.e(tag, e.toString())
             }

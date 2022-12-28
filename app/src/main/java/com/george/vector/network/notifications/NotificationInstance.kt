@@ -4,7 +4,7 @@ import com.george.vector.network.notifications.Constants.Companion.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitInstance {
+class NotificationInstance {
 
     companion object {
         private val retrofit by lazy {
